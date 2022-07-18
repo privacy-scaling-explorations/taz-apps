@@ -1,0 +1,42 @@
+{
+    "name": "semaphore-boilerplate",
+    "description": "A simple DApp to use as a starting point for your project.",
+    "license": "MIT",
+    "repository": "git@github.com:semaphore-protocol/boilerplate.git",
+    "homepage": "https://github.com/semaphore-protocol/boilerplate",
+    "bugs": "https://github.com/semaphore-protocol/boilerplate/issues",
+    "private": true,
+    "scripts": {
+        "start:contracts": "yarn workspace contracts start",
+        "start:relay": "yarn workspace relay start",
+        "start:web-app": "yarn workspace web-app start",
+        "lint": "eslint . --ext .js,.ts",
+        "prettier": "prettier -c .",
+        "prettier:write": "prettier -w ."
+    },
+    "keywords": [
+        "javascript",
+        "typescript",
+        "monorepo",
+        "zero-knowledge",
+        "semaphore",
+        "boilerplate"
+    ],
+    "workspaces": [
+        "apps/*"
+    ],
+    "packageManager": "yarn@3.2.1",
+    "devDependencies": {
+        "@types/node": "^17.0.9",
+        "@typescript-eslint/eslint-plugin": "^5.9.1",
+        "@typescript-eslint/parser": "^5.9.1",
+        "eslint": "^8.2.0",
+        "eslint-config-airbnb-base": "15.0.0",
+        "eslint-config-airbnb-typescript": "^16.1.0",
+        "eslint-config-prettier": "^8.3.0",
+        "eslint-plugin-import": "^2.25.2",
+        "prettier": "^2.5.1",
+        "ts-node": "^10.8.1",
+        "typescript": "^4.7.3"
+    }
+}
