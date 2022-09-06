@@ -1,0 +1,8 @@
+{
+    "TAZMESSAGE_CONTRACT": "0xe1A073dD58AAB0e111b3033A21d442C61a157BF1",
+    "TAZMESSAGE_SUBGRAPH": "https://api.thegraph.com/subgraphs/name/dlrfc/taz-message-goerli",
+    "SEMAPHORE_CONTRACT": "0x99aAb52e60f40AAC0BFE53e003De847bBDbC9611",
+    "GROUP_ID": 10803,
+    "IDENTITY_SEED": "secret-message2",
+    "API_REQUEST_TIMEOUT": 300000
+}
