@@ -34,7 +34,7 @@ const ExperiencesListComponent = ({ clearIdentity }) => {
           Having anonymity in your apps might be easier than you think
         </p>
         <p className="mb-12 text-brand-brown2 text-[16px]">
-          Bellow are some example that just do that
+          Below are some examples that do just that
         </p>
       </div>
       <div className=" relative flex flex-col items-center overflow-hidden rounded-md border-2 border-gray-700 shadow-xl bg-white">
