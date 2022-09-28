@@ -1,0 +1,9 @@
+{
+  "FACTS": [
+    "Proving time is the time it takes for a proof to be completed.",
+    "Trapdoor and nullifier values are the private values of the Semaphore identity. To avoid fraud, the owner must keep both values secret.",
+    "Sempahore identities are given to all Semaphore group members. They are comprised of three parts: identity commitment, trapdoor, and nullifier.",
+    "Semaphore uses the Poseidon hash function to create the identity commitment from the identity private values. Identity commitments can be made public, similarly to Ethereum addresses.",
+    "Semaphore identities can be generated deterministically or randomly. Deterministic identities can be generated from the hash of a secret message."
+  ]
+}

@@ -1,56 +1,53 @@
 import { Identity } from '@semaphore-protocol/identity'
 import { Group } from '@semaphore-protocol/group'
 import { useEffect, useState } from 'react'
-import { Subgraph } from '@semaphore-protocol/subgraph'
+// import { Subgraph } from '@semaphore-protocol/subgraph'
+import { Subgraphs } from './subgraphs'
 
-const {
-  generateProof,
-  verifyProof,
-  packToSolidityProof,
-} = require('@semaphore-protocol/proof')
+const { generateProof, packToSolidityProof } = require('@semaphore-protocol/proof')
+const { GROUP_ID } = require('../config/goerli.json')
 
-export const useGenerateProof = (identityKey) => {
-  const [externalNullifier] = useState(Math.round(Math.random() * 1000000000))
-  // Define signal based on message
-  const [signal] = useState('proposal_1')
-  // const [fullProof, setFullProof] = useState(null)
-  // const [solidityProof, setSolidityProof] = useState(null)
-  // const [nullifierHash, setNullifierHash] = useState(null)
-  // const [identity, setIdentity] = useState(new Identity(identityKey))
-
-  const generateFullProof = async (identityKey) => {
+// eslint-disable-next-line import/prefer-default-export
+export const useGenerateProof = () => {
+  const generateFullProof = async (identityKey, signal) => {
     const identity = new Identity(identityKey)
     const group = new Group(16)
-    const groupId = '10803'
-    const subgraph = new Subgraph('goerli')
-    const { members } = await subgraph.getGroup(groupId, { members: true })
-    console.log('IdentityCommitment', identity.generateCommitment().toString())
-    console.log(members)
-    group.addMembers(members)
-    console.log('group...', group)
+    const groupId = GROUP_ID.toString()
 
-    const fullProofTemp = await generateProof(
-      identity,
-      group,
-      externalNullifier,
-      signal,
-      {
-        zkeyFilePath:
-          'https://www.trusted-setup-pse.org/semaphore/16/semaphore.zkey',
-        wasmFilePath:
-          'https://www.trusted-setup-pse.org/semaphore/16/semaphore.wasm',
-      },
-    )
-    // console.log('fullProofTemp...', fullProofTemp)
-    const { nullifierHash: nullifierHashTemp } = fullProofTemp.publicSignals
+    // const subgraph = new Subgraph()
+    // const subgraph = new Subgraph('goerli')
+    // const { members } = await subgraph.getGroup(groupId, { members: true })
+
+    const subgraphs = new Subgraphs()
+    const members = await subgraphs.getGroupIdentities(groupId)
+
+    console.log('members', members)
+
+    group.addMembers(members)
+
+    const merkleTreeRoot = group.root.toString()
+
+    const externalNullifier = Math.round(Math.random() * 1000000000)
+
+    // Adapt Signal
+    // const signal = 'proposal_1'
+    const fullProofTemp = await generateProof(identity, group, externalNullifier, signal, {
+      zkeyFilePath: '/semaphore.zkey',
+      wasmFilePath: '/semaphoreWasm.wasm'
+    })
+
+    const { nullifierHash } = fullProofTemp.publicSignals
     const solidityProof = packToSolidityProof(fullProofTemp.proof)
-    console.log('fullProof on useHook', fullProofTemp)
+
+    console.log('nullifierHash', nullifierHash)
+
     return {
       fullProofTemp,
       solidityProof,
-      nullifierHashTemp,
+      nullifierHash,
       externalNullifier,
-      signal,
+      merkleTreeRoot,
+      groupId
     }
   }
 

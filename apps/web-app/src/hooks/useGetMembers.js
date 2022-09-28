@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react'
-import { Subgraph } from '@semaphore-protocol/subgraph'
+// import { Subgraph } from '@semaphore-protocol/subgraph'
+import { Subgraphs } from '../hooks/subgraphs'
+
+const { GROUP_ID } = require('../config/goerli.json')
 
 const useGetMembers = async () => {
   const [data, setData] = useState([])
@@ -12,9 +15,13 @@ const useGetMembers = async () => {
 
   const fetchData = async () => {
     try {
-      const subgraph = new Subgraph('goerli')
+      // const subgraph = new Subgraph('goerli')
+      // const { members } = await subgraph.getGroup('1080', { members: true })
 
-      const { members } = await subgraph.getGroup('1080', { members: true })
+      const groupId = GROUP_ID.toString()
+      const subgraphs = new Subgraphs()
+      const members = await subgraphs.getGroupIdentities(groupId)
+
       setData(members)
       console.log('Members Set!!')
     } catch (error) {
