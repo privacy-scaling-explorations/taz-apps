@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 // import Semaphore from '../utils/Semaphore.json'
 import TazMessage from '../utils/TazMessage.json'
 import { TAZMESSAGE_CONTRACT, MAX_TRANSACTION_ATTEMPTS } from '../../config/goerli.json'
-import { fetchWalletIndex, fetchNonce, retry} from '../../helpers/helpers'
+import { fetchWalletIndex, fetchNonce, retry } from '../../helpers/helpers'
 
 dotenv.config({ path: '../../.env.local' })
 
@@ -39,7 +39,7 @@ export default async function handler(req, res) {
     console.log('signer_array[currentIndex]', signer_array[currentIndex])
     const signer = new ethers.Wallet(signer_array[currentIndex]).connect(provider)
     console.log('signer', signer)
-    const signerAddress = await signer.getAddress();
+    const signerAddress = await signer.getAddress()
     const tazMessageContract = new ethers.Contract(tazMessageAddress, tazMessageAbi, signer)
     const bytes32Signal = ethers.utils.formatBytes32String(signal)
 
@@ -49,7 +49,7 @@ export default async function handler(req, res) {
       console.log('BACKEND LOG | Transacting reply')
 
       // const sendTransaction = async () => {
-        try {
+      try {
         const nonce = await fetchNonce(signerAddress)
         tx = await tazMessageContract.replyToMessage(
           parentMessageId,
@@ -60,7 +60,7 @@ export default async function handler(req, res) {
           nullifierHash,
           externalNullifier,
           solidityProof,
-          { nonce,gasLimit: 15000000 }
+          { nonce, gasLimit: 15000000 }
         )
         console.log('Transaction Finished!')
         // const response = await tx.wait(1)
@@ -70,11 +70,10 @@ export default async function handler(req, res) {
         res.status(201).json(tx)
       } catch (e) {
         console.log(e)
-        res.status(500).json(e)
+        res.status(401).json(e)
       }
 
       // await retry(sendTransaction, MAX_TRANSACTION_ATTEMPTS)
-
     } else {
       console.log('BACKEND LOG | Add Message')
 
@@ -88,7 +87,7 @@ export default async function handler(req, res) {
       //   uint256[8] calldata proof) external {
 
       // const sendTransaction = async () => {
-        try {
+      try {
         const nonce = fetchNonce(signerAddress)
         tx = await tazMessageContract.addMessage(
           messageContent,
@@ -107,7 +106,7 @@ export default async function handler(req, res) {
         res.status(201).json(tx)
       } catch (e) {
         console.log(e)
-        res.status(500).json(e)
+        res.status(402).json(e)
       }
 
       // await retry(sendTransaction, MAX_TRANSACTION_ATTEMPTS)

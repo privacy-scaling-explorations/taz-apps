@@ -123,10 +123,12 @@ export default function GenerateIdentity(props) {
 
           // setIsGeneratingIdentity(false)
         }
+
+        console.log('Error10!')
       })
       .catch((err) => {
         console.log(err)
-        console.log('Error!')
+        console.log('Error2!')
 
         cancelTimers(timers)
         setIsLoading(false)

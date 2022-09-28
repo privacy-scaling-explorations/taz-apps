@@ -43,11 +43,7 @@ export default function ArtGallery(props) {
 
   const changeTxLoadingModal = () => {
     console.log('isTxLoading', isTxLoading)
-    if (isTxLoading === true) {
-      setIsTxLoading(false)
-    } else {
-      setIsTxLoading(true)
-    }
+    setIsTxLoading(!isTxLoading)
   }
 
   return (

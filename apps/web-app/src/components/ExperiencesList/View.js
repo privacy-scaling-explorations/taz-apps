@@ -10,7 +10,7 @@ import SelectorArrow from '../ArrowNavigators/SelectorArrow'
 import Accordion from '../FAQ/Accordion'
 import Footer from '../Footer'
 
-const ExperiencesListComponent = ({ clearIdentity, urlIdentity }) => (
+const ExperiencesListComponent = ({ clearIdentity }) => (
   // <div>
   <div className="grid">
     <div className="z-0 col-start-1 row-start-1 fixed">
@@ -73,7 +73,7 @@ const ExperiencesListComponent = ({ clearIdentity, urlIdentity }) => (
           <div className="text-15px text-brand-blue">Take your ID with you </div>
           <div></div>
         </div>
-        <Link href={`https://www.zkitter.com/taz/#${urlIdentity}`} target="_blank" rel="noreferrer">
+        <Link href="https://www.auti.sm" target="_blank" rel="noreferrer">
           <div className="flex w-full flex-row items-center py-3 px-4 cursor-pointer">
             <div className="w-[90%]">
               <p className="py-2 text-brand-h3 font-bold">Zkitter</p>

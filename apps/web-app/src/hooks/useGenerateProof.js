@@ -31,7 +31,8 @@ export const useGenerateProof = () => {
 
     // Adapt Signal
     // const signal = 'proposal_1'
-    const fullProofTemp = await generateProof(identity, group, externalNullifier, signal, {
+    let fullProofTemp
+    fullProofTemp = await generateProof(identity, group, externalNullifier, signal, {
       zkeyFilePath: '/semaphore.zkey',
       wasmFilePath: '/semaphoreWasm.wasm'
     })
