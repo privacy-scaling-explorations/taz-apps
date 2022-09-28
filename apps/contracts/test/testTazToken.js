@@ -9,13 +9,14 @@ const { Identity } = require('@semaphore-protocol/identity')
 const { keccak256 } = require('@ethersproject/keccak256')
 const { toUtf8Bytes } = require('@ethersproject/strings')
 const {
-  GROUP_ID,
   TAZTOKEN_CONTRACT,
   SEMAPHORE_CONTRACT,
   EXTERNAL_NULLIFIER_FOR_VOTING
 } = require('../config/goerli.json')
 
-const identitySeed = process.env.IDENTITY_SEED
+const GROUP_ID = 256 // Set here rather than from config so it differs from TazMessage
+
+const identitySeed = "sample-identity-seed"
 const tazTokenAbi = require('../artifacts/contracts/TazToken.sol/TazToken.json').abi
 
 const TAZ_ADMIN_ROLE_HASH = keccak256(toUtf8Bytes('TAZ_ADMIN_ROLE'))
@@ -253,7 +254,7 @@ describe('TazToken', () => {
         groupId: GROUP_ID,
         signal,
         externalNullifier: EXTERNAL_NULLIFIER_FOR_VOTING,
-        logs: true
+        logs: false
       })
 
       const tx = contract
@@ -281,7 +282,7 @@ describe('TazToken', () => {
         groupId: GROUP_ID,
         signal,
         externalNullifier: EXTERNAL_NULLIFIER_FOR_VOTING,
-        logs: true
+        logs: false
       })
 
       const tx = contract
@@ -305,7 +306,7 @@ describe('TazToken', () => {
         groupId: GROUP_ID,
         signal,
         externalNullifier: EXTERNAL_NULLIFIER_FOR_VOTING,
-        logs: true
+        logs: false
       })
 
       const tx = contract

@@ -3,7 +3,7 @@ const { Identity } = require('@semaphore-protocol/identity')
 const { Group } = require('@semaphore-protocol/group')
 const { generateProof } = require('@semaphore-protocol/proof')
 const { packToSolidityProof } = require('@semaphore-protocol/proof')
-const { Subgraphs } = require('../hooks/subgraphs')
+const { Subgraphs } = require('../helpers/subgraphs')
 
 task('createProof', 'create a proof')
   .addParam('identitySeed', 'String used for identity creation', '', types.string)

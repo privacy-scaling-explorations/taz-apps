@@ -9,9 +9,11 @@ const { run, ethers } = require('hardhat')
 const { Identity } = require('@semaphore-protocol/identity')
 const { keccak256 } = require('@ethersproject/keccak256')
 const { toUtf8Bytes } = require('@ethersproject/strings')
-const { GROUP_ID, TAZMESSAGE_CONTRACT, SEMAPHORE_CONTRACT } = require('../config/goerli.json')
+const { TAZMESSAGE_CONTRACT, SEMAPHORE_CONTRACT } = require('../config/goerli.json')
 
-const identitySeed = process.env.IDENTITY_SEED
+const GROUP_ID = 255 // Set here rather than from config so it differs from TazToken
+
+const identitySeed = "sample-identity-seed"
 const tazMessageAbi = require('../artifacts/contracts/TazMessage.sol/TazMessage.json').abi
 
 const TAZ_ADMIN_ROLE_HASH = keccak256(toUtf8Bytes('TAZ_ADMIN_ROLE'))
