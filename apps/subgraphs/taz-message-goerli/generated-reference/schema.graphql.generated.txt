@@ -1,0 +1,41 @@
+type MemberAdded @entity {
+  id: ID!
+  groupId: BigInt! # uint256
+  identityCommitment: BigInt! # uint256
+}
+
+type MessageAdded @entity {
+  id: ID!
+  parentMessageId: String! # string
+  messageId: String! # string
+  messageNum: BigInt! # uint256
+  messageContent: String! # string
+  timestamp: BigInt!
+}
+
+type RoleAdminChanged @entity {
+  id: ID!
+  role: Bytes! # bytes32
+  previousAdminRole: Bytes! # bytes32
+  newAdminRole: Bytes! # bytes32
+}
+
+type RoleGranted @entity {
+  id: ID!
+  role: Bytes! # bytes32
+  account: Bytes! # address
+  sender: Bytes! # address
+}
+
+type RoleRevoked @entity {
+  id: ID!
+  role: Bytes! # bytes32
+  account: Bytes! # address
+  sender: Bytes! # address
+}
+
+type ViolationAdded @entity {
+  id: ID!
+  messageNum: BigInt! # uint256
+  reviewer: Bytes! # address
+}

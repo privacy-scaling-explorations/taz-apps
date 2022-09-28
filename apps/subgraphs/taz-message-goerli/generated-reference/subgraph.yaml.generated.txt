@@ -1,0 +1,39 @@
+specVersion: 0.0.4
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Contract
+    network: goerli
+    source:
+      address: "0xE2C95FD193148321286Acf018E4fbB645F804f8B"
+      abi: Contract
+      startBlock: 7460000 
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - MemberAdded
+        - MessageAdded
+        - RoleAdminChanged
+        - RoleGranted
+        - RoleRevoked
+        - ViolationAdded
+      abis:
+        - name: Contract
+          file: ./abis/Contract.json
+      eventHandlers:
+        - event: MemberAdded(indexed uint256,uint256)
+          handler: handleMemberAdded
+        - event: MessageAdded(string,string,uint256,string)
+          handler: handleMessageAdded
+        - event: RoleAdminChanged(indexed bytes32,indexed bytes32,indexed bytes32)
+          handler: handleRoleAdminChanged
+        - event: RoleGranted(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleGranted
+        - event: RoleRevoked(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleRevoked
+        - event: ViolationAdded(uint256,address)
+          handler: handleViolationAdded
+      file: ./src/contract.ts

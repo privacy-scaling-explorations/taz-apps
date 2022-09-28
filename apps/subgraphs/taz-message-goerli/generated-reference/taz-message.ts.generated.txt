@@ -1,0 +1,76 @@
+import {
+  MemberAdded as MemberAddedEvent,
+  MessageAdded as MessageAddedEvent,
+  RoleAdminChanged as RoleAdminChangedEvent,
+  RoleGranted as RoleGrantedEvent,
+  RoleRevoked as RoleRevokedEvent,
+  ViolationAdded as ViolationAddedEvent
+} from "../generated/Contract/Contract"
+import {
+  MemberAdded,
+  MessageAdded,
+  RoleAdminChanged,
+  RoleGranted,
+  RoleRevoked,
+  ViolationAdded
+} from "../generated/schema"
+
+export function handleMemberAdded(event: MemberAddedEvent): void {
+  let entity = new MemberAdded(
+    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
+  )
+  entity.groupId = event.params.groupId
+  entity.identityCommitment = event.params.identityCommitment
+  entity.save()
+}
+
+export function handleMessageAdded(event: MessageAddedEvent): void {
+  let entity = new MessageAdded(
+    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
+  )
+  entity.parentMessageId = event.params.parentMessageId
+  entity.messageId = event.params.messageId
+  entity.messageNum = event.params.messageNum
+  entity.messageContent = event.params.messageContent
+  entity.timestamp = event.block.timestamp
+  entity.save()
+}
+
+export function handleRoleAdminChanged(event: RoleAdminChangedEvent): void {
+  let entity = new RoleAdminChanged(
+    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
+  )
+  entity.role = event.params.role
+  entity.previousAdminRole = event.params.previousAdminRole
+  entity.newAdminRole = event.params.newAdminRole
+  entity.save()
+}
+
+export function handleRoleGranted(event: RoleGrantedEvent): void {
+  let entity = new RoleGranted(
+    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
+  )
+  entity.role = event.params.role
+  entity.account = event.params.account
+  entity.sender = event.params.sender
+  entity.save()
+}
+
+export function handleRoleRevoked(event: RoleRevokedEvent): void {
+  let entity = new RoleRevoked(
+    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
+  )
+  entity.role = event.params.role
+  entity.account = event.params.account
+  entity.sender = event.params.sender
+  entity.save()
+}
+
+export function handleViolationAdded(event: ViolationAddedEvent): void {
+  let entity = new ViolationAdded(
+    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
+  )
+  entity.messageNum = event.params.messageNum
+  entity.reviewer = event.params.reviewer
+  entity.save()
+}
