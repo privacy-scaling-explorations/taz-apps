@@ -1,12 +1,12 @@
 ## Contracts
 
-The contracts folder includes test, tasks, and scripts folders for teh two TAZ smart contracts: TazMessage and TazToken.
+The contracts folder includes test, tasks, and scripts folders for the two TAZ smart contracts: TazMessage and TazToken.
 
 Contract tests can be run from the root "taz-apps" folder using ```yarn test:contracts```.
 
 Included in the tasks folder are Hardhat tasks for creating proofs and deploying contracts.
 
-The scripts folder includes scripts for accomplishing things such as adding access roles to the contracts and updating the group admin on the Semaphore contract when a new contract is deployed.
+The scripts folder includes scripts for accomplishing things such as adding access roles to the contracts and updating the group admin on the Semaphore contract to be the new TazMessage contract when a new TazMessage contract is deployed.
 
 # Subgraphs
 
