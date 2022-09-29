@@ -1,8 +1,8 @@
+import { ethers } from "ethers"
+import dotenv from "dotenv"
 import { TAZTOKEN_CONTRACT } from "../../config/goerli.json"
 import { fetchWalletIndex } from "../../helpers/helpers"
 import TazToken from "../utils/TazToken.json"
-import { ethers } from "ethers"
-import dotenv from "dotenv"
 
 dotenv.config({ path: "../../.env.local" })
 
@@ -29,7 +29,7 @@ export default async function handler(req, res) {
                 nullifierHash,
                 solidityProof,
                 {
-                    gasLimit: 15000000
+                    gasLimit: 150000
                 }
             )
             console.log(tx)
