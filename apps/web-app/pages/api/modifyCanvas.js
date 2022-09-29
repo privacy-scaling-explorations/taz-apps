@@ -1,5 +1,6 @@
 import faunadb from "faunadb"
 import { verifyProof } from "@semaphore-protocol/proof"
+import verificationKey from "../../static/semaphore.json"
 
 
 export default async function handler(req, res) {
@@ -50,7 +51,6 @@ export default async function handler(req, res) {
 
         const { canvasId, updatedTiles, tileIndex , fullProof} = req.body
 
-        const verificationKey = await fetch("https://www.trusted-setup-pse.org/semaphore/16/semaphore.json").then((res) => res.json());
         const proofRes = await verifyProof(verificationKey, fullProof)
         const response = proofRes.toString();
 
