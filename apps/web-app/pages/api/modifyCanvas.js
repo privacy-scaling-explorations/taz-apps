@@ -2,7 +2,6 @@ import faunadb from "faunadb"
 import { verifyProof } from "@semaphore-protocol/proof"
 import verificationKey from "../../static/semaphore.json"
 
-
 export default async function handler(req, res) {
     // Make connection to the database
     const secret = process.env.FAUNA_SECRET_KEY
@@ -49,14 +48,14 @@ export default async function handler(req, res) {
         // To update the database the backend needs the canvasId and the updated tiles from the request body
         // For example: updatedTiles: ["newDrawingString","","","","","","","",""] canvasId: 1
 
-        const { canvasId, updatedTiles, tileIndex , fullProof} = req.body
+        const { canvasId, updatedTiles, tileIndex, fullProof } = req.body
 
         const proofRes = await verifyProof(verificationKey, fullProof)
-        const response = proofRes.toString();
+        const response = proofRes.toString()
 
         console.log("Is proof valid?", response)
 
-        if(response === "true"){
+        if (response === "true") {
             // Query all 5 canvases from the database
 
             const dbs = await client.query(
@@ -67,11 +66,11 @@ export default async function handler(req, res) {
                     query.Lambda("canvasRef", query.Get(query.Var("canvasRef")))
                 )
             )
-    
+
             // Find the matching canvas based on the canvasId
             const match = dbs.data.filter((canvas) => canvas.data.canvasId === canvasId)[0]
             console.log(match.data.tiles[tileIndex])
-    
+
             if (match.data.tiles[tileIndex] === "") {
                 const newLocal = "Canvas successfully updated!"
                 // Update the canvas in the database
@@ -93,13 +92,10 @@ export default async function handler(req, res) {
                 const existingTile = match.data.tiles[tileIndex]
                 res.status(403).json({ newLocal, existingTile })
             }
-
         } else {
             const newLocal = "Error: Proof is invalid"
 
             res.status(404).json({ newLocal })
         }
-
-    
     }
 }

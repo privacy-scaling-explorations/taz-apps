@@ -61,80 +61,78 @@ export default async function handler(req, res) {
             // if (match.data.tiles.includes("")) {
             //     res.status(400).json("Canvas is not full yet")
             // } else {
-                console.log("canvas is full")
+            console.log("canvas is full")
 
-                const web3StorageApiToken = process.env.WEB3_STORAGE_API_TOKEN
+            const web3StorageApiToken = process.env.WEB3_STORAGE_API_TOKEN
 
-                const b64toBlob = async (b64Data, contentType = "", sliceSize = 512) => {
-                    const byteCharacters = Buffer.from(b64Data, "base64").toString("binary")
-                    const byteArrays = []
-                    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-                        const slice = byteCharacters.slice(offset, offset + sliceSize)
-                        const byteNumbers = new Array(slice.length)
-                        for (let i = 0; i < slice.length; i++) {
-                            byteNumbers[i] = slice.charCodeAt(i)
-                        }
-                        const byteArray = new Uint8Array(byteNumbers)
-                        byteArrays.push(byteArray)
+            const b64toBlob = async (b64Data, contentType = "", sliceSize = 512) => {
+                const byteCharacters = Buffer.from(b64Data, "base64").toString("binary")
+                const byteArrays = []
+                for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+                    const slice = byteCharacters.slice(offset, offset + sliceSize)
+                    const byteNumbers = new Array(slice.length)
+                    for (let i = 0; i < slice.length; i++) {
+                        byteNumbers[i] = slice.charCodeAt(i)
                     }
-                    const blob = new Blob(byteArrays, { type: contentType })
-                    return blob
+                    const byteArray = new Uint8Array(byteNumbers)
+                    byteArrays.push(byteArray)
                 }
+                const blob = new Blob(byteArrays, { type: contentType })
+                return blob
+            }
 
-                const contentType = "image/png"
-                const b64Data = imageUri.replace("data:image/png;base64,", "")
-                const blobForServingImage = await b64toBlob(b64Data, contentType)
+            const contentType = "image/png"
+            const b64Data = imageUri.replace("data:image/png;base64,", "")
+            const blobForServingImage = await b64toBlob(b64Data, contentType)
 
-                const web3StorageClient = new Web3Storage({
-                    token: web3StorageApiToken,
-                    endpoint: new URL("https://api.web3.storage")
-                })
+            const web3StorageClient = new Web3Storage({
+                token: web3StorageApiToken,
+                endpoint: new URL("https://api.web3.storage")
+            })
 
-                const dataFileArrayForServingImage = [new File([blobForServingImage], "image.png")]
+            const dataFileArrayForServingImage = [new File([blobForServingImage], "image.png")]
 
-                let ipfsUrl
+            let ipfsUrl
 
-                await web3StorageClient
-                    .put(dataFileArrayForServingImage, { wrapWithDirectory: false })
-                    .then((dataCid) => {
-                        ipfsUrl = `https://${dataCid}.ipfs.dweb.link`
-                        console.log("IPFS url created: ", ipfsUrl)
-                    })
+            await web3StorageClient.put(dataFileArrayForServingImage, { wrapWithDirectory: false }).then((dataCid) => {
+                ipfsUrl = `https://${dataCid}.ipfs.dweb.link`
+                console.log("IPFS url created: ", ipfsUrl)
+            })
 
-                try {
-                    const currentIndex = await fetchWalletIndex()
-                    const signer_array = process.env.PRIVATE_KEY_ARRAY.split(",")
-                    const signer = new ethers.Wallet(signer_array[currentIndex]).connect(provider)
-                    const signerAddress = await signer.getAddress()
-                    const nftContract = new ethers.Contract(contractAddress, abi, signer)
-                    const signalBytes32 = ethers.utils.formatBytes32String(signal)
-                    const tx = await nftContract.safeMint(
-                        signerAddress,
-                        ipfsUrl,
-                        groupId,
-                        merkleTreeRoot,
-                        signalBytes32,
-                        nullifierHash,
-                        externalNullifier,
-                        solidityProof,
-                        {
-                            gasLimit: 500000
+            try {
+                const currentIndex = await fetchWalletIndex()
+                const signer_array = process.env.PRIVATE_KEY_ARRAY.split(",")
+                const signer = new ethers.Wallet(signer_array[currentIndex]).connect(provider)
+                const signerAddress = await signer.getAddress()
+                const nftContract = new ethers.Contract(contractAddress, abi, signer)
+                const signalBytes32 = ethers.utils.formatBytes32String(signal)
+                const tx = await nftContract.safeMint(
+                    signerAddress,
+                    ipfsUrl,
+                    groupId,
+                    merkleTreeRoot,
+                    signalBytes32,
+                    nullifierHash,
+                    externalNullifier,
+                    solidityProof,
+                    {
+                        gasLimit: 500000
+                    }
+                )
+                console.log(tx)
+
+                await client.query(
+                    query.Update(query.Ref(match.ref), {
+                        data: {
+                            tiles: ["", "", "", "", "", "", "", "", ""]
                         }
-                    )
-                    console.log(tx)
+                    })
+                )
 
-                    await client.query(
-                        query.Update(query.Ref(match.ref), {
-                            data: {
-                                tiles: ["", "", "", "", "", "", "", "", ""]
-                            }
-                        })
-                    )
-
-                    res.status(201).json({ tx, ipfsUrl })
-                } catch (e) {
-                    console.log(e)
-                    res.status(401).json(e)
+                res.status(201).json({ tx, ipfsUrl })
+            } catch (e) {
+                console.log(e)
+                res.status(401).json(e)
                 // }
             }
         } catch (error) {
