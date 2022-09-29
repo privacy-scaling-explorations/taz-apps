@@ -1,6 +1,6 @@
 import { Identity } from '@semaphore-protocol/identity'
 import { Group } from '@semaphore-protocol/group'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 // import { Subgraph } from '@semaphore-protocol/subgraph'
 import { Subgraphs } from './subgraphs'
 
@@ -8,8 +8,8 @@ const { generateProof, packToSolidityProof } = require('@semaphore-protocol/proo
 const { GROUP_ID } = require('../config/goerli.json')
 
 // eslint-disable-next-line import/prefer-default-export
-export const useGenerateProof = () => {
-  const generateFullProof = async (identityKey, signal) => {
+export const useGenerateProofVote = () => {
+  const generateFullProofVote = async (identityKey, signal) => {
     const identity = new Identity(identityKey)
     const group = new Group(16)
     const groupId = GROUP_ID.toString()
@@ -27,11 +27,11 @@ export const useGenerateProof = () => {
 
     const merkleTreeRoot = group.root.toString()
 
-    const externalNullifier = Math.round(Math.random() * 1000000000)
+    const externalNullifier = 115101
 
     // Adapt Signal
     // const signal = 'proposal_1'
-    const fullProofTemp = await generateProof(identity, group, externalNullifier, signal, {
+    const fullProofTemp = await generateProof(identity, group, 115101, signal, {
       zkeyFilePath: '/semaphore.zkey',
       wasmFilePath: '/semaphoreWasm.wasm'
     })
@@ -55,5 +55,5 @@ export const useGenerateProof = () => {
     console.log('State Initiated')
   }, [])
 
-  return [generateFullProof]
+  return [generateFullProofVote]
 }
