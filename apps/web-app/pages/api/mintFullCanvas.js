@@ -58,9 +58,9 @@ export default async function handler(req, res) {
 
             const match = dbs.data.filter((canvas) => canvas.data.canvasId === canvasId)[0]
 
-            if (match.data.tiles.includes("")) {
-                res.status(400).json("Canvas is not full yet")
-            } else {
+            // if (match.data.tiles.includes("")) {
+            //     res.status(400).json("Canvas is not full yet")
+            // } else {
                 console.log("canvas is full")
 
                 const web3StorageApiToken = process.env.WEB3_STORAGE_API_TOKEN
@@ -118,7 +118,7 @@ export default async function handler(req, res) {
                         externalNullifier,
                         solidityProof,
                         {
-                            gasLimit: 150000
+                            gasLimit: 500000
                         }
                     )
                     console.log(tx)
@@ -135,7 +135,7 @@ export default async function handler(req, res) {
                 } catch (e) {
                     console.log(e)
                     res.status(401).json(e)
-                }
+                // }
             }
         } catch (error) {
             res.status(500).json("Error in catch 2: ", error)

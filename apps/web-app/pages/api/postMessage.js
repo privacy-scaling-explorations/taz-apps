@@ -51,7 +51,7 @@ export default async function handler(req, res) {
                     nullifierHash,
                     externalNullifier,
                     solidityProof,
-                    { gasLimit: 150000 }
+                    { gasLimit: 500000 }
                 )
                 console.log(tx)
 
@@ -77,7 +77,7 @@ export default async function handler(req, res) {
                     nullifierHash,
                     externalNullifier,
                     solidityProof,
-                    { gasLimit: 150000 }
+                    { gasLimit: 500000 }
                 )
 
                 console.log(tx)

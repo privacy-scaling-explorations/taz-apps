@@ -1,4 +1,7 @@
 import faunadb from "faunadb"
+import { verifyProof } from "@semaphore-protocol/proof"
+import verificationKey from "../../static/semaphore.json"
+
 
 export default async function handler(req, res) {
     // Make connection to the database
@@ -46,42 +49,57 @@ export default async function handler(req, res) {
         // To update the database the backend needs the canvasId and the updated tiles from the request body
         // For example: updatedTiles: ["newDrawingString","","","","","","","",""] canvasId: 1
 
-        const { canvasId, updatedTiles, tileIndex } = req.body
+        const { canvasId, updatedTiles, tileIndex , fullProof} = req.body
 
-        // Query all 5 canvases from the database
-        const dbs = await client.query(
-            query.Map(
-                query.Paginate(query.Match(query.Index("all_canvases")), {
-                    size: 10000
-                }),
-                query.Lambda("canvasRef", query.Get(query.Var("canvasRef")))
-            )
-        )
+        const proofRes = await verifyProof(verificationKey, fullProof)
+        const response = proofRes.toString();
 
-        // Find the matching canvas based on the canvasId
-        const match = dbs.data.filter((canvas) => canvas.data.canvasId === canvasId)[0]
-        console.log(match.data.tiles[tileIndex])
+        console.log("Is proof valid?", response)
 
-        if (match.data.tiles[tileIndex] === "") {
-            const newLocal = "Canvas successfully updated!"
-            // Update the canvas in the database
-            // eslint-disable-next-line no-unused-expressions
-            await client
-                .query(
-                    query.Update(query.Ref(match.ref), {
-                        data: {
-                            tiles: updatedTiles
-                        }
-                    })
-                    // eslint-disable-next-line no-sequences
+        if(response === "true"){
+            // Query all 5 canvases from the database
+
+            const dbs = await client.query(
+                query.Map(
+                    query.Paginate(query.Match(query.Index("all_canvases")), {
+                        size: 10000
+                    }),
+                    query.Lambda("canvasRef", query.Get(query.Var("canvasRef")))
                 )
-                .then((ret) => console.log(ret))
-            // Send response back to frontend
-            res.status(201).json(newLocal)
+            )
+    
+            // Find the matching canvas based on the canvasId
+            const match = dbs.data.filter((canvas) => canvas.data.canvasId === canvasId)[0]
+            console.log(match.data.tiles[tileIndex])
+    
+            if (match.data.tiles[tileIndex] === "") {
+                const newLocal = "Canvas successfully updated!"
+                // Update the canvas in the database
+                // eslint-disable-next-line no-unused-expressions
+                await client
+                    .query(
+                        query.Update(query.Ref(match.ref), {
+                            data: {
+                                tiles: updatedTiles
+                            }
+                        })
+                        // eslint-disable-next-line no-sequences
+                    )
+                    .then((ret) => console.log(ret))
+                // Send response back to frontend
+                res.status(201).json(newLocal)
+            } else {
+                const newLocal = "Error: this tile has already been filled"
+                const existingTile = match.data.tiles[tileIndex]
+                res.status(403).json({ newLocal, existingTile })
+            }
+
         } else {
-            const newLocal = "Error: this tile has already been filled"
-            const existingTile = match.data.tiles[tileIndex]
-            res.status(403).json({ newLocal, existingTile })
+            const newLocal = "Error: Proof is invalid"
+
+            res.status(404).json({ newLocal })
         }
+
+    
     }
 }
