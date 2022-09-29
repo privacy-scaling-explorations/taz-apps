@@ -1,21 +1,9 @@
 //SPDX-License-Identifier: MIT
-pragma solidity 0.8.13;
+pragma solidity 0.8.4;
 
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
-
-interface ISemaphore {
-    function addMember(uint256 groupId, uint256 identityCommitment) external;
-    function updateGroupAdmin(uint256 groupId, address newAdmin) external;
-    function verifyProof(
-        uint256 groupId,
-        uint256 merkleTreeRoot,
-        bytes32 signal,
-        uint256 nullifierHash,
-        uint256 externalNullifier,
-        uint256[8] calldata proof
-    ) external;
-}
+import "@semaphore-protocol/contracts/interfaces/ISemaphore.sol";
 
 contract TazMessage is AccessControl {
     using Counters for Counters.Counter;
@@ -86,7 +74,8 @@ contract TazMessage is AccessControl {
         bytes32 signal,
         uint256 nullifierHash,
         uint256 externalNullifier,
-        uint256[8] calldata proof) external returns (uint256) {
+        uint256[8] calldata proof
+    ) external returns (uint256) {
         uint256 messageId = _messageIdCounter.current();
 
         // Verify proof with Sempahore contract
@@ -109,7 +98,8 @@ contract TazMessage is AccessControl {
         bytes32 signal,
         uint256 nullifierHash,
         uint256 externalNullifier,
-        uint256[8] calldata proof) external returns (uint256) {
+        uint256[8] calldata proof
+    ) external returns (uint256) {
         uint256 messageId = _messageIdCounter.current();
 
         // Require a valid parentMessageId
@@ -127,25 +117,25 @@ contract TazMessage is AccessControl {
     }
 
     function addAdmins(address[] calldata admins) external onlyRole(TAZ_ADMIN_ROLE) {
-        for(uint256 i = 0; i < admins.length; ++i) {
+        for (uint256 i = 0; i < admins.length; ++i) {
             grantRole(TAZ_ADMIN_ROLE, admins[i]);
         }
     }
 
     function removeAdmins(address[] calldata admins) external onlyRole(TAZ_ADMIN_ROLE) {
-        for(uint256 i = 0; i < admins.length; ++i) {
+        for (uint256 i = 0; i < admins.length; ++i) {
             revokeRole(TAZ_ADMIN_ROLE, admins[i]);
         }
     }
 
     function addReviewers(address[] calldata reviewers) external onlyRole(TAZ_ADMIN_ROLE) {
-        for(uint256 i = 0; i < reviewers.length; ++i) {
+        for (uint256 i = 0; i < reviewers.length; ++i) {
             grantRole(REVIEWER_ROLE, reviewers[i]);
         }
     }
 
     function removeReviewers(address[] calldata reviewers) external onlyRole(TAZ_ADMIN_ROLE) {
-        for(uint256 i = 0; i < reviewers.length; ++i) {
+        for (uint256 i = 0; i < reviewers.length; ++i) {
             revokeRole(REVIEWER_ROLE, reviewers[i]);
         }
     }

@@ -1,0 +1,22 @@
+type MemberAdded @entity {
+    id: ID!
+    groupId: BigInt! # uint256
+    identityCommitment: BigInt! # uint256
+}
+
+type Message @entity {
+    id: ID!
+    parentMessageId: BigInt! # uint256
+    messageId: BigInt! # uint256
+    messageContent: String! # string
+    hasViolation: Boolean!
+    timestamp: BigInt!
+    violations: [Violation!] @derivedFrom(field: "message")
+}
+
+type Violation @entity {
+    id: ID!
+    reviewer: Bytes! # address
+    timestamp: BigInt!
+    message: Message!
+}

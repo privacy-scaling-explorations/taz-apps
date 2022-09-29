@@ -1,23 +1,11 @@
 //SPDX-License-Identifier: MIT
-pragma solidity 0.8.13;
+pragma solidity 0.8.4;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
-
-import "hardhat/console.sol";
-
-interface ISemaphore {
-    function verifyProof(
-        uint256 groupId,
-        uint256 merkleTreeRoot,
-        bytes32 signal,
-        uint256 nullifierHash,
-        uint256 externalNullifier,
-        uint256[8] calldata proof
-    ) external;
-}
+import "@semaphore-protocol/contracts/interfaces/ISemaphore.sol";
 
 contract TazToken is ERC721, ERC721URIStorage, AccessControl {
     using Counters for Counters.Counter;
@@ -68,7 +56,8 @@ contract TazToken is ERC721, ERC721URIStorage, AccessControl {
         bytes32 signal,
         uint256 nullifierHash,
         uint256 externalNullifier,
-        uint256[8] calldata proof) public onlyRole(TAZ_ADMIN_ROLE) returns (uint256){
+        uint256[8] calldata proof
+    ) public onlyRole(TAZ_ADMIN_ROLE) returns (uint256) {
         uint256 tokenId = _tokenIdCounter.current();
 
         require(_mintingActive, "Minting not active");
@@ -93,8 +82,8 @@ contract TazToken is ERC721, ERC721URIStorage, AccessControl {
         uint256 merkleTreeRoot,
         bytes32 signal,
         uint256 nullifierHash,
-        uint256[8] calldata proof) external {
-
+        uint256[8] calldata proof
+    ) external {
         require(_votingActive, "Voting not active");
 
         // Verify proof with Sempahore contract
@@ -104,37 +93,37 @@ contract TazToken is ERC721, ERC721URIStorage, AccessControl {
     }
 
     function addAdmins(address[] calldata admins) external onlyRole(TAZ_ADMIN_ROLE) {
-        for(uint256 i = 0; i < admins.length; ++i) {
+        for (uint256 i = 0; i < admins.length; ++i) {
             grantRole(TAZ_ADMIN_ROLE, admins[i]);
         }
     }
 
     function removeAdmins(address[] calldata admins) external onlyRole(TAZ_ADMIN_ROLE) {
-        for(uint256 i = 0; i < admins.length; ++i) {
+        for (uint256 i = 0; i < admins.length; ++i) {
             revokeRole(TAZ_ADMIN_ROLE, admins[i]);
         }
     }
 
     function addStartStoppers(address[] calldata startStoppers) external onlyRole(TAZ_ADMIN_ROLE) {
-        for(uint256 i = 0; i < startStoppers.length; ++i) {
+        for (uint256 i = 0; i < startStoppers.length; ++i) {
             grantRole(START_STOPPER_ROLE, startStoppers[i]);
         }
     }
 
     function removeStartStoppers(address[] calldata startStoppers) external onlyRole(TAZ_ADMIN_ROLE) {
-        for(uint256 i = 0; i < startStoppers.length; ++i) {
+        for (uint256 i = 0; i < startStoppers.length; ++i) {
             revokeRole(START_STOPPER_ROLE, startStoppers[i]);
         }
     }
 
     function addReviewers(address[] calldata reviewers) external onlyRole(TAZ_ADMIN_ROLE) {
-        for(uint256 i = 0; i < reviewers.length; ++i) {
+        for (uint256 i = 0; i < reviewers.length; ++i) {
             grantRole(REVIEWER_ROLE, reviewers[i]);
         }
     }
 
     function removeReviewers(address[] calldata reviewers) external onlyRole(TAZ_ADMIN_ROLE) {
-        for(uint256 i = 0; i < reviewers.length; ++i) {
+        for (uint256 i = 0; i < reviewers.length; ++i) {
             revokeRole(REVIEWER_ROLE, reviewers[i]);
         }
     }
@@ -165,21 +154,11 @@ contract TazToken is ERC721, ERC721URIStorage, AccessControl {
         super._burn(tokenId);
     }
 
-    function tokenURI(uint256 tokenId)
-        public
-        view
-        override(ERC721, ERC721URIStorage)
-        returns (string memory)
-    {
+    function tokenURI(uint256 tokenId) public view override(ERC721, ERC721URIStorage) returns (string memory) {
         return super.tokenURI(tokenId);
     }
 
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        override(ERC721, AccessControl)
-        returns (bool)
-    {
+    function supportsInterface(bytes4 interfaceId) public view override(ERC721, AccessControl) returns (bool) {
         return super.supportsInterface(interfaceId);
     }
 }

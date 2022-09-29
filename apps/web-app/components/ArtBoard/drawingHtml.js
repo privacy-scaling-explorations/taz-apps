@@ -1,18 +1,18 @@
-import React, { forwardRef } from 'react'
-import { Stage, Layer, Line, Rect } from 'react-konva'
+import React, { forwardRef } from "react"
+import { Stage, Layer, Line, Rect } from "react-konva"
 
 const DrawingHtml = forwardRef(({ color, stageRef, borderRef, lines, setLines, fillColor }) => {
     const isDrawing = React.useRef(false)
-    const [tool] = React.useState('pen')
+    const [tool] = React.useState("pen")
     const COLORCONVERT = {
-        white: 'white',
-        black: '#171717',
-        'red-600': '#dc2626',
-        'orange-500': '#f97316',
-        'yellow-300': '#fde047',
-        'green-600': '#16a34a',
-        'blue-600': '#2563eb',
-        'purple-600': '#9333ea'
+        white: "white",
+        black: "#171717",
+        "red-600": "#dc2626",
+        "orange-500": "#f97316",
+        "yellow-300": "#fde047",
+        "green-600": "#16a34a",
+        "blue-600": "#2563eb",
+        "purple-600": "#9333ea"
     }
 
     const handleMouseDown = (e) => {
@@ -69,7 +69,7 @@ const DrawingHtml = forwardRef(({ color, stageRef, borderRef, lines, setLines, f
                             tension={0.5}
                             lineCap="round"
                             lineJoin="round"
-                            globalCompositeOperation={line.tool === 'eraser' ? 'destination-out' : 'source-over'}
+                            globalCompositeOperation={line.tool === "eraser" ? "destination-out" : "source-over"}
                         />
                     ))}
                 </Layer>
