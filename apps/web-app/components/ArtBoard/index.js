@@ -187,28 +187,7 @@ export default function ArtBoard() {
         //   setIsLoading(false)
         // }
 
-        try {
-            setSteps([
-                { status: "complete", text: "Generate zero knowledge proof" },
-                { status: "processing", text: "Verify ZKP Membership and submit Art" }
-            ])
-            const response = await axios.post("/api/modifyCanvas", {
-                updatedTiles: tilesRef.current,
-                tileIndex: selectedTile,
-                canvasId: canvasId.current
-            })
-            if (response.status === 201) {
-                router.push("/artGallery-page")
-            }
-        } catch (error) {
-            alert("Tile already exists, please submit another Tile")
-            console.log("error", error)
-            console.log("data", error.response.data.existingTile)
-            tiles[selectedTile] = error.response.data.existingTile
-            setIsLoading(false)
-            setUserSelectedTile(false)
-            setSelectedTile(null)
-        }
+   
 
         if (tilesRemaining.length === 0) {
             const body = {
@@ -249,6 +228,32 @@ export default function ArtBoard() {
             } else if (mintResponse.status === 403) {
                 alert("Tx have failed, please try submitting again")
             }
+        } else {
+          try {
+            setSteps([
+                { status: "complete", text: "Generate zero knowledge proof" },
+                { status: "processing", text: "Verify ZKP Membership and submit Art" }
+            ])
+
+            const body = {
+              updatedTiles:tilesRef.current,
+              tileIndex: selectedTile,
+              canvasId: canvasId.current,
+              fullProof: fullProofTemp
+          }
+            const response = await axios.post("/api/modifyCanvas", body)
+            if (response.status === 201) {
+                router.push("/artGallery-page")
+            }
+        } catch (error) {
+            alert("Tile already exists, please submit another Tile")
+            console.log("error", error)
+            console.log("data", error.response.data.existingTile)
+            tiles[selectedTile] = error.response.data.existingTile
+            setIsLoading(false)
+            setUserSelectedTile(false)
+            setSelectedTile(null)
+        }
         }
     }
 
