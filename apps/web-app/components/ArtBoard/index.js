@@ -161,7 +161,7 @@ export default function ArtBoard() {
         // Should be renamed. This is for Posting data not loading.
         setIsLoading(true)
         setSteps([
-            { status: "processing", text: "Generate zero knowledge proof" },
+            { status: "processing", text: "Generating zero knowledge proof" },
             { status: "queued", text: "Verify ZKP Membership and submit Art" }
         ])
         const signal = "proposal_1"
@@ -187,8 +187,6 @@ export default function ArtBoard() {
         //   setIsLoading(false)
         // }
 
-   
-
         if (tilesRemaining.length === 0) {
             const body = {
                 imageUri: canvasUri,
@@ -204,9 +202,9 @@ export default function ArtBoard() {
             console.log("canvasUri: ", canvasUri)
             console.log("canvasId.current: ", canvasId.current)
             setSteps([
-                { status: "complete", text: "Generate zero knowledge proof" },
-                { status: "complete", text: "Submit transaction with proof and Canva" },
-                { status: "processing", text: "Update ArtGallery from on-chain events" }
+                { status: "complete", text: "Generated zero knowledge proof" },
+                { status: "complete", text: "Submitted transaction with proof and Canva" },
+                { status: "processing", text: "Updating ArtGallery from on-chain events" }
             ])
 
             // Add Try and Catch
@@ -229,31 +227,33 @@ export default function ArtBoard() {
                 alert("Tx have failed, please try submitting again")
             }
         } else {
-          try {
-            setSteps([
-                { status: "complete", text: "Generate zero knowledge proof" },
-                { status: "processing", text: "Verify ZKP Membership and submit Art" }
-            ])
+            try {
+                setSteps([
+                    { status: "complete", text: "Generated zero knowledge proof" },
+                    { status: "processing", text: "Verifying ZKP Membership and submit Art" }
+                ])
 
-            const body = {
-              updatedTiles:tilesRef.current,
-              tileIndex: selectedTile,
-              canvasId: canvasId.current,
-              fullProof: fullProofTemp
-          }
-            const response = await axios.post("/api/modifyCanvas", body)
-            if (response.status === 201) {
-                router.push("/artGallery-page")
+                const body = {
+                    updatedTiles: tilesRef.current,
+                    tileIndex: selectedTile,
+                    canvasId: canvasId.current,
+                    fullProof: fullProofTemp
+                }
+                const response = await axios.post("/api/modifyCanvas", body)
+                if (response.status === 201) {
+                    router.push("/artGallery-page")
+                }
+            } catch (error) {
+                alert(
+                    "Error: someone submitted their drawing to this tile before you. Don’t worry, your drawing is saved! It will be applied to the next tile you select."
+                )
+                console.log("error", error)
+                console.log("data", error.response.data.existingTile)
+                tiles[selectedTile] = error.response.data.existingTile
+                setIsLoading(false)
+                setUserSelectedTile(false)
+                setSelectedTile(null)
             }
-        } catch (error) {
-            alert("Tile already exists, please submit another Tile")
-            console.log("error", error)
-            console.log("data", error.response.data.existingTile)
-            tiles[selectedTile] = error.response.data.existingTile
-            setIsLoading(false)
-            setUserSelectedTile(false)
-            setSelectedTile(null)
-        }
         }
     }
 

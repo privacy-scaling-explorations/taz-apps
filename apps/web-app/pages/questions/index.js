@@ -75,7 +75,7 @@ export default function Questions() {
         setTimeout(openProcessingModal, CHAINED_MODAL_DELAY)
 
         setSteps([
-            { status: "processing", text: "Generate zero knowledge proof" },
+            { status: "processing", text: "Generating zero knowledge proof" },
             { status: "queued", text: "Submit transaction with proof and question" },
             { status: "queued", text: "Update questions from on-chain events" }
         ])
@@ -88,8 +88,8 @@ export default function Questions() {
         )
 
         setSteps([
-            { status: "complete", text: "Generate zero knowledge proof" },
-            { status: "processing", text: "Submit transaction with proof and question" },
+            { status: "complete", text: "Generated zero knowledge proof" },
+            { status: "processing", text: "Submitting transaction with proof and question" },
             { status: "queued", text: "Update questions from on-chain events" }
         ])
 
@@ -133,9 +133,9 @@ export default function Questions() {
         }
 
         setSteps([
-            { status: "complete", text: "Generate zero knowledge proof" },
-            { status: "complete", text: "Submit transaction with proof and question" },
-            { status: "processing", text: "Update questions from on-chain events" }
+            { status: "complete", text: "Generated zero knowledge proof" },
+            { status: "complete", text: "Submitted transaction with proof and question" },
+            { status: "processing", text: "Updating questions from on-chain events" }
         ])
 
         setTimeout(internalCloseProcessingModal, 2000)

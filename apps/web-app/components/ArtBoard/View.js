@@ -148,7 +148,7 @@ const ArtBoardComponent = forwardRef(
                         </div>
                     </div>
                     <div className="flex items-center justify-center mt-5">
-                        <p>CanvaId : {currentCanvas}</p>
+                        <p>Canvas {currentCanvas}</p>
                     </div>
                 </div>
                 <div className="flex w-full justify-center bg-black pb-3 pt-9">
