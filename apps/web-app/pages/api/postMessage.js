@@ -10,6 +10,7 @@ const tazMessageAbi = TazMessage.abi
 const tazMessageAddress = TAZMESSAGE_CONTRACT
 
 const provider = new ethers.providers.JsonRpcProvider(process.env.GOERLI_URL)
+console.log("provider", provider)
 
 export default async function handler(req, res) {
   console.log('api called')
@@ -36,9 +37,13 @@ export default async function handler(req, res) {
       console.log('BACKEND LOG | Transacting reply')
 
       try {
-        const currentIndex = await fetchWalletIndex()
+        // const currentIndex = await fetchWalletIndex()
+        const currentIndex = 2
+
         const signer_array = process.env.PRIVATE_KEY_ARRAY.split(',')
+        console.log("signer_array" ,signer_array )
         const signer = new ethers.Wallet(signer_array[currentIndex]).connect(provider)
+        console.log("signer", signer)
         const tazMessageContract = new ethers.Contract(tazMessageAddress, tazMessageAbi, signer)
         const bytes32Signal = ethers.utils.formatBytes32String(signal)
 
@@ -51,7 +56,7 @@ export default async function handler(req, res) {
           nullifierHash,
           externalNullifier,
           solidityProof,
-          { gasLimit: 15000000 }
+          { gasLimit: 150000 }
         )
         console.log(tx)
 
@@ -77,7 +82,7 @@ export default async function handler(req, res) {
           nullifierHash,
           externalNullifier,
           solidityProof,
-          { gasLimit: 1500000 }
+          { gasLimit: 150000 }
         )
 
         console.log(tx)

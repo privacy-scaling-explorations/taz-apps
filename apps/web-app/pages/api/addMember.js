@@ -51,7 +51,7 @@ export default async function handler(req, res) {
           const signer_array = process.env.PRIVATE_KEY_ARRAY.split(',')
           const signer = new ethers.Wallet(signer_array[currentIndex]).connect(provider)
           const tazMessageContract = new ethers.Contract(tazMessageAddress, tazMessageAbi, signer)
-          const tx = await tazMessageContract.addMember(groupId, identityCommitment, { gasLimit: 15000000 })
+          const tx = await tazMessageContract.addMember(groupId, identityCommitment, { gasLimit: 150000 })
           console.log(tx)
 
           const response = await tx.wait(1).then(

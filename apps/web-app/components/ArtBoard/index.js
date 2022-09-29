@@ -187,6 +187,51 @@ export default function ArtBoard() {
     //   setIsLoading(false)
     // }
 
+
+
+    if (tilesRemaining.length === 0) {
+      const body = {
+        imageUri: canvasUri,
+        canvasId: canvasId.current,
+        groupId,
+        signal,
+        nullifierHash,
+        externalNullifier,
+        solidityProof,
+        merkleTreeRoot
+      }
+      console.log('POSTING to /api/mintFullCanvas')
+      console.log('canvasUri: ', canvasUri)
+      console.log('canvasId.current: ', canvasId.current)
+
+
+      // Add Try and Catch
+      const mintResponse = await axios.post('/api/mintFullCanvas', body)
+
+      setSteps([
+        { status: 'complete', text: 'Generate zero knowledge proof' },
+        { status: 'complete', text: 'Submit transaction with proof and Canva' },
+        { status: 'processing', text: 'Update ArtGallery from on-chain events' }
+      ])
+
+      console.log('RESPONSE FROM /api/mintFullCanvas:', mintResponse)
+      console.log('Canva Uri', mintResponse.ipfsUrl)
+
+      const newCanvas = {
+        id: 10000,
+        timestamp: 999999999,
+        tokenId: 0,
+        uri: mintResponse.data.ipfsUrl,
+        canvaUri: canvasUri
+      }
+      if (mintResponse.status === 201) {
+        window.localStorage.setItem('savedCanva', JSON.stringify(newCanvas))
+        router.push('/artGallery-page')
+      } else if (mintResponse.status === 403) {
+        alert('Tx have failed, please try submitting again')
+      }
+    }
+
     try {
       setSteps([
         { status: 'complete', text: 'Generate zero knowledge proof' },
@@ -208,47 +253,6 @@ export default function ArtBoard() {
       setIsLoading(false)
       setUserSelectedTile(false)
       setSelectedTile(null)
-    }
-
-    if (tilesRemaining.length === 0) {
-      const body = {
-        imageUri: canvasUri,
-        canvasId: canvasId.current,
-        groupId,
-        signal,
-        nullifierHash,
-        externalNullifier,
-        solidityProof,
-        merkleTreeRoot
-      }
-      console.log('POSTING to /api/mintFullCanvas')
-      console.log('canvasUri: ', canvasUri)
-      console.log('canvasId.current: ', canvasId.current)
-      setSteps([
-        { status: 'complete', text: 'Generate zero knowledge proof' },
-        { status: 'complete', text: 'Submit transaction with proof and Canva' },
-        { status: 'processing', text: 'Update ArtGallery from on-chain events' }
-      ])
-
-      // Add Try and Catch
-      const mintResponse = await axios.post('/api/mintFullCanvas', body)
-
-      console.log('RESPONSE FROM /api/mintFullCanvas:', mintResponse)
-      console.log('Canva Uri', mintResponse.ipfsUrl)
-
-      const newCanvas = {
-        id: 10000,
-        timestamp: 999999999,
-        tokenId: 0,
-        uri: mintResponse.data.ipfsUrl,
-        canvaUri: canvasUri
-      }
-      if (mintResponse.status === 201) {
-        window.localStorage.setItem('savedCanva', JSON.stringify(newCanvas))
-        router.push('/artGallery-page')
-      } else if (mintResponse.status === 403) {
-        alert('Tx have failed, please try submitting again')
-      }
     }
   }
 

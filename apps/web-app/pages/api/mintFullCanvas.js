@@ -18,9 +18,12 @@ export default async function handler(req, res) {
   const { abi } = TazToken
   const contractAddress = TAZTOKEN_CONTRACT
 
+  
+
   if (res.method === 'GET') {
     res.status(405).json('GET not allowed')
   } else if (req.method === 'POST') {
+    console.log("provider", provider)
     try {
       const { imageUri, canvasId, groupId, signal, nullifierHash, externalNullifier, merkleTreeRoot, solidityProof } =
         req.body
@@ -84,7 +87,7 @@ export default async function handler(req, res) {
         })
 
         try {
-          const currentIndex = await fetchWalletIndex()
+          const currentIndex = 3
           const signer_array = process.env.PRIVATE_KEY_ARRAY.split(',')
           const signer = new ethers.Wallet(signer_array[currentIndex]).connect(provider)
           const signerAddress = await signer.getAddress()
@@ -100,7 +103,7 @@ export default async function handler(req, res) {
             externalNullifier,
             solidityProof,
             {
-              gasLimit: 15000000
+              gasLimit: 150000
             }
           )
           console.log(tx)
