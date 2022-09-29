@@ -12,7 +12,8 @@
         "start:web-app": "yarn workspace web-app start",
         "lint": "eslint . --ext .js,.ts",
         "prettier": "prettier -c .",
-        "prettier:write": "prettier -w ."
+        "prettier:write": "prettier -w .",
+        "test:contracts": "yarn workspace contracts hardhat test --network hardhat"
     },
     "keywords": [
         "javascript",
