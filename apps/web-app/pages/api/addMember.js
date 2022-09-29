@@ -72,7 +72,7 @@ export default async function handler(req, res) {
                 }
             } else {
                 isValid = false
-                res.status(401).json({ Error: "Invalid code" })
+                res.status(401).json({ Error: "Invalid code!" })
             }
         } catch (error) {
             res.status(403).json({ Error: error.message })
