@@ -29,7 +29,7 @@ export default async function handler(req, res) {
                 nullifierHash,
                 solidityProof,
                 {
-                    gasLimit: 150000
+                    gasLimit: 500000
                 }
             )
             console.log(tx)
