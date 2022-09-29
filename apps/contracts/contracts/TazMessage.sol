@@ -111,7 +111,7 @@ contract TazMessage is AccessControl {
         // Increment for next use
         _messageIdCounter.increment();
 
-        emit MessageAdded(parentMessageId, _messageIdCounter.current(), messageContent);
+        emit MessageAdded(parentMessageId, messageId, messageContent);
 
         return messageId;
     }
