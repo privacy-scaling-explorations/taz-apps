@@ -14,7 +14,15 @@ docs
 # production
 dist
 build
+
+# Next.js
+.next
+out
+
+# Hardhat
+artifacts
 cache
+typechain-types
 
 # github
 .github/ISSUE_TEMPLATE
