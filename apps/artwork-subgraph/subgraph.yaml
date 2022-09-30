@@ -3,12 +3,12 @@ schema:
     file: ./schema.graphql
 dataSources:
     - kind: ethereum
-      name: TazToken
+      name: TazArtwork
       network: goerli
       source:
-          address: "0x167f7B463CAAbCdc997dba559fC6d045409d0F25"
-          abi: TazToken
-          startBlock: 7460000
+          address: "0x4Aa16DA1797a4be663D62e6C01613DEc3FAa9b68"
+          abi: TazArtwork
+          startBlock: 7686804
       mapping:
           kind: ethereum/events
           apiVersion: 0.0.5
@@ -18,8 +18,8 @@ dataSources:
               - Violation
               - Vote
           abis:
-              - name: TazToken
-                file: ./abis/TazToken.json
+              - name: TazArtwork
+                file: ./abis/TazArtwork.json
           eventHandlers:
               - event: NewToken(uint256,string)
                 handler: handleNewToken
@@ -27,4 +27,4 @@ dataSources:
                 handler: handleViolationAdded
               - event: VoteAdded(uint256)
                 handler: handleVoteAdded
-          file: ./src/taz-token.ts
+          file: ./src/taz-artwork.ts
