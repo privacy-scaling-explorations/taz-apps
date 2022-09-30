@@ -40,7 +40,7 @@ cd taz-apps && yarn
 
 ### Contracts
 
-The contracts folder includes test, tasks, and scripts folders for the two TAZ smart contracts: TazMessage and TazToken.
+The contracts folder includes test, tasks, and scripts folders for the two TAZ smart contracts: TazMessage and TazArtwork.
 
 Contract tests can be run from the root "taz-apps" folder using `yarn test:contracts`.
 
@@ -50,9 +50,9 @@ The scripts folder includes scripts for accomplishing things such as adding acce
 
 ### Subgraphs
 
-The subgraphs folder includes subgraph files for each of the two TAZ contracts. `web-app/helpers/subgraphs.js` is the class used to make subgraph api queries.
+The two subgraph folders include deployment files for each of the TAZ contracts. `web-app/helpers/subgraphs.js` is the class used to make subgraph api queries.
 
-The taz-token subgraph has entities Token, Violation, and Vote.
+The taz-artwork subgraph has entities Token, Violation, and Vote.
 The taz-message subgraph has entities Message, Violation, and MemberAddeds.
 
 Entity data is derived from events, plus some rollup attributes such as TotalVotes and HasViolation.
