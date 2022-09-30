@@ -5,7 +5,7 @@
         "start": "hardhat node",
         "compile": "hardhat compile",
         "deploy:taz-message": "hardhat deploy:taz-message",
-        "deploy:taz-token": "hardhat deploy:taz-token",
+        "deploy:taz-artwork": "hardhat deploy:taz-artwork",
         "test": "hardhat test",
         "lint": "solhint 'contracts/**/*.sol'"
     },

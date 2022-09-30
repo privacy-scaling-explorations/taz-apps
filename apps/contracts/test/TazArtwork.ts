@@ -7,12 +7,12 @@ import { run, ethers } from "hardhat"
 import { Identity } from "@semaphore-protocol/identity"
 import { keccak256 } from "@ethersproject/keccak256"
 import { toUtf8Bytes } from "@ethersproject/strings"
-import { TAZTOKEN_CONTRACT, SEMAPHORE_CONTRACT, EXTERNAL_NULLIFIER_FOR_VOTING } from "../config/goerli.json"
+import { TAZARTWORK_CONTRACT, SEMAPHORE_CONTRACT, EXTERNAL_NULLIFIER_FOR_VOTING } from "../config/goerli.json"
 
 const GROUP_ID = 256 // Set here rather than from config so it differs from TazMessage
 
 const identitySeed = "sample-identity-seed"
-const tazTokenAbi = require("../artifacts/contracts/TazToken.sol/TazToken.json").abi
+const tazArtworkAbi = require("../artifacts/contracts/TazArtwork.sol/TazArtwork.json").abi
 
 const TAZ_ADMIN_ROLE_HASH = keccak256(toUtf8Bytes("TAZ_ADMIN_ROLE"))
 const START_STOPPER_ROLE_HASH = keccak256(toUtf8Bytes("START_STOPPER_ROLE"))
@@ -22,11 +22,11 @@ const REVIEWER_ROLE_HASH = keccak256(toUtf8Bytes("REVIEWER_ROLE"))
 SETTINGS
 Alter settings depending on what testing is needed
 */
-const DEPLOY_NEW_TAZ_TOKEN_CONTRACT = true
+const DEPLOY_NEW_TAZARTWORK_CONTRACT = true
 const CREATE_NEW_GROUP = true // Will fail if group id already exists
 const ADD_MEMBER = true // Will fail if member has already been added to the group
 
-describe("TazToken", () => {
+describe("TazArtwork", () => {
     let contract: any
     let signer1: any
     let signer2: any
@@ -34,16 +34,16 @@ describe("TazToken", () => {
     before(async () => {
         ;[signer1, signer2] = await ethers.getSigners()
 
-        if (DEPLOY_NEW_TAZ_TOKEN_CONTRACT) {
-            contract = await run("deploy:taz-token", {
+        if (DEPLOY_NEW_TAZARTWORK_CONTRACT) {
+            contract = await run("deploy:taz-artwork", {
                 semaphoreContract: SEMAPHORE_CONTRACT,
                 logs: true
             })
         } else {
             console.log("--------------------------------------------------------------------")
-            console.log("TEST | Using existing TazToken contract")
+            console.log("TEST | Using existing TazArtwork contract")
             console.log("--------------------------------------------------------------------")
-            contract = new ethers.Contract(TAZTOKEN_CONTRACT, tazTokenAbi, signer1)
+            contract = new ethers.Contract(TAZARTWORK_CONTRACT, tazArtworkAbi, signer1)
         }
     })
 
@@ -159,27 +159,7 @@ describe("TazToken", () => {
             const tx1 = contract.connect(signer2).stopMinting()
             await expect(tx1).to.not.be.reverted
 
-            const proofElements = await run("create:proof", {
-                identitySeed,
-                groupId: GROUP_ID,
-                signal,
-                externalNullifier: Math.round(Math.random() * 1000000000),
-                logs: false
-            })
-
-            const tx2 = contract
-                .connect(signer1)
-                .safeMint(
-                    signer2.address,
-                    uri,
-                    proofElements.groupId,
-                    proofElements.merkleTreeRoot,
-                    proofElements.signalBytes32,
-                    proofElements.nullifierHash,
-                    proofElements.externalNullifier,
-                    proofElements.solidityProof,
-                    { gasLimit: 1500000 }
-                )
+            const tx2 = contract.connect(signer1).safeMint(signer2.address, uri, { gasLimit: 1500000 })
 
             await expect(tx2).to.be.revertedWith("Minting not active")
         })
@@ -189,47 +169,17 @@ describe("TazToken", () => {
             const tx1 = contract.connect(signer2).startMinting()
             await expect(tx1).to.not.be.reverted
 
-            const proofElements = await run("create:proof", {
-                identitySeed,
-                groupId: GROUP_ID,
-                signal,
-                externalNullifier: Math.round(Math.random() * 1000000000),
-                logs: false
-            })
-
             // Call static to get token id
             const tokenId = await contract
                 .connect(signer1)
-                .callStatic.safeMint(
-                    signer2.address,
-                    uri,
-                    proofElements.groupId,
-                    proofElements.merkleTreeRoot,
-                    proofElements.signalBytes32,
-                    proofElements.nullifierHash,
-                    proofElements.externalNullifier,
-                    proofElements.solidityProof,
-                    { gasLimit: 1500000 }
-                )
+                .callStatic.safeMint(signer2.address, uri, { gasLimit: 1500000 })
 
             // console.log('--------------------------------------------------------------------')
             // console.log('TEST | Token ID: ', tokenId)
             // console.log(`TEST | Minting to address: ${signer2.address}`)
             // console.log('--------------------------------------------------------------------')
 
-            const tx2 = await contract
-                .connect(signer1)
-                .safeMint(
-                    signer2.address,
-                    uri,
-                    proofElements.groupId,
-                    proofElements.merkleTreeRoot,
-                    proofElements.signalBytes32,
-                    proofElements.nullifierHash,
-                    proofElements.externalNullifier,
-                    proofElements.solidityProof,
-                    { gasLimit: 1500000 }
-                )
+            const tx2 = await contract.connect(signer1).safeMint(signer2.address, uri, { gasLimit: 1500000 })
 
             /* console.log('--------------------------------------------------------------------')
       console.log('TEST | Transaction: ', tx2)
