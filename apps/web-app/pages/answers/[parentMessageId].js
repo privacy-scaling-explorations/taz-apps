@@ -4,17 +4,17 @@ import axios from "axios"
 import { ethers } from "ethers"
 import Link from "next/link"
 import InfiniteScroll from "react-infinite-scroller"
-import AnswerModal from "../../components/AnswerModal"
+import { RiArrowLeftLine } from "react-icons/ri"
+
 import { useGenerateProof } from "../../hooks/useGenerateProof"
-import ProcessingModal from "../../components/ProcessingModal"
 import { Subgraphs } from "../../hooks/subgraphs"
+import AnswerModal from "../../components/AnswerModal"
+import ProcessingModal from "../../components/ProcessingModal"
 import Footer from "../../components/Footer"
 import BlueCircle from "../../components/svgElements/BlueCircle"
 import YellowEllipse from "../../components/svgElements/YellowEllipse"
-import BunnyQ2 from "../../components/svgElements/BunnyQ2"
 import RedCircle from "../../components/svgElements/RedCircle"
 import BackToTopArrow from "../../components/svgElements/BackToTopArrow"
-import BackArrow from "../../components/svgElements/BackArrow"
 import ConvoBubbles from "../../components/svgElements/ConvoBubbles"
 import Loading from "../../components/Loading"
 
@@ -231,13 +231,22 @@ export default function Answers() {
     }, [answers, fetching, nextFetchSkip, parentMessageId])
 
     return (
-        <div className="min-h-[700px] h-auto flex flex-col">
-            {/* <div className="z-20 fixed bottom-0"> */}
+        <div className="h-full min-h-screen relative overflow-hidden flex flex-col">
+            <div className="fixed top-[10%] -left-[30%]">
+                <YellowEllipse />
+            </div>
+            <div className="fixed top-[40%] right-[2%]">
+                <RedCircle />
+            </div>
+            <div className="fixed top-[60%] left-[-25%]">
+                <BlueCircle />
+            </div>
+
             {parentMessageId !== "0" && (
-                <div className="fixed bottom-[50%] right-2 z-30 flex justify-end">
+                <div className="fixed bottom-[25%] right-2 z-10 flex justify-end">
                     <button
                         type="button"
-                        className="rounded-full bg-brand-yellow ring-1 ring-brand-black py-3 px-4 drop-shadow text-brand-button font-medium text-brand-black hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-opacity-25"
+                        className="rounded-full bg-brand-yellow ring-2 ring-brand-black py-3 px-4 drop-shadow text-brand-button font-medium text-brand-black hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-opacity-25"
                         onClick={openAnswerModal}
                     >
                         Answer this question
@@ -245,16 +254,12 @@ export default function Answers() {
                 </div>
             )}
             {showTopBtn && (
-                <div className="fixed bottom-[25%] left-2 z-30 flex justify-end">
+                <div className="fixed bottom-[25%] left-2 z-10 flex justify-end">
                     <button onClick={goToTop}>
                         <BackToTopArrow />
                     </button>
                 </div>
             )}
-            <div className="z-20 fixed bottom-0 w-full flex-col bg-black mt-20 py-5">
-                <Footer />
-            </div>
-            {/* </div> */}
 
             <ProcessingModal
                 isOpen={processingModalIsOpen}
@@ -269,94 +274,79 @@ export default function Answers() {
                 handleSubmit={handleSubmit}
             />
             {/* Begin Answer Board */}
-            <div className="grid mb-[200px]">
-                <div className="z-0 col-start-1 row-start-1 fixed">
-                    <div className="absolute top-[70px] -left-[140px]">
-                        <YellowEllipse />
-                    </div>
-                    <div className="absolute top-[300px] left-[320px]">
-                        <BlueCircle />
-                    </div>
-                    <div className="absolute top-[450px] left-[-51px]">
-                        <RedCircle />
-                    </div>
-                    <div className="absolute top-[500px] left-[29px]">
-                        <BunnyQ2 />
-                    </div>
-                </div>
+            <div className="flex-grow mx-6 mt-8 mb-[30%] text-brand-brown p-4 min-w-[200px] min-h-[100%] relative divide-y overflow-y-auto border-2 border-brand-blue rounded-md bg-white drop-shadow-lg">
+                <Link href="/questions" className="cursor-pointer brand">
+                    <RiArrowLeftLine className="fill-brand-gray50 cursor-pointer mb-4 border-0" />
+                </Link>
 
-                <div className="z-20 col-start-1 row-start-1 px-6 py-8 text-brand-brown">
-                    <div className="p-4 min-w-[200px] relative divide-y overflow-y-auto border-2 border-brand-blue rounded-md bg-white drop-shadow-lg">
-                        <div className="mb-4 border-0">
-                            <Link href="/questions" className="cursor-pointer">
-                                <div className="cursor-pointer">
-                                    <BackArrow />
-                                </div>
-                            </Link>
-                        </div>
-                        {parentMessageId === "0" && txHash ? (
-                            <div className="p-4">
-                                <p className="text-brand-red pb-4">Question is still being processed.</p>
-                                <p className="text-sm">
-                                    You can check your transaction on{" "}
-                                    <a className="py-2 underline" href={`https://goerli.etherscan.io/tx/${txHash}`}>
-                                        Etherscan
-                                    </a>
-                                    .
+                {parentMessageId === "0" && txHash ? (
+                    <div className="p-4">
+                        <p className="text-brand-red pb-4">Question is still being processed.</p>
+                        <p className="text-sm">
+                            You can check your transaction on{" "}
+                            <a className="py-2 underline" href={`https://goerli.etherscan.io/tx/${txHash}`}>
+                                Etherscan
+                            </a>
+                            .
+                        </p>
+                    </div>
+                ) : (
+                    question && (
+                        <div style={{ borderTopWidth: "0px" }}>
+                            <div
+                                style={
+                                    answers.length > 0
+                                        ? { borderTopWidth: "0px", borderBottomWidth: "1px", borderColor: "#EAE1DA" }
+                                        : { borderTopWidth: "0px", borderBottomWidth: "0px" }
+                                }
+                            >
+                                <p className="px-2 text-brand-3xs text-brand-gray50 font-medium">
+                                    qID {question.messageId.toLocaleString()}
                                 </p>
+                                <p className="px-2 pb-4">{question.messageContent}</p>
                             </div>
-                        ) : (
-                            question && (
-                                <div style={{ borderTopWidth: "0px" }}>
-                                    <div
-                                        style={
-                                            answers.length > 0
-                                                ? {
-                                                      borderTopWidth: "0px",
-                                                      borderBottomWidth: "1px",
-                                                      borderColor: "#EAE1DA"
-                                                  }
-                                                : { borderTopWidth: "0px", borderBottomWidth: "0px" }
-                                        }
-                                    >
-                                        <p className="px-2 text-brand-3xs text-brand-gray50 font-medium">
-                                            qID {question.messageId.toLocaleString()}
-                                        </p>
-                                        <p className="px-2 pb-4">{question.messageContent}</p>
-                                    </div>
 
-                                    <InfiniteScroll loadMore={fetchItems} hasMore={hasMoreItems} loader={loader}>
-                                        {answers.map((item, index) => (
-                                            <div
-                                                className="flex flex-row align-top border-b-[1px] border-brand-beige last:border-b-0"
-                                                key={item.messageId}
-                                                // style={
-                                                //   index + 1 === item.length
-                                                //     ? { borderTopWidth: '0px', borderBottomWidth: '0px' }
-                                                //     : { borderTopWidth: '0px', borderBottomWidth: '1px', borderColor: '#EAE1DA' }
-                                                // }
-                                            >
-                                                <div className="flex-col px-2 py-4">
-                                                    <ConvoBubbles />
-                                                </div>
-
-                                                <div className="flex-col py-3 text-xs text-brand-brown">
-                                                    <p className="px-4 pb-2 text-brand-3xs text-brand-gray50 font-medium">
-                                                        aID {item.messageId ? item.messageId.toLocaleString() : "0"}
-                                                    </p>
-                                                    <p className="px-4 leading-[1.3rem]">{item.messageContent}</p>
-                                                </div>
+                            <InfiniteScroll loadMore={fetchItems} hasMore={hasMoreItems} loader={loader}>
+                                {answers.length > 0 ? (
+                                    answers.map((item, index) => (
+                                        <div
+                                            className="flex flex-row align-top border-b-[1px] border-brand-beige last:border-b-0"
+                                            key={item.messageId}
+                                            // style={
+                                            //   index + 1 === item.length
+                                            //     ? { borderTopWidth: '0px', borderBottomWidth: '0px' }
+                                            //     : { borderTopWidth: '0px', borderBottomWidth: '1px', borderColor: '#EAE1DA' }
+                                            // }
+                                        >
+                                            <div className="flex-col px-2 py-4">
+                                                <ConvoBubbles />
                                             </div>
-                                        ))}
-                                    </InfiniteScroll>
-                                </div>
-                            )
-                        )}
-                    </div>
-                </div>
-                <div className="z-10 fixed bottom-0 w-full flex-col bg-black py-5">
-                    <Footer />
-                </div>
+
+                                            <div className="flex-col py-3 text-xs text-brand-brown">
+                                                <p className="px-4 pb-2 text-brand-3xs text-brand-gray50 font-medium">
+                                                    aID {item.messageId ? item.messageId.toLocaleString() : "0"}
+                                                </p>
+                                                <p className="px-4 leading-[1.3rem] opacity-[70%]">
+                                                    {item.messageContent}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div>
+                                        <p className="pl-6 text-brand-orange text-brand-info">
+                                            No one has answered this question.
+                                        </p>
+                                        <p className="pl-24 text-brand-orange text-brand-info">Be the first!</p>
+                                    </div>
+                                )}
+                            </InfiniteScroll>
+                        </div>
+                    )
+                )}
+            </div>
+            <div className="flex w-full relative justify-center bg-black pb-3 pt-9">
+                <Footer />
             </div>
             {/* End Answer Board */}
         </div>
