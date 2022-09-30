@@ -152,7 +152,17 @@ describe("TazArtwork", () => {
 
     describe("# safeMint", () => {
         const uri = "https://bafkreignzbdtj6355qlex3njd46lubd7xpyrqdyobvw2q4sxv7fihvsi6y.ipfs.dweb.link/"
-        const signal = uri.slice(0, 31)
+        it("Should fail to mint due to not having the tazAdmin role", async () => {
+            // Ensure minting is active
+            const tx1 = contract.connect(signer2).startMinting()
+            await expect(tx1).to.not.be.reverted
+
+            const tx2 = contract.connect(signer2).safeMint(signer1.address, uri, { gasLimit: 1500000 })
+
+            await expect(tx2).to.be.revertedWith(
+                `AccessControl: account ${signer2.address.toLowerCase()} is missing role ${TAZ_ADMIN_ROLE_HASH}`
+            )
+        })
 
         it("Should fail to mint due to minting being stopped", async () => {
             // Stop minting
@@ -164,7 +174,7 @@ describe("TazArtwork", () => {
             await expect(tx2).to.be.revertedWith("Minting not active")
         })
 
-        it("Should verify proof and mint an NFT", async () => {
+        it("Should mint an NFT", async () => {
             // Ensure minting is active
             const tx1 = contract.connect(signer2).startMinting()
             await expect(tx1).to.not.be.reverted
