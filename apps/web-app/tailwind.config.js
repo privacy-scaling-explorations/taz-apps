@@ -24,6 +24,7 @@ module.exports = {
                 brand: {
                     beige: "#EAE1DA",
                     beige2: "#F0EBE8",
+                    beige3: "#B8AEA7",
                     blue: "#435C6C",
                     blue2: "#5F99EF",
                     gray: "#475F6F",

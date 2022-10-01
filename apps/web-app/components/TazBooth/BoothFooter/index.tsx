@@ -3,7 +3,7 @@ import React from "react"
 import BoothLogo from "../BoothLogo"
 import ArtBunnyBooth from "../../svgElements/ArtBunnyBooth"
 
-const TazBoothFooter = () => (
+const BoothFooter = () => (
     <div className="flex justify-between h-1/3 px-20 items-center bg-brand-black text-brand-beige">
         <BoothLogo />
         <div className="text-brand-beige px-20">
@@ -26,4 +26,4 @@ const TazBoothFooter = () => (
     </div>
 )
 
-export default TazBoothFooter
+export default BoothFooter

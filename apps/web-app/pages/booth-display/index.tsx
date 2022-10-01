@@ -1,8 +1,7 @@
 import faunadb from "faunadb"
-import type { NextApiRequest, NextApiResponse } from "next"
 
 import BoothContent from "../../components/TazBooth/BoothContent"
-import TazBoothFooter from "../../components/TazBooth/TazBoothFooter"
+import BoothFooter from "../../components/TazBooth/BoothFooter"
 
 export interface Canvas {
     canvasId: number
@@ -14,7 +13,7 @@ const BoothDisplay = ({ canvases }) => {
     return (
         <div className="flex flex-col h-screen bg-brand-black p-10">
             <BoothContent canvases={canvases} />
-            <TazBoothFooter />
+            <BoothFooter />
         </div>
     )
 }
@@ -23,14 +22,14 @@ export default BoothDisplay
 
 export async function getStaticProps() {
     // Server Side code that will never reach client
+    const secret = process.env.FAUNA_SECRET_KEY
+    if (typeof secret !== "string") {
+        return { notFound: true }
+    }
+    const client = new faunadb.Client({ secret })
+    const { query } = faunadb
 
     try {
-        const secret = process.env.FAUNA_SECRET_KEY
-        if (secret !== typeof String) {
-            return false
-        }
-        const client = new faunadb.Client({ secret })
-        const { query } = faunadb
         const dbs = await client.query(
             query.Map(
                 query.Paginate(query.Match(query.Index("all_canvases")), {

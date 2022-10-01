@@ -8,7 +8,7 @@ const BoothContent = ({ canvases }: any) => {
     return (
         <div className="grow flex justify-between items-center px-14 bg-brand-beige">
             {canvases.map((canvas: any) => (
-                <BoothArtboardCard canvas={canvas} />
+                <BoothArtboardCard key={canvas.canvasId} canvas={canvas} />
             ))}
         </div>
     )
