@@ -7,7 +7,7 @@ import InfiniteScroll from "react-infinite-scroller"
 import { RiArrowLeftLine } from "react-icons/ri"
 
 import { useGenerateProof } from "../../hooks/useGenerateProof"
-import { Subgraphs } from "../../hooks/subgraphs"
+import { Subgraphs } from "../../helpers/subgraphs"
 import AnswerModal from "../../components/AnswerModal"
 import ProcessingModal from "../../components/ProcessingModal"
 import Footer from "../../components/Footer"
