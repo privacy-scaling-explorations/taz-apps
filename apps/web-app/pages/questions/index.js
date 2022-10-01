@@ -75,7 +75,7 @@ export default function Questions() {
         setTimeout(openProcessingModal, CHAINED_MODAL_DELAY)
 
         setSteps([
-            { status: "processing", text: "Generate zero knowledge proof" },
+            { status: "processing", text: "Generating zero knowledge proof" },
             { status: "queued", text: "Submit transaction with proof and question" },
             { status: "queued", text: "Update questions from on-chain events" }
         ])
@@ -88,8 +88,8 @@ export default function Questions() {
         )
 
         setSteps([
-            { status: "complete", text: "Generate zero knowledge proof" },
-            { status: "processing", text: "Submit transaction with proof and question" },
+            { status: "complete", text: "Generated zero knowledge proof" },
+            { status: "processing", text: "Submitting transaction with proof and question" },
             { status: "queued", text: "Update questions from on-chain events" }
         ])
 
@@ -133,9 +133,9 @@ export default function Questions() {
         }
 
         setSteps([
-            { status: "complete", text: "Generate zero knowledge proof" },
-            { status: "complete", text: "Submit transaction with proof and question" },
-            { status: "processing", text: "Update questions from on-chain events" }
+            { status: "complete", text: "Generated zero knowledge proof" },
+            { status: "complete", text: "Submitted transaction with proof and question" },
+            { status: "processing", text: "Updating questions from on-chain events" }
         ])
 
         setTimeout(internalCloseProcessingModal, 2000)
@@ -219,11 +219,11 @@ export default function Questions() {
                 <YellowCircle />
             </div>
             {/* this one bunny instead of the one at the bottom
-      will stay in place like the colored bg elements but
-      is not ideal for displaying the whole bunny on different screen sizes}
-      {/* <div className="fixed top-[17%] right-[0]">
-        <BunnyQuestion />
-      </div> */}
+        will stay in place like the colored bg elements but
+        is not ideal for displaying the whole bunny on different screen sizes}
+        {/* <div className="fixed top-[17%] right-[0]">
+            <BunnyQuestion />
+        </div> */}
             <div className="fixed top-[45%] right-[-35%]">
                 <BlueEllipse />
             </div>
@@ -321,12 +321,10 @@ export default function Questions() {
 }
 
 /* export async function getServerSideProps() {
-  const subgraphs = new Subgraphs()
-  const questions = await subgraphs.getMessages(0)
-
-  // console.log('QUESTIONS PAGE | fetched questions', questions)
-
-  return {
+const subgraphs = new Subgraphs()
+const questions = await subgraphs.getMessages(0)
+// console.log('QUESTIONS PAGE | fetched questions', questions)
+return {
     props: { questionsProp: questions }
-  }
+}
 } */

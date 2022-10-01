@@ -1,14 +1,14 @@
 import { ethers } from "hardhat"
-import { TAZMESSAGE_CONTRACT, TAZTOKEN_CONTRACT } from "../config/goerli.json"
+import { TAZMESSAGE_CONTRACT, TAZARTWORK_CONTRACT } from "../config/goerli.json"
 
 const tazMessageAbi = require("../artifacts/contracts/TazMessage.sol/TazMessage.json").abi
-const tazTokenAbi = require("../artifacts/contracts/TazToken.sol/TazToken.json").abi
+const tazArtworkAbi = require("../artifacts/contracts/TazArtwork.sol/TazArtwork.json").abi
 
 async function main() {
     const [signer1] = await ethers.getSigners()
 
     const tazMessage = new ethers.Contract(TAZMESSAGE_CONTRACT, tazMessageAbi, signer1)
-    const tazToken = new ethers.Contract(TAZTOKEN_CONTRACT, tazTokenAbi, signer1)
+    const tazArtwork = new ethers.Contract(TAZARTWORK_CONTRACT, tazArtworkAbi, signer1)
 
     const publicKeys = (process.env.PUBLIC_KEY_ARRAY as any).split(",")
 
@@ -19,12 +19,12 @@ async function main() {
 
     console.info("tazMessage.addAdmins receipt", receipt1)
 
-    console.info("Calling tazToken.addAdmins")
+    console.info("Calling tazArtwork.addAdmins")
 
-    const tx2 = await tazToken.connect(signer1).addAdmins(publicKeys)
+    const tx2 = await tazArtwork.connect(signer1).addAdmins(publicKeys)
     const receipt2 = await tx2.wait()
 
-    console.info("tazToken.addAdmins receipt", receipt2)
+    console.info("tazArtwork.addAdmins receipt", receipt2)
 
     console.info("Calling tazMessage.addReviewers")
 
@@ -33,19 +33,26 @@ async function main() {
 
     console.info("tazMessage.addReviewers receipt", receipt3)
 
-    console.info("Calling tazToken.addReviewers")
+    console.info("Calling tazArtwork.addReviewers")
 
-    const tx4 = await tazToken.connect(signer1).addReviewers([signer1.address])
+    const tx4 = await tazArtwork.connect(signer1).addReviewers([signer1.address])
     const receipt4 = await tx4.wait()
 
-    console.info("tazToken.addReviewers receipt", receipt4)
+    console.info("tazArtwork.addReviewers receipt", receipt4)
 
-    console.info("Calling tazToken.addStartStoppers")
+    console.info("Calling tazArtwork.addStartStoppers")
 
-    const tx5 = await tazToken.connect(signer1).addStartStoppers([signer1.address])
+    const tx5 = await tazArtwork.connect(signer1).addStartStoppers([signer1.address])
     const receipt5 = await tx5.wait()
 
-    console.info("tazToken.addStartStoppers receipt", receipt5)
+    console.info("tazArtwork.addStartStoppers receipt", receipt5)
+
+    // console.info("Calling tazArtwork.startVoting")
+
+    // const tx6 = await tazArtwork.connect(signer1).startVoting()
+    // const receipt6 = await tx6.wait()
+
+    // console.info("tazArtwork.startVoting receipt", receipt6)
 }
 
 main().catch((error) => {
