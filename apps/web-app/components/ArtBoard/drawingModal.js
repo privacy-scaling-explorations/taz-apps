@@ -8,6 +8,7 @@ import PaintbrushFull from "../svgElements/PaintbrushFull"
 import PaintBucketEmpty from "../svgElements/PaintBucketEmpty"
 import PaintBucketFull from "../svgElements/PaintBucketFull"
 import Undo from "../svgElements/Undo"
+import TrashCan from "../svgElements/TrashCan"
 
 const DrawingHtml = forwardRef(
     ({
@@ -21,20 +22,10 @@ const DrawingHtml = forwardRef(
         borderRef,
         lines,
         setLines,
-        fillColor
+        fillColor,
+        handleClear
     }) => {
         const isDrawing = React.useRef(false)
-        const COLORCONVERT = {
-            white: "white",
-            black: "#171717",
-            "brand-orange": "#BD5141",
-            "brand-orange2": "#EE8C45",
-            "brand-yellow2": "#EFD85F",
-            "brand-green": "#90B188",
-            "brand-blue": "#435C6C",
-            "brand-blue2": "#5F99EF",
-            "brand-purple": "#8679AB"
-        }
         const drawingSize = 300
 
         const dropIn = {
@@ -59,11 +50,13 @@ const DrawingHtml = forwardRef(
         }
 
         const handleMouseDown = (e) => {
+            if (tool !== "pen") return
             isDrawing.current = true
             const pos = e.target.getStage().getPointerPosition()
             setLines([...lines, { tool, points: [pos.x, pos.y] }])
         }
         const handleMouseMove = (e) => {
+            if (tool !== "pen") return
             // no drawing - skipping
             if (!isDrawing.current) {
                 return
@@ -73,7 +66,7 @@ const DrawingHtml = forwardRef(
             const lastLine = lines[lines.length - 1]
 
             // set color
-            lines[lines.length - 1].color = COLORCONVERT[color]
+            lines[lines.length - 1].color = color
 
             // add point
             lastLine.points = lastLine.points.concat([point.x, point.y])
@@ -97,15 +90,39 @@ const DrawingHtml = forwardRef(
                     onClick={(e) => e.stopPropagation()}
                     className=" w-flex h-flex p-2 bg-white border-2 border-black flex flex-col items-center justify-center rounded-[5px]"
                 >
-                    <div className="grid grid-rows-1 pb-1 grid-cols-9">
+                    <div className="flex flex-row w-full items-center justify-between py-1">
+                        <button
+                            className="text-xs font-bold border border-black border-2 p-1.5 px-4 rounded-full flex flex-row items-center"
+                            type="submit"
+                            onClick={handleClear}
+                        >
+                            <TrashCan />
+                            <p className="pl-2">Clear</p>
+                        </button>
+                        <div className="cursor-pointer" onClick={toggleTool}>
+                            {tool === "pen" ? <PaintbrushFull /> : <PaintbrushEmpty />}
+                        </div>
+                        <div className="cursor-pointer" onClick={toggleTool}>
+                            {tool === "fill" ? <PaintBucketFull /> : <PaintBucketEmpty />}
+                        </div>
+                        <button
+                            className="text-xs font-bold border border-black border-2 p-1.5 px-4 rounded-full flex flex-row items-center"
+                            type="submit"
+                            onClick={handleUndo}
+                        >
+                            <Undo />
+                            <p className="pl-2">Undo</p>
+                        </button>
+                    </div>
+                    <div className="grid grid-rows-1 py-1 grid-cols-9">
                         <div>
                             <button
-                                id="brand-orange"
-                                aria-label="orange color picker"
+                                id="#BD4157"
+                                aria-label="color picker 1"
                                 className={
-                                    color === "brand-orange"
-                                        ? "ring ring-offset-4 ring-slate-500 ring-4 w-6 h-6 m-[5px] bg-brand-orange rounded-full"
-                                        : "w-6 h-6 m-[5px] bg-brand-orange rounded-full"
+                                    color === "#BD4157"
+                                        ? "ring ring-offset-4 ring-slate-500 ring-4 w-6 h-6 m-[5px] bg-[#BD4157] rounded-full"
+                                        : "w-6 h-6 m-[5px] bg-[#BD4157] rounded-full"
                                 }
                                 type="submit"
                                 onClick={(e) => handleColorSelect(e)}
@@ -113,12 +130,12 @@ const DrawingHtml = forwardRef(
                         </div>
                         <div>
                             <button
-                                id="brand-orange2"
-                                aria-label="orange2 color picker"
+                                id="#EE8C45"
+                                aria-label="color picker 2"
                                 className={
-                                    color === "brand-orange2"
-                                        ? "ring ring-offset-4 ring-slate-500 ring-4 w-6 h-6 m-[5px] bg-brand-orange2 rounded-full"
-                                        : "w-6 h-6 m-[5px] bg-brand-orange2 rounded-full"
+                                    color === "#EE8C45"
+                                        ? "ring ring-offset-4 ring-slate-500 ring-4 w-6 h-6 m-[5px] bg-[#EE8C45] rounded-full"
+                                        : "w-6 h-6 m-[5px] bg-[#EE8C45] rounded-full"
                                 }
                                 type="submit"
                                 onClick={(e) => handleColorSelect(e)}
@@ -126,12 +143,12 @@ const DrawingHtml = forwardRef(
                         </div>
                         <div>
                             <button
-                                id="brand-yellow2"
-                                aria-label="yellow2 color picker"
+                                id="#EFD85F"
+                                aria-label="color picker3"
                                 className={
-                                    color === "brand-yellow2"
-                                        ? "ring ring-offset-4 ring-slate-500 ring-4 w-6 h-6 m-[5px] bg-brand-yellow2 rounded-full"
-                                        : "w-6 h-6 m-[5px] bg-brand-yellow2 rounded-full"
+                                    color === "#EFD85F"
+                                        ? "ring ring-offset-4 ring-slate-500 ring-4 w-6 h-6 m-[5px] bg-[#EFD85F] rounded-full"
+                                        : "w-6 h-6 m-[5px] bg-[#EFD85F] rounded-full"
                                 }
                                 type="submit"
                                 onClick={(e) => handleColorSelect(e)}
@@ -139,12 +156,12 @@ const DrawingHtml = forwardRef(
                         </div>
                         <div>
                             <button
-                                id="brand-green"
-                                aria-label="green color picker"
+                                id="#90B188"
+                                aria-label="color picker4"
                                 className={
-                                    color === "brand-green"
-                                        ? "ring ring-offset-4 ring-slate-500 ring-4 w-6 h-6 m-[5px] bg-brand-green rounded-full"
-                                        : "w-6 h-6 m-[5px] bg-brand-green rounded-full"
+                                    color === "#90B188"
+                                        ? "ring ring-offset-4 ring-slate-500 ring-4 w-6 h-6 m-[5px] bg-[#90B188] rounded-full"
+                                        : "w-6 h-6 m-[5px] bg-[#90B188] rounded-full"
                                 }
                                 type="submit"
                                 onClick={(e) => handleColorSelect(e)}
@@ -152,12 +169,12 @@ const DrawingHtml = forwardRef(
                         </div>
                         <div>
                             <button
-                                id="brand-blue2"
-                                aria-label="blue2 color picker"
+                                id="#5F99EF"
+                                aria-label="color picker5"
                                 className={
-                                    color === "brand-blue2"
-                                        ? "ring ring-offset-4 ring-slate-500 ring-4 w-6 h-6 m-[5px] bg-brand-blue2 rounded-full"
-                                        : "w-6 h-6 m-[5px] bg-brand-blue2 rounded-full"
+                                    color === "#5F99EF"
+                                        ? "ring ring-offset-4 ring-slate-500 ring-4 w-6 h-6 m-[5px] bg-[#5F99EF] rounded-full"
+                                        : "w-6 h-6 m-[5px] bg-[#5F99EF] rounded-full"
                                 }
                                 type="submit"
                                 onClick={(e) => handleColorSelect(e)}
@@ -165,12 +182,12 @@ const DrawingHtml = forwardRef(
                         </div>
                         <div>
                             <button
-                                id="brand-blue"
-                                aria-label="blue color picker"
+                                id="#2A4D91"
+                                aria-label="color picker6"
                                 className={
-                                    color === "brand-blue"
-                                        ? "ring ring-offset-4 ring-slate-500 ring-4 w-6 h-6 m-[5px] bg-brand-blue rounded-full"
-                                        : "w-6 h-6 m-[5px] bg-brand-blue rounded-full"
+                                    color === "#2A4D91"
+                                        ? "ring ring-offset-4 ring-slate-500 ring-4 w-6 h-6 m-[5px] bg-[#2A4D91] rounded-full"
+                                        : "w-6 h-6 m-[5px] bg-[#2A4D91] rounded-full"
                                 }
                                 type="submit"
                                 onClick={(e) => handleColorSelect(e)}
@@ -178,12 +195,12 @@ const DrawingHtml = forwardRef(
                         </div>
                         <div>
                             <button
-                                id="brand-purple"
-                                aria-label="purple color picker"
+                                id="#8679AB"
+                                aria-label="color picker7"
                                 className={
-                                    color === "brand-purple"
-                                        ? "ring ring-offset-4 ring-slate-500 ring-4 w-6 h-6 m-[5px] bg-brand-purple rounded-full"
-                                        : "w-6 h-6 m-[5px] bg-brand-purple rounded-full"
+                                    color === "#8679AB"
+                                        ? "ring ring-offset-4 ring-slate-500 ring-4 w-6 h-6 m-[5px] bg-[#8679AB] rounded-full"
+                                        : "w-6 h-6 m-[5px] bg-[#8679AB] rounded-full"
                                 }
                                 type="submit"
                                 onClick={(e) => handleColorSelect(e)}
@@ -191,12 +208,12 @@ const DrawingHtml = forwardRef(
                         </div>
                         <div>
                             <button
-                                id="black"
-                                aria-label="black color picker"
+                                id="#000000"
+                                aria-label="color picker8"
                                 className={
-                                    color === "black"
-                                        ? "ring ring-offset-4 ring-slate-500 ring-4 w-6 h-6 m-[5px] bg-black rounded-full"
-                                        : "w-6 h-6 m-[5px] bg-black rounded-full"
+                                    color === "#000000"
+                                        ? "ring ring-offset-4 ring-slate-500 ring-4 w-6 h-6 m-[5px] bg-[#000000] rounded-full"
+                                        : "w-6 h-6 m-[5px] bg-[#000000] rounded-full"
                                 }
                                 type="submit"
                                 onClick={(e) => handleColorSelect(e)}
@@ -204,12 +221,12 @@ const DrawingHtml = forwardRef(
                         </div>
                         <div>
                             <button
-                                id="white"
-                                aria-label="white color picker"
+                                id="#FFFFFF"
+                                aria-label="color picker 9"
                                 className={
-                                    color === "white"
-                                        ? "outline outline-slate-500 outline-4 w-6 h-6 m-[5px] bg-white rounded-full"
-                                        : "w-6 h-6 m-[5px] bg-white rounded-full border border-black"
+                                    color === "#FFFFFF"
+                                        ? 'ring ring-offset-4 ring-slate-500 ring-4 border border-black w-6 h-6 m-[5px] bg-["#FFFFFF"] rounded-full'
+                                        : 'w-6 h-6 m-[5px] bg-["#FFFFFF"] rounded-full border border-black'
                                 }
                                 type="submit"
                                 onClick={(e) => handleColorSelect(e)}
@@ -230,13 +247,7 @@ const DrawingHtml = forwardRef(
                         >
                             <Layer>
                                 {/* <Text text="Just start drawing" x={5} y={30} /> */}
-                                <Rect
-                                    x={0}
-                                    y={0}
-                                    width={drawingSize}
-                                    height={drawingSize}
-                                    fill={COLORCONVERT[fillColor]}
-                                />
+                                <Rect x={0} y={0} width={drawingSize} height={drawingSize} fill={fillColor} />
                                 {lines.map((line, i) => (
                                     <Line
                                         key={i}
@@ -254,28 +265,15 @@ const DrawingHtml = forwardRef(
                             </Layer>
                         </Stage>
                     </div>
-                    <div className="flex flex-row w-full items-center mt-3 mb-1">
-                        <div className="justify-left ml-2">
-                            <button
-                                className="bg-black text-xs text-white w-32 p-2 pl-4 rounded-full flex flex-row"
-                                type="submit"
-                                onClick={minimize}
-                            >
-                                <Minimize />
-                                <p className="pl-4">minimize</p>
-                            </button>
-                        </div>
-                        <div className="flex flex-row w-full items-center justify-items-center grid grid-cols-3 pl-4">
-                            <div className="cursor-pointer" onClick={toggleTool}>
-                                {tool === "pen" ? <PaintbrushFull /> : <PaintbrushEmpty />}
-                            </div>
-                            <div className="cursor-pointer" onClick={toggleTool}>
-                                {tool === "fill" ? <PaintBucketFull /> : <PaintBucketEmpty />}
-                            </div>
-                            <div className="cursor-pointer" onClick={handleUndo}>
-                                <Undo />
-                            </div>
-                        </div>
+                    <div className="flex flex-row w-full justify-center items-center mt-3 mb-1">
+                        <button
+                            className="bg-black text-xs text-brand-beige px-4 p-1.5 items-center rounded-full flex flex-row"
+                            type="submit"
+                            onClick={minimize}
+                        >
+                            <Minimize />
+                            <p className="pl-4 text-brand-beige">preview on canvas</p>
+                        </button>
                     </div>
                 </motion.div>
             </div>

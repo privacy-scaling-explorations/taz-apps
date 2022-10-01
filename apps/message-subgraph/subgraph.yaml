@@ -8,7 +8,7 @@ dataSources:
       source:
           address: "0x9335A0e0D9fBbd971E04E863C7Eb30c3F284289A"
           abi: TazMessage
-          startBlock: 7460000
+          startBlock: 7686804
       mapping:
           kind: ethereum/events
           apiVersion: 0.0.5
