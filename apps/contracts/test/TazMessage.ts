@@ -10,7 +10,7 @@ import { keccak256 } from "@ethersproject/keccak256"
 import { toUtf8Bytes } from "@ethersproject/strings"
 import { TAZMESSAGE_CONTRACT, SEMAPHORE_CONTRACT } from "../config/goerli.json"
 
-const GROUP_ID = 255 // Set here rather than from config so it differs from TazToken
+const GROUP_ID = 255 // Set here rather than from config so it differs from TazArtwork
 
 const identitySeed = "sample-identity-seed"
 const tazMessageAbi = require("../artifacts/contracts/TazMessage.sol/TazMessage.json").abi

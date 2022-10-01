@@ -5,7 +5,7 @@ import { HardhatUserConfig } from "hardhat/types"
 
 import "./tasks/createProof"
 import "./tasks/deployTazMessage"
-import "./tasks/deployTazToken"
+import "./tasks/deployTazArtwork"
 
 dotenvConfig({ path: resolve(__dirname, "./.env") })
 

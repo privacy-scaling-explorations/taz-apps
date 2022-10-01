@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@semaphore-protocol/contracts/interfaces/ISemaphore.sol";
 
-contract TazToken is ERC721, ERC721URIStorage, AccessControl {
+contract TazArtwork is ERC721, ERC721URIStorage, AccessControl {
     using Counters for Counters.Counter;
 
     bytes32 public constant TAZ_ADMIN_ROLE = keccak256("TAZ_ADMIN_ROLE");
@@ -31,7 +31,7 @@ contract TazToken is ERC721, ERC721URIStorage, AccessControl {
     // Constant used for voting so that each identity gets only one vote
     uint256 private constant _EXTERNAL_NULLIFIER_FOR_VOTING = 115101;
 
-    constructor(ISemaphore semaContractAddr) ERC721("TazToken", "TAZ") {
+    constructor(ISemaphore semaContractAddr) ERC721("TazArtwork", "TAZ") {
         semaContract = semaContractAddr;
 
         _setRoleAdmin(TAZ_ADMIN_ROLE, TAZ_ADMIN_ROLE);
@@ -47,23 +47,10 @@ contract TazToken is ERC721, ERC721URIStorage, AccessControl {
         _tokenIdCounter.increment();
     }
 
-    // Verifies a proof, and on success mints a non-fungible token
-    function safeMint(
-        address to,
-        string memory uri,
-        uint256 groupId,
-        uint256 merkleTreeRoot,
-        bytes32 signal,
-        uint256 nullifierHash,
-        uint256 externalNullifier,
-        uint256[8] calldata proof
-    ) public onlyRole(TAZ_ADMIN_ROLE) returns (uint256) {
+    function safeMint(address to, string memory uri) public onlyRole(TAZ_ADMIN_ROLE) returns (uint256) {
         uint256 tokenId = _tokenIdCounter.current();
 
         require(_mintingActive, "Minting not active");
-
-        // Verify proof with Sempahore contract
-        semaContract.verifyProof(groupId, merkleTreeRoot, signal, nullifierHash, externalNullifier, proof);
 
         // Increment for next use
         _tokenIdCounter.increment();
