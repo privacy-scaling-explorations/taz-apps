@@ -194,7 +194,8 @@ export default function ArtBoard() {
             const response = await axios.post("/api/modifyCanvas", {
                 updatedTiles: tilesRef.current,
                 tileIndex: selectedTile,
-                canvasId: canvasId.current
+                canvasId: canvasId.current,
+                fullProof: fullProofTemp
             })
             if (response.status === 201) {
                 router.push("/artGallery-page")

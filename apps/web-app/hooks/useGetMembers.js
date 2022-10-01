@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 // import { Subgraph } from '@semaphore-protocol/subgraph'
-import { Subgraphs } from "../hooks/subgraphs"
+import { Subgraphs } from "../helpers/subgraphs"
 
 const { GROUP_ID } = require("../config/goerli.json")
 
