@@ -38,10 +38,12 @@ export async function getStaticProps() {
                 query.Lambda("canvasRef", query.Get(query.Var("canvasRef")))
             )
         )
+        // TODO Finish up types for returun data and component
         console.log("dbs", dbs)
         const canvases = dbs.data.map((canvas) => canvas.data)
         return {
             props: { canvases },
+            // will reload data every 3 secons
             revalidate: 3
         }
     } catch (err) {
