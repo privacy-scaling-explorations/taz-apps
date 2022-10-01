@@ -8,15 +8,12 @@ export interface Canvas {
     tiles: string[]
 }
 
-const BoothDisplay = ({ canvases }) => {
-    console.log("canvases", canvases)
-    return (
-        <div className="flex flex-col h-screen bg-brand-black p-10">
-            <BoothContent canvases={canvases} />
-            <BoothFooter />
-        </div>
-    )
-}
+const BoothDisplay = ({ canvases }: { canvases: { canvasId: number; tiles: string[] }[] }) => (
+    <div className="flex flex-col h-screen bg-brand-black p-10">
+        <BoothContent canvases={canvases} />
+        <BoothFooter />
+    </div>
+)
 
 export default BoothDisplay
 
