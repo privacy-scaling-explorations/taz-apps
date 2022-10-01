@@ -2,17 +2,17 @@ import React, { useEffect, useState } from "react"
 import axios from "axios"
 
 const TazBoothCanvasGrid = ({ images }) => {
-    const [gallaryImages, setGallaryImages] = useState(images)
+    // const [gallaryImages, setGallaryImages] = useState(images)
 
-    useEffect(() => {
-        axios
-            .get("/api/modifyCanvas")
-            .then((response) => {
-                console.log(response)
-            })
-            .catch((error) => console.log(error))
+    useEffect(async () => {
+        try {
+            const result = await axios.get("/api/getActiveCanvases")
+            console.log(result)
+        } catch (err) {
+            console.log("error", err)
+        }
         // handle updaing data
-    }, [gallaryImages])
+    })
 
     return (
         <div className="container h-fit w-full flex self-center p-8 ">

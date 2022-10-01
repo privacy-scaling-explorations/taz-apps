@@ -1,24 +1,42 @@
+import faunadb from "faunadb"
+
 import BoothContent from "../../components/TazBooth/BoothContent"
 import TazBoothFooter from "../../components/TazBooth/TazBoothFooter"
 
-const BoothDisplay = () => (
-    <div className="flex flex-col h-screen bg-brand-black p-10">
-        <BoothContent />
-        <TazBoothFooter />
-    </div>
-)
+const BoothDisplay = ({ canvases }) => {
+    console.log("canvases", canvases)
+    return (
+        <div className="flex flex-col h-screen bg-brand-black p-10">
+            <BoothContent canvases={canvases} />
+            <TazBoothFooter />
+        </div>
+    )
+}
 
 export default BoothDisplay
 
-// eslint-disable-next-line no-unused-vars
-// export async function getServerSideProps(context) {
-//   const subgraphs = new Subgraphs()
-//   const imagesRequest = subgraphs.getMintedTokens()
-//   // const artBoardRequest = axios.get('/api/modifyCanvas')
+export async function getStaticProps() {
+    // Server Side code that will never reach client
+    const secret = process.env.FAUNA_SECRET_KEY
+    const client = new faunadb.Client({ secret })
+    const { query } = faunadb
 
-//   const [images] = await Promise.all([imagesRequest])
+    try {
+        const dbs = await client.query(
+            query.Map(
+                query.Paginate(query.Match(query.Index("all_canvases")), {
+                    size: 10000
+                }),
+                query.Lambda("canvasRef", query.Get(query.Var("canvasRef")))
+            )
+        )
 
-//   return {
-//     props: { images }
-//   }
-// }
+        const canvases = dbs.data.map((canvas) => canvas.data)
+        return {
+            props: { canvases },
+            revalidate: 3
+        }
+    } catch (err) {
+        return { props: { err: "Error" } }
+    }
+}
