@@ -105,7 +105,7 @@ export default function Modal({
                         onClick={onClose}
                         className="border-none h-[300px] w-[100%] max-w-[500px] max-h-[500px] "
                         style={{
-                            backgroundImage: `url(${activeImage.url})`,
+                            backgroundImage: `url(${`canvases/${activeImage.imageId}.png`})`,
                             backgroundSize: "cover"
                         }}
                     ></button>

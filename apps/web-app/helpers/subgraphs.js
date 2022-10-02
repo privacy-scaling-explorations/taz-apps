@@ -106,6 +106,7 @@ class Subgraphs {
                         ) {
                             tokenId
                             uri
+                            imageId
                             totalVotes
                         }
                         }`

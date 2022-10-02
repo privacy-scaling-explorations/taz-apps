@@ -6,7 +6,7 @@ dataSources:
       name: TazArtwork
       network: goerli
       source:
-          address: "0x4Aa16DA1797a4be663D62e6C01613DEc3FAa9b68"
+          address: "0x5fdac459A8ec7592b7Fef634667015746817Eb37"
           abi: TazArtwork
           startBlock: 7686804
       mapping:
@@ -21,7 +21,7 @@ dataSources:
               - name: TazArtwork
                 file: ./abis/TazArtwork.json
           eventHandlers:
-              - event: NewToken(uint256,string)
+              - event: NewToken(uint256,string,string)
                 handler: handleNewToken
               - event: ViolationAdded(uint256,address)
                 handler: handleViolationAdded
