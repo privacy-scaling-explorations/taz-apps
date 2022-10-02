@@ -116,16 +116,9 @@ export default async function handler(req, res) {
                     const signer = new ethers.Wallet(signer_array[currentIndex]).connect(provider)
                     const signerAddress = await signer.getAddress()
                     const nftContract = new ethers.Contract(contractAddress, abi, signer)
-                    const signalBytes32 = ethers.utils.formatBytes32String(signal)
                     const tx = await nftContract.safeMint(
                         signerAddress,
                         metadataUrl,
-                        groupId,
-                        merkleTreeRoot,
-                        signalBytes32,
-                        nullifierHash,
-                        externalNullifier,
-                        solidityProof,
                         {
                             gasLimit: 500000
                         }
@@ -141,13 +134,12 @@ export default async function handler(req, res) {
                     )
 
                     res.status(201).json({ tx, metadataUrl })
-                } catch (e) {
-                    console.log(e)
-                    res.status(401).json(e)
+                } catch (error) {
+                    res.status(401).json("Error:", error)
                 }
             }
         } catch (error) {
-            res.status(500).json(error)
+            res.status(500).json("Error: ", error)
         }
     }
 }
