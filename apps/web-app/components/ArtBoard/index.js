@@ -229,7 +229,7 @@ export default function ArtBoard() {
                 { status: "complete", text: "Verified ZKP membership and submitted transaction" },
                 {
                     status: "processing",
-                    text: "Your drawing completed a canvas! Check out your freshly-baked creation in the TAZ app!"
+                    text: "Add art to active canvas"
                 }
             ])
 
@@ -259,7 +259,7 @@ export default function ArtBoard() {
                 { status: "complete", text: "Verified ZKP membership and submitted transaction" },
                 {
                     status: "processing",
-                    text: "Your drawing is live on an active canvas! Check it out on the TAZ TV."
+                    text: "Add art to active canvas"
                 }
             ])
         }
