@@ -10,7 +10,7 @@ import { Subgraphs } from "../../helpers/subgraphs"
 import BackToTopArrow from "../../components/svgElements/BackToTopArrow"
 import BunnyQuestion from "../../components/svgElements/BunnyQuestion"
 import YellowCircle from "../../components/svgElements/YellowCircle"
-import BlueEllipse from "../../components/svgElements/BlueEllipse"
+import Ellipse from "../../components/svgElements/Ellipse"
 import RedCircle from "../../components/svgElements/RedCircle"
 import SelectorArrow from "../../components/ArrowNavigators/SelectorArrow"
 import BackTAZ from "../../components/ArrowNavigators/BackTAZ"
@@ -225,7 +225,7 @@ export default function Questions() {
             <BunnyQuestion />
         </div> */}
             <div className="fixed top-[45%] right-[-35%]">
-                <BlueEllipse />
+                <Ellipse color="#435C6C" />
             </div>
             <div className="fixed top-[60%] left-[2%]">
                 <RedCircle />

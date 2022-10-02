@@ -12,7 +12,7 @@ import AnswerModal from "../../components/AnswerModal"
 import ProcessingModal from "../../components/ProcessingModal"
 import Footer from "../../components/Footer"
 import BlueCircle from "../../components/svgElements/BlueCircle"
-import YellowEllipse from "../../components/svgElements/YellowEllipse"
+import Ellipse from "../../components/svgElements/Ellipse"
 import RedCircle from "../../components/svgElements/RedCircle"
 import BackToTopArrow from "../../components/svgElements/BackToTopArrow"
 import ConvoBubbles from "../../components/svgElements/ConvoBubbles"
@@ -233,7 +233,7 @@ export default function Answers() {
     return (
         <div className="h-full min-h-screen relative overflow-hidden flex flex-col">
             <div className="fixed top-[10%] -left-[30%]">
-                <YellowEllipse />
+                <Ellipse color="#EFAD5F" />
             </div>
             <div className="fixed top-[40%] right-[2%]">
                 <RedCircle />

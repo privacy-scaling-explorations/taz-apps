@@ -3,6 +3,7 @@ import Link from "next/link"
 // import LoadingModal from '../LoadingModal/Index.js'
 import ProcessingModal from "../ProcessingModal"
 import Header from "../Header/index.js"
+import RedBunny from "../svgElements/RedBunny"
 import Footer from "../Footer"
 
 // Page 3 will Generate Identity and Join Group
@@ -44,8 +45,17 @@ export default function GenerateIdentityComponent({
                                 <div className="p-5">
                                     <p className="text-brand-red text-brand-h3">SEMAPHORE GROUP</p>
                                     <p className="text-brand-gray2 text-brand-h1">DEVCON VI</p>
-                                    <div className="absolute right-0 bottom-0">
-                                        <svg
+                                    <p className="text-brand-gray2 text-brand-body">Anonymity is stronger</p>
+                                    <p className="text-brand-gray2 text-brand-body">in groups</p>
+                                    <div className="absolute right-[48%] bottom-0">
+                                        <RedBunny width="42" height="36" />
+                                    </div>
+                                    <div className="absolute right-[31%] bottom-0">
+                                        <RedBunny width="58" height="45" />
+                                    </div>
+                                    <div className="absolute right-[3%] bottom-0">
+                                        <RedBunny width="94" height="91" />
+                                        {/* <svg
                                             width="106"
                                             height="86"
                                             viewBox="0 0 106 86"
@@ -90,7 +100,7 @@ export default function GenerateIdentityComponent({
                                                 strokeLinejoin="round"
                                             />
                                             <circle cx="58" cy="58" r="56.26" stroke="#BD5141" strokeWidth="3.48" />
-                                        </svg>
+                                        </svg> */}
                                     </div>
                                 </div>
                             </div>
