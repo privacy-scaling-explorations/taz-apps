@@ -1,5 +1,5 @@
 import ArtGallery from "../components/ArtGallery"
-import { Subgraphs } from "../hooks/subgraphs"
+import { Subgraphs } from "../helpers/subgraphs.js"
 
 export default function ArtGalleryPage({ images }) {
     return <ArtGallery images={images} />
@@ -9,7 +9,13 @@ export default function ArtGalleryPage({ images }) {
 // eslint-disable-next-line no-unused-vars
 export async function getServerSideProps(context) {
     const subgraphs = new Subgraphs()
-    const images = await subgraphs.getMintedTokens()
+    let images = []
+
+    try {
+        images = await subgraphs.getMintedTokens()
+    } catch (err) {
+        console.error("Error fetching images:", err)
+    }
 
     return {
         props: { images }

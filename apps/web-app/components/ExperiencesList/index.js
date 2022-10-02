@@ -14,13 +14,12 @@ const ExperiencesList = () => {
 
     useEffect(() => {
         const identity = window.localStorage.getItem("identity")
-        if(identity.length > 3){
+        if (identity?.length > 3) {
             const identityUrlTemp = identity.replace('["', "").replace('"]', "").replace('","', "_")
             setIdentityUrl(identityUrlTemp)
             console.log("identity", identity)
             console.log("urlIdentity", identityUrlTemp)
         }
-
     })
     return <ExperiencesListComponent clearIdentity={clearIdentity} urlIdentity={identityUrl} />
 }

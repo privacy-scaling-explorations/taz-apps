@@ -24,6 +24,8 @@ export default function ArtGallery(props) {
         } else if (savedCanvas) {
             const updatedCanvas = [savedCanvas].concat(images)
             setImages(updatedCanvas)
+            console.log("savedCanvas", savedCanvas)
+            console.log("updatedCanvas", updatedCanvas)
             console.log("image not found")
         }
     }

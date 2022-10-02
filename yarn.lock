@@ -22563,9 +22563,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"token-subgraph@workspace:apps/token-subgraph":
+"token-subgraph@workspace:apps/artwork-subgraph":
   version: 0.0.0-use.local
-  resolution: "token-subgraph@workspace:apps/token-subgraph"
+  resolution: "token-subgraph@workspace:apps/artwork-subgraph"
   dependencies:
     "@graphprotocol/graph-cli": 0.30.4
     "@graphprotocol/graph-ts": 0.27.0

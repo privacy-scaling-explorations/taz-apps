@@ -6,11 +6,11 @@ import InfiniteScroll from "react-infinite-scroller"
 import QuestionModal from "../../components/QuestionModal"
 import { useGenerateProof } from "../../hooks/useGenerateProof"
 import ProcessingModal from "../../components/ProcessingModal"
-import { Subgraphs } from "../../hooks/subgraphs"
+import { Subgraphs } from "../../helpers/subgraphs"
 import BackToTopArrow from "../../components/svgElements/BackToTopArrow"
 import BunnyQuestion from "../../components/svgElements/BunnyQuestion"
 import YellowCircle from "../../components/svgElements/YellowCircle"
-import BlueEllipse from "../../components/svgElements/BlueEllipse"
+import Ellipse from "../../components/svgElements/Ellipse"
 import RedCircle from "../../components/svgElements/RedCircle"
 import SelectorArrow from "../../components/ArrowNavigators/SelectorArrow"
 import BackTAZ from "../../components/ArrowNavigators/BackTAZ"
@@ -75,7 +75,7 @@ export default function Questions() {
         setTimeout(openProcessingModal, CHAINED_MODAL_DELAY)
 
         setSteps([
-            { status: "processing", text: "Generate zero knowledge proof" },
+            { status: "processing", text: "Generating zero knowledge proof" },
             { status: "queued", text: "Submit transaction with proof and question" },
             { status: "queued", text: "Update questions from on-chain events" }
         ])
@@ -88,8 +88,8 @@ export default function Questions() {
         )
 
         setSteps([
-            { status: "complete", text: "Generate zero knowledge proof" },
-            { status: "processing", text: "Submit transaction with proof and question" },
+            { status: "complete", text: "Generated zero knowledge proof" },
+            { status: "processing", text: "Submitting transaction with proof and question" },
             { status: "queued", text: "Update questions from on-chain events" }
         ])
 
@@ -133,9 +133,9 @@ export default function Questions() {
         }
 
         setSteps([
-            { status: "complete", text: "Generate zero knowledge proof" },
-            { status: "complete", text: "Submit transaction with proof and question" },
-            { status: "processing", text: "Update questions from on-chain events" }
+            { status: "complete", text: "Generated zero knowledge proof" },
+            { status: "complete", text: "Submitted transaction with proof and question" },
+            { status: "processing", text: "Updating questions from on-chain events" }
         ])
 
         setTimeout(internalCloseProcessingModal, 2000)
@@ -218,20 +218,14 @@ export default function Questions() {
             <div className="fixed top-[16%] -left-[14%]">
                 <YellowCircle />
             </div>
-            {/* this one bunny instead of the one at the bottom
-      will stay in place like the colored bg elements but
-      is not ideal for displaying the whole bunny on different screen sizes}
-      {/* <div className="fixed top-[17%] right-[0]">
-        <BunnyQuestion />
-      </div> */}
-            <div className="fixed top-[45%] right-[-35%]">
-                <BlueEllipse />
+            <div className="fixed top-[52%] right-[-35%]">
+                <Ellipse color="#435C6C" />
             </div>
             <div className="fixed top-[60%] left-[2%]">
                 <RedCircle />
             </div>
 
-            <div className="fixed bottom-[25%] right-2 z-20 flex justify-end">
+            <div className="fixed bottom-[15%] right-2 z-20 flex justify-end">
                 <button
                     type="button"
                     className="rounded-full bg-brand-yellow ring-2 ring-brand-black py-3 px-4 drop-shadow text-brand-button font-medium text-brand-black hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-opacity-25"
@@ -241,7 +235,7 @@ export default function Questions() {
                 </button>
             </div>
             {showTopBtn && (
-                <div className="fixed bottom-[25%] left-2 z-20 flex justify-end">
+                <div className="fixed bottom-[15%] left-2 z-20 flex justify-end">
                     <button onClick={goToTop}>
                         <BackToTopArrow />
                     </button>
@@ -262,29 +256,32 @@ export default function Questions() {
 
             {/* Begin Questions Board */}
 
-            <div className="z-0 ">
+            <div className="z-10 ">
                 <Link href="/experiences-page">
-                    <div className="flex max-w-[76px] max-h-[32px] bg-black ml-9 mt-8 mb-10 px-1 text-xl text-brand-beige2 cursor-pointer shadow-[2.0px_3.0px_3.0px_rgba(0,0,0,0.38)]">
+                    <div className="flex max-w-[76px] max-h-[32px] bg-black ml-9 mt-8 mb-7 px-1 text-xl text-brand-beige2 cursor-pointer shadow-[2.0px_3.0px_3.0px_rgba(0,0,0,0.38)]">
                         <BackTAZ />
                         <h1>TAZ</h1>
                     </div>
                 </Link>
-                <div className="px-6 pt-3 pb-2">
-                    <div>
-                        <h2 className="ml-3 text-[24px] leading-5 font-extrabold">ASK AND ANSWER</h2>
+                <div className="px-6 pb-4">
+                    <div className="flex flex-row w-full">
+                        <div className="py-5">
+                            <h2 className="ml-3 text-2xl leading-5 font-extrabold">ASK AND ANSWER</h2>
+                            <h2 className="ml-3 text-2xl font-extrabold">QUESTIONS FREELY</h2>
+                        </div>
+                        <div className="pl-3">
+                            <BunnyQuestion />
+                        </div>
                     </div>
-                    <div>
-                        <h2 className="ml-3 mb-1 text-[24px] font-extrabold">QUESTIONS FREELY</h2>
-                    </div>
-                    <div>
-                        <h3 className="mx-3 pr-20 text-brand-body text-brand-blue">
-                            More details about what makes this anonymous and copy about this long.
-                        </h3>
-                    </div>
+                    <p className="mx-3 text-brand-body text-brand-blue">
+                        Using your Semaphore ID, you can prove you're a member of the Devcon VI group without having to
+                        log in or identify yourself. Go ahead and ask those questions you don't want to admit you don't
+                        already know the answer to ;)
+                    </p>
                 </div>
             </div>
 
-            <div className="z-10 mb-[23%] px-6 pb-8">
+            <div className="z-10 px-6 pb-8">
                 <div className="min-w-[200px] relative divide-y overflow-y-auto rounded-md border-2 border-brand-blue bg-white drop-shadow-lg">
                     <InfiniteScroll loadMore={fetchItems} hasMore={hasMoreItems} loader={loader}>
                         {questions.map((item) => (
@@ -311,9 +308,9 @@ export default function Questions() {
             <div className="flex w-full relative justify-center bg-black pb-3 pt-9">
                 <Footer />
             </div>
-            <div className="absolute overflow-hidden top-36 md:top-20 -right-0">
+            {/* <div className="absolute overflow-hidden top-36 md:top-20 right-3">
                 <BunnyQuestion />
-            </div>
+            </div> */}
 
             {/* End Questions Board */}
         </div>
@@ -321,12 +318,10 @@ export default function Questions() {
 }
 
 /* export async function getServerSideProps() {
-  const subgraphs = new Subgraphs()
-  const questions = await subgraphs.getMessages(0)
-
-  // console.log('QUESTIONS PAGE | fetched questions', questions)
-
-  return {
+const subgraphs = new Subgraphs()
+const questions = await subgraphs.getMessages(0)
+// console.log('QUESTIONS PAGE | fetched questions', questions)
+return {
     props: { questionsProp: questions }
-  }
+}
 } */
