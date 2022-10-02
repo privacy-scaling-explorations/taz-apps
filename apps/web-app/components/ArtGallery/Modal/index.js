@@ -108,19 +108,17 @@ export default function Modal({
                     </div>
           
                         {isVoting ? 
-                        <div className="relative flex flex-col items-center justify center">
-                            <img className="opacity-20" src={activeImage.url}></img>
-                            <div className="absolute mt-16 px-12 text-center flex flex-col items-center ">
-                                <p className="mb-10 text-[16px] font-bold px-3">You only get 1 vote. Use it now?</p>
-                                <p className="text-[#787878] text-[12px] px-3">Voting Window</p>
-                                <p className="mb-10 text-[#787878] text-[12px] px-3">October 10-15, 2022</p>
-                                <p className="text-[#787878] text-[12px] px-3">Learn more about <a className="underline">Semaphore Voting</a></p>
-                                {/* <p className="">You only get 1 vote. Use it now?</p> */}
-
+                            <div className="relative flex flex-col items-center justify center">
+                                <img className="opacity-20" src={activeImage.url}></img>
+                                <div className="absolute mt-16 px-12 text-center flex flex-col items-center ">
+                                    <p className="mb-10 text-[16px] font-bold px-3">You only get 1 vote. Use it now?</p>
+                                    <p className="text-[#787878] text-[12px] px-3">Voting Window</p>
+                                    <p className="mb-10 text-[#787878] text-[12px] px-3">October 10-15, 2022</p>
+                                    <p className="text-[#787878] text-[12px] px-3">Learn more about <a className="underline">Semaphore Voting</a></p>
+                                </div>
                             </div>
-                        </div>
-                    
-                        :           <img src={activeImage.url}></img>}
+                            :
+                            <img src={activeImage.url}></img>}
          
  
                     <div className="flex flex-col py-4 text-[14px] w-full text-center border-t-2 border-t-brand-gray2 items-center">
