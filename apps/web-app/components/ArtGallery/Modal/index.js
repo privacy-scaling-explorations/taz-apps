@@ -89,7 +89,7 @@ export default function Modal({
 
         <div
             onClick={onClose}
-            className="absolute left-0 top-0 bottom-0 right-0 h-[2000px] w-[100%] overflow-scroll bg-[#1E1E1E] bg-opacity-70 flex flex-col items-center justify-start z-20"
+            className="fixed left-0 top-0 bottom-0 right-0 h-[100%] w-[100%] overflow-scroll bg-[#1E1E1E] bg-opacity-70 flex flex-col items-center justify-start z-20"
         >
             {isTxLoading ? (
                 <ProcessingModal isOpen={isTxLoading} closeModal={changeTxLoadingModal} steps={steps} fact={2} />
@@ -103,7 +103,7 @@ export default function Modal({
                     </div>
                     <button
                         onClick={onClose}
-                        className="border-none h-[300px] w-[100%] max-w-[500px] max-h-[500px] "
+                        className="border-none w-[100%] max-w-[500px] h-[369px] "
                         style={{
                             backgroundImage: `url(${`canvases/${activeImage.imageId}.png`})`,
                             backgroundSize: "cover"
