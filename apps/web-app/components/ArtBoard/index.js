@@ -97,6 +97,7 @@ export default function ArtBoard() {
     const toggleTool = (e) => {
         if (tool === "pen") {
             console.log("settofill")
+            setFillColor(color)
             setTool("fill")
         } else {
             setTool("pen")
@@ -161,7 +162,8 @@ export default function ArtBoard() {
         setIsLoading(true)
         setSteps([
             { status: "processing", text: "Generating zero knowledge proof" },
-            { status: "queued", text: "Verify ZKP Membership and submit Art" }
+            { status: "queued", text: "Verify ZKP membership and submit transaction" },
+            { status: "queued", text: "Add art to active canvas" }
         ])
         const signal = "proposal_1"
         const { fullProofTemp, solidityProof, nullifierHash, externalNullifier, merkleTreeRoot, groupId } =
@@ -189,7 +191,8 @@ export default function ArtBoard() {
         try {
             setSteps([
                 { status: "complete", text: "Generated zero knowledge proof" },
-                { status: "processing", text: "Verifying ZKP Membership and submit Art" }
+                { status: "processing", text: "Verifying ZKP membership and submitting transaction" },
+                { status: "queued", text: "Add art to active canvas" }
             ])
             const response = await axios.post("/api/modifyCanvas", {
                 updatedTiles: tilesRef.current,
@@ -223,8 +226,11 @@ export default function ArtBoard() {
             console.log("canvasId.current: ", canvasId.current)
             setSteps([
                 { status: "complete", text: "Generated zero knowledge proof" },
-                { status: "complete", text: "Submitted transaction with proof and Canva" },
-                { status: "processing", text: "Updating ArtGallery from on-chain events" }
+                { status: "complete", text: "Verified ZKP membership and submitted transaction" },
+                {
+                    status: "processing",
+                    text: "Your drawing completed a canvas! Check out your freshly-baked creation in the TAZ app!"
+                }
             ])
 
             // Add Try and Catch
@@ -247,6 +253,15 @@ export default function ArtBoard() {
             } else if (mintResponse.status === 403) {
                 alert("Tx have failed, please try submitting again")
             }
+        } else {
+            setSteps([
+                { status: "complete", text: "Generated zero knowledge proof" },
+                { status: "complete", text: "Verified ZKP membership and submitted transaction" },
+                {
+                    status: "processing",
+                    text: "Your drawing is live on an active canvas! Check it out on the TAZ TV."
+                }
+            ])
         }
     }
 
