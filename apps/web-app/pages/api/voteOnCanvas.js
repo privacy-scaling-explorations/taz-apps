@@ -1,8 +1,8 @@
 import { ethers } from "ethers"
 import dotenv from "dotenv"
-import { TAZTOKEN_CONTRACT } from "../../config/goerli.json"
+import { TAZARTWORK_CONTRACT } from "../../config/goerli.json"
 import { fetchWalletIndex } from "../../helpers/helpers"
-import TazToken from "../utils/TazToken.json"
+import TazArtwork from "../utils/TazArtwork.json"
 
 dotenv.config({ path: "../../.env.local" })
 
@@ -11,8 +11,8 @@ export default async function handler(req, res) {
 
     const provider = new ethers.providers.JsonRpcProvider(process.env.GOERLI_URL)
 
-    const { abi } = TazToken
-    const contractAddress = TAZTOKEN_CONTRACT
+    const { abi } = TazArtwork
+    const contractAddress = TAZARTWORK_CONTRACT
 
     if (req.method === "POST") {
         try {

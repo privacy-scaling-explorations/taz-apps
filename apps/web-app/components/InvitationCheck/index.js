@@ -8,7 +8,7 @@ import { useIdentityLoginContext } from "../../context/IdentityContextProvider"
 import ValidateInvitationComponent from "./View"
 
 // const { Subgraph } = require('@semaphore-protocol/subgraph')
-import { Subgraphs } from "../../hooks/subgraphs"
+import { Subgraphs } from "../../helpers/subgraphs"
 
 const { GROUP_ID, FACT_ROTATION_INTERVAL } = require("../../config/goerli.json")
 const { FACTS } = require("../../data/facts.json")

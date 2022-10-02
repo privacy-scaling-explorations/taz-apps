@@ -97,6 +97,7 @@ export default function ArtBoard() {
     const toggleTool = (e) => {
         if (tool === "pen") {
             console.log("settofill")
+            setFillColor(color)
             setTool("fill")
         } else {
             setTool("pen")
@@ -104,18 +105,18 @@ export default function ArtBoard() {
     }
 
     const startDrawing = (i) => {
-        if (tiles[i] === "" && userSelectedTile === false) {
-            setIsDrawing(true)
-            setSelectedTile(i)
-        } else if (i === selectedTile) {
-            setIsDrawing(true)
-        } else {
-            console.log("You Cannot select this Tile")
-        }
+        // if (tiles[i] === "" && userSelectedTile === false) {
+        //     setIsDrawing(true)
+        //     setSelectedTile(i)
+        // } else if (i === selectedTile) {
+        //     setIsDrawing(true)
+        // } else {
+        //     console.log("You Cannot select this Tile")
+        // }
 
         // ------ For testing
-        // setSelectedTile(i)
-        // setIsDrawing(true)
+        setSelectedTile(i)
+        setIsDrawing(true)
     }
     const minimize = () => {
         const uri = stageRef.current.toDataURL()
@@ -161,7 +162,8 @@ export default function ArtBoard() {
         setIsLoading(true)
         setSteps([
             { status: "processing", text: "Generating zero knowledge proof" },
-            { status: "queued", text: "Verify ZKP Membership and submit Art" }
+            { status: "queued", text: "Verify ZKP membership and submit transaction" },
+            { status: "queued", text: "Add art to active canvas" }
         ])
         const signal = "proposal_1"
         const { fullProofTemp, solidityProof, nullifierHash, externalNullifier, merkleTreeRoot, groupId } =
@@ -189,12 +191,14 @@ export default function ArtBoard() {
         try {
             setSteps([
                 { status: "complete", text: "Generated zero knowledge proof" },
-                { status: "processing", text: "Verifying ZKP Membership and submit Art" }
+                { status: "processing", text: "Verifying ZKP membership and submitting transaction" },
+                { status: "queued", text: "Add art to active canvas" }
             ])
             const response = await axios.post("/api/modifyCanvas", {
                 updatedTiles: tilesRef.current,
                 tileIndex: selectedTile,
-                canvasId: canvasId.current
+                canvasId: canvasId.current,
+                fullProof: fullProofTemp
             })
             if (response.status === 201) {
                 router.push("/artGallery-page")
@@ -215,20 +219,18 @@ export default function ArtBoard() {
             const body = {
                 imageUri: canvasUri,
                 canvasId: canvasId.current,
-                groupId,
-                signal,
-                nullifierHash,
-                externalNullifier,
-                solidityProof,
-                merkleTreeRoot
+                fullProof: fullProofTemp,
             }
             console.log("POSTING to /api/mintFullCanvas")
             console.log("canvasUri: ", canvasUri)
             console.log("canvasId.current: ", canvasId.current)
             setSteps([
                 { status: "complete", text: "Generated zero knowledge proof" },
-                { status: "complete", text: "Submitted transaction with proof and Canva" },
-                { status: "processing", text: "Updating ArtGallery from on-chain events" }
+                { status: "complete", text: "Verified ZKP membership and submitted transaction" },
+                {
+                    status: "processing",
+                    text: "Your drawing completed a canvas! Check out your freshly-baked creation in the TAZ app!"
+                }
             ])
 
             // Add Try and Catch
@@ -246,10 +248,20 @@ export default function ArtBoard() {
             }
             if (mintResponse.status === 201) {
                 window.localStorage.setItem("savedCanva", JSON.stringify(newCanvas))
+                console.log("Image Saved!",newCanvas )
                 router.push("/artGallery-page")
             } else if (mintResponse.status === 403) {
                 alert("Tx have failed, please try submitting again")
             }
+        } else {
+            setSteps([
+                { status: "complete", text: "Generated zero knowledge proof" },
+                { status: "complete", text: "Verified ZKP membership and submitted transaction" },
+                {
+                    status: "processing",
+                    text: "Your drawing is live on an active canvas! Check it out on the TAZ TV."
+                }
+            ])
         }
     }
 
