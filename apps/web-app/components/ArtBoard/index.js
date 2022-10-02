@@ -5,6 +5,7 @@ import { useRouter } from "next/router"
 import { useGenerateProof } from "../../hooks/useGenerateProof"
 import ArtBoardComponent from "./View"
 
+const { CHAINED_MODAL_DELAY } = require("../../config/goerli.json")
 const { FACTS } = require("../../data/facts.json")
 
 export default function ArtBoard() {
@@ -12,6 +13,7 @@ export default function ArtBoard() {
     const [identityKey, setIdentityKey] = useState("")
     const [isLoading, setIsLoading] = useState(false)
     const [isComponentLoading, setIsComponentLoading] = useState(false)
+    const [processingModalIsOpen, setProcessingModalIsOpen] = useState(false)
     const [tool, setTool] = useState("pen")
     const [userSelectedTile, setUserSelectedTile] = useState(false)
 
@@ -143,6 +145,19 @@ export default function ArtBoard() {
         return await takeScreenShot(canvasRef.current)
     }
 
+    const internalCloseProcessingModal = () => {
+        setProcessingModalIsOpen(false)
+    }
+
+    const closeProcessingModal = () => {
+        setProcessingModalIsOpen(true)
+        setIsLoading(false)
+    }
+
+    const openProcessingModal = () => {
+        setProcessingModalIsOpen(true)
+    }
+
     const submit = async () => {
         // removeBorder
         // borderRef.current.className = 'touch-none bg-white h-[250] w-[250]'
@@ -160,6 +175,8 @@ export default function ArtBoard() {
 
         // Should be renamed. This is for Posting data not loading.
         setIsLoading(true)
+        // setTimeout(openProcessingModal, CHAINED_MODAL_DELAY)
+
         setSteps([
             { status: "processing", text: "Generating zero knowledge proof" },
             { status: "queued", text: "Verify ZKP membership and submit transaction" },
@@ -189,11 +206,17 @@ export default function ArtBoard() {
         // }
 
         try {
-            setSteps([
-                { status: "complete", text: "Generated zero knowledge proof" },
-                { status: "processing", text: "Verifying ZKP membership and submitting transaction" },
-                { status: "queued", text: "Add art to active canvas" }
-            ])
+            setTimeout(() => {
+                setSteps(
+                    [
+                        { status: "complete", text: "Generated zero knowledge proof" },
+                        { status: "processing", text: "Verifying ZKP membership and submitting transaction" },
+                        { status: "queued", text: "Add art to active canvas" }
+                    ],
+                    2500
+                )
+            })
+
             const response = await axios.post("/api/modifyCanvas", {
                 updatedTiles: tilesRef.current,
                 tileIndex: selectedTile,
@@ -219,19 +242,38 @@ export default function ArtBoard() {
             const body = {
                 imageUri: canvasUri,
                 canvasId: canvasId.current,
-                fullProof: fullProofTemp,
+                fullProof: fullProofTemp
             }
             console.log("POSTING to /api/mintFullCanvas")
             console.log("canvasUri: ", canvasUri)
             console.log("canvasId.current: ", canvasId.current)
-            setSteps([
-                { status: "complete", text: "Generated zero knowledge proof" },
-                { status: "complete", text: "Verified ZKP membership and submitted transaction" },
-                {
-                    status: "processing",
-                    text: "Your drawing completed a canvas! Check out your freshly-baked creation in the TAZ app!"
-                }
-            ])
+            setTimeout(() => {
+                setSteps(
+                    [
+                        { status: "complete", text: "Generated zero knowledge proof" },
+                        { status: "complete", text: "Verified ZKP membership and submitted transaction" },
+                        { status: "processing", text: "Adding art to active canvas" }
+                    ],
+                    2500
+                )
+            })
+
+            setTimeout(() => {
+                setSteps(
+                    [
+                        { status: "complete", text: "Generated zero knowledge proof" },
+                        { status: "complete", text: "Verified ZKP membership and submitted transaction" },
+                        { status: "complete", text: "Added art to active canvas" },
+                        {
+                            status: "complete",
+                            text: "Your drawing completed a canvas! Check out your freshly-baked creation in the TAZ app!"
+                        }
+                    ],
+                    40000
+                )
+            })
+
+            // setTimeout(closeProcessingModal, 2000)
 
             // Add Try and Catch
             const mintResponse = await axios.post("/api/mintFullCanvas", body)
@@ -248,20 +290,43 @@ export default function ArtBoard() {
             }
             if (mintResponse.status === 201) {
                 window.localStorage.setItem("savedCanva", JSON.stringify(newCanvas))
-                console.log("Image Saved!",newCanvas )
+                console.log("Image Saved!", newCanvas)
                 router.push("/artGallery-page")
             } else if (mintResponse.status === 403) {
                 alert("Tx have failed, please try submitting again")
             }
         } else {
-            setSteps([
-                { status: "complete", text: "Generated zero knowledge proof" },
-                { status: "complete", text: "Verified ZKP membership and submitted transaction" },
-                {
-                    status: "processing",
-                    text: "Your drawing is live on an active canvas! Check it out on the TAZ TV."
-                }
-            ])
+            setTimeout(() => {
+                setSteps(
+                    [
+                        { status: "complete", text: "Generated zero knowledge proof" },
+                        { status: "complete", text: "Verified ZKP membership and submitted transaction" },
+                        { status: "processing", text: "Adding art to active canvas" }
+                    ],
+                    2500
+                )
+            })
+
+            setTimeout(() => {
+                setSteps(
+                    [
+                        { status: "complete", text: "Generated zero knowledge proof" },
+                        { status: "complete", text: "Verified ZKP membership and submitted transaction" },
+                        { status: "complete", text: "Added art to active canvas" },
+                        {
+                            status: "complete",
+                            text: "Your drawing is live on an active canvas! Check it out on the TAZ TV."
+                        }
+                    ],
+                    40000
+                )
+            })
+
+            setTimeout(() => {
+                setIsLoading(false)
+            }, 20000)
+
+            // setTimeout(closeProcessingModal, 2000)
         }
     }
 
@@ -276,9 +341,9 @@ export default function ArtBoard() {
         handleClear()
     }
 
-    const closeProcessingModal = () => {
-        setIsLoading(false)
-    }
+    // const closeProcessingModal = () => {
+    //     setIsLoading(false)
+    // }
 
     const rotateFact = () => {
         setFact(FACTS[FACTS.indexOf(fact) + 1 === FACTS.length ? 0 : FACTS.indexOf(fact) + 1])
