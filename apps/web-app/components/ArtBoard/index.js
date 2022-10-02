@@ -105,18 +105,18 @@ export default function ArtBoard() {
     }
 
     const startDrawing = (i) => {
-        if (tiles[i] === "" && userSelectedTile === false) {
-            setIsDrawing(true)
-            setSelectedTile(i)
-        } else if (i === selectedTile) {
-            setIsDrawing(true)
-        } else {
-            console.log("You Cannot select this Tile")
-        }
+        // if (tiles[i] === "" && userSelectedTile === false) {
+        //     setIsDrawing(true)
+        //     setSelectedTile(i)
+        // } else if (i === selectedTile) {
+        //     setIsDrawing(true)
+        // } else {
+        //     console.log("You Cannot select this Tile")
+        // }
 
         // ------ For testing
-        // setSelectedTile(i)
-        // setIsDrawing(true)
+        setSelectedTile(i)
+        setIsDrawing(true)
     }
     const minimize = () => {
         const uri = stageRef.current.toDataURL()
@@ -219,12 +219,7 @@ export default function ArtBoard() {
             const body = {
                 imageUri: canvasUri,
                 canvasId: canvasId.current,
-                groupId,
-                signal,
-                nullifierHash,
-                externalNullifier,
-                solidityProof,
-                merkleTreeRoot
+                fullProof: fullProofTemp,
             }
             console.log("POSTING to /api/mintFullCanvas")
             console.log("canvasUri: ", canvasUri)
@@ -253,6 +248,7 @@ export default function ArtBoard() {
             }
             if (mintResponse.status === 201) {
                 window.localStorage.setItem("savedCanva", JSON.stringify(newCanvas))
+                console.log("Image Saved!",newCanvas )
                 router.push("/artGallery-page")
             } else if (mintResponse.status === 403) {
                 alert("Tx have failed, please try submitting again")
