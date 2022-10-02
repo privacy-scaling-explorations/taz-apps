@@ -243,7 +243,7 @@ export default function Answers() {
             </div>
 
             {parentMessageId !== "0" && (
-                <div className="fixed bottom-[25%] right-2 z-10 flex justify-end">
+                <div className="fixed bottom-[15%] right-2 z-10 flex justify-end">
                     <button
                         type="button"
                         className="rounded-full bg-brand-yellow ring-2 ring-brand-black py-3 px-4 drop-shadow text-brand-button font-medium text-brand-black hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-opacity-25"
@@ -254,7 +254,7 @@ export default function Answers() {
                 </div>
             )}
             {showTopBtn && (
-                <div className="fixed bottom-[25%] left-2 z-10 flex justify-end">
+                <div className="fixed bottom-[15%] left-2 z-10 flex justify-end">
                     <button onClick={goToTop}>
                         <BackToTopArrow />
                     </button>
@@ -274,7 +274,7 @@ export default function Answers() {
                 handleSubmit={handleSubmit}
             />
             {/* Begin Answer Board */}
-            <div className="flex-grow mx-6 mt-8 mb-[30%] text-brand-brown p-4 min-w-[200px] min-h-[100%] relative divide-y overflow-y-auto border-2 border-brand-blue rounded-md bg-white drop-shadow-lg">
+            <div className="flex-grow mx-6 my-8 text-brand-brown p-4 min-w-[200px] min-h-[100%] relative divide-y overflow-y-auto border-2 border-brand-blue rounded-md bg-white drop-shadow-lg">
                 <Link href="/questions" className="cursor-pointer brand">
                     <RiArrowLeftLine className="fill-brand-gray50 cursor-pointer mb-4 border-0" />
                 </Link>
