@@ -57,11 +57,26 @@ export default function ArtGalleryComponent({
             )}
 
             {/* Header */}
-            <div className="flex flex-col w-full px-8 mb-6">
-                <div className="mt-8 mb-10">
+            <div className="flex flex-col w-full px-5 mb-6">
+                <div className="mt-8 mb-10 ml-2">
                     <BackLink hre="/experiences-page" />
                 </div>
-                <p className="mb-3 text-2xl font-extrabold">
+                <div className="">
+                    <div className="flex flex-row w-full justify-between">
+                        <div className="py-4">
+                            <h2 className="ml-2 text-2xl leading-5 font-extrabold">WELCOME TO THE</h2>
+                            <h2 className="ml-2 text-2xl font-extrabold">DEVCON VI GALLERY</h2>
+                        </div>
+                        <div className="">
+                            <ArtBunny />
+                        </div>
+                    </div>
+                    <p className="mx-2 text-brand-info text-brand-blue">
+                        Each completed canvas below is a collective creation by 9 anonymous TAZ members. You can vote for your favorite at any time - but you only get one vote so choose wisely!
+                    </p>
+                </div>
+                
+                {/* <p className="mb-3 text-2xl font-extrabold">
                     WELCOME TO THE DEVCON <span className="font-extrabold">XI GALLERY</span>
                 </p>
                 <p className="w-3/4 py-2min-h-[80px] md:min-h-fit text-brand-info text-[#1E1E1E]">
@@ -74,6 +89,11 @@ export default function ArtGalleryComponent({
                 </div>
                 <p className="relative overflow-hidden text-brand-beige text-opacity-100 text-xs w-full px-8 py-2 leading-relaxed">
                     Vote for your favorite! The winner will be announced at the end of the week.
+                </p> */}
+            </div>
+            <div className="relative bg-black">
+                <p className="relative overflow-hidden text-brand-beige text-center text-opacity-100 text-xs w-full px-10 py-2 leading-relaxed">
+                        Visit the TAZ community hub to see canvases in progress
                 </p>
             </div>
 

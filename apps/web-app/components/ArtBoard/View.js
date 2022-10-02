@@ -77,7 +77,7 @@ const ArtBoardComponent = forwardRef(
                     </AnimatePresence>
                 )}
                 <div className="z-10 px-6 py-8 font-sans">
-                    <div className="p-4 min-w-[200px] relative divide-y overflow-y-auto border-2 border-brand-blue rounded-md bg-white drop-shadow-lg">
+                    <div className="p-4 pb-6 min-w-[200px] relative divide-y overflow-y-auto border-2 border-brand-blue rounded-md bg-white drop-shadow-lg">
                         <div className="mb-4 border-0">
                             <Link href="/artGallery-page">
                                 <div>
@@ -87,9 +87,8 @@ const ArtBoardComponent = forwardRef(
                         </div>
                         <div className="border-0 text-brand-brown" style={{ borderTopWidth: "0px" }}>
                             <p className="text-sm w-full font-bold mb-4">To draw, choose 1 open tile</p>
-                            <p className="text-xs opacity-[70%] mb-4">
-                                You can submit one tile to this canvas. Start over to select a new tile.
-                            </p>
+                            <p className="text-xs opacity-[70%]">You can submit one tile to this canvas.</p>
+                            <p className="text-xs opacity-[70%] mb-4">Start over to select a new tile.</p>
                         </div>
                         <div className="flex items-center justify-center">
                             {isComponentLoading ? (
@@ -128,22 +127,22 @@ const ArtBoardComponent = forwardRef(
 
                         <div className="flex">
                             {userSelectedTile ? (
-                                <div className="flex items-center justify-between w-full pt-4">
+                                <div className="flex items-center justify-between w-full pt-6">
                                     <button
                                         className="flex items-center font-bold text-[14px] px-4 py-1.5 rounded-full border border-black"
                                         type="submit"
                                         onClick={handleStartOver}
                                     >
                                         <Flame />
-                                        <div className="pl-2">Start Over</div>
+                                        <div className="pl-2">Select new tile</div>
                                     </button>
 
                                     <button
-                                        className="bg-brand-yellow font-bold text-[14px] px-4 py-1.5 rounded-full"
+                                        className="bg-brand-yellow font-bold text-brand-body px-4 py-1.5 rounded-full"
                                         type="submit"
                                         onClick={submit}
                                     >
-                                        Submit tile
+                                        Add my art
                                     </button>
                                 </div>
                             ) : null}
