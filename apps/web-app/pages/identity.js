@@ -26,7 +26,7 @@ export default function GenerateIdentityPage() {
 
     return (
         <div className="h-[920px] flex flex-col  justify-start bg-brand-blue ">
-            <div className="flex flex-col items-start justify-center w-full px-9 mt-9">
+            <div className="flex flex-col items-start justify-center w-full px-6 mt-9">
                 {" "}
                 <div className="mb-10">
                     <BackLink hre="/experiences-page" />
@@ -34,8 +34,14 @@ export default function GenerateIdentityPage() {
                 <div className="flex flex-col w-full items-center mt-20">
                     <img src={imageUrl} alt="img" className="mb-20 rounded-xl" />
 
-                    <p className="text-brand-beige text-center text-opacity-70 text-brand-body px-10">
-                        Take a screen shot of this Qr code to save it.
+                    <p className="text-brand-beige text-center text-opacity-70 text-brand-body mb-5">
+                        THIS QR IS YOUR SEMAPHORE IDENTITY.
+                    </p>
+                    <p className="text-brand-beige text-center text-opacity-70 text-brand-body">
+                        Take a screen shot to save it.
+                    </p>
+                    <p className="text-brand-beige text-center text-opacity-70 text-brand-body">
+                        Visit TAZ.appliedzkp.org and select "I've been here before". Upload this QR to reconnect.
                     </p>
                 </div>
             </div>
