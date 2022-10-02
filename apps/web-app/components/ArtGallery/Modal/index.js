@@ -1,8 +1,18 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import axios from "axios"
 import ethers from "ethers"
 import ProcessingModal from "../../ProcessingModal"
 import { useGenerateProofVote } from "../../../hooks/useGenerateProofVote"
+
+const { FACTS } = require("../../../data/facts.json")
+const {
+    API_REQUEST_TIMEOUT,
+    FACT_ROTATION_INTERVAL,
+    CHAINED_MODAL_DELAY,
+    ITEMS_PER_FETCH
+} = require("../../../config/goerli.json")
+
+
 
 // import { images } from '../data'
 
@@ -17,6 +27,7 @@ export default function Modal({
 }) {
     const [steps, setSteps] = useState([])
     const [isTxLoading, setIsTxLoading] = useState(false)
+    const [fact,setFact] = useState([FACTS[0]])
     const [generateFullProofVote] = useGenerateProofVote()
 
     const handleControlTabClick = (e, image) => {
@@ -69,7 +80,7 @@ export default function Modal({
             console.log("Post Vote Response", postVote)
             setIsTxLoading(false)
         } catch (error) {
-            alert("Your transaction has failed. Please try submitting again.")
+            alert("You can only vote once!")
             setIsTxLoading(false)
         }
 
@@ -89,6 +100,15 @@ export default function Modal({
         onClose()
     }
 
+    useEffect(() => {
+        setTimeout(rotateFact, FACT_ROTATION_INTERVAL)
+    }, [fact])
+
+    const rotateFact = () => {
+        setFact(FACTS[FACTS.indexOf(fact) + 1 === FACTS.length ? 0 : FACTS.indexOf(fact) + 1])
+    }
+
+
     return (
         // <div onClick={handleClick} className={styles.backdrop}>
 
@@ -97,7 +117,7 @@ export default function Modal({
             className="fixed left-0 top-0 bottom-0 right-0 h-[100%] w-[100%] overflow-scroll bg-[#1E1E1E] bg-opacity-70 flex flex-col items-center justify-start z-20"
         >
             {isTxLoading ? (
-                <ProcessingModal isOpen={isTxLoading} closeModal={changeTxLoadingModal} steps={steps} fact={2} />
+                <ProcessingModal isOpen={isTxLoading} closeModal={changeTxLoadingModal} steps={steps} fact={fact} />
             ) : (
                 <div
                     onClick={(e) => e.stopPropagation()}
