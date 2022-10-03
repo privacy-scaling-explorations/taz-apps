@@ -122,6 +122,7 @@ export default async function handler(req, res) {
                     const signer = new ethers.Wallet(signer_array[currentIndex]).connect(provider)
                     const signerAddress = await signer.getAddress()
                     const nftContract = new ethers.Contract(contractAddress, abi, signer)
+                    console.log("calling function")
                     const tx = await nftContract.safeMint(signerAddress, metadataUrl, imageId, {
                         gasLimit: 500000
                     })
@@ -139,17 +140,15 @@ export default async function handler(req, res) {
                         query.Create(query.Collection("FinishedCanvases"), {
                             data: {
                                 imageId,
-                                imageUri,
+                                imageUri
                             }
                         })
                     )
-
-                    console.log(finishedCanvaCreate.data)
                   
 
                     res.status(201).json({ tx, metadataUrl, imageId })
                 } catch (error) {
-                    res.status(401).json("Error:", error)
+                    res.status(501).json("Error:", error)
                 }
             }
         } catch (error) {
