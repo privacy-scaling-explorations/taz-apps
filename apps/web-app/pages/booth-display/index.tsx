@@ -26,24 +26,24 @@ export async function getStaticProps() {
     const client = new faunadb.Client({ secret })
     const { query } = faunadb
 
-    try {
-        const dbs = await client.query(
-            query.Map(
-                query.Paginate(query.Match(query.Index("all_canvases")), {
-                    size: 10000
-                }),
-                query.Lambda("canvasRef", query.Get(query.Var("canvasRef")))
-            )
-        )
-        // TODO Finish up types for returun data and component
-        console.log("dbs", dbs)
-        const canvases = dbs.data.map((canvas) => canvas.data)
-        return {
-            props: { canvases },
-            // will reload data every 3 secons
-            revalidate: 3
-        }
-    } catch (err) {
-        return { props: { err: "Error" } }
-    }
+    // try {
+    //     const dbs = await client.query(
+    //         query.Map(
+    //             query.Paginate(query.Match(query.Index("all_canvases")), {
+    //                 size: 10000
+    //             }),
+    //             query.Lambda("canvasRef", query.Get(query.Var("canvasRef")))
+    //         )
+    //     )
+    //     // TODO Finish up types for returun data and component
+    //     console.log("dbs", dbs)
+    //     const canvases = dbs.data.map((canvas) => canvas.data)
+    //     return {
+    //         props: { canvases },
+    //         // will reload data every 3 secons
+    //         revalidate: 3
+    //     }
+    // } catch (err) {
+    //     return { props: { err: "Error" } }
+    // }
 }
