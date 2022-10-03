@@ -218,8 +218,11 @@ export default function ArtBoard() {
                 canvasId: canvasId.current,
                 fullProof: fullProofTemp
             })
-            if (response.status === 201) {
-                router.push("/artGallery-page")
+            if (response.status === 201 && tilesRemaining.length > 0) {
+                setTimeout(() => {
+                    internalCloseProcessingModal()
+                    router.push("/artGallery-page")
+                }, 3000)
             }
         } catch (error) {
             alert(
@@ -252,8 +255,6 @@ export default function ArtBoard() {
                 }
             ])
 
-            setTimeout(internalCloseProcessingModal, 20000)
-
             // Add Try and Catch
             const mintResponse = await axios.post("/api/mintFullCanvas", body)
 
@@ -271,7 +272,10 @@ export default function ArtBoard() {
             if (mintResponse.status === 201) {
                 window.localStorage.setItem("savedCanva", JSON.stringify(newCanvas))
                 console.log("Image Saved!", newCanvas)
-                router.push("/artGallery-page")
+                setTimeout(() => {
+                    internalCloseProcessingModal()
+                    router.push("/artGallery-page")
+                }, 6000)
             } else if (mintResponse.status === 403) {
                 alert("Tx have failed, please try submitting again")
             }
@@ -284,8 +288,6 @@ export default function ArtBoard() {
                     text: "Your drawing is live on an active canvas! Check it out on the TAZ TV."
                 }
             ])
-
-            setTimeout(internalCloseProcessingModal, 20000)
         }
     }
 
