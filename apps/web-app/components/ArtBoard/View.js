@@ -40,6 +40,7 @@ const ArtBoardComponent = forwardRef(
         handleStartOver,
         handleClear,
         userSelectedTile,
+        openProcessingModal,
         closeProcessingModal,
         steps,
         fact,
@@ -53,8 +54,13 @@ const ArtBoardComponent = forwardRef(
 
         return (
             <div className="flex h-auto min-h-screen flex-col justify-between overflow-x-hidden">
-                {isLoading && (
-                    <ProcessingModal isOpen={isLoading} closeModal={closeProcessingModal} steps={steps} fact={fact} />
+                {openProcessingModal && (
+                    <ProcessingModal
+                        isOpen={openProcessingModal}
+                        closeModal={closeProcessingModal}
+                        steps={steps}
+                        fact={fact}
+                    />
                 )}
                 {isDrawing && (
                     <AnimatePresence initial={false} exitBeforeEnter onExitComplete={() => null} className="z-20">
