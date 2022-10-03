@@ -32,17 +32,13 @@ export default async function handler(req,res) {
         try {
             console.log("Try")
             const dbs = await client.query(
-                query.Update(
-                    query.Ref(query.Collection('FinishedCanvases'), '181388642581742080'),
-                    {
-                      data: {
-                        name: 'Mountain\'s Thunder',
-                        cost: null,
-                      },
-                    },
-                  )
+                query.Create(query.Collection("FinishedCanvases"), {
+                    data: {
+                        canvaId: 100,
+                        canvaUrl: 108
+                    }
+                })
             )
-
           
                     
             res.status(200).json(dbs.data)
