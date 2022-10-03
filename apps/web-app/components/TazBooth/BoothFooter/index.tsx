@@ -4,7 +4,7 @@ import BoothLogo from "../BoothLogo"
 import ArtBunnyBooth from "../../svgElements/ArtBunnyBooth"
 
 const BoothFooter = () => (
-    <div className="flex justify-between h-1/3 px-20 items-center bg-brand-black text-brand-beige">
+    <div className="flex justify-between h-[329px] px-20 items-center bg-brand-black text-brand-beige">
         <BoothLogo />
         <div className="text-brand-beige px-20">
             <h1 className="text-2xl font-extrabold mb-8">Co-created, anonymous faces</h1>

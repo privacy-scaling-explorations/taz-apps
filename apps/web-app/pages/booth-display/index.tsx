@@ -9,7 +9,7 @@ export interface Canvas {
 }
 
 const BoothDisplay = ({ canvases }: { canvases: { canvasId: number; tiles: string[] }[] }) => (
-    <div className="flex flex-col h-screen bg-brand-black p-10">
+    <div className="flex flex-col h-screen bg-brand-black">
         <BoothContent canvases={canvases} />
         <BoothFooter />
     </div>

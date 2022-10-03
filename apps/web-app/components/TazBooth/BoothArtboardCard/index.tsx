@@ -5,11 +5,17 @@ import { RiFocus2Line } from "react-icons/ri"
 const BoothArtboardCard = ({ canvas }: { canvas: { canvasId: number; tiles: string[] } }) => {
     const emptyTiles = canvas.tiles.filter((tile: string) => tile.length === 0)
     return (
-        <div className="flex flex-col h-[470px] w-1/4 mx-8 p-7 bg-brand-beige2 shadow-[-20px_15px_0px_0px_rgba(184,174,167)]">
-            <div className="grow flex flex-wrap bg-white mb-4">
+        <div className="flex flex-col h-[471px] w-1/4 mx-8 p-7 bg-brand-beige2 shadow-[-20px_15px_0px_0px_rgba(184,174,167)]">
+            <div className="grow flex flex-wrap bg-white mb-4 border border-brand-beige3">
                 {canvas.tiles.map((tile: string, index: number) => (
-                    <picture key={index} className="w-1/3 h-1/3">
-                        {tile ? <img alt={`Artboard tile ${index}`} src={tile} /> : <div className="bg-white" />}
+                    <picture key={index} className="w-1/3 h-1/3 border border-brand-beige3">
+                        {tile ? (
+                            <img alt={`Artboard tile ${index}`} src={tile} className="w-full h-full" />
+                        ) : (
+                            <div className="bg-white flex h-full w-full items-center">
+                                <p className="text-sm text-brand-blue w-full text-center">open tile</p>
+                            </div>
+                        )}
                     </picture>
                 ))}
             </div>
