@@ -17,7 +17,7 @@ contract TazArtwork is ERC721, ERC721URIStorage, AccessControl {
     // Stores the address of the Semaphore contract used for verifications
     ISemaphore public semaContract;
 
-    event NewToken(uint256 tokenId, string uri);
+    event NewToken(uint256 tokenId, string uri, string imageId);
 
     event VoteAdded(uint256 tokenId);
 
@@ -47,7 +47,11 @@ contract TazArtwork is ERC721, ERC721URIStorage, AccessControl {
         _tokenIdCounter.increment();
     }
 
-    function safeMint(address to, string memory uri) public onlyRole(TAZ_ADMIN_ROLE) returns (uint256) {
+    function safeMint(
+        address to,
+        string memory uri,
+        string memory imageId
+    ) public onlyRole(TAZ_ADMIN_ROLE) returns (uint256) {
         uint256 tokenId = _tokenIdCounter.current();
 
         require(_mintingActive, "Minting not active");
@@ -58,7 +62,7 @@ contract TazArtwork is ERC721, ERC721URIStorage, AccessControl {
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
 
-        emit NewToken(tokenId, uri);
+        emit NewToken(tokenId, uri, imageId);
 
         return tokenId;
     }

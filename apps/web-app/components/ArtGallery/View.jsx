@@ -72,10 +72,11 @@ export default function ArtGalleryComponent({
                         </div>
                     </div>
                     <p className="mx-2 text-brand-info text-brand-blue">
-                        Each completed canvas below is a collective creation by 9 anonymous TAZ members. You can vote for your favorite at any time - but you only get one vote so choose wisely!
+                        Each completed canvas below is a collective creation by 9 anonymous TAZ members. You can vote
+                        for your favorite at any time - but you only get one vote so choose wisely!
                     </p>
                 </div>
-                
+
                 {/* <p className="mb-3 text-2xl font-extrabold">
                     WELCOME TO THE DEVCON <span className="font-extrabold">XI GALLERY</span>
                 </p>
@@ -93,7 +94,7 @@ export default function ArtGalleryComponent({
             </div>
             <div className="relative bg-black">
                 <p className="relative overflow-hidden text-brand-beige text-center text-opacity-100 text-xs w-full px-10 py-2 leading-relaxed">
-                        Visit the TAZ community hub to see canvases in progress
+                    Visit the TAZ community hub to see canvases in progress
                 </p>
             </div>
 
@@ -107,12 +108,13 @@ export default function ArtGalleryComponent({
                     images.map((img) => (
                         <picture
                             key={img.tokenId}
-                            onClick={() => handleClick({ tokenId: img.tokenId, url: img.uri })}
+                            onClick={() => handleClick({ tokenId: img.tokenId, url: img.uri, imageId: img.imageId })}
                             className="w-1/2 md:w-1/4 h-auto cursor-pointer"
                         >
                             <img
                                 className="min-h-[195px] outline"
-                                src={img.canvaUri ? img.canvaUri : img.uri}
+                                // src={img.canvaUri ? img.canvaUri : img.uri}
+                                src={img.canvaUri ? img.canvaUri : `canvases/${img.imageId}.png`}
                                 alt={`Image ${img.tokenId}`}
                             />
                         </picture>

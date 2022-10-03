@@ -82,6 +82,10 @@ export class NewToken__Params {
   get uri(): string {
     return this._event.parameters[1].value.toString();
   }
+
+  get imageId(): string {
+    return this._event.parameters[2].value.toString();
+  }
 }
 
 export class RoleAdminChanged extends ethereum.Event {
@@ -459,20 +463,33 @@ export class TazArtwork extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  safeMint(to: Address, uri: string): BigInt {
-    let result = super.call("safeMint", "safeMint(address,string):(uint256)", [
-      ethereum.Value.fromAddress(to),
-      ethereum.Value.fromString(uri)
-    ]);
+  safeMint(to: Address, uri: string, imageId: string): BigInt {
+    let result = super.call(
+      "safeMint",
+      "safeMint(address,string,string):(uint256)",
+      [
+        ethereum.Value.fromAddress(to),
+        ethereum.Value.fromString(uri),
+        ethereum.Value.fromString(imageId)
+      ]
+    );
 
     return result[0].toBigInt();
   }
 
-  try_safeMint(to: Address, uri: string): ethereum.CallResult<BigInt> {
+  try_safeMint(
+    to: Address,
+    uri: string,
+    imageId: string
+  ): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
       "safeMint",
-      "safeMint(address,string):(uint256)",
-      [ethereum.Value.fromAddress(to), ethereum.Value.fromString(uri)]
+      "safeMint(address,string,string):(uint256)",
+      [
+        ethereum.Value.fromAddress(to),
+        ethereum.Value.fromString(uri),
+        ethereum.Value.fromString(imageId)
+      ]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -953,6 +970,10 @@ export class SafeMintCall__Inputs {
 
   get uri(): string {
     return this._call.inputValues[1].value.toString();
+  }
+
+  get imageId(): string {
+    return this._call.inputValues[2].value.toString();
   }
 }
 

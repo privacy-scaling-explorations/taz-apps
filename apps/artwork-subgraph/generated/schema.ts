@@ -60,6 +60,15 @@ export class Token extends Entity {
     this.set("uri", Value.fromString(value));
   }
 
+  get imageId(): string {
+    let value = this.get("imageId");
+    return value!.toString();
+  }
+
+  set imageId(value: string) {
+    this.set("imageId", Value.fromString(value));
+  }
+
   get hasViolation(): boolean {
     let value = this.get("hasViolation");
     return value!.toBoolean();

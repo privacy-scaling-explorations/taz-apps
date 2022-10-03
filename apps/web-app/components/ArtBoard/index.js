@@ -5,6 +5,7 @@ import { useRouter } from "next/router"
 import { useGenerateProof } from "../../hooks/useGenerateProof"
 import ArtBoardComponent from "./View"
 
+const { CHAINED_MODAL_DELAY, FACT_ROTATION_INTERVAL } = require("../../config/goerli.json")
 const { FACTS } = require("../../data/facts.json")
 
 export default function ArtBoard() {
@@ -12,6 +13,7 @@ export default function ArtBoard() {
     const [identityKey, setIdentityKey] = useState("")
     const [isLoading, setIsLoading] = useState(false)
     const [isComponentLoading, setIsComponentLoading] = useState(false)
+    const [processingModalIsOpen, setProcessingModalIsOpen] = useState(false)
     const [tool, setTool] = useState("pen")
     const [userSelectedTile, setUserSelectedTile] = useState(false)
 
@@ -143,7 +145,20 @@ export default function ArtBoard() {
         return await takeScreenShot(canvasRef.current)
     }
 
-    const submit = async () => {
+    const internalCloseProcessingModal = () => {
+        setProcessingModalIsOpen(false)
+    }
+
+    const closeProcessingModal = () => {
+        setProcessingModalIsOpen(true)
+    }
+
+    const openProcessingModal = () => {
+        setProcessingModalIsOpen(true)
+    }
+
+    const submit = async (event) => {
+        event.preventDefault()
         // removeBorder
         // borderRef.current.className = 'touch-none bg-white h-[250] w-[250]'
 
@@ -159,7 +174,9 @@ export default function ArtBoard() {
         }
 
         // Should be renamed. This is for Posting data not loading.
-        setIsLoading(true)
+        // setIsLoading(true)
+        setTimeout(openProcessingModal, CHAINED_MODAL_DELAY)
+
         setSteps([
             { status: "processing", text: "Generating zero knowledge proof" },
             { status: "queued", text: "Verify ZKP membership and submit transaction" },
@@ -194,14 +211,18 @@ export default function ArtBoard() {
                 { status: "processing", text: "Verifying ZKP membership and submitting transaction" },
                 { status: "queued", text: "Add art to active canvas" }
             ])
+
             const response = await axios.post("/api/modifyCanvas", {
                 updatedTiles: tilesRef.current,
                 tileIndex: selectedTile,
                 canvasId: canvasId.current,
                 fullProof: fullProofTemp
             })
-            if (response.status === 201) {
-                router.push("/artGallery-page")
+            if (response.status === 201 && tilesRemaining.length > 0) {
+                setTimeout(() => {
+                    internalCloseProcessingModal()
+                    router.push("/artGallery-page")
+                }, 3000)
             }
         } catch (error) {
             alert(
@@ -210,7 +231,8 @@ export default function ArtBoard() {
             console.log("error", error)
             console.log("data", error.response.data.existingTile)
             tiles[selectedTile] = error.response.data.existingTile
-            setIsLoading(false)
+            // setIsLoading(false)
+            internalCloseProcessingModal()
             setUserSelectedTile(false)
             setSelectedTile(null)
         }
@@ -219,7 +241,7 @@ export default function ArtBoard() {
             const body = {
                 imageUri: canvasUri,
                 canvasId: canvasId.current,
-                fullProof: fullProofTemp,
+                fullProof: fullProofTemp
             }
             console.log("POSTING to /api/mintFullCanvas")
             console.log("canvasUri: ", canvasUri)
@@ -228,7 +250,7 @@ export default function ArtBoard() {
                 { status: "complete", text: "Generated zero knowledge proof" },
                 { status: "complete", text: "Verified ZKP membership and submitted transaction" },
                 {
-                    status: "processing",
+                    status: "complete",
                     text: "Your drawing completed a canvas! Check out your freshly-baked creation in the TAZ app!"
                 }
             ])
@@ -237,10 +259,11 @@ export default function ArtBoard() {
             const mintResponse = await axios.post("/api/mintFullCanvas", body)
 
             console.log("RESPONSE FROM /api/mintFullCanvas:", mintResponse)
-            console.log("Canva Uri", mintResponse.ipfsUrl)
+            console.log("Canva Uri", mintResponse.ipfsUrl, mintResponse.imageId)
 
             const newCanvas = {
                 id: 10000,
+                imageId: mintResponse.data.imageId,
                 timestamp: 999999999,
                 tokenId: 0,
                 uri: mintResponse.data.ipfsUrl,
@@ -248,8 +271,11 @@ export default function ArtBoard() {
             }
             if (mintResponse.status === 201) {
                 window.localStorage.setItem("savedCanva", JSON.stringify(newCanvas))
-                console.log("Image Saved!",newCanvas )
-                router.push("/artGallery-page")
+                console.log("Image Saved!", newCanvas)
+                setTimeout(() => {
+                    internalCloseProcessingModal()
+                    router.push("/artGallery-page")
+                }, 6000)
             } else if (mintResponse.status === 403) {
                 alert("Tx have failed, please try submitting again")
             }
@@ -258,7 +284,7 @@ export default function ArtBoard() {
                 { status: "complete", text: "Generated zero knowledge proof" },
                 { status: "complete", text: "Verified ZKP membership and submitted transaction" },
                 {
-                    status: "processing",
+                    status: "complete",
                     text: "Your drawing is live on an active canvas! Check it out on the TAZ TV."
                 }
             ])
@@ -276,13 +302,17 @@ export default function ArtBoard() {
         handleClear()
     }
 
-    const closeProcessingModal = () => {
-        setIsLoading(false)
-    }
+    // const closeProcessingModal = () => {
+    //     setIsLoading(false)
+    // }
 
     const rotateFact = () => {
         setFact(FACTS[FACTS.indexOf(fact) + 1 === FACTS.length ? 0 : FACTS.indexOf(fact) + 1])
     }
+
+    useEffect(() => {
+        setTimeout(rotateFact, FACT_ROTATION_INTERVAL)
+    }, [fact])
 
     // const handleGenerateProof = async () => {
     //   const { fullProofTemp, solidityProof, nullifierHashTemp, externalNullifier, signal, merkleTreeRoot, groupId } =
@@ -322,6 +352,7 @@ export default function ArtBoard() {
             minimize={minimize}
             handleStartOver={handleStartOver}
             userSelectedTile={userSelectedTile}
+            openProcessingModal={processingModalIsOpen}
             closeProcessingModal={closeProcessingModal}
             steps={steps}
             fact={fact}

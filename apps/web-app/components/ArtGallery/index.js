@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 
+import axios from "axios"
 import ArtGalleryComponent from "./View"
 // Used to dev when images didn't load
 import mockImages from "./data"
@@ -17,7 +18,7 @@ export default function ArtGallery(props) {
 
     const updateFromLocalStorage = () => {
         const savedCanvas = JSON.parse(window.localStorage.getItem("savedCanva"))
-        const found = images.some((element) => savedCanvas && element.uri === savedCanvas.uri)
+        const found = images.some((element) => savedCanvas && element.imageId === savedCanvas.imageId)
         if (found) {
             window.localStorage.removeItem("savedCanva")
             console.log("image found")
@@ -30,12 +31,18 @@ export default function ArtGallery(props) {
         }
     }
 
+    const fetchCanvasesData = async () => {
+        const response = await axios.get("/api/fetchCanvases");
+        console.log("All Canvases",response.data)
+    }
+
     useEffect(() => {
         if (activeImage) {
             // open modal
             setOpen(true)
         }
         updateFromLocalStorage()
+        fetchCanvasesData()
     }, [activeImage])
 
     const handleClose = () => {
