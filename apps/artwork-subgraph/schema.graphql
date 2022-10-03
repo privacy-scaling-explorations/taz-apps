@@ -2,6 +2,7 @@ type Token @entity {
     id: ID!
     tokenId: BigInt! # uint256
     uri: String! # string
+    imageId: String! #string
     hasViolation: Boolean!
     totalVotes: Int!
     timestamp: BigInt!

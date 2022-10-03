@@ -258,10 +258,11 @@ export default function ArtBoard() {
             const mintResponse = await axios.post("/api/mintFullCanvas", body)
 
             console.log("RESPONSE FROM /api/mintFullCanvas:", mintResponse)
-            console.log("Canva Uri", mintResponse.ipfsUrl)
+            console.log("Canva Uri", mintResponse.ipfsUrl, mintResponse.imageId)
 
             const newCanvas = {
                 id: 10000,
+                imageId: mintResponse.data.imageId,
                 timestamp: 999999999,
                 tokenId: 0,
                 uri: mintResponse.data.ipfsUrl,
