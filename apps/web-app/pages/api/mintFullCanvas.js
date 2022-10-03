@@ -135,6 +135,18 @@ export default async function handler(req, res) {
                         })
                     )
 
+                    const finishedCanvaCreate = await client.query(
+                        query.Create(query.Collection("FinishedCanvases"), {
+                            data: {
+                                imageId,
+                                imageUri,
+                            }
+                        })
+                    )
+
+                    console.log(finishedCanvaCreate.data)
+                  
+
                     res.status(201).json({ tx, metadataUrl, imageId })
                 } catch (error) {
                     res.status(401).json("Error:", error)
