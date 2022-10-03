@@ -17,7 +17,7 @@ export default function ArtGallery(props) {
 
     const updateFromLocalStorage = () => {
         const savedCanvas = JSON.parse(window.localStorage.getItem("savedCanva"))
-        const found = images.some((element) => savedCanvas && element.uri === savedCanvas.uri)
+        const found = images.some((element) => savedCanvas && element.imageId === savedCanvas.imageId)
         if (found) {
             window.localStorage.removeItem("savedCanva")
             console.log("image found")
