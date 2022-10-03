@@ -2,7 +2,7 @@ import { Identity } from "@semaphore-protocol/identity"
 import { Group } from "@semaphore-protocol/group"
 import { useEffect, useState } from "react"
 // import { Subgraph } from '@semaphore-protocol/subgraph'
-import { Subgraphs } from "./subgraphs"
+import { Subgraphs } from "../helpers/subgraphs"
 
 const { generateProof, packToSolidityProof } = require("@semaphore-protocol/proof")
 const { GROUP_ID } = require("../config/goerli.json")

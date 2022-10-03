@@ -18,7 +18,7 @@ export default async function handler(req, res) {
 
             const canvases = dbs.data.map((canvas) => canvas.data)
 
-            res.status(200).json({ canvases: canvases })
+            res.status(200).json({ canvases })
         } catch (error) {
             res.status(500).json(error)
         }
