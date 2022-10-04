@@ -277,7 +277,7 @@ export default function ArtBoard() {
                 setTimeout(() => {
                     internalCloseProcessingModal()
                     router.push("/artGallery-page")
-                }, 5000)
+                }, 4000)
             } else if (mintResponse.status === 403) {
                 alert("Tx have failed, please try submitting again")
             }

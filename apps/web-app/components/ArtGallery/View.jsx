@@ -121,12 +121,17 @@ export default function ArtGalleryComponent({
                     images?.map((img) => (
                         <picture
                             key={img.tokenId}
-                            onClick={() => handleClick({ tokenId: img.tokenId, url: img.uri, imageId: img.imageId })}
+                            onClick={() =>
+                                handleClick({
+                                    tokenId: img.tokenId,
+                                    url: img.canvaUri ? img.canvaUri : img.imageUri,
+                                    imageId: img.imageId
+                                })
+                            }
                             className="w-1/2 md:w-1/4 h-auto cursor-pointer"
                         >
                             <img
                                 className="min-h-[195px] outline"
-                                // src={img.canvaUri ? img.canvaUri : img.uri}
                                 src={img.canvaUri ? img.canvaUri : img.imageUri}
                                 alt={`Image ${img.tokenId}`}
                             />
