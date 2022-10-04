@@ -22,6 +22,29 @@
     </a>
 </p>
 
+<div align="center">
+    <h4>
+        <a href="/CONTRIBUTING.md">
+            👥 Contributing
+        </a>
+        <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+        <a href="/CODE_OF_CONDUCT.md">
+            🤝 Code of conduct
+        </a>
+        <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+        <a href="https://discord.gg/6mSdGHnstH">
+            🗣️ Chat &amp; Support
+        </a>
+    </h4>
+</div>
+
+| The Temporary Anonymous Zone is a no-labels zone where Devcon VI attendees can learn through experience about privacy and anonymity. Visitors can get info on basic concepts, ask the team questions, share thoughts, make digital and physical art together, and interact anonymously with other Devcon attendees using apps built specifically for the Devcon VI TAZ. |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+
+TAZ contracts use the latest version of the [`Semaphore.sol`](https://goerli.etherscan.io/address/0xE585f0Db9aB24dC912404DFfb9b28fb8BF211fA6) contract, deployed on the Goerli testnet. The web app uses Next.js and allows users with a valid Semaphore ID to join the TAZ group and generate Semaphore proofs to post anonymous questions and answers, or to make art. Proofs related to the Q&A part are validated on-chain, while proofs related to artworks are validated off-chain and final canvases are posted as NFTs. Users can also vote anonymously for their favorite artworks.
+
+⚠️ The TAZ apps are experimental and the code is not well tested. For more information visit [taz.appliedzkp.org](https://taz.appliedzkp.org) or see our [Notion site](https://pse-team.notion.site/About-the-TAZ-app-1ae2793046414468b56472f43725961e).
+
 ## 🛠 Install
 
 Clone this repository:
@@ -38,24 +61,30 @@ cd taz-apps && yarn
 
 ## 📜 Usage
 
-### Contracts
+Web app and contracts need their env variables. For each of them, copy the `.env.example` file as `.env`:
 
-The contracts folder includes test, tasks, and scripts folders for the two TAZ smart contracts: TazMessage and TazArtwork.
+```bash
+cd apps/web-app # and apps/contracts
+cp .env.example .env
+```
 
-Contract tests can be run from the root "taz-apps" folder using `yarn test:contracts`.
+And add your environment variables.
 
-Included in the tasks folder are Hardhat tasks for creating proofs and deploying contracts.
+### Start the web-app
 
-The scripts folder includes scripts for accomplishing things such as adding access roles to the contracts and updating the group admin on the Semaphore contract to be the new TazMessage contract when a new TazMessage contract is deployed.
+Run the following command to run a local web app:
 
-### Subgraphs
+```bash
+yarn start:web-app
+```
 
-The two subgraph folders include deployment files for each of the TAZ contracts. `web-app/helpers/subgraphs.js` is the class used to make subgraph api queries.
+### Test the contracts
 
-The taz-artwork subgraph has entities Token, Violation, and Vote.
-The taz-message subgraph has entities Message, Violation, and MemberAddeds.
+Contracts can be tested with the following command:
 
-Entity data is derived from events, plus some rollup attributes such as TotalVotes and HasViolation.
+```bash
+yarn test:contracts
+```
 
 ### Code quality and formatting
 

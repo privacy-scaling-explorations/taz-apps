@@ -1,27 +1,35 @@
-# Next.js + Tailwind CSS Example
+<p align="center">
+    <h1 align="center">
+        TAZ Web App
+    </h1>
+</p>
 
-This example shows how to use [Tailwind CSS](https://tailwindcss.com/) [(v3.0)](https://tailwindcss.com/blog/tailwindcss-v3) with Next.js. It follows the steps outlined in the official [Tailwind docs](https://tailwindcss.com/docs/guides/nextjs).
+<p align="center">
+    <a href="https://github.com/semaphore-protocol/taz-apps" target="_blank">
+        <img src="https://img.shields.io/badge/project-TAZ-blue?style=flat-square">
+    </a>
+    <a href="https://github.com/semaphore-protocol/taz-apps/blob/main/LICENSE">
+        <img alt="Github license" src="https://img.shields.io/github/license/semaphore-protocol/taz-apps.svg?style=flat-square">
+    </a>
+    <a href="https://github.com/semaphore-protocol/taz-apps/actions?query=workflow%3Astyle">
+        <img alt="GitHub Workflow style" src="https://img.shields.io/github/workflow/status/semaphore-protocol/taz-apps/style?label=style&style=flat-square&logo=github">
+    </a>
+    <a href="https://eslint.org/">
+        <img alt="Linter eslint" src="https://img.shields.io/badge/linter-eslint-8080f2?style=flat-square&logo=eslint">
+    </a>
+    <a href="https://prettier.io/">
+        <img alt="Code style prettier" src="https://img.shields.io/badge/code%20style-prettier-f8bc45?style=flat-square&logo=prettier">
+    </a>
+</p>
 
-## Deploy your own
+## 📜 Usage
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example) or preview live with [StackBlitz](https://stackblitz.com/github/vercel/next.js/tree/canary/examples/with-tailwindcss)
+Copy the `.env.example` file and rename it `.env`.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-tailwindcss&project-name=with-tailwindcss&repository-name=with-tailwindcss)
+### Start the web-app
 
-## How to use
-
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example:
+Run the following command to run a local web app:
 
 ```bash
-npx create-next-app --example with-tailwindcss with-tailwindcss-app
+yarn dev
 ```
-
-```bash
-yarn create next-app --example with-tailwindcss with-tailwindcss-app
-```
-
-```bash
-pnpm create next-app --example with-tailwindcss with-tailwindcss-app
-```
-
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
