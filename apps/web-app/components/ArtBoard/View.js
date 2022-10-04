@@ -80,8 +80,8 @@ const ArtBoardComponent = forwardRef(
                         />
                     </AnimatePresence>
                 )}
-                <div className="z-10 px-6 py-8 font-sans">
-                    <div className="p-4 pb-6 min-w-[200px] relative overflow-y-auto border-2 border-brand-blue rounded-md bg-white drop-shadow-lg">
+                <div className="z-10 m-auto py-8 font-sans">
+                    <div className="p-4 pb-6 min-w-[200px] w-fit border-2 border-brand-blue rounded-md bg-white drop-shadow-lg">
                         <div className="mb-4">
                             <Link href="/artGallery-page">
                                 <div>

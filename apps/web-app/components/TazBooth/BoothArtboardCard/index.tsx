@@ -3,11 +3,45 @@ import React from "react"
 import { RiFocus2Line } from "react-icons/ri"
 
 const BoothArtboardCard = ({ canvas }: { canvas: { canvasId: number; tiles: string[] } }) => {
+    const tileGrid = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8]
+    ]
     const emptyTiles = canvas.tiles.filter((tile: string) => tile.length === 0)
     return (
-        <div className="flex flex-col h-[471px] w-1/4 mx-8 p-7 bg-brand-beige2 shadow-[-20px_15px_0px_0px_rgba(184,174,167)]">
-            <div className="grow flex flex-wrap bg-white mb-4 border border-brand-beige3">
-                {canvas.tiles.map((tile: string, index: number) => (
+        <div className="flex flex-col h-auto w-1/4 mx-8 p-7 bg-brand-beige2 shadow-[-20px_15px_0px_0px_rgba(184,174,167)]">
+            <table className="grow flex flex-wrap bg-white mb-4 border border-brand-beige3 border-collapse">
+                <tbody>
+                    {tileGrid.map((rows, index) => {
+                        console.log("rows", rows, index)
+                        return (
+                            <tr className="flex w-full h-1/3" key={index}>
+                                {rows.map((item, i) => {
+                                    console.log("item", item, i)
+                                    return (
+                                        <td className="flex h-full w-full min-h-[110px] min-w-[110px] bg-white p-0 border border-brand-beige3">
+                                            {canvas.tiles[item] ? (
+                                                <img
+                                                    alt={`Artboard tile ${item}`}
+                                                    src={canvas.tiles[item]}
+                                                    className="w-full h-full"
+                                                />
+                                            ) : (
+                                                <div className="bg-white grow flex items-center w-full h-full">
+                                                    <p className="text-sm text-brand-blue w-full text-center">
+                                                        open tile
+                                                    </p>
+                                                </div>
+                                            )}
+                                        </td>
+                                    )
+                                })}
+                            </tr>
+                        )
+                    })}
+                </tbody>
+                {/* {canvas.tiles.map((tile: string, index: number) => (
                     <picture key={index} className="w-1/3 h-1/3 border border-brand-beige3">
                         {tile ? (
                             <img alt={`Artboard tile ${index}`} src={tile} className="w-full h-full" />
@@ -17,8 +51,8 @@ const BoothArtboardCard = ({ canvas }: { canvas: { canvasId: number; tiles: stri
                             </div>
                         )}
                     </picture>
-                ))}
-            </div>
+                ))} */}
+            </table>
             <div className="flex flex-col h-24">
                 <h1 className="font-extrabold mb-4">Canvas {canvas.canvasId}</h1>
                 {emptyTiles.length === 9 && (
