@@ -58,11 +58,11 @@ const ArtBoardComponent = forwardRef(
 
         return (
             <div className="flex h-auto min-h-screen flex-col justify-between overflow-x-hidden">
-                {/* <EraseModal>
+                <EraseModal
                     eraseModalIsOpen={eraseModalIsOpen}
                     acceptEraseModal={acceptEraseModal}
                     cancelEraseModal={cancelEraseModal}
-                </EraseModal> */}
+                />
                 <ProcessingModal
                     isOpen={openProcessingModal}
                     closeModal={closeProcessingModal}
@@ -100,12 +100,9 @@ const ArtBoardComponent = forwardRef(
                         </div>
                         <div className="border-0 text-brand-brown" style={{ borderTopWidth: "0px" }}>
                             <p className="text-sm w-full font-bold mb-4">
-                                {userSelectedTile ? "Tap your tile to continue editing" : "To draw, choose 1 open tile"}
+                                {userSelectedTile ? "Add your art or continue editing." : "To draw, choose 1 open tile."}
                             </p>
-                            <p className="text-xs opacity-[70%]">
-                                {userSelectedTile ? "..." : "You can submit one tile to this canvas."}
-                            </p>
-                            <p className="text-xs opacity-[70%] mb-4">{userSelectedTile ? "..." : "..."}</p>
+                            <p className="text-xs opacity-[70%] mb-4">{userSelectedTile ? "Delete your drawing and pick a new tile or click your tile to continue editing." : "Once you have created a drawing, you will be able to add it to the canvas."}</p>
                         </div>
                         <div className="flex items-center justify-center">
                             {isComponentLoading ? (
