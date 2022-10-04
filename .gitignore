@@ -63,9 +63,9 @@ typechain-types
 out
 
 # PWA
-/.pnp
-.pnp.js
-sw.js.map
+**/public/workbox-*.js
+**/public/sw.js
+**/public/worker-*.js
 
 # Parcel
 .parcel-cache

@@ -47,8 +47,7 @@ const BoothArtboardCard = ({ canvas }: { canvas: { canvasId: number; tiles: stri
                 )}
                 {emptyTiles.length !== 0 && emptyTiles.length !== 9 && (
                     <p className="text-xs mb-4">
-                        {9 - emptyTiles.length} tiles are complete | {emptyTiles.length} open tiles remainThere are
-                        still
+                        {9 - emptyTiles.length} tiles are complete | {emptyTiles.length} open tiles remains
                     </p>
                 )}
                 <div className="flex items-center w-fit py-1 px-2 rounded bg-brand-red text-brand-beige">
