@@ -89,8 +89,8 @@ const ArtBoardComponent = forwardRef(
                         />
                     </AnimatePresence>
                 )}
-                <div className="z-10 m-auto py-8 font-sans">
-                    <div className="p-4 pb-6 min-w-[200px] w-fit border-2 border-brand-blue rounded-md bg-white drop-shadow-lg">
+                <div className="z-10 px-6 py-8 font-sans">
+                    <div className="p-4 pb-6 min-w-[200px] relative border-2 border-brand-blue rounded-md bg-white drop-shadow-lg">
                         <div className="mb-4">
                             <Link href="/artGallery-page">
                                 <div>
@@ -110,7 +110,7 @@ const ArtBoardComponent = forwardRef(
                                     : "Once you have created a drawing, you will be able to add it to the canvas."}
                             </p>
                         </div>
-                        <div className="flex items-center justify-center w-full">
+                        <div className="flex items-center justify-center">
                             {isComponentLoading ? (
                                 <div className="my-10">
                                     <Loading size="xl" />
