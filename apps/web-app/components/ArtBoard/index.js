@@ -14,6 +14,7 @@ export default function ArtBoard() {
     const [isLoading, setIsLoading] = useState(false)
     const [isComponentLoading, setIsComponentLoading] = useState(false)
     const [processingModalIsOpen, setProcessingModalIsOpen] = useState(false)
+    const [eraseModalIsOpen, setEraseModalIsOpen] = useState(false)
     const [tool, setTool] = useState("pen")
     const [userSelectedTile, setUserSelectedTile] = useState(false)
 
@@ -55,14 +56,10 @@ export default function ArtBoard() {
             if (runFetch.current === false) {
                 try {
                     const result = await axios.get("/api/modifyCanvas")
-                    console.log("result:")
-                    console.log(result)
 
                     tilesTemp = result.data.canvas.tiles
                     canvasId.current = result.data.canvas.canvasId
                     setCurrentCanvas(result.data.canvas.canvasId)
-                    console.log("tilesTemp: ", tilesTemp)
-                    console.log("canvasId.current: ", canvasId.current)
 
                     const remainingIndices = []
 
@@ -74,7 +71,6 @@ export default function ArtBoard() {
 
                     selectedTileTemp = remainingIndices[Math.floor(Math.random() * (remainingIndices.length - 1))] || 0
 
-                    console.log("selectedTileTemp: ", selectedTileTemp)
                     setTiles(tilesTemp)
                     tilesRef.current = tilesTemp
                     setSelectedTile(selectedTileTemp)
@@ -86,7 +82,6 @@ export default function ArtBoard() {
         }
         fetchData()
         return () => {
-            console.log("Use Effect Finished")
             runFetch.current = true
         }
     }, [])
@@ -96,10 +91,8 @@ export default function ArtBoard() {
         setLines(lines.concat())
     }
 
-    const toggleTool = (e) => {
+    const toggleTool = () => {
         if (tool === "pen") {
-            console.log("settofill")
-            setFillColor(color)
             setTool("fill")
         } else {
             setTool("pen")
@@ -107,31 +100,27 @@ export default function ArtBoard() {
     }
 
     const startDrawing = (i) => {
-        // if (tiles[i] === "" && userSelectedTile === false) {
-        //     setIsDrawing(true)
-        //     setSelectedTile(i)
-        // } else if (i === selectedTile) {
-        //     setIsDrawing(true)
-        // } else {
-        //     console.log("You Cannot select this Tile")
-        // }
-
-        // ------ For testing
-        setSelectedTile(i)
-        setIsDrawing(true)
+        // if no tile is currently selected, allow selection of any empty tile
+        // if tile is selected, only allow selection of selected tile
+        if ((userSelectedTile === false) & !tiles[i]) {
+            setSelectedTile(i)
+            setUserSelectedTile(true)
+            setIsDrawing(true)
+        } else if (selectedTile === i) {
+            setIsDrawing(true)
+        } else {
+            console.log("you can't select that tile");
+        }
     }
+
     const minimize = () => {
         const uri = stageRef.current.toDataURL()
-        console.log("uri", uri)
-        console.log("selectedTile", selectedTile)
-        console.log("tiles", tiles)
         tiles[selectedTile] = uri
         setUserSelectedTile(true)
         setIsDrawing(false)
     }
 
     const handleColorSelect = (e) => {
-        console.log("handleColorSelect: ", e.target)
         if (tool === "fill") {
             setFillColor(e.target.id)
             setColor(e.target.id)
@@ -141,7 +130,6 @@ export default function ArtBoard() {
     }
 
     const generateCanvasUri = async () => {
-        console.log("canvasRef.current: ", canvasRef.current)
         return await takeScreenShot(canvasRef.current)
     }
 
@@ -155,6 +143,22 @@ export default function ArtBoard() {
 
     const openProcessingModal = () => {
         setProcessingModalIsOpen(true)
+    }
+
+    const cancelEraseModal = () => {
+        setEraseModalIsOpen(false)
+    }
+
+    const acceptEraseModal = () => {
+        setEraseModalIsOpen(false)
+        tiles[selectedTile] = ""
+        setSelectedTile(null)
+        setUserSelectedTile(false)
+        handleClear()
+    }
+
+    const openEraseModal = () => {
+        setEraseModalIsOpen(true)
     }
 
     const submit = async (event) => {
@@ -250,8 +254,8 @@ export default function ArtBoard() {
                 { status: "complete", text: "Generated zero knowledge proof" },
                 { status: "complete", text: "Verified ZKP membership and submitted transaction" },
                 {
-                    status: "complete",
-                    text: "Your drawing completed a canvas! Check out your freshly-baked creation in the TAZ app!"
+                    status: "processing",
+                    text: "Add art to active canvas"
                 }
             ])
 
@@ -284,8 +288,8 @@ export default function ArtBoard() {
                 { status: "complete", text: "Generated zero knowledge proof" },
                 { status: "complete", text: "Verified ZKP membership and submitted transaction" },
                 {
-                    status: "complete",
-                    text: "Your drawing is live on an active canvas! Check it out on the TAZ TV."
+                    status: "processing",
+                    text: "Add art to active canvas"
                 }
             ])
         }
@@ -297,9 +301,7 @@ export default function ArtBoard() {
     }
 
     const handleStartOver = () => {
-        tiles[selectedTile] = ""
-        setUserSelectedTile(false)
-        handleClear()
+        openEraseModal();
     }
 
     // const closeProcessingModal = () => {
@@ -354,6 +356,10 @@ export default function ArtBoard() {
             userSelectedTile={userSelectedTile}
             openProcessingModal={processingModalIsOpen}
             closeProcessingModal={closeProcessingModal}
+            openEraseModal={openEraseModal}
+            cancelEraseModal={cancelEraseModal}
+            acceptEraseModal={acceptEraseModal}
+            eraseModalIsOpen={eraseModalIsOpen}
             steps={steps}
             fact={fact}
             currentCanvas={currentCanvas}

@@ -4,6 +4,7 @@ import Link from "next/link"
 import { AnimatePresence } from "framer-motion"
 
 import DrawingModal from "./drawingModal"
+import EraseModal from "./eraseModal"
 import GenerateTile from "./generateTile"
 import BackArrow from "../svgElements/BackArrow"
 import ProcessingModal from "../ProcessingModal"
@@ -42,6 +43,9 @@ const ArtBoardComponent = forwardRef(
         userSelectedTile,
         openProcessingModal,
         closeProcessingModal,
+        eraseModalIsOpen,
+        cancelEraseModal,
+        acceptEraseModal,
         steps,
         fact,
         currentCanvas
@@ -54,6 +58,11 @@ const ArtBoardComponent = forwardRef(
 
         return (
             <div className="flex h-auto min-h-screen flex-col justify-between overflow-x-hidden">
+                <EraseModal
+                    eraseModalIsOpen={eraseModalIsOpen}
+                    acceptEraseModal={acceptEraseModal}
+                    cancelEraseModal={cancelEraseModal}
+                />
                 <ProcessingModal
                     isOpen={openProcessingModal}
                     closeModal={closeProcessingModal}
@@ -90,9 +99,16 @@ const ArtBoardComponent = forwardRef(
                             </Link>
                         </div>
                         <div className="text-brand-brown mb-4">
-                            <p className="text-sm w-full font-bold mb-4">To draw, choose 1 open tile</p>
-                            <p className="text-xs opacity-[70%]">You can submit one tile to this canvas.</p>
-                            <p className="text-xs opacity-[70%]">Start over to select a new tile.</p>
+                            <p className="text-sm w-full font-bold mb-4">
+                                {userSelectedTile
+                                    ? "Add your art or continue editing."
+                                    : "To draw, choose 1 open tile."}
+                            </p>
+                            <p className="text-xs opacity-[70%]">
+                                {userSelectedTile
+                                    ? "Delete your drawing and pick a new tile or click your tile to continue editing."
+                                    : "Once you have created a drawing, you will be able to add it to the canvas."}
+                            </p>
                         </div>
                         <div className="flex items-center justify-center w-full">
                             {isComponentLoading ? (
@@ -119,6 +135,7 @@ const ArtBoardComponent = forwardRef(
                                                             borderRef={borderRef}
                                                             lines={lines}
                                                             setLines={setLines}
+                                                            userSelectedTile={userSelectedTile}
                                                         />
                                                     ))}
                                                 </tr>
@@ -138,7 +155,7 @@ const ArtBoardComponent = forwardRef(
                                         onClick={handleStartOver}
                                     >
                                         <Flame />
-                                        <div className="pl-2">Select new tile</div>
+                                        <div className="pl-2">New tile</div>
                                     </button>
 
                                     <button
