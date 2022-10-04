@@ -65,6 +65,7 @@ out
 # PWA
 /.pnp
 .pnp.js
+sw.js.map
 
 # Parcel
 .parcel-cache
