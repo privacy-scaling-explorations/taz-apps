@@ -17,10 +17,11 @@ export default function ArtGalleryComponent({
     isVoting,
     setIsVoting,
     isTxLoading,
-    changeTxLoadingModal
+    changeTxLoadingModal,
+    galleryOpen,
+    winner
 }) {
     const [showTopBtn, setShowTopBtn] = useState(false)
-    const [galleryOpen, setGalleryOpen] = useState(true)
 
     useEffect(() => {
         // Get the view height of the device.
@@ -102,10 +103,14 @@ export default function ArtGalleryComponent({
                             <p>This gallery closed at the end of the event. Thank you to everyone who contributed!</p>
                         </div>
                         {/* placeholder for winning canvas */}
-                        <div className="w-full h-[400px] bg-white"></div>
+                        <div className="w-full h-[400px] min-w-[400px] bg-white flex justify-center">
+                            <img src={winner?.imageUri} />
+                        </div>
                         <div className="relative overflow-hidden text-brand-beige text-center text-opacity-100 text-brand-info w-full px-6 py-2 leading-relaxed">
                             <p className="text-2xl">Exhibition Favorite</p>
-                            <p>Canvas 323 | 746 of 909 Votes</p>
+                            <p>
+                                Canvas {winner?.tokenId} | {winner?.votes} of {winner?.galleryVotes} Votes
+                            </p>
                         </div>
                     </div>
                 )}

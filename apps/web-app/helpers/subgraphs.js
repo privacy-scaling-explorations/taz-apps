@@ -123,6 +123,45 @@ class Subgraphs {
         return allTokens.reverse()
     }
 
+    // Gets winning token
+    async getVoteWinner() {
+        let tokenId = 0
+        let votes = 0
+        let galleryVotes = 0
+
+        const config = {
+            method: "post",
+            data: JSON.stringify({
+                query: `
+                        {
+                        tokens(
+                            where: {hasViolation: false, totalVotes_gt: 0}
+                            orderBy: totalVotes
+                            orderDirection: desc
+                        ) {
+                            tokenId
+                            uri
+                            imageId
+                            totalVotes
+                        }
+                        }`
+            })
+        }
+
+        const { tokens } = await Subgraphs.request(this.tazArtworkSubgraphApi, config)
+        if (tokens.length) {
+            tokenId = tokens[0].tokenId
+            votes = tokens[0].url
+            votes = tokens[0].totalVotes
+            galleryVotes = tokens.reduce(
+                (previousValue, currentValue) => previousValue + parseInt(currentValue.totalVotes, 10),
+                0
+            )
+        }
+
+        return { tokenId, votes, galleryVotes }
+    }
+
     // Gets the specified non-violating message. Returns null if not found.
     async getMessage(messageId) {
         const config = {
