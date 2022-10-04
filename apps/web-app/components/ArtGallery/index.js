@@ -12,6 +12,8 @@ export default function ArtGallery(props) {
     const [open, setOpen] = useState(false)
     const [isVoting, setIsVoting] = useState()
     const [isTxLoading, setIsTxLoading] = useState(false)
+    const [galleryOpen, setGalleryOpen] = useState(true)
+    const [winner, setWinner] = useState(null)
 
     const handleClick = (image) => {
         setActiveImage(image)
@@ -42,6 +44,14 @@ export default function ArtGallery(props) {
             setImages(imageData)
         }
         setImages(imageData)
+
+        // If gallery is closed, get winner data
+        if (!galleryOpen) {
+            const winnerData = await subgraphs.getVoteWinner()
+            const { imageUri } = imageData.find((img) => img.tokenId === winnerData.tokenId)
+            winnerData.imageUri = imageUri
+            setWinner(winnerData)
+        }
     }
 
     useEffect(() => {
@@ -78,6 +88,8 @@ export default function ArtGallery(props) {
             setIsVoting={setIsVoting}
             isTxLoading={isTxLoading}
             changeTxLoadingModal={changeTxLoadingModal}
+            galleryOpen={galleryOpen}
+            winner={winner}
         />
     )
 }

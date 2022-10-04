@@ -129,7 +129,7 @@ export default function Modal({
 
                     {isVoting ? (
                         <div className="relative flex flex-col items-center justify center">
-                            <img className="opacity-20" src={image}></img>
+                            <img className="opacity-20" src={image.url}></img>
                             <div className="absolute mt-16 px-12 text-center flex flex-col items-center ">
                                 <p className="mb-10 text-[16px] font-bold px-3">You only get 1 vote. Use it now?</p>
                                 <p className="text-[#787878] text-[12px] px-3">Voting Window</p>
