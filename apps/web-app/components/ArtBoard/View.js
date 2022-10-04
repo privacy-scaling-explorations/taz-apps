@@ -106,7 +106,7 @@ const ArtBoardComponent = forwardRef(
                             </p>
                             <p className="text-xs opacity-[70%]">
                                 {userSelectedTile
-                                    ? "Delete your drawing and pick a new tile or click your tile to continue editing."
+                                    ? "Delete your drawing and pick a new tile or tap your tile to continue editing."
                                     : "Once you have created a drawing, you will be able to add it to the canvas."}
                             </p>
                         </div>

@@ -93,6 +93,7 @@ export default function ArtBoard() {
 
     const toggleTool = () => {
         if (tool === "pen") {
+            setFillColor(color)
             setTool("fill")
         } else {
             setTool("pen")
@@ -252,8 +253,8 @@ export default function ArtBoard() {
                 { status: "complete", text: "Generated zero knowledge proof" },
                 { status: "complete", text: "Verified ZKP membership and submitted transaction" },
                 {
-                    status: "processing",
-                    text: "Add art to active canvas"
+                    status: "complete",
+                    text: "Your drawing completed a canvas! Check out your freshly-baked creation in the TAZ app!"
                 }
             ])
 
@@ -286,8 +287,8 @@ export default function ArtBoard() {
                 { status: "complete", text: "Generated zero knowledge proof" },
                 { status: "complete", text: "Verified ZKP membership and submitted transaction" },
                 {
-                    status: "processing",
-                    text: "Add art to active canvas"
+                    status: "complete",
+                    text: "Your drawing is live on an active canvas! Check it out on the TAZ TV."
                 }
             ])
         }
