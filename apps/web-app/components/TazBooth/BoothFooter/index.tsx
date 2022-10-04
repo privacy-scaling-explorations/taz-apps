@@ -1,4 +1,6 @@
 import React from "react"
+import Image from "next/image"
+import rabitAnimation from "../../svgElements/rabbit-animation.gif"
 
 import BoothLogo from "../BoothLogo"
 import ArtBunnyBooth from "../../svgElements/ArtBunnyBooth"
@@ -13,8 +15,8 @@ const BoothFooter = () => (
                 canvases in the app.
             </p>
         </div>
-        <div className="scale-x-flip">
-            <ArtBunnyBooth className="h-40 w-40 fill-current stroke-current text-brand-beige animate-bounce" />
+        <div>
+            <Image src={rabitAnimation} alt="Animation of rabit drawing face" />
         </div>
         <div className="text-brand-beige px-20">
             <h1 className="text-2xl font-extrabold mb-8">To participate, grab an invite!</h1>
