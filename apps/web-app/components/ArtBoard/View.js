@@ -89,32 +89,38 @@ const ArtBoardComponent = forwardRef(
                         />
                     </AnimatePresence>
                 )}
-                <div className="z-10 px-6 py-8 font-sans">
-                    <div className="p-4 pb-6 min-w-[200px] relative divide-y overflow-y-auto border-2 border-brand-blue rounded-md bg-white drop-shadow-lg">
-                        <div className="mb-4 border-0">
+                <div className="z-10 m-auto py-8 font-sans">
+                    <div className="p-4 pb-6 min-w-[200px] w-fit border-2 border-brand-blue rounded-md bg-white drop-shadow-lg">
+                        <div className="mb-4">
                             <Link href="/artGallery-page">
                                 <div>
                                     <BackArrow />
                                 </div>
                             </Link>
                         </div>
-                        <div className="border-0 text-brand-brown" style={{ borderTopWidth: "0px" }}>
+                        <div className="text-brand-brown mb-4">
                             <p className="text-sm w-full font-bold mb-4">
-                                {userSelectedTile ? "Add your art or continue editing." : "To draw, choose 1 open tile."}
+                                {userSelectedTile
+                                    ? "Add your art or continue editing."
+                                    : "To draw, choose 1 open tile."}
                             </p>
-                            <p className="text-xs opacity-[70%] mb-4">{userSelectedTile ? "Delete your drawing and pick a new tile or click your tile to continue editing." : "Once you have created a drawing, you will be able to add it to the canvas."}</p>
+                            <p className="text-xs opacity-[70%]">
+                                {userSelectedTile
+                                    ? "Delete your drawing and pick a new tile or click your tile to continue editing."
+                                    : "Once you have created a drawing, you will be able to add it to the canvas."}
+                            </p>
                         </div>
-                        <div className="flex items-center justify-center">
+                        <div className="flex items-center justify-center w-full">
                             {isComponentLoading ? (
                                 <div className="my-10">
                                     <Loading size="xl" />
                                 </div>
                             ) : (
                                 <div ref={canvasRef} id="ipfsURI">
-                                    <table>
+                                    <table className="border border-slate-200 border-collapse">
                                         <tbody>
                                             {tileCounter.map((counter) => (
-                                                <tr className="w-full h-full" key={counter}>
+                                                <tr className="w-full h-full border border-slate-200" key={counter}>
                                                     {counter.map((id) => (
                                                         <GenerateTile
                                                             startDrawing={startDrawing}

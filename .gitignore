@@ -62,6 +62,10 @@ typechain-types
 .next
 out
 
+# PWA
+/.pnp
+.pnp.js
+
 # Parcel
 .parcel-cache
 
