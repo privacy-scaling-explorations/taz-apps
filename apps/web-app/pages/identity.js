@@ -35,13 +35,13 @@ export default function GenerateIdentityPage() {
                     <img src={imageUrl} alt="img" className="mb-20 rounded-xl" />
 
                     <p className="text-brand-beige text-center text-opacity-70 text-brand-body mb-5">
-                        THIS QR IS YOUR SEMAPHORE IDENTITY.
+                        THIS QR IS YOUR SEMAPHORE IDENTITY
                     </p>
                     <p className="text-brand-beige text-center text-opacity-70 text-brand-body">
                         Take a screen shot to save it.
                     </p>
                     <p className="text-brand-beige text-center text-opacity-70 text-brand-body">
-                        Visit TAZ.appliedzkp.org and select "I've been here before". Upload this QR to reconnect.
+                        Visit TAZ.appliedzkp.org and select "Upload Semaphore ID". Upload this QR to reconnect.
                     </p>
                 </div>
             </div>
