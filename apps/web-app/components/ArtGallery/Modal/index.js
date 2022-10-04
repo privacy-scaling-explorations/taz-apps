@@ -28,7 +28,10 @@ export default function Modal({
     const [steps, setSteps] = useState([])
     const [isTxLoading, setIsTxLoading] = useState(false)
     const [fact,setFact] = useState([FACTS[0]])
+    const [image,setImage] = useState('')
     const [generateFullProofVote] = useGenerateProofVote()
+
+    console.log("active Image", activeImage.url)
 
     const handleControlTabClick = (e, image) => {
         e.stopPropagation()
@@ -99,15 +102,22 @@ export default function Modal({
         setIsVoting(false)
         onClose()
     }
+    const getActiveImage = async () => {
+        const res = await axios(`${activeImage.url}`)
+        setImage(res.data.image)
+
+    }
 
     useEffect(() => {
         setTimeout(rotateFact, FACT_ROTATION_INTERVAL)
+        getActiveImage()
     }, [fact])
 
     const rotateFact = () => {
         setFact(FACTS[FACTS.indexOf(fact) + 1 === FACTS.length ? 0 : FACTS.indexOf(fact) + 1])
     }
-
+    
+  
 
     return (
         // <div onClick={handleClick} className={styles.backdrop}>
@@ -129,7 +139,7 @@ export default function Modal({
           
                         {isVoting ? 
                             <div className="relative flex flex-col items-center justify center">
-                                <img className="opacity-20" src={activeImage.url}></img>
+                                <img className="opacity-20" src={image}></img>
                                 <div className="absolute mt-16 px-12 text-center flex flex-col items-center ">
                                     <p className="mb-10 text-[16px] font-bold px-3">You only get 1 vote. Use it now?</p>
                                     <p className="text-[#787878] text-[12px] px-3">Voting Window</p>
@@ -138,7 +148,7 @@ export default function Modal({
                                 </div>
                             </div>
                             :
-                            <img src={activeImage.url}></img>}
+                            <img src={image}></img>}
          
  
                     <div className="flex flex-col py-4 text-[14px] w-full text-center border-t-2 border-t-brand-gray2 items-center">
