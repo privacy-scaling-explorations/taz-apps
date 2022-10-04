@@ -38,16 +38,14 @@ export default function GenerateIdentityComponent({
                             <p className="font-bold text-brand-h3 text-brand-beige">
                                 You've been invited to Join a Semaphore Group
                             </p>
-                            <p className="mb-3 py-5 text-brand-beige opacity-70 text-[14px]]">
-                                Accepting this invitation will generate a Semaphore ID that will be added to the
-                                following group
-                            </p>
-                            <div className="bg-brand-beige rounded-2xl mb-[41px] relative shadow-[rgba(0,_0,_0,_0.38)_0px_4px_10px] h-[157px]">
+                            <div className="bg-brand-beige rounded-2xl mt-10 mb-3 relative shadow-[rgba(0,_0,_0,_0.38)_0px_4px_10px] h-[157px]">
                                 <div className="p-5">
                                     <p className="text-brand-red text-brand-h3">SEMAPHORE GROUP</p>
                                     <p className="text-brand-gray2 text-brand-h1">DEVCON VI</p>
-                                    <p className="text-brand-gray2 text-brand-body">Anonymity is stronger</p>
-                                    <p className="text-brand-gray2 text-brand-body">in groups</p>
+                                    <p className="text-brand-gray2 opacity-[70%] text-brand-body">
+                                        Anonymity is stronger
+                                    </p>
+                                    <p className="text-brand-gray2 opacity-[70%] text-brand-body">in groups</p>
                                     <div className="absolute right-[48%] bottom-0">
                                         <RedBunny width="42" height="36" />
                                     </div>
@@ -106,6 +104,10 @@ export default function GenerateIdentityComponent({
                                     </div>
                                 </div>
                             </div>
+                            <p className="mb-4 pt-4 pb-8 text-brand-beige opacity-70 text-[14px]]">
+                                Accepting this invitation will generate a Semaphore ID that will be added to the Devcon
+                                VI group.
+                            </p>
                             <div className="flex flex-col items-center justify-center">
                                 <button
                                     className="w-full border-2 border-brand-gray2 bg-brand-yellow p-2 py-4 shadow-[-3px_3px_0px_0px_rgba(30,30,30)] text-brand-button"
@@ -129,17 +131,22 @@ export default function GenerateIdentityComponent({
                                         </div>
                                     )}
                                 </button>
-
-                                <p className="mb-3 py-5 px-3 text-brand-beige opacity-70 text-xs">
-                                    Learn more about <a className="underline">Semaphore</a>
-                                </p>
+                                <Link
+                                    href="https://pse-team.notion.site/Experience-zero-knowledge-1ae2793046414468b56472f43725961e"
+                                    target="_blank"
+                                    rel="noreferrer"
+                                >
+                                    <p className="mb-3 py-5 px-3 text-brand-beige opacity-70 text-xs">
+                                        Learn more about <a className="underline">Semaphore</a>
+                                    </p>
+                                </Link>
                             </div>
                         </div>
                     ) : (
                         <div>
                             <p className="font-bold text-xl text-brand-beige">You’ve joined the group!</p>
-                            <p className="mb-3 py-5 text-brand-beige opacity-70 text-[16px]">
-                                Screeshot this QR, it has your Semaphore ID and group membership
+                            <p className="mb-3 py-5 text-brand-beige opacity-[70%] text-[16px]">
+                                Save this QR, it has your Semaphore ID and group membership
                             </p>
                             <div className="flex items-center justify-center flex-col">
                                 <img src={imageUrl} alt="img" className="mb-7 rounded-xl" />
@@ -164,7 +171,7 @@ export default function GenerateIdentityComponent({
                                         </svg>
                                     </button>
                                 </Link>
-                                <p className="mb-3 py-5 px-3 text-brand-beige text-[12px] text-center">
+                                <p className="mb-3 py-5 text-brand-beige text-brand-info opacity-[70%] text-center">
                                     {`Your browser will remember your ID unless you remove it or use a private browser. Save the QR image in
               case your browser forgets :)`}
                                 </p>
