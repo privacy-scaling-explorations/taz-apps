@@ -5,6 +5,7 @@ export function handleNewToken(event: NewToken): void {
     const token = new Token(event.params.tokenId.toString())
     token.tokenId = event.params.tokenId
     token.uri = event.params.uri
+    token.imageId = event.params.imageId
     token.hasViolation = false
     token.totalVotes = 0
     token.timestamp = event.block.timestamp

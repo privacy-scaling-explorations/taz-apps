@@ -152,12 +152,14 @@ describe("TazArtwork", () => {
 
     describe("# safeMint", () => {
         const uri = "https://bafkreignzbdtj6355qlex3njd46lubd7xpyrqdyobvw2q4sxv7fihvsi6y.ipfs.dweb.link/"
+        const imageId = "VFAUuztYJEjIMltLItfVb"
+
         it("Should fail to mint due to not having the tazAdmin role", async () => {
             // Ensure minting is active
             const tx1 = contract.connect(signer2).startMinting()
             await expect(tx1).to.not.be.reverted
 
-            const tx2 = contract.connect(signer2).safeMint(signer1.address, uri, { gasLimit: 1500000 })
+            const tx2 = contract.connect(signer2).safeMint(signer1.address, uri, imageId, { gasLimit: 1500000 })
 
             await expect(tx2).to.be.revertedWith(
                 `AccessControl: account ${signer2.address.toLowerCase()} is missing role ${TAZ_ADMIN_ROLE_HASH}`
@@ -169,7 +171,7 @@ describe("TazArtwork", () => {
             const tx1 = contract.connect(signer2).stopMinting()
             await expect(tx1).to.not.be.reverted
 
-            const tx2 = contract.connect(signer1).safeMint(signer2.address, uri, { gasLimit: 1500000 })
+            const tx2 = contract.connect(signer1).safeMint(signer2.address, uri, imageId, { gasLimit: 1500000 })
 
             await expect(tx2).to.be.revertedWith("Minting not active")
         })
@@ -182,20 +184,20 @@ describe("TazArtwork", () => {
             // Call static to get token id
             const tokenId = await contract
                 .connect(signer1)
-                .callStatic.safeMint(signer2.address, uri, { gasLimit: 1500000 })
+                .callStatic.safeMint(signer2.address, uri, imageId, { gasLimit: 1500000 })
 
             // console.log('--------------------------------------------------------------------')
             // console.log('TEST | Token ID: ', tokenId)
             // console.log(`TEST | Minting to address: ${signer2.address}`)
             // console.log('--------------------------------------------------------------------')
 
-            const tx2 = await contract.connect(signer1).safeMint(signer2.address, uri, { gasLimit: 1500000 })
+            const tx2 = await contract.connect(signer1).safeMint(signer2.address, uri, imageId, { gasLimit: 1500000 })
 
             /* console.log('--------------------------------------------------------------------')
       console.log('TEST | Transaction: ', tx2)
       console.log('--------------------------------------------------------------------') */
 
-            await expect(tx2).to.emit(contract, "NewToken").withArgs(tokenId, uri)
+            await expect(tx2).to.emit(contract, "NewToken").withArgs(tokenId, uri, imageId)
         })
     })
 

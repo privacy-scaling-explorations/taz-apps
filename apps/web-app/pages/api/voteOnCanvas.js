@@ -32,7 +32,12 @@ export default async function handler(req, res) {
                     gasLimit: 500000
                 }
             )
-            console.log(tx)
+
+            const txResult = await tx.wait();
+            // const txReceipt = await provider.getTransactionReceipt(txResult.hash);
+
+            console.log(txResult)
+            // console.log(txReceipt)
 
             const newLocal = "Vote sucessfully registered!"
             res.status(201).json(newLocal)

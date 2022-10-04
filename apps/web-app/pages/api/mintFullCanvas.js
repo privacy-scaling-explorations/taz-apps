@@ -4,6 +4,8 @@ import faunadb from "faunadb"
 import { Blob } from "@web-std/blob"
 import { verifyProof } from "@semaphore-protocol/proof"
 import { Web3Storage, File } from "web3.storage"
+import * as fs from "fs"
+import { nanoid } from "nanoid"
 import { TAZARTWORK_CONTRACT } from "../../config/goerli.json"
 import { fetchWalletIndex } from "../../helpers/helpers"
 import TazArtwork from "../utils/TazArtwork.json"
@@ -72,6 +74,10 @@ export default async function handler(req, res) {
                 const b64Data = imageUri.replace("data:image/png;base64,", "")
                 const blobForServingImage = await b64toBlob(b64Data, contentType)
 
+                // Save canvas image locally
+                const imageId = nanoid()
+                fs.writeFileSync(`./public/canvases/${imageId}.png`, b64Data, "base64")
+
                 const web3StorageClient = new Web3Storage({
                     token: web3StorageApiToken,
                     endpoint: new URL("https://api.web3.storage")
@@ -116,13 +122,10 @@ export default async function handler(req, res) {
                     const signer = new ethers.Wallet(signer_array[currentIndex]).connect(provider)
                     const signerAddress = await signer.getAddress()
                     const nftContract = new ethers.Contract(contractAddress, abi, signer)
-                    const tx = await nftContract.safeMint(
-                        signerAddress,
-                        metadataUrl,
-                        {
-                            gasLimit: 500000
-                        }
-                    )
+                    console.log("calling function")
+                    const tx = await nftContract.safeMint(signerAddress, metadataUrl, imageId, {
+                        gasLimit: 500000
+                    })
                     console.log(tx)
 
                     await client.query(
@@ -133,9 +136,19 @@ export default async function handler(req, res) {
                         })
                     )
 
-                    res.status(201).json({ tx, metadataUrl })
+                    const finishedCanvaCreate = await client.query(
+                        query.Create(query.Collection("FinishedCanvases"), {
+                            data: {
+                                imageId,
+                                imageUri
+                            }
+                        })
+                    )
+                  
+
+                    res.status(201).json({ tx, metadataUrl, imageId })
                 } catch (error) {
-                    res.status(401).json("Error:", error)
+                    res.status(501).json("Error:", error)
                 }
             }
         } catch (error) {

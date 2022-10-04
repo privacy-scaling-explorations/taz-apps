@@ -7,6 +7,22 @@ const Accordion = () => {
     const data = [
         {
             id: 1,
+            question: "What happened when I joined the Semaphore Devon VI group?",
+            answer: (
+                <p>
+                    <span className="text-brand-h3 text-black">&bull; </span>You don't have a password.
+                    <br />
+                    <span className="text-brand-h3 text-black">&bull; </span> The QR you received is your ID. It acts
+                    kind of like a username and password in-one except that you are anon when you use it, you can’t
+                    change it, and you have to upload a picture of it to connect.
+                    <br />
+                    <span className="text-brand-h3 text-black">&bull; </span> Your browser will remember your ID unless
+                    you disconnet it.
+                </p>
+            )
+        },
+        {
+            id: 2,
             question: "What is a Semaphore ID?",
             answer: (
                 <p>
@@ -22,7 +38,7 @@ const Accordion = () => {
             )
         },
         {
-            id: 2,
+            id: 3,
             question: "How does Semaphore provide privacy?",
             answer: (
                 <p>
@@ -36,7 +52,7 @@ const Accordion = () => {
             )
         },
         {
-            id: 3,
+            id: 4,
             question: "What’s an anonymity set?",
             answer: (
                 <p>
@@ -49,7 +65,7 @@ const Accordion = () => {
             )
         },
         {
-            id: 4,
+            id: 5,
             question: "Why does it take a long time to post?",
             answer: (
                 <p>
@@ -64,7 +80,7 @@ const Accordion = () => {
             )
         },
         {
-            id: 5,
+            id: 6,
             question: "Why are you using a centralized backend?",
             answer: (
                 <p>
@@ -78,7 +94,7 @@ const Accordion = () => {
             )
         },
         {
-            id: 6,
+            id: 7,
             question: "How secure is my Semaphore ID on the TAZ app?",
             answer: (
                 <p>
