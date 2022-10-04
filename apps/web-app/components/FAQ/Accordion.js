@@ -7,22 +7,59 @@ const Accordion = () => {
     const data = [
         {
             id: 1,
-            question: "What happened when I joined the Semaphore Devon VI group?",
+            question: "How do I sign in and out of the TAZ app?",
             answer: (
                 <p>
-                    <span className="text-brand-h3 text-black">&bull; </span>You don't have a password.
+                    Use your Semaphore ID (the QR code generated in your browser). Think of your Semaphore ID like an
+                    Ethereum private key. Don’t show it to anyone else and keep it safe because if you lose it, we can’t
+                    get it back for you!
                     <br />
-                    <span className="text-brand-h3 text-black">&bull; </span> The QR you received is your ID. It acts
-                    kind of like a username and password in-one except that you are anon when you use it, you can’t
-                    change it, and you have to upload a picture of it to connect.
                     <br />
-                    <span className="text-brand-h3 text-black">&bull; </span> Your browser will remember your ID unless
-                    you disconnet it.
+                    Your browser will rember your Semaphore ID, but it’s a good idea to save a screenshot of your
+                    Semaphore ID QR code in case you need to log back into the TAZ app.
                 </p>
             )
         },
         {
             id: 2,
+            question: "Can my invite code be used more than once?",
+            answer: (
+                <p>
+                    No. The QR code on your physical invitation card from the TAZ Community Hub can only generate a
+                    Semaphore ID one time.
+                </p>
+            )
+        },
+        {
+            id: 3,
+            question: "Is my Semaphore ID QR code on the invitation card?",
+            answer: (
+                <p>
+                    No. There are two different QR codes: one is the invite code (on the physical card) and the other is
+                    your Semaphore ID generated locally on your browser. You scan the invite QR code to get to the TAZ
+                    app and generate a Semaphore ID. The Semaphore ID QR code is used to interact with the TAZ app or
+                    log back in.
+                </p>
+            )
+        },
+        {
+            id: 4,
+            question: "Since I’m anonymous, can I spam the app or act like a troll?",
+            answer: <p>Please don’t. We can and will blacklist you.</p>
+        },
+        {
+            id: 5,
+            question: "What’s Zkitter? ",
+            answer: (
+                <p>
+                    Zkitter is an anon-friendly social network available to try now. You can anonymously post, chat,
+                    comment, follow, etc. Like the TAZ app, Zkitter uses a Semaphore ID to allow users to stay anonymous
+                    so you can take the Semaphore ID generated at Devcon and use it on Zkitter.
+                </p>
+            )
+        },
+        {
+            id: 6,
             question: "What is a Semaphore ID?",
             answer: (
                 <p>
@@ -38,7 +75,7 @@ const Accordion = () => {
             )
         },
         {
-            id: 3,
+            id: 7,
             question: "How does Semaphore provide privacy?",
             answer: (
                 <p>
@@ -52,7 +89,7 @@ const Accordion = () => {
             )
         },
         {
-            id: 4,
+            id: 8,
             question: "What’s an anonymity set?",
             answer: (
                 <p>
@@ -65,7 +102,7 @@ const Accordion = () => {
             )
         },
         {
-            id: 5,
+            id: 9,
             question: "Why does it take a long time to post?",
             answer: (
                 <p>
@@ -80,7 +117,7 @@ const Accordion = () => {
             )
         },
         {
-            id: 6,
+            id: 10,
             question: "Why are you using a centralized backend?",
             answer: (
                 <p>
@@ -94,7 +131,7 @@ const Accordion = () => {
             )
         },
         {
-            id: 7,
+            id: 11,
             question: "How secure is my Semaphore ID on the TAZ app?",
             answer: (
                 <p>
