@@ -109,7 +109,7 @@ export default function ArtBoard() {
         } else if (selectedTile === i) {
             setIsDrawing(true)
         } else {
-            console.log("you can't select that tile");
+            console.log("you can't select that tile")
         }
     }
 
@@ -129,9 +129,7 @@ export default function ArtBoard() {
         }
     }
 
-    const generateCanvasUri = async () => {
-        return await takeScreenShot(canvasRef.current)
-    }
+    const generateCanvasUri = async () => await takeScreenShot(canvasRef.current)
 
     const internalCloseProcessingModal = () => {
         setProcessingModalIsOpen(false)
@@ -279,7 +277,7 @@ export default function ArtBoard() {
                 setTimeout(() => {
                     internalCloseProcessingModal()
                     router.push("/artGallery-page")
-                }, 6000)
+                }, 5000)
             } else if (mintResponse.status === 403) {
                 alert("Tx have failed, please try submitting again")
             }
@@ -301,7 +299,7 @@ export default function ArtBoard() {
     }
 
     const handleStartOver = () => {
-        openEraseModal();
+        openEraseModal()
     }
 
     // const closeProcessingModal = () => {
