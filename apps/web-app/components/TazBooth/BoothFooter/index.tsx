@@ -3,7 +3,6 @@ import Image from "next/image"
 import rabitAnimation from "../../svgElements/rabbit-animation.gif"
 
 import BoothLogo from "../BoothLogo"
-import ArtBunnyBooth from "../../svgElements/ArtBunnyBooth"
 
 const BoothFooter = () => (
     <div className="flex justify-between h-[329px] px-20 items-center bg-brand-black text-brand-beige">
