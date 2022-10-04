@@ -74,9 +74,8 @@ export default async function handler(req, res) {
                 const b64Data = imageUri.replace("data:image/png;base64,", "")
                 const blobForServingImage = await b64toBlob(b64Data, contentType)
 
-                // Save canvas image locally
+                // Generate unique id for the image
                 const imageId = nanoid()
-                fs.writeFileSync(`./public/canvases/${imageId}.png`, b64Data, "base64")
 
                 const web3StorageClient = new Web3Storage({
                     token: web3StorageApiToken,
@@ -144,7 +143,6 @@ export default async function handler(req, res) {
                             }
                         })
                     )
-                  
 
                     res.status(201).json({ tx, metadataUrl, imageId })
                 } catch (error) {
