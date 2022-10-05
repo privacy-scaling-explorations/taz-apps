@@ -27,7 +27,11 @@ export default function Modal({
     const [isTxLoading, setIsTxLoading] = useState(false)
     const [fact, setFact] = useState([FACTS[0]])
     const [image, setImage] = useState(activeImage)
+    const [hasVoted, setHasVoted] = useState(window.localStorage.getItem('voted'))
+
     const [generateFullProofVote] = useGenerateProofVote()
+
+    console.log("hasVoted", hasVoted)
 
     console.log("active Image", activeImage.url)
 
@@ -79,6 +83,7 @@ export default function Modal({
         try {
             const postVote = await axios.post("/api/voteOnCanvas", body)
             console.log("Post Vote Response", postVote)
+            window.localStorage.setItem("voted", "true")
             setIsTxLoading(false)
         } catch (error) {
             alert("You can only vote once!")
@@ -152,12 +157,18 @@ export default function Modal({
                                 Yes Vote!
                             </button>
                         ) : (
-                            <button
-                                className=" bg-brand-gray2 max-w-[181px] text-brand-beige rounded-xl my-2 px-4 py-1"
-                                onClick={() => setIsVoting(true)}
-                            >
-                                Vote favorite!
-                            </button>
+                            <div> 
+                                {hasVoted ?                                 <button
+                                    className=" bg-brand-gray2 max-w-[181px] text-brand-beige rounded-xl my-2 px-4 py-1"
+                                >
+                                    Already voted!
+                                </button> :                                 <button
+                                    className=" bg-brand-gray2 max-w-[341px] text-brand-beige rounded-xl my-2 px-4 py-1"
+                                    onClick={() => setIsVoting(true)}
+                                >
+                                    Vote favorite!
+                                </button>}
+                            </div>
                         )}
 
                         <button className="underline mx-2 mt-3" onClick={handleClose}>
