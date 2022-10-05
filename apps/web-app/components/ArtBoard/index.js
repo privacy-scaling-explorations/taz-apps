@@ -93,6 +93,7 @@ export default function ArtBoard() {
 
     const toggleTool = () => {
         if (tool === "pen") {
+            setFillColor(color)
             setTool("fill")
         } else {
             setTool("pen")
@@ -109,7 +110,7 @@ export default function ArtBoard() {
         } else if (selectedTile === i) {
             setIsDrawing(true)
         } else {
-            console.log("you can't select that tile");
+            console.log("you can't select that tile")
         }
     }
 
@@ -129,9 +130,7 @@ export default function ArtBoard() {
         }
     }
 
-    const generateCanvasUri = async () => {
-        return await takeScreenShot(canvasRef.current)
-    }
+    const generateCanvasUri = async () => await takeScreenShot(canvasRef.current)
 
     const internalCloseProcessingModal = () => {
         setProcessingModalIsOpen(false)
@@ -254,8 +253,8 @@ export default function ArtBoard() {
                 { status: "complete", text: "Generated zero knowledge proof" },
                 { status: "complete", text: "Verified ZKP membership and submitted transaction" },
                 {
-                    status: "processing",
-                    text: "Add art to active canvas"
+                    status: "complete",
+                    text: "Your drawing completed a canvas! Check out your freshly-baked creation in the TAZ app!"
                 }
             ])
 
@@ -279,7 +278,7 @@ export default function ArtBoard() {
                 setTimeout(() => {
                     internalCloseProcessingModal()
                     router.push("/artGallery-page")
-                }, 6000)
+                }, 4000)
             } else if (mintResponse.status === 403) {
                 alert("Tx have failed, please try submitting again")
             }
@@ -288,8 +287,8 @@ export default function ArtBoard() {
                 { status: "complete", text: "Generated zero knowledge proof" },
                 { status: "complete", text: "Verified ZKP membership and submitted transaction" },
                 {
-                    status: "processing",
-                    text: "Add art to active canvas"
+                    status: "complete",
+                    text: "Your drawing is live on an active canvas! Check it out on the TAZ TV."
                 }
             ])
         }
@@ -301,7 +300,7 @@ export default function ArtBoard() {
     }
 
     const handleStartOver = () => {
-        openEraseModal();
+        openEraseModal()
     }
 
     // const closeProcessingModal = () => {

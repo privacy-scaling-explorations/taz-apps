@@ -17,10 +17,11 @@ export default function ArtGalleryComponent({
     isVoting,
     setIsVoting,
     isTxLoading,
-    changeTxLoadingModal
+    changeTxLoadingModal,
+    galleryOpen,
+    winner
 }) {
     const [showTopBtn, setShowTopBtn] = useState(false)
-    const [galleryOpen, setGalleryOpen] = useState(true)
 
     useEffect(() => {
         // Get the view height of the device.
@@ -62,15 +63,19 @@ export default function ArtGalleryComponent({
                     <BackLink hre="/experiences-page" />
                 </div>
                 <div className="flex flex-col w-full items-left">
-                        <h2 className="ml-4 text-2xl leading-5 font-extrabold">WELCOME TO THE</h2>
-                        <h2 className="ml-4 mb-2 text-2xl font-extrabold">DEVCON VI GALLERY</h2>
+                    <h2 className="ml-4 text-2xl leading-5 font-extrabold">WELCOME TO THE</h2>
+                    <h2 className="ml-4 mb-2 text-2xl font-extrabold">DEVCON VI GALLERY</h2>
                 </div>
-                {galleryOpen ? (<p className="ml-4 text-brand-info text-brand-blue">
-                    Each completed canvas below is a collective creation by 9 anonymous TAZ members. You can vote
-                    for your favorite at any time - but you only get one vote so choose wisely!
-                </p>) : (<p className="ml-4 text-brand-info text-brand-blue">
-                    Nine anonymous individuals were assigned at random to each canvas October 10-17, 2022.
-                </p>)}
+                {galleryOpen ? (
+                    <p className="ml-4 text-brand-info text-brand-blue">
+                        Each completed canvas below is a collective creation by 9 anonymous TAZ members. You can vote
+                        for your favorite at any time - but you only get one vote so choose wisely!
+                    </p>
+                ) : (
+                    <p className="ml-4 text-brand-info text-brand-blue">
+                        Nine anonymous individuals were assigned at random to each canvas October 10-17, 2022.
+                    </p>
+                )}
 
                 {/* <p className="mb-3 text-2xl font-extrabold">
                     WELCOME TO THE DEVCON <span className="font-extrabold">XI GALLERY</span>
@@ -88,20 +93,27 @@ export default function ArtGalleryComponent({
                 </p> */}
             </div>
             <div className="relative bg-black">
-                {galleryOpen ? (<p className="relative overflow-hidden text-brand-beige text-center text-opacity-100 text-brand-info w-full px-12 py-2 leading-relaxed">
-                    Visit the TAZ community hub to see canvases in progress
-                </p>) : (<div>
-                            <div className="relative overflow-hidden text-brand-beige text-center text-opacity-100 text-brand-info w-full px-6 py-2 leading-relaxed">
-                                <p>This gallery closed at the end of the event. Thank you to everyone who contributed!</p>
-                            </div>
-                            {/* placeholder for winning canvas */}
-                            <div className="w-full h-[400px] bg-white"></div>
-                            <div className="relative overflow-hidden text-brand-beige text-center text-opacity-100 text-brand-info w-full px-6 py-2 leading-relaxed">
-                                <p className="text-2xl">Exhibition Favorite</p>
-                                <p>Canvas 323  |  746 of 909 Votes</p>
-                            </div>
-                        </div>)}
-                
+                {galleryOpen ? (
+                    <p className="relative overflow-hidden text-brand-beige text-center text-opacity-100 text-brand-info w-full px-12 py-2 leading-relaxed">
+                        Visit the TAZ community hub to see canvases in progress
+                    </p>
+                ) : (
+                    <div>
+                        <div className="relative overflow-hidden text-brand-beige text-center text-opacity-100 text-brand-info w-full px-6 py-2 leading-relaxed">
+                            <p>This gallery closed at the end of the event. Thank you to everyone who contributed!</p>
+                        </div>
+                        {/* placeholder for winning canvas */}
+                        <div className="w-full h-[400px] min-w-[400px] bg-white flex justify-center">
+                            <img src={winner?.imageUri} />
+                        </div>
+                        <div className="relative overflow-hidden text-brand-beige text-center text-opacity-100 text-brand-info w-full px-6 py-2 leading-relaxed">
+                            <p className="text-2xl">Exhibition Favorite</p>
+                            <p>
+                                Canvas {winner?.tokenId} | {winner?.votes} of {winner?.galleryVotes} Votes
+                            </p>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Image Gallery */}
@@ -111,16 +123,21 @@ export default function ArtGalleryComponent({
                         <Loading size="xl" />
                     </div>
                 ) : (
-                    images.map((img) => (
+                    images?.map((img) => (
                         <picture
                             key={img.tokenId}
-                            onClick={() => handleClick({ tokenId: img.tokenId, url: img.uri, imageId: img.imageId })}
+                            onClick={() =>
+                                handleClick({
+                                    tokenId: img.tokenId,
+                                    url: img.canvaUri ? img.canvaUri : img.imageUri,
+                                    imageId: img.imageId
+                                })
+                            }
                             className="w-1/2 md:w-1/4 h-auto cursor-pointer"
                         >
                             <img
                                 className="min-h-[195px] outline"
-                                // src={img.canvaUri ? img.canvaUri : img.uri}
-                                src={img.canvaUri ? img.canvaUri : `canvases/${img.imageId}.png`}
+                                src={img.canvaUri ? img.canvaUri : img.imageUri}
                                 alt={`Image ${img.tokenId}`}
                             />
                         </picture>
@@ -129,7 +146,7 @@ export default function ArtGalleryComponent({
             </div>
 
             {/* Put Fixed and Absolute Positioned items at the bottom Gallery container */}
-            {galleryOpen ? 
+            {galleryOpen ? (
                 <div>
                     <div className="fixed bottom-[15%] right-2 flex justify-end">
                         <Link href="/artBoard-page">
@@ -149,14 +166,17 @@ export default function ArtGalleryComponent({
                         </div>
                     )}
                 </div>
-                 : <div>{showTopBtn && (
+            ) : (
+                <div>
+                    {showTopBtn && (
                         <div className="fixed bottom-[15%] left-[44%] flex justify-end">
                             <button onClick={goToTop}>
                                 <BackToTopArrow />
                             </button>
                         </div>
-                    )}</div>}
-            
+                    )}
+                </div>
+            )}
 
             <div className="flex w-full justify-center bg-black pb-3 pt-9">
                 <Footer />

@@ -12,8 +12,6 @@ const {
     ITEMS_PER_FETCH
 } = require("../../../config/goerli.json")
 
-
-
 // import { images } from '../data'
 
 export default function Modal({
@@ -27,9 +25,13 @@ export default function Modal({
 }) {
     const [steps, setSteps] = useState([])
     const [isTxLoading, setIsTxLoading] = useState(false)
-    const [fact,setFact] = useState([FACTS[0]])
-    const [image,setImage] = useState('')
+    const [fact, setFact] = useState([FACTS[0]])
+    const [image, setImage] = useState(activeImage)
+    const [hasVoted, setHasVoted] = useState(window.localStorage.getItem('voted'))
+
     const [generateFullProofVote] = useGenerateProofVote()
+
+    console.log("hasVoted", hasVoted)
 
     console.log("active Image", activeImage.url)
 
@@ -81,6 +83,7 @@ export default function Modal({
         try {
             const postVote = await axios.post("/api/voteOnCanvas", body)
             console.log("Post Vote Response", postVote)
+            window.localStorage.setItem("voted", "true")
             setIsTxLoading(false)
         } catch (error) {
             alert("You can only vote once!")
@@ -102,22 +105,14 @@ export default function Modal({
         setIsVoting(false)
         onClose()
     }
-    const getActiveImage = async () => {
-        const res = await axios(`${activeImage.url}`)
-        setImage(res.data.image)
-
-    }
 
     useEffect(() => {
         setTimeout(rotateFact, FACT_ROTATION_INTERVAL)
-        getActiveImage()
     }, [fact])
 
     const rotateFact = () => {
         setFact(FACTS[FACTS.indexOf(fact) + 1 === FACTS.length ? 0 : FACTS.indexOf(fact) + 1])
     }
-    
-  
 
     return (
         // <div onClick={handleClick} className={styles.backdrop}>
@@ -136,21 +131,23 @@ export default function Modal({
                     <div className="py-4 text-[14px] w-full text-center border-b-2 border-b-brand-gray2">
                         Canvas ID {activeImage.tokenId}
                     </div>
-          
-                        {isVoting ? 
-                            <div className="relative flex flex-col items-center justify center">
-                                <img className="opacity-20" src={image}></img>
-                                <div className="absolute mt-16 px-12 text-center flex flex-col items-center ">
-                                    <p className="mb-10 text-[16px] font-bold px-3">You only get 1 vote. Use it now?</p>
-                                    <p className="text-[#787878] text-[12px] px-3">Voting Window</p>
-                                    <p className="mb-10 text-[#787878] text-[12px] px-3">October 10-15, 2022</p>
-                                    <p className="text-[#787878] text-[12px] px-3">Learn more about <a className="underline">Semaphore Voting</a></p>
-                                </div>
+
+                    {isVoting ? (
+                        <div className="relative flex flex-col items-center justify center">
+                            <img className="opacity-20" src={image.url}></img>
+                            <div className="absolute mt-16 px-12 text-center flex flex-col items-center ">
+                                <p className="mb-10 text-[16px] font-bold px-3">You only get 1 vote. Use it now?</p>
+                                <p className="text-[#787878] text-[12px] px-3">Voting Window</p>
+                                <p className="mb-10 text-[#787878] text-[12px] px-3">October 10-15, 2022</p>
+                                <p className="text-[#787878] text-[12px] px-3">
+                                    Learn more about <a className="underline">Semaphore Voting</a>
+                                </p>
                             </div>
-                            :
-                            <img src={image}></img>}
-         
- 
+                        </div>
+                    ) : (
+                        <img src={image.url}></img>
+                    )}
+
                     <div className="flex flex-col py-4 text-[14px] w-full text-center border-t-2 border-t-brand-gray2 items-center">
                         {isVoting ? (
                             <button
@@ -159,15 +156,19 @@ export default function Modal({
                             >
                                 Yes Vote!
                             </button>
-                     
                         ) : (
-                  
-                            <button
-                                className=" bg-brand-gray2 max-w-[181px] text-brand-beige rounded-xl my-2 px-4 py-1"
-                                onClick={() => setIsVoting(true)}
-                            >
-                                Vote favorite!
-                            </button>
+                            <div> 
+                                {hasVoted ?                                 <button
+                                    className=" bg-brand-gray2 max-w-[181px] text-brand-beige rounded-xl my-2 px-4 py-1"
+                                >
+                                    Already voted!
+                                </button> :                                 <button
+                                    className=" bg-brand-gray2 max-w-[341px] text-brand-beige rounded-xl my-2 px-4 py-1"
+                                    onClick={() => setIsVoting(true)}
+                                >
+                                    Vote favorite!
+                                </button>}
+                            </div>
                         )}
 
                         <button className="underline mx-2 mt-3" onClick={handleClose}>
