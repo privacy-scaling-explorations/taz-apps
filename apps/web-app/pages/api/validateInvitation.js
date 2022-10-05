@@ -15,6 +15,9 @@ export default async function handler(req, res) {
             const secret = process.env.FAUNA_SECRET_KEY
             const { query } = faunadb
             const client = new faunadb.Client({ secret })
+            const hashedInv = ethers.utils.id(invitation)
+            const stringHash = hashedInv.toString()
+
 
             const dbs = await client.query(
                 query.Map(
@@ -24,24 +27,51 @@ export default async function handler(req, res) {
                     query.Lambda("codeRef", query.Get(query.Var("codeRef")))
                 )
             )
+             
+            console.log("HashedINV", hashedInv)
+            console.log("stringHash", stringHash)
 
-            console.log("DB length", dbs.data.length)
-            console.log(dbs.data)
+            try{
+                const dbs2 = await client.query(
+                    query.Get(
+                        query.Match(
+                            query.Index("get_code"),
+                            stringHash
+                        )
+                      )
+                )
+    
+                const isValid = !dbs2.data.isUsed
+    
+                console.log("dbs2", dbs2)
+                console.log("dbs2 isUsed?", dbs2.data.isUsed)
+                res.status(200).json({ isValid })
 
-            const hashedInv = ethers.utils.id(invitation)
-            const match = dbs.data.filter((code) => code.data.code === hashedInv)
 
-            let isValid
-            console.log("match:", match)
-
-            if (match[0] && !match[0].data.isUsed) {
-                isValid = true
-            } else {
-                isValid = false
+            } catch(e){
+                const isValid = false
+                res.status(200).json({ isValid })
             }
-            console.log(isValid)
 
-            res.status(200).json({ isValid })
+
+
+
+            // console.log("DB length", dbs.data.length)
+            // console.log(dbs.data)
+
+            // const match = dbs.data.filter((code) => code.data.code === hashedInv)
+
+            // let isValid
+            // console.log("match:", match)
+
+            // if (match[0] && !match[0].data.isUsed) {
+            //     isValid = true
+            // } else {
+            //     isValid = false
+            // }
+            // console.log(isValid)
+
+            // res.status(200).json({ isValid2 })
         } catch (error) {
             res.status(500).json({ Error: error.message })
         }

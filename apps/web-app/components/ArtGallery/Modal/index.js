@@ -84,6 +84,7 @@ export default function Modal({
             const postVote = await axios.post("/api/voteOnCanvas", body)
             console.log("Post Vote Response", postVote)
             window.localStorage.setItem("voted", "true")
+            setHasVoted("true")
             setIsTxLoading(false)
         } catch (error) {
             alert("You can only vote once!")
@@ -135,6 +136,15 @@ export default function Modal({
                     {isVoting ? (
                         <div className="relative flex flex-col items-center justify center">
                             <img className="opacity-20" src={image.url}></img>
+                            {hasVoted ? 
+                                <div className="absolute mt-16 px-12 text-center flex flex-col items-center ">
+                                <p className="mb-10 text-[16px] font-bold px-3">Thank You for you vote!</p>
+                                <p className="text-[#787878] text-[12px] px-3">Voting Window</p>
+                                <p className="mb-10 text-[#787878] text-[12px] px-3">October 10-15, 2022</p>
+                                <p className="text-[#787878] text-[12px] px-3">
+                                    Learn more about <a className="underline">Semaphore Voting</a>
+                                </p>
+                            </div> :
                             <div className="absolute mt-16 px-12 text-center flex flex-col items-center ">
                                 <p className="mb-10 text-[16px] font-bold px-3">You only get 1 vote. Use it now?</p>
                                 <p className="text-[#787878] text-[12px] px-3">Voting Window</p>
@@ -143,6 +153,9 @@ export default function Modal({
                                     Learn more about <a className="underline">Semaphore Voting</a>
                                 </p>
                             </div>
+
+                            }
+
                         </div>
                     ) : (
                         <img src={image.url}></img>

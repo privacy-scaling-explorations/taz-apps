@@ -125,6 +125,7 @@ export default function InvitationCheck() {
 
             if (check) {
                 onSetIdentity(result)
+                window.localStorage.removeItem("voted")
                 router.push(`/`)
             } else {
                 alert("Identity is not part of the Semaphore Group")
