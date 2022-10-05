@@ -160,35 +160,41 @@ export default function Modal({
                         <div className="relative flex flex-col items-center justify center">
                             <img className="opacity-20" src={image.url}></img>
 
-                            {hasVoted ? 
-                                <div className="absolute mt-16 px-12 text-center flex flex-col items-center ">
-                                <p className="mb-10 text-[16px] font-bold px-3">Thank You for you vote!</p>
-                                <p className="text-[#787878] text-[12px] px-3">Voting Window</p>
-                                <p className="mb-10 text-[#787878] text-[12px] px-3">October 10-15, 2022</p>
-                                <p className="text-[#787878] text-[12px] px-3">
-                                    Learn more about <a className="underline">Semaphore Voting</a>
-                                </p>
-                            </div> :
-                           
+                            {hasVoted ? (
                                 <div className="absolute mt-16 text-center flex flex-col items-center ">
-                                <p className="text-[28px] font-bold">YOU GET ONE VOTE.</p>
-                                <p className="mb-10 text-[28px] font-bold">USE IT NOW?</p>
-                                <p className="mb-10 text-[#787878] text-[15px] font-extrabold">
-                                    Voting window October 11-14, 2022
-                                </p>
-                                <Link
-                                    href="https://pse-team.notion.site/Experience-zero-knowledge-1ae2793046414468b56472f43725961e"
-                                    target="_blank"
-                                    rel="noreferrer"
-                                >
-                                    <p className="text-[#787878] text-brand-info px-3">
-                                        Learn more about <a className="underline">Semaphore voting</a>
+                                    <p className="text-[28px] font-bold">Thank you for</p>
+                                    <p className="mb-10 text-[28px] font-bold">your vote!</p>
+                                    <p className="mb-10 text-[#787878] text-[15px] font-extrabold">
+                                        Voting window October 11-14, 2022
                                     </p>
-                                </Link>
-                            </div>
-
-                            }
-
+                                    <Link
+                                        href="https://pse-team.notion.site/Experience-zero-knowledge-1ae2793046414468b56472f43725961e"
+                                        target="_blank"
+                                        rel="noreferrer"
+                                    >
+                                        <p className="text-[#787878] text-brand-info px-3">
+                                            Learn more about <a className="underline">Semaphore voting</a>
+                                        </p>
+                                    </Link>
+                                </div>
+                            ) : (
+                                <div className="absolute mt-16 text-center flex flex-col items-center ">
+                                    <p className="text-[28px] font-bold">YOU GET ONE VOTE.</p>
+                                    <p className="mb-10 text-[28px] font-bold">USE IT NOW?</p>
+                                    <p className="mb-10 text-[#787878] text-[15px] font-extrabold">
+                                        Voting window October 11-14, 2022
+                                    </p>
+                                    <Link
+                                        href="https://pse-team.notion.site/Experience-zero-knowledge-1ae2793046414468b56472f43725961e"
+                                        target="_blank"
+                                        rel="noreferrer"
+                                    >
+                                        <p className="text-[#787878] text-brand-info px-3">
+                                            Learn more about <a className="underline">Semaphore voting</a>
+                                        </p>
+                                    </Link>
+                                </div>
+                            )}
                         </div>
                     ) : (
                         <img src={image.url}></img>
