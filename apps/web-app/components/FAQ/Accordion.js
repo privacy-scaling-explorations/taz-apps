@@ -45,7 +45,7 @@ const Accordion = () => {
         {
             id: 4,
             question: "Since I’m anonymous, can I spam the app or act like a troll?",
-            answer: <p>Please don’t. We can and will blacklist you.</p>
+            answer: <p>Please don’t. We can and will blacklist your content.</p>
         },
         {
             id: 5,
