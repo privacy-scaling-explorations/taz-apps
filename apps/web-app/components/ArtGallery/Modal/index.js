@@ -150,7 +150,7 @@ export default function Modal({
 
                     <div className="flex flex-col py-4 text-[14px] w-full h-full text-center border-t-2 border-t-brand-gray2 items-center">
                         
-                        {!isVoting ? (
+                        {isVoting ? (
                             <div className="flex items-center space-x-2 bg-[#EFAD5F] max-w-[190px] text-brand-gray2 rounded-xl my-2 px-4 py-1">
 
                                 <svg width="14" height="13" viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -166,7 +166,7 @@ export default function Modal({
                                 </button> : 
                                 <button
                                     onClick={handleSubmit}
-                                    className=" bg-[#EFAD5F] max-w-[181px] text-brand-gray2 rounded-xl my-2 px-4 py-1"
+                                    className=""
                                 >
                                     Yes Vote!
                                 </button>}
