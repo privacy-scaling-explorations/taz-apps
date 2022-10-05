@@ -103,15 +103,19 @@ export default function ArtBoard() {
     const startDrawing = (i) => {
         // if no tile is currently selected, allow selection of any empty tile
         // if tile is selected, only allow selection of selected tile
-        if ((userSelectedTile === false) & !tiles[i]) {
-            setSelectedTile(i)
-            setUserSelectedTile(true)
-            setIsDrawing(true)
-        } else if (selectedTile === i) {
-            setIsDrawing(true)
-        } else {
-            console.log("you can't select that tile")
-        }
+        // if ((userSelectedTile === false) & !tiles[i]) {
+        //     setSelectedTile(i)
+        //     setUserSelectedTile(true)
+        //     setIsDrawing(true)
+        // } else if (selectedTile === i) {
+        //     setIsDrawing(true)
+        // } else {
+        //     console.log("you can't select that tile")
+        // }
+
+        setSelectedTile(i)
+        setUserSelectedTile(true)
+        setIsDrawing(true)
     }
 
     const minimize = () => {
@@ -214,19 +218,64 @@ export default function ArtBoard() {
                 { status: "processing", text: "Verifying ZKP membership and submitting transaction" },
                 { status: "queued", text: "Add art to active canvas" }
             ])
-
-            const response = await axios.post("/api/modifyCanvas", {
-                updatedTiles: tilesRef.current,
-                tileIndex: selectedTile,
-                canvasId: canvasId.current,
-                fullProof: fullProofTemp
-            })
-            if (response.status === 201 && tilesRemaining.length > 0) {
-                setTimeout(() => {
-                    internalCloseProcessingModal()
-                    router.push("/artGallery-page")
-                }, 3000)
+            if (tilesRemaining.length === 0) {
+                const body = {
+                    imageUri: canvasUri,
+                    canvasId: canvasId.current,
+                    fullProof: fullProofTemp
+                }
+                console.log("POSTING to /api/mintFullCanvas")
+                console.log("canvasUri: ", canvasUri)
+                console.log("canvasId.current: ", canvasId.current)
+                setSteps([
+                    { status: "complete", text: "Generated zero knowledge proof" },
+                    { status: "complete", text: "Verified ZKP membership and submitted transaction" },
+                    {
+                        status: "complete",
+                        text: "Your drawing completed a canvas! Check out your freshly-baked creation in the TAZ app!"
+                    }
+                ])
+    
+                // Add Try and Catch
+                const mintResponse = await axios.post("/api/mintFullCanvas", body)
+    
+                console.log("RESPONSE FROM /api/mintFullCanvas:", mintResponse)
+                console.log("Canva Uri", mintResponse.ipfsUrl, mintResponse.imageId)
+    
+                const newCanvas = {
+                    id: 10000,
+                    imageId: mintResponse.data.imageId,
+                    timestamp: 999999999,
+                    tokenId: 0,
+                    uri: mintResponse.data.ipfsUrl,
+                    canvaUri: canvasUri
+                }
+                if (mintResponse.status === 201) {
+                    window.localStorage.setItem("savedCanva", JSON.stringify(newCanvas))
+                    console.log("Image Saved!", newCanvas)
+                    setTimeout(() => {
+                        internalCloseProcessingModal()
+                        router.push("/artGallery-page")
+                    }, 4000)
+                } else if (mintResponse.status === 403) {
+                    alert("Tx have failed, please try submitting again")
+                }
+            } else {
+                const response = await axios.post("/api/modifyCanvas", {
+                    updatedTiles: tilesRef.current,
+                    tileIndex: selectedTile,
+                    canvasId: canvasId.current,
+                    fullProof: fullProofTemp
+                })
+                if (response.status === 201 && tilesRemaining.length > 0) {
+                    setTimeout(() => {
+                        internalCloseProcessingModal()
+                        router.push("/artGallery-page")
+                    }, 3000)
+                }
             }
+
+
         } catch (error) {
             alert(
                 "Error: someone submitted their drawing to this tile before you. Don’t worry, your drawing is saved! It will be applied to the next tile you select."
@@ -240,58 +289,7 @@ export default function ArtBoard() {
             setSelectedTile(null)
         }
 
-        if (tilesRemaining.length === 0) {
-            const body = {
-                imageUri: canvasUri,
-                canvasId: canvasId.current,
-                fullProof: fullProofTemp
-            }
-            console.log("POSTING to /api/mintFullCanvas")
-            console.log("canvasUri: ", canvasUri)
-            console.log("canvasId.current: ", canvasId.current)
-            setSteps([
-                { status: "complete", text: "Generated zero knowledge proof" },
-                { status: "complete", text: "Verified ZKP membership and submitted transaction" },
-                {
-                    status: "complete",
-                    text: "Your drawing completed a canvas! Check out your freshly-baked creation in the TAZ app!"
-                }
-            ])
 
-            // Add Try and Catch
-            const mintResponse = await axios.post("/api/mintFullCanvas", body)
-
-            console.log("RESPONSE FROM /api/mintFullCanvas:", mintResponse)
-            console.log("Canva Uri", mintResponse.ipfsUrl, mintResponse.imageId)
-
-            const newCanvas = {
-                id: 10000,
-                imageId: mintResponse.data.imageId,
-                timestamp: 999999999,
-                tokenId: 0,
-                uri: mintResponse.data.ipfsUrl,
-                canvaUri: canvasUri
-            }
-            if (mintResponse.status === 201) {
-                window.localStorage.setItem("savedCanva", JSON.stringify(newCanvas))
-                console.log("Image Saved!", newCanvas)
-                setTimeout(() => {
-                    internalCloseProcessingModal()
-                    router.push("/artGallery-page")
-                }, 4000)
-            } else if (mintResponse.status === 403) {
-                alert("Tx have failed, please try submitting again")
-            }
-        } else {
-            setSteps([
-                { status: "complete", text: "Generated zero knowledge proof" },
-                { status: "complete", text: "Verified ZKP membership and submitted transaction" },
-                {
-                    status: "complete",
-                    text: "Your drawing is live on an active canvas! Check it out on the TAZ TV."
-                }
-            ])
-        }
     }
 
     const handleClear = () => {
