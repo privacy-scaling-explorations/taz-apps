@@ -76,7 +76,7 @@ function ExperiencesListComponent({ clearIdentity, urlIdentity }) {
                 <div className="relative flex flex-col items-center overflow-hidden mx-6 my-8 rounded-md border-2 border-brand-blue shadow-xl bg-white mb-8">
                     <div className="flex w-full justify-between border-b-2 border-brand-blue bg-brand-beige2 p-3">
                         <div>✌️</div>
-                        <div className="text-brand-blue text-15px">Use your ID in the TAZ Apps</div>
+                        <div className="text-brand-blue text-15px">Use your ID in TAZ Apps</div>
                         <div></div>
                     </div>
                     <Link href="questions">
@@ -120,7 +120,7 @@ function ExperiencesListComponent({ clearIdentity, urlIdentity }) {
 
                 <div className="relative flex flex-col items-center overflow-hidden mx-6 my-8 rounded-md border-2 border-brand-blue shadow-xl bg-white mt-20 mb-20">
                     <div className="flex w-full justify-between bg-black text-15px text-brand-beige p-3">
-                        <div>🧑‍🏫</div>
+                        <div>💡</div>
                         <div>FAQ</div>
                         <div></div>
                     </div>
@@ -160,24 +160,24 @@ function ExperiencesListComponent({ clearIdentity, urlIdentity }) {
                     >
                         Semaphore Grants Round
                     </a>
-                    <a href="https://appliedzkp.org/" target="_blank" className="pl-9 pb-14 underline" rel="noreferrer">
+                    <a href="https://appliedzkp.org/" target="_blank" className="pl-9 pb-12 underline" rel="noreferrer">
                         Privacy & Scaling Explorations
                     </a>
-                    {/* <Link href="/identity">
-                    <button className="w-[200px] ml-9 mb-10 bg-brand-yellow text-sm text-black py-1 rounded-full">
-                        View Semaphore ID
-                    </button>
-                </Link> */}
                     <button
-                        className="w-[200px] ml-9 mb-4 bg-brand-yellow text-sm text-black py-1 rounded-full"
+                        className="w-[300px] ml-9 mb-4 bg-brand-yellow text-brand-body text-black px-3 py-3 rounded-full"
                         onClick={clearIdentity}
                     >
                         Disconnect ID
                     </button>
-                    <p className="ml-9 mb-12 text-brand-info">Save ID before disconnecting!</p>
-                    <button onClick={goToTop} className="mb-6 underline cursor-pointer">
-                        Back to top
-                    </button>
+                    <p className="pl-9 ml-12 mb-5 text-brand-info">
+                        <span>
+                            <button onClick={goToTop} className="text-brand-info underline cursor-pointer">
+                                Save ID
+                            </button>
+                        </span>{" "}
+                        before disconnecting!
+                    </p>
+
                     <div className="flex w-full justify-center bg-black pb-3 pt-9">
                         <Footer />
                     </div>
