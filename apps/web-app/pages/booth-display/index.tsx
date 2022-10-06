@@ -27,7 +27,7 @@ export async function getStaticProps() {
     const { query } = faunadb
 
     try {
-        const dbs = await client.query(
+        const dbs = await client.query<any>(
             query.Map(
                 query.Paginate(query.Match(query.Index("all_canvases")), {
                     size: 10000
@@ -37,7 +37,7 @@ export async function getStaticProps() {
         )
         // TODO Finish up types for returun data and component
         console.log("dbs", dbs)
-        const canvases = dbs.data.map((canvas) => canvas.data)
+        const canvases = dbs.data.map((canvas: any) => canvas.data)
         return {
             props: { canvases },
             // will reload data every 3 secons
