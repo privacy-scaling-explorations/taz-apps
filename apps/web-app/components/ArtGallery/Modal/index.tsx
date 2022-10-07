@@ -1,7 +1,7 @@
 import axios from "axios"
 import Link from "next/link"
-import {useEffect, useState} from "react"
-import {useGenerateProofVote} from "../../../hooks/useGenerateProofVote"
+import { useEffect, useState } from "react"
+import { useGenerateProofVote } from "../../../hooks/useGenerateProofVote"
 import ProcessingModal from "../../ProcessingModal"
 import Cancel from "../../svgElements/Cancel"
 import Heart from "../../svgElements/Heart"
@@ -210,4 +210,3 @@ export default function Modal({
         </div>
     )
 }
-
