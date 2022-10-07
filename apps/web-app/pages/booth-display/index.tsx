@@ -28,27 +28,23 @@ export async function getStaticProps() {
     
     let canvases = null;
 
-    const fetchCanvases = async () => {
-        const dbs = await client.query(
-            query.Map(
-                query.Paginate(query.Match(query.Index("all_active_canvases")), {
-                    size: 10000
-                }),
-                query.Lambda("canvasRef", query.Get(query.Var("canvasRef")))
-                )
-            )
-            canvases = dbs.data[0].data.canvases
-            console.log(canvases);
-        }
-
     try {
         client.stream.document(query.Ref(query.Collection("ActiveCanvases"), '344764218231226955'))
-        .on('start', start => {
+        .on('start', async start => {
             console.log('start', start);
-            fetchCanvases()
+
+            const dbs = await client.query(
+                query.Map(
+                    query.Paginate(query.Match(query.Index("all_active_canvases"))),
+                    query.Lambda("canvasRef", query.Get(query.Var("canvasRef")))
+                    )
+                )
+                canvases = dbs.data[0].data.canvases
+                console.log(canvases);
+
         }).on('version', version => {
-            console.log('version', version)
-          fetchCanvases()
+            console.log('version', version.document.data.canvases)
+            canvases = version.document.data.canvases
         })
         .start()
 
@@ -56,8 +52,6 @@ export async function getStaticProps() {
         // TODO Finish up types for returun data and component
         return {
             props: { canvases },
-            // will reload data every 3 secons
-            // revalidate: 3
         }
     } catch (err) {
         return { props: { err: "Error" } }
