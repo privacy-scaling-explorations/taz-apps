@@ -33,7 +33,7 @@ export default async function handler(req, res) {
                 }
             )
 
-            const txResult = await tx.wait();
+            const txResult = await tx.wait()
             // const txReceipt = await provider.getTransactionReceipt(txResult.hash);
 
             console.log(txResult)
