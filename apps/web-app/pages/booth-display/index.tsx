@@ -1,4 +1,5 @@
 import faunadb from "faunadb"
+import { useEffect, useState } from "react"
 
 import BoothContent from "../../components/TazBooth/BoothContent"
 import BoothFooter from "../../components/TazBooth/BoothFooter"
@@ -8,52 +9,45 @@ export interface Canvas {
     tiles: string[]
 }
 
-const BoothDisplay = ({ canvases }: { canvases: { canvasId: number; tiles: string[] }[] }) => (
-    <div className="flex flex-col h-screen bg-brand-black">
-        <BoothContent canvases={canvases} />
-        <BoothFooter />
-    </div>
-)
-
-export default BoothDisplay
-
-export async function getStaticProps() {
-    // Server Side code that will never reach client
-    const secret = process.env.FAUNA_SECRET_KEY
-    if (typeof secret !== "string") {
-        return { notFound: true }
-    }
+const BoothDisplay = () => {
+    const [canvases, setCanvases] = useState([])
+    const secret = "fnAEvFcKVTACS4C4wTx9Onll1EfhX8dE9mc5xvzk"
     const client = new faunadb.Client({ secret })
+    console.log("secret", secret, client)
     const { query } = faunadb
-    
-    let canvases = null;
 
-    try {
-        client.stream.document(query.Ref(query.Collection("ActiveCanvases"), '344764218231226955'))
-        .on('start', async start => {
-            console.log('start', start);
+    async function getActiveCanvases() {
+        client.stream
+            .document(query.Ref(query.Collection("ActiveCanvases"), "344764218231226955"))
+            .on("start", async (start) => {
+                console.log("start", start)
 
-            const dbs = await client.query(
-                query.Map(
-                    query.Paginate(query.Match(query.Index("all_active_canvases"))),
-                    query.Lambda("canvasRef", query.Get(query.Var("canvasRef")))
+                const dbs = await client.query<any>(
+                    query.Map(
+                        query.Paginate(query.Match(query.Index("all_active_canvases"))),
+                        query.Lambda("canvasRef", query.Get(query.Var("canvasRef")))
                     )
                 )
-                canvases = dbs.data[0].data.canvases
-                console.log(canvases);
-
-        }).on('version', version => {
-            console.log('version', version.document.data.canvases)
-            canvases = version.document.data.canvases
-        })
-        .start()
-
-
-        // TODO Finish up types for returun data and component
-        return {
-            props: { canvases },
-        }
-    } catch (err) {
-        return { props: { err: "Error" } }
+                console.log("Canvases in component", dbs.data[0].data.canvases)
+                setCanvases(dbs.data[0].data.canvases)
+            })
+            .on("version", (version: any) => {
+                console.log("version", version.document.data.canvases)
+                setCanvases(version.document.data.canvases)
+            })
+            .start()
     }
+
+    useEffect(() => {
+        getActiveCanvases()
+    }, [])
+
+    return (
+        <div className="flex flex-col h-screen bg-brand-black">
+            <BoothContent canvases={canvases} />
+            <BoothFooter />
+        </div>
+    )
 }
+
+export default BoothDisplay
