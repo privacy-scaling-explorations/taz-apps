@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react"
-import faunadb, { Ref, Collection, Handler, SubscriptionEventHandlers } from "faunadb"
-import * as Fauna from "faunadb/src/types/values"
+import faunadb, { Ref, Collection } from "faunadb"
 
 import BoothArtboardCard from "../BoothArtboardCard"
 
@@ -15,6 +14,7 @@ export type FaunadbStreamVersionEvent = {
 
 const BoothContent = (initialCanvases: Canvas[]) => {
     const [canvases, setCanvases] = useState(initialCanvases)
+    //! SECRET NEEDS TO BE REMOVED
     const secret = "fnAEvFcKVTACS4C4wTx9Onll1EfhX8dE9mc5xvzk"
     const client = new faunadb.Client({ secret })
     const q = faunadb.query
