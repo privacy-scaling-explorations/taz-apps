@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import faunadb, { Ref, Collection, Handler } from "faunadb"
+import faunadb, { Ref, Collection, Handler, SubscriptionEventHandlers } from "faunadb"
 import * as Fauna from "faunadb/src/types/values"
 
 import BoothArtboardCard from "../BoothArtboardCard"
@@ -23,8 +23,6 @@ const BoothContent = (initialCanvases: Canvas[]) => {
         return client.stream
             .document(q.Ref(q.Collection("ActiveCanvases"), "344764218231226955"))
             .on("start", async (start) => {
-                console.log("start", start)
-
                 const dbs: FanaCanvasResponse = await client.query<FanaCanvasResponse>(
                     q.Get(Ref(Collection("ActiveCanvases"), "344764218231226955"))
                 )
@@ -32,9 +30,10 @@ const BoothContent = (initialCanvases: Canvas[]) => {
                     setCanvases(dbs.data.canvases)
                 }
             })
-            .on("version", (version: any) => {
-                console.log("version", version)
-                // setCanvases(version.document.data.canvases)
+            .on("version", (version) => {
+                // Had to resort to type casting
+                const updatedVersion = version as FaunadbStreamVersionEvent
+                setCanvases(updatedVersion.document.data.canvases)
             })
     }
 
