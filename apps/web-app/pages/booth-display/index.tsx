@@ -1,49 +1,48 @@
-import faunadb from "faunadb"
+import React from "react"
+import faunadb, { Collection, Ref } from "faunadb"
+import * as Fauna from "faunadb/src/types/values"
 
 import BoothContent from "../../components/TazBooth/BoothContent"
 import BoothFooter from "../../components/TazBooth/BoothFooter"
 
-export interface Canvas {
+export type Canvas = {
     canvasId: number
     tiles: string[]
 }
 
-const BoothDisplay = ({ canvases }: { canvases: { canvasId: number; tiles: string[] }[] }) => (
+export type CanvasData = {
+    [canvases: string]: Canvas[]
+}
+
+export type FanaCanvasResponse = Fauna.values.Document<CanvasData>
+
+const BoothDisplay = (props: { canvases: Canvas[] }) => (
     <div className="flex flex-col h-screen bg-brand-black">
-        <BoothContent canvases={canvases} />
+        <BoothContent initialCanvases={props.canvases} />
         <BoothFooter />
     </div>
 )
 
 export default BoothDisplay
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
     // Server Side code that will never reach client
     const secret = process.env.FAUNA_SECRET_KEY
     if (typeof secret !== "string") {
         return { notFound: true }
     }
     const client = new faunadb.Client({ secret })
-    const { query } = faunadb
+    const q = faunadb.query
 
     try {
-        const dbs = await client.query<any>(
-            query.Map(
-                query.Paginate(query.Match(query.Index("all_canvases")), {
-                    size: 10000
-                }),
-                query.Lambda("canvasRef", query.Get(query.Var("canvasRef")))
-            )
+        const dbs: FanaCanvasResponse = await client.query<FanaCanvasResponse>(
+            q.Get(Ref(Collection("ActiveCanvases"), "344764218231226955"))
         )
-        // TODO Finish up types for returun data and component
-        console.log("dbs", dbs)
-        const canvases = dbs.data.map((canvas: any) => canvas.data)
+        const { canvases } = dbs.data
         return {
-            props: { canvases },
-            // will reload data every 3 secons
-            revalidate: 3
+            props: { canvases }
         }
     } catch (err) {
-        return { props: { err: "Error" } }
+        return { Error: { err } }
     }
 }
