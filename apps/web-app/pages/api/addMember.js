@@ -53,7 +53,7 @@ export default async function handler(req, res) {
                     const tazMessageContract = new ethers.Contract(tazMessageAddress, tazMessageAbi, signer)
                     const tx = await tazMessageContract.addMember(groupId, identityCommitment, { gasLimit: 1500000 })
                     console.log(tx)
-
+                    
                     // Change to try and catch
                     const response = await tx.wait(1).then(
                         client.query(

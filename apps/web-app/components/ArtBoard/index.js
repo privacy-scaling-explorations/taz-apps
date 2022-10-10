@@ -222,6 +222,7 @@ export default function ArtBoard() {
                 fullProof: fullProofTemp
             })
             if (response.status === 201 && tilesRemaining.length > 0) {
+                
                 setTimeout(() => {
                     internalCloseProcessingModal()
                     router.push("/artGallery-page")
@@ -249,6 +250,7 @@ export default function ArtBoard() {
             console.log("POSTING to /api/mintFullCanvas")
             console.log("canvasUri: ", canvasUri)
             console.log("canvasId.current: ", canvasId.current)
+
 
             // Add Try and Catch
             const mintResponse = await axios.post("/api/mintFullCanvas", body)

@@ -117,10 +117,10 @@ const ArtBoardComponent = forwardRef(
                                 </div>
                             ) : (
                                 <div ref={canvasRef} id="ipfsURI">
-                                    <table className="">
+                                    <table className="border border-slate-200 border-collapse">
                                         <tbody>
                                             {tileCounter.map((counter) => (
-                                                <tr className="w-full h-full " key={counter}>
+                                                <tr className="w-full h-full border border-slate-200" key={counter}>
                                                     {counter.map((id) => (
                                                         <GenerateTile
                                                             startDrawing={startDrawing}
