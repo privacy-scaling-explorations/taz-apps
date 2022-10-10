@@ -120,7 +120,7 @@ const ArtBoardComponent = forwardRef(
                                     <table className="">
                                         <tbody>
                                             {tileCounter.map((counter) => (
-                                                <tr className="w-full h-full" key={counter}>
+                                                <tr className="w-full h-full " key={counter}>
                                                     {counter.map((id) => (
                                                         <GenerateTile
                                                             startDrawing={startDrawing}

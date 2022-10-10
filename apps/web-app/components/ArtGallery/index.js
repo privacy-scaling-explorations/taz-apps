@@ -6,14 +6,17 @@ import { Subgraphs } from "../../helpers/subgraphs.js"
 // Used to dev when images didn't load
 import mockImages from "./data"
 
+const { GALLERY_OPEN } = require("../../config/goerli.json")
+
 export default function ArtGallery(props) {
     const [images, setImages] = useState(null)
     const [activeImage, setActiveImage] = useState(null)
     const [open, setOpen] = useState(false)
     const [isVoting, setIsVoting] = useState()
     const [isTxLoading, setIsTxLoading] = useState(false)
-    const [galleryOpen, setGalleryOpen] = useState(true)
     const [winner, setWinner] = useState(null)
+
+    const galleryOpen = GALLERY_OPEN
 
     const handleClick = (image) => {
         setActiveImage(image)
@@ -47,10 +50,14 @@ export default function ArtGallery(props) {
 
         // If gallery is closed, get winner data
         if (!galleryOpen) {
-            const winnerData = await subgraphs.getVoteWinner()
-            const { imageUri } = imageData.find((img) => img.tokenId === winnerData.tokenId)
-            winnerData.imageUri = imageUri
-            setWinner(winnerData)
+            try {
+                const winnerData = await subgraphs.getVoteWinner()
+                const { imageUri } = imageData.find((img) => img.tokenId === winnerData.tokenId)
+                winnerData.imageUri = imageUri
+                setWinner(winnerData)
+            } catch (err) {
+                console.info("Error fetching winner data: ", err)
+            }
         }
     }
 
