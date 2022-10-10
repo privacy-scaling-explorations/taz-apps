@@ -1,7 +1,7 @@
 import React, { forwardRef } from "react"
 
 const GenerateTile = forwardRef(({ i, tiles, startDrawing, userSelectedTile }) => (
-    <td className="bg-white p-0 ">
+    <td className="bg-white p-0">
         <div className="w-[100px] h-[100px] flex items-center" onClick={() => startDrawing(i)}>
             {tiles[i] ? (
                 <picture>

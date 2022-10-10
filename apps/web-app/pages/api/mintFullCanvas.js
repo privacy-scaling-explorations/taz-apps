@@ -41,6 +41,16 @@ export default async function handler(req, res) {
 
             if (response === "true") {
                 console.log("Proof Verified!")
+                const dbs = await client.query(
+                    query.Map(
+                        query.Paginate(query.Match(query.Index("all_canvases")), {
+                            size: 10000
+                        }),
+                        query.Lambda("canvasRef", query.Get(query.Var("canvasRef")))
+                    )
+                )
+
+                const match = dbs.data.filter((canvas) => canvas.data.canvasId === canvasId)[0]
 
                 const web3StorageApiToken = process.env.WEB3_STORAGE_API_TOKEN
 
@@ -117,24 +127,10 @@ export default async function handler(req, res) {
                     })
                     console.log(tx)
 
-                    const dbs = await client.query(
-                        query.Map(
-                            query.Paginate(query.Match(query.Index("all_active_canvases")), {
-                                size: 10000
-                            }),
-                            query.Lambda("canvasRef", query.Get(query.Var("canvasRef")))
-                        )
-                    )
-
-                    const document = dbs.data[0]
-                    const canvases = document.data.canvases
-
-                    canvases[canvasId - 1].tiles = ["", "", "", "", "", "", "", "", ""]
-
                     await client.query(
-                        query.Update(query.Ref(document.ref), {
+                        query.Update(query.Ref(match.ref), {
                             data: {
-                                canvases: canvases
+                                tiles: ["", "", "", "", "", "", "", "", ""]
                             }
                         })
                     )

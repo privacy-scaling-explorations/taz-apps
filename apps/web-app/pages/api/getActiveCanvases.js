@@ -9,14 +9,14 @@ export default async function handler(req, res) {
 
             const dbs = await client.query(
                 query.Map(
-                    query.Paginate(query.Match(query.Index("all_canvases")), {
+                    query.Paginate(query.Match(query.Index("all_active_canvases")), {
                         size: 10000
                     }),
                     query.Lambda("canvasRef", query.Get(query.Var("canvasRef")))
                 )
             )
 
-            const canvases = dbs.data.map((canvas) => canvas.data)
+            const canvases = dbs.data[0].data.canvases
 
             res.status(200).json({ canvases })
         } catch (error) {
