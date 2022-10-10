@@ -47,12 +47,12 @@ async function main() {
 
     console.info("tazArtwork.addStartStoppers receipt", receipt5)
 
-    // console.info("Calling tazArtwork.startVoting")
+    console.info("Calling tazArtwork.startVoting")
 
-    // const tx6 = await tazArtwork.connect(signer1).startVoting()
-    // const receipt6 = await tx6.wait()
+    const tx6 = await tazArtwork.connect(signer1).startVoting()
+    const receipt6 = await tx6.wait()
 
-    // console.info("tazArtwork.startVoting receipt", receipt6)
+    console.info("tazArtwork.startVoting receipt", receipt6)
 }
 
 main().catch((error) => {
