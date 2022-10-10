@@ -12,7 +12,7 @@ export type FaunadbStreamVersionEvent = {
     prev: FanaCanvasResponse
 }
 
-const BoothContent = (initialCanvases: Canvas[]) => {
+const BoothContent = (initialCanvases: any) => {
     const [canvases, setCanvases] = useState(initialCanvases)
     //! SECRET NEEDS TO BE REMOVED
     const secret = "fnAEvFcKVTACS4C4wTx9Onll1EfhX8dE9mc5xvzk"
