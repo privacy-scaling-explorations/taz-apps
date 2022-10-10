@@ -77,6 +77,8 @@ export default function GenerateIdentity(props) {
                 console.log("Status!")
                 console.log(res.status)
                 onSetIdentity(identityKey)
+                window.localStorage.removeItem("voted")
+
 
                 setSteps([
                     { status: "complete", text: "Generated Semaphore Identity (private values and id commitment)" },

@@ -62,6 +62,11 @@ typechain-types
 .next
 out
 
+# PWA
+**/public/workbox-*.js
+**/public/sw.js
+**/public/worker-*.js
+
 # Parcel
 .parcel-cache
 

@@ -8,7 +8,6 @@ import { useGenerateProof } from "../../hooks/useGenerateProof"
 import ProcessingModal from "../../components/ProcessingModal"
 import { Subgraphs } from "../../helpers/subgraphs"
 import BackToTopArrow from "../../components/svgElements/BackToTopArrow"
-import BunnyQuestion from "../../components/svgElements/BunnyQuestion"
 import YellowCircle from "../../components/svgElements/YellowCircle"
 import Ellipse from "../../components/svgElements/Ellipse"
 import RedCircle from "../../components/svgElements/RedCircle"
@@ -215,13 +214,13 @@ export default function Questions() {
 
     return (
         <div className="min-h-[700px] relative overflow-hidden h-auto flex flex-col">
-            <div className="fixed top-[16%] -left-[14%]">
+            <div className="fixed top-[25%] -left-[14%]">
                 <YellowCircle />
             </div>
-            <div className="fixed top-[52%] right-[-35%]">
+            <div className="fixed top-[62%] right-[-35%]">
                 <Ellipse color="#435C6C" />
             </div>
-            <div className="fixed top-[60%] left-[2%]">
+            <div className="fixed top-[70%] left-[2%]">
                 <RedCircle />
             </div>
 
@@ -258,22 +257,17 @@ export default function Questions() {
 
             <div className="z-10 ">
                 <Link href="/experiences-page">
-                    <div className="flex max-w-[76px] max-h-[32px] bg-black ml-9 mt-8 mb-7 px-1 text-xl text-brand-beige2 cursor-pointer shadow-[2.0px_3.0px_3.0px_rgba(0,0,0,0.38)]">
+                    <div className="flex max-w-[76px] max-h-[32px] bg-black ml-8 mt-8 mb-7 px-1 text-xl text-brand-beige2 cursor-pointer shadow-[2.0px_3.0px_3.0px_rgba(0,0,0,0.38)]">
                         <BackTAZ />
                         <h1>TAZ</h1>
                     </div>
                 </Link>
                 <div className="px-6 pb-4">
-                    <div className="flex flex-row w-full">
-                        <div className="py-5">
-                            <h2 className="ml-3 text-2xl leading-5 font-extrabold">ASK AND ANSWER</h2>
-                            <h2 className="ml-3 text-2xl font-extrabold">QUESTIONS FREELY</h2>
-                        </div>
-                        <div className="pl-3">
-                            <BunnyQuestion />
-                        </div>
+                    <div className="flex flex-col w-full pt-5 pb-2">
+                        <h2 className="ml-2 text-2xl leading-5 font-extrabold">ASK AND ANSWER</h2>
+                        <h2 className="ml-2 text-2xl font-extrabold">QUESTIONS FREELY</h2>
                     </div>
-                    <p className="mx-3 text-brand-body text-brand-blue">
+                    <p className="ml-2 text-brand-info text-brand-blue">
                         Using your Semaphore ID, you can prove you're a member of the Devcon VI group without having to
                         log in or identify yourself. Go ahead and ask those questions you don't want to admit you don't
                         already know the answer to ;)
@@ -308,9 +302,6 @@ export default function Questions() {
             <div className="flex w-full relative justify-center bg-black pb-3 pt-9">
                 <Footer />
             </div>
-            {/* <div className="absolute overflow-hidden top-36 md:top-20 right-3">
-                <BunnyQuestion />
-            </div> */}
 
             {/* End Questions Board */}
         </div>
