@@ -50,10 +50,14 @@ export default function ArtGallery(props) {
 
         // If gallery is closed, get winner data
         if (!galleryOpen) {
-            const winnerData = await subgraphs.getVoteWinner()
-            const { imageUri } = imageData.find((img) => img.tokenId === winnerData.tokenId)
-            winnerData.imageUri = imageUri
-            setWinner(winnerData)
+            try {
+                const winnerData = await subgraphs.getVoteWinner()
+                const { imageUri } = imageData.find((img) => img.tokenId === winnerData.tokenId)
+                winnerData.imageUri = imageUri
+                setWinner(winnerData)
+            } catch (err) {
+                console.info("Error fetching winner data: ", err)
+            }
         }
     }
 
