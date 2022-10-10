@@ -18,6 +18,7 @@ export default async function handler(req, res) {
             const hashedInv = ethers.utils.id(invitation)
             const stringHash = hashedInv.toString()
 
+
             const dbs = await client.query(
                 query.Map(
                     query.Paginate(query.Match(query.Index("all_hashes")), {
@@ -26,22 +27,34 @@ export default async function handler(req, res) {
                     query.Lambda("codeRef", query.Get(query.Var("codeRef")))
                 )
             )
-
+             
             console.log("HashedINV", hashedInv)
             console.log("stringHash", stringHash)
 
-            try {
-                const dbs2 = await client.query(query.Get(query.Match(query.Index("get_code"), stringHash)))
-
+            try{
+                const dbs2 = await client.query(
+                    query.Get(
+                        query.Match(
+                            query.Index("get_code"),
+                            stringHash
+                        )
+                      )
+                )
+    
                 const isValid = !dbs2.data.isUsed
-
+    
                 console.log("dbs2", dbs2)
                 console.log("dbs2 isUsed?", dbs2.data.isUsed)
                 res.status(200).json({ isValid })
-            } catch (e) {
+
+
+            } catch(e){
                 const isValid = false
                 res.status(200).json({ isValid })
             }
+
+
+
 
             // console.log("DB length", dbs.data.length)
             // console.log(dbs.data)
