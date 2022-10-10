@@ -52,7 +52,6 @@ export default function Modal({
         event.preventDefault()
 
         setIsTxLoading(true)
-        // setTimeout(openProcessingModal, CHAINED_MODAL_DELAY)
 
         setSteps([
             { status: "processing", text: "Generating zero knowledge proof" },
@@ -99,8 +98,6 @@ export default function Modal({
             { status: "complete", text: "Submitted transaction with proof and vote" },
             { status: "processing", text: "Updating vote from on-chain events" }
         ])
-
-        // setTimeout(internalCloseProcessingModal, 2000)
     }
 
     const isOpen = true
