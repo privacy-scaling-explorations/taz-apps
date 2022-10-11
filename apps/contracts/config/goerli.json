@@ -6,7 +6,7 @@
     "IDENTITY_SEED": "test",
     "SEMAPHORE_CONTRACT": "0xE585f0Db9aB24dC912404DFfb9b28fb8BF211fA6",
     "SEMAPHORE_SUBGRAPH": "https://api.thegraph.com/subgraphs/name/semaphore-protocol/goerli",
-    "GROUP_ID": 10807,
+    "GROUP_ID": 42,
     "API_REQUEST_TIMEOUT": 500000,
     "EXTERNAL_NULLIFIER_FOR_VOTING": 115101,
     "FACT_ROTATION_INTERVAL": 8000,
