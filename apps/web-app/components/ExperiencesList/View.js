@@ -108,10 +108,21 @@ function ExperiencesListComponent({ clearIdentity, urlIdentity }) {
                         <div></div>
                     </div>
                     <Link href={`https://www.zkitter.com/taz/#${urlIdentity}`} target="_blank" rel="noreferrer">
-                        <div className="flex w-full flex-row items-center py-3 px-4 cursor-pointer">
+                        <div className="flex w-full flex-row items-center border-b-2 border-brand-blue py-3 px-4 cursor-pointer">
                             <div className="w-[90%]">
                                 <p className="py-2 text-brand-h3 font-bold">Zkitter</p>
                                 <p className="text-brand-info opacity-[70%]">Social media but make it anon</p>
+                            </div>
+                            <SelectorArrow />
+                        </div>
+                    </Link>
+                    <Link href={`https://www.heyanon.xyz/taz/#${urlIdentity}`} target="_blank" rel="noreferrer">
+                        <div className="flex w-full flex-row items-center py-3 px-4 cursor-pointer">
+                            <div className="w-[90%]">
+                                <p className="py-2 text-brand-h3 font-bold">heyanon!</p>
+                                <p className="text-brand-info opacity-[70%]">
+                                    Tweet anonymously to the @DevconAnon feed, from Personae Labs
+                                </p>
                             </div>
                             <SelectorArrow />
                         </div>
