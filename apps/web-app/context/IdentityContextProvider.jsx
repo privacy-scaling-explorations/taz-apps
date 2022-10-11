@@ -24,7 +24,7 @@ const getInitialIdentityValue = () => {
 }
 
 export function IdentityContextProvider({ children }) {
-    const [identity, setIdentity] = useState<Identity>(getInitialIdentityValue())
+    const [identity, setIdentity] = useState < Identity > getInitialIdentityValue()
 
     const onSetIdentity = useCallback((value) => {
         setIdentity(value)

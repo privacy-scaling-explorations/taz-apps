@@ -3,7 +3,7 @@ import { createContext, useContext } from "react"
 /**
  * This context factory creates a new context and a method to consume it
  */
-export const contextFactory =  () => {
+export const contextFactory = () => {
     // Create new context
     const context = createContext(undefined)
     // Create the context consumer method
