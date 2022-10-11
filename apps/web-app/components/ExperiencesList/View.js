@@ -116,7 +116,7 @@ function ExperiencesListComponent({ clearIdentity, urlIdentity }) {
                             <SelectorArrow />
                         </div>
                     </Link>
-                    <Link href={`https://www.heyanon.xyz/taz/#${urlIdentity}`} target="_blank" rel="noreferrer">
+                    <Link href={`https://www.heyanon.xyz/taz/${urlIdentity}`} target="_blank" rel="noreferrer">
                         <div className="flex w-full flex-row items-center py-3 px-4 cursor-pointer">
                             <div className="w-[90%]">
                                 <p className="py-2 text-brand-h3 font-bold">heyanon!</p>
