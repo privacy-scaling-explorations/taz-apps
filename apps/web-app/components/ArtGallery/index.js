@@ -28,11 +28,26 @@ export default function ArtGallery(props) {
 
         try {
             const tokens = await subgraphs.getMintedTokens()
-            const canvas = (await axios.get("/api/fetchCanvases")).data
-            imageData = tokens.map((token) => ({
-                ...token,
-                ...canvas.find((canva) => canva.imageId === token.imageId)
-            }))
+            console.log("TOKENS:", tokens)
+            // const canvas = (await axios.get("/api/fetchCanvases")).data
+            // imageData = tokens.map((token) => ({
+            //     ...token,
+            //     ...canvas.find((canva) => canva.imageId === token.imageId)
+            // }))
+
+            imageData = tokens
+
+            const requests = []
+
+            for (const img of imageData) {
+                requests.push(axios.get(img.uri))
+            }
+
+            const urls = await Promise.all(requests)
+
+            for (let i = 0; i < imageData.length; i++) {
+                imageData[i].imageUri = urls[i].data.image
+            }
         } catch (err) {
             console.error("Error fetching image data", err)
         }
