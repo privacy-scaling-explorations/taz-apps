@@ -24,13 +24,13 @@ const {
     ITEMS_PER_FETCH
 } = require("../../config/goerli.json")
 const { FACTS } = require("../../data/facts.json")
-const feedback = require("../../data/feedback.json")
+const allFeedback = require("../../data/feedback.json")
 
 export default function Answers() {
     const [generateFullProof] = useGenerateProof()
     const [answerModalIsOpen, setAnswerModalIsOpen] = useState(false)
     const [processingModalIsOpen, setProcessingModalIsOpen] = useState(false)
-    const [question, setQuestion] = useState(null)
+    const [feedback, setFeedback] = useState(null)
     const [answer, setAnswer] = useState()
     const [identityKey, setIdentityKey] = useState("")
     const [answers, setAnswers] = useState([])
@@ -151,14 +151,7 @@ export default function Answers() {
 
     const fetchQuestion = async () => {
         if (feedbackId) {
-            for (const { questions } of feedback) {
-                for (const q of questions) {
-                    if (feedbackId === q.id.toString()) {
-                        setQuestion(q)
-                        return
-                    }
-                }
-            }
+            setFeedback(allFeedback.find((f) => f.id.toString() === feedbackId))
         }
     }
 
@@ -294,7 +287,7 @@ export default function Answers() {
                         </p>
                     </div>
                 ) : (
-                    question && (
+                    feedback && (
                         <div style={{ borderTopWidth: "0px" }}>
                             <div
                                 style={
@@ -303,11 +296,13 @@ export default function Answers() {
                                         : { borderTopWidth: "0px", borderBottomWidth: "0px" }
                                 }
                             >
-                                <p className="px-2 text-brand-3xs text-brand-gray50 font-medium">
-                                    qID {question.id.toLocaleString()}
+                                <p className="px-2 pb-3">{feedback.description}</p>
+                                <p className="px-2 text-brand-info text-brand-gray50 font-medium">
+                                    {feedback.questions}
                                 </p>
-                                <p className="px-2 pb-4">{question.question}</p>
                             </div>
+
+                            <hr className="mt-4" />
 
                             <InfiniteScroll loadMore={fetchItems} hasMore={hasMoreItems} loader={loader}>
                                 {answers.length > 0 ? (
@@ -331,11 +326,12 @@ export default function Answers() {
                                         </div>
                                     ))
                                 ) : (
-                                    <div>
-                                        <p className="pl-6 text-brand-orange text-brand-info">
+                                    <div className="px-2 mt-3">
+                                        <p className="text-brand-orange text-brand-info">
                                             No one has answered this question.
+                                            <br />
+                                            Be the first!
                                         </p>
-                                        <p className="pl-24 text-brand-orange text-brand-info">Be the first!</p>
                                     </div>
                                 )}
                             </InfiniteScroll>

@@ -75,28 +75,31 @@ export default function Feedback() {
                     <div className="flex flex-col w-full pt-5 pb-2">
                         <h2 className="ml-2 text-2xl leading-5 font-extrabold">TELL US WHAT YOU THINK</h2>
                     </div>
-                    <p className="ml-2 text-brand-info text-brand-blue">...</p>
+                    <p className="ml-2 text-brand-info text-brand-blue">
+                        We’d love to hear your feedback. It will be submitted anonymously using your Semaphore ID.
+                    </p>
                 </div>
             </div>
 
-            {feedback.map(({ topic, questions }) => (
+            {feedback.map(({ id, topic, icon, description }) => (
                 <div className="relative flex flex-col items-center overflow-hidden mx-6 my-3 rounded-md border-2 border-brand-blue shadow-xl bg-white">
-                    <div className="flex w-full justify-between bg-black text-15px text-brand-beige p-3">
-                        <div>💡</div>
-                        <div>{topic}</div>
+                    <div className="flex w-full justify-between border-b-2 border-brand-blue bg-brand-beige2 p-3">
+                        <div>{icon}</div>
+                        <div className="text-15px text-brand-blue">{topic}</div>
                         <div></div>
                     </div>
 
-                    {questions.map(({ id, question }) => (
-                        <Link href={`/feedback/${id}`}>
-                            <div className="flex w-full flex-row items-center border-brand-blue border-b-[1px] p-4 cursor-pointer">
-                                <p className="text-brand-brown opacity-[85%] text-sm leading-5 w-[100%]">{question}</p>
-                                <SelectorArrow />
+                    <Link href={`/feedback/${id}`}>
+                        <div className="flex w-full flex-row items-center py-3 px-4 cursor-pointer">
+                            <div className="w-[90%]">
+                                <p className="py-2 text-brand-h3">{description}</p>
                             </div>
-                        </Link>
-                    ))}
+                            <SelectorArrow />
+                        </div>
+                    </Link>
                 </div>
             ))}
+
             <div className="flex w-full relative justify-center bg-black pb-3 pt-9 mt-10">
                 <Footer />
             </div>

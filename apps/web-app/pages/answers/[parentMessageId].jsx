@@ -333,11 +333,12 @@ export default function Answers() {
                                         </div>
                                     ))
                                 ) : (
-                                    <div>
-                                        <p className="pl-6 text-brand-orange text-brand-info">
+                                    <div className="px-2 mt-3">
+                                        <p className="text-brand-orange text-brand-info">
                                             No one has answered this question.
+                                            <br />
+                                            Be the first!
                                         </p>
-                                        <p className="pl-24 text-brand-orange text-brand-info">Be the first!</p>
                                     </div>
                                 )}
                             </InfiniteScroll>
