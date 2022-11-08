@@ -1,0 +1,37 @@
+[
+    {
+        "id": 1000000000,
+        "topic": "User experience",
+        "icon": "🤳",
+        "description": "Let us know what it was like to use the app",
+        "questions": "What did you think of the sign up experience? Did you have any issues navigating in the app?"
+    },
+    {
+        "id": 1000000001,
+        "topic": "Technical implementation",
+        "icon": "💻",
+        "description": "Report any technical issues",
+        "questions": "Did you experience any bugs? Any inconsistencies?"
+    },
+    {
+        "id": 1000000002,
+        "topic": "Anonymity",
+        "icon": "🎭",
+        "description": "Tell us about your experience being anonymous",
+        "questions": "What do you value about being anon? Did you have any concerns? What did you think of anon posting on ZKitter and Heyanon?"
+    },
+    {
+        "id": 1000000003,
+        "topic": "Future plans",
+        "icon": "😎",
+        "description": "Help us plan ahead",
+        "questions": "How would you like to use the TAZ app in the future? What questions do you still have about Semaphore?"
+    },
+    {
+        "id": 1000000004,
+        "topic": "General feedback",
+        "icon": "💡",
+        "description": "Share any thoughts related to the TAZ",
+        "questions": ""
+    }
+]

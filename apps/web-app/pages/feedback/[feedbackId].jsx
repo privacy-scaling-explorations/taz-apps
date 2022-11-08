@@ -1,22 +1,21 @@
-import { useState, useEffect, useCallback } from "react"
-import { useRouter } from "next/router"
 import axios from "axios"
 import { ethers } from "ethers"
 import Link from "next/link"
-import InfiniteScroll from "react-infinite-scroller"
+import { useRouter } from "next/router"
+import { useCallback, useEffect, useState } from "react"
 import { RiArrowLeftLine } from "react-icons/ri"
-
-import { useGenerateProof } from "../../hooks/useGenerateProof"
-import { Subgraphs } from "../../helpers/subgraphs"
+import InfiniteScroll from "react-infinite-scroller"
 import AnswerModal from "../../components/AnswerModal"
-import ProcessingModal from "../../components/ProcessingModal"
 import Footer from "../../components/Footer"
+import Loading from "../../components/Loading"
+import ProcessingModal from "../../components/ProcessingModal"
+import BackToTopArrow from "../../components/svgElements/BackToTopArrow"
 import BlueCircle from "../../components/svgElements/BlueCircle"
+import ConvoBubbles from "../../components/svgElements/ConvoBubbles"
 import Ellipse from "../../components/svgElements/Ellipse"
 import RedCircle from "../../components/svgElements/RedCircle"
-import BackToTopArrow from "../../components/svgElements/BackToTopArrow"
-import ConvoBubbles from "../../components/svgElements/ConvoBubbles"
-import Loading from "../../components/Loading"
+import { Subgraphs } from "../../helpers/subgraphs"
+import { useGenerateProof } from "../../hooks/useGenerateProof"
 
 const {
     API_REQUEST_TIMEOUT,
@@ -25,12 +24,13 @@ const {
     ITEMS_PER_FETCH
 } = require("../../config/goerli.json")
 const { FACTS } = require("../../data/facts.json")
+const allFeedback = require("../../data/feedback.json")
 
 export default function Answers() {
     const [generateFullProof] = useGenerateProof()
     const [answerModalIsOpen, setAnswerModalIsOpen] = useState(false)
     const [processingModalIsOpen, setProcessingModalIsOpen] = useState(false)
-    const [question, setQuestion] = useState(null)
+    const [feedback, setFeedback] = useState(null)
     const [answer, setAnswer] = useState()
     const [identityKey, setIdentityKey] = useState("")
     const [answers, setAnswers] = useState([])
@@ -46,7 +46,7 @@ export default function Answers() {
         </div>
     )
     const router = useRouter()
-    const { parentMessageId, txHash } = router.query
+    const { feedbackId } = router.query
 
     const closeAnswerModal = () => {
         setAnswerModalIsOpen(false)
@@ -98,7 +98,7 @@ export default function Answers() {
         ])
 
         const body = {
-            parentMessageId,
+            parentMessageId: feedbackId,
             messageContent,
             merkleTreeRoot,
             groupId,
@@ -107,14 +107,15 @@ export default function Answers() {
             externalNullifier,
             solidityProof
         }
-        console.log("ANSWERS PAGE | body", body)
+
         try {
             const postResponse = await axios.post("/api/postMessage", body, {
                 timeout: API_REQUEST_TIMEOUT
             })
+
             if (postResponse.status === 201) {
                 const newAnswer = {
-                    parentMessageId,
+                    parentMessageId: feedbackId,
                     messageId: 0,
                     txHash: postResponse.data.hash,
                     messageContent
@@ -122,19 +123,16 @@ export default function Answers() {
                 const updatedAnswers = [newAnswer].concat(answers)
                 setAnswers(updatedAnswers)
 
-                console.log("ANSWERS PAGE | updatedAnswers", updatedAnswers)
-                console.log("ANSWERS PAGE | answers", answers)
-                console.log("ANSWERS PAGE | postResponse.status", postResponse.status)
-                console.log("ANSWERS PAGE | postResponse.data.hash", postResponse.data.hash)
-
                 // Cache answer while tx completes
                 window.localStorage.setItem("savedAnswer", JSON.stringify(newAnswer))
             } else if (postResponse.status === 203) {
                 alert("Your transaction has failed. Please try submitting again.")
+
                 internalCloseProcessingModal()
             }
         } catch (error) {
             alert("Your transaction has failed. Please try submitting again.")
+
             internalCloseProcessingModal()
         }
 
@@ -152,10 +150,8 @@ export default function Answers() {
     }
 
     const fetchQuestion = async () => {
-        if (parentMessageId) {
-            const subgraphs = new Subgraphs()
-            const questionItem = await subgraphs.getMessage(parentMessageId)
-            setQuestion(questionItem)
+        if (feedbackId) {
+            setFeedback(allFeedback.find((f) => f.id.toString() === feedbackId))
         }
     }
 
@@ -198,12 +194,12 @@ export default function Answers() {
 
         try {
             const subgraphs = new Subgraphs()
-            const items = await subgraphs.getMessages(parentMessageId, ITEMS_PER_FETCH, nextFetchSkip)
+            const items = await subgraphs.getMessages(feedbackId, ITEMS_PER_FETCH, nextFetchSkip)
 
             // Check local storage for any items cached pending tx finalization
             if (nextFetchSkip === 0) {
                 const savedItem = JSON.parse(window.localStorage.getItem("savedAnswer"))
-                if (savedItem && savedItem.parentMessageId === parentMessageId) {
+                if (savedItem && savedItem.parentMessageId === feedbackId) {
                     const found = items.some((item) => savedItem && item.messageContent === savedItem.messageContent)
                     if (found) {
                         window.localStorage.removeItem("savedAnswer")
@@ -228,7 +224,7 @@ export default function Answers() {
         } finally {
             setFetching(false)
         }
-    }, [answers, fetching, nextFetchSkip, parentMessageId])
+    }, [answers, fetching, nextFetchSkip, feedbackId])
 
     return (
         <div className="h-full min-h-screen relative overflow-hidden flex flex-col">
@@ -242,7 +238,7 @@ export default function Answers() {
                 <BlueCircle />
             </div>
 
-            {parentMessageId !== "0" && (
+            {feedbackId !== "0" && (
                 <div className="fixed bottom-[15%] right-2 z-10 flex justify-end">
                     <button
                         type="button"
@@ -275,11 +271,11 @@ export default function Answers() {
             />
             {/* Begin Answer Board */}
             <div className="flex-grow mx-6 my-8 text-brand-brown p-4 min-w-[200px] min-h-[100%] relative divide-y overflow-y-auto border-2 border-brand-blue rounded-md bg-white drop-shadow-lg">
-                <Link href="/questions" className="cursor-pointer brand">
+                <Link href="/feedback" className="cursor-pointer brand">
                     <RiArrowLeftLine className="fill-brand-gray50 cursor-pointer mb-4 border-0" />
                 </Link>
 
-                {parentMessageId === "0" && txHash ? (
+                {feedbackId === "0" && txHash ? (
                     <div className="p-4">
                         <p className="text-brand-red pb-4">Question is still being processed.</p>
                         <p className="text-sm">
@@ -291,7 +287,7 @@ export default function Answers() {
                         </p>
                     </div>
                 ) : (
-                    question && (
+                    feedback && (
                         <div style={{ borderTopWidth: "0px" }}>
                             <div
                                 style={
@@ -300,23 +296,20 @@ export default function Answers() {
                                         : { borderTopWidth: "0px", borderBottomWidth: "0px" }
                                 }
                             >
-                                <p className="px-2 text-brand-3xs text-brand-gray50 font-medium">
-                                    qID {question.messageId.toLocaleString()}
+                                <p className="px-2 pb-3">{feedback.description}</p>
+                                <p className="px-2 text-brand-info text-brand-gray50 font-medium">
+                                    {feedback.questions}
                                 </p>
-                                <p className="px-2 pb-4">{question.messageContent}</p>
                             </div>
+
+                            <hr className="mt-4" />
 
                             <InfiniteScroll loadMore={fetchItems} hasMore={hasMoreItems} loader={loader}>
                                 {answers.length > 0 ? (
-                                    answers.map((item, index) => (
+                                    answers.map((item) => (
                                         <div
                                             className="flex flex-row align-top border-b-[1px] border-brand-beige last:border-b-0"
                                             key={item.messageId}
-                                            // style={
-                                            //   index + 1 === item.length
-                                            //     ? { borderTopWidth: '0px', borderBottomWidth: '0px' }
-                                            //     : { borderTopWidth: '0px', borderBottomWidth: '1px', borderColor: '#EAE1DA' }
-                                            // }
                                         >
                                             <div className="flex-col px-2 py-4">
                                                 <ConvoBubbles />
@@ -333,11 +326,12 @@ export default function Answers() {
                                         </div>
                                     ))
                                 ) : (
-                                    <div>
-                                        <p className="pl-6 text-brand-orange text-brand-info">
+                                    <div className="px-2 mt-3">
+                                        <p className="text-brand-orange text-brand-info">
                                             No one has answered this question.
+                                            <br />
+                                            Be the first!
                                         </p>
-                                        <p className="pl-24 text-brand-orange text-brand-info">Be the first!</p>
                                     </div>
                                 )}
                             </InfiniteScroll>
@@ -345,34 +339,10 @@ export default function Answers() {
                     )
                 )}
             </div>
+
             <div className="flex w-full relative justify-center bg-black pb-3 pt-9">
                 <Footer />
             </div>
-            {/* End Answer Board */}
         </div>
     )
 }
-
-// This exists to prevent losing dynamic query params on refresh
-// eslint-disable-next-line no-unused-vars
-export async function getServerSideProps(context) {
-    return {
-        props: {}
-    }
-}
-
-/* export async function getServerSideProps({ query }) {
-  const subgraphs = new Subgraphs()
-  const question = await subgraphs.getMessage(query.parentMessageId)
-  const answers = await subgraphs.getMessages(query.parentMessageId)
-  console.log('ANSWERS PAGE | fetched answers', answers)
-  return {
-    props: {
-      messageId: query.parentMessageId,
-      txHash: query.txHash || '',
-      questionProp: question,
-      answersProp: answers
-    }
-  }
-}
- */

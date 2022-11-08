@@ -79,6 +79,15 @@ function ExperiencesListComponent({ clearIdentity, urlIdentity }) {
                         <div className="text-brand-blue text-15px">Use your ID in TAZ Apps</div>
                         <div></div>
                     </div>
+                    <Link href="feedback">
+                        <div className="flex w-full flex-row items-center border-b-2 border-brand-blue py-3 px-4 cursor-pointer">
+                            <div className="w-[90%]">
+                                <p className="py-2 text-brand-h3 font-bold">Feedback</p>
+                                <p className="text-brand-info opacity-[70%]">Save your thoughts with the team</p>
+                            </div>
+                            <SelectorArrow />
+                        </div>
+                    </Link>
                     <Link href="questions">
                         <div className="flex w-full flex-row items-center border-b-2 border-brand-blue py-3 px-4 cursor-pointer">
                             <div className="w-[90%]">
