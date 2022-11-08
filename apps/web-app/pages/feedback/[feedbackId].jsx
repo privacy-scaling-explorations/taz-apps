@@ -275,68 +275,51 @@ export default function Answers() {
                     <RiArrowLeftLine className="fill-brand-gray50 cursor-pointer mb-4 border-0" />
                 </Link>
 
-                {feedbackId === "0" && txHash ? (
-                    <div className="p-4">
-                        <p className="text-brand-red pb-4">Question is still being processed.</p>
-                        <p className="text-sm">
-                            You can check your transaction on{" "}
-                            <a className="py-2 underline" href={`https://goerli.etherscan.io/tx/${txHash}`}>
-                                Etherscan
-                            </a>
-                            .
-                        </p>
-                    </div>
-                ) : (
-                    feedback && (
-                        <div style={{ borderTopWidth: "0px" }}>
-                            <div
-                                style={
-                                    answers.length > 0
-                                        ? { borderTopWidth: "0px", borderBottomWidth: "1px", borderColor: "#EAE1DA" }
-                                        : { borderTopWidth: "0px", borderBottomWidth: "0px" }
-                                }
-                            >
-                                <p className="px-2 pb-3">{feedback.description}</p>
-                                <p className="px-2 text-brand-info text-brand-gray50 font-medium">
-                                    {feedback.questions}
-                                </p>
-                            </div>
-
-                            <hr className="mt-4" />
-
-                            <InfiniteScroll loadMore={fetchItems} hasMore={hasMoreItems} loader={loader}>
-                                {answers.length > 0 ? (
-                                    answers.map((item) => (
-                                        <div
-                                            className="flex flex-row align-top border-b-[1px] border-brand-beige last:border-b-0"
-                                            key={item.messageId}
-                                        >
-                                            <div className="flex-col px-2 py-4">
-                                                <ConvoBubbles />
-                                            </div>
-
-                                            <div className="flex-col py-3 text-xs text-brand-brown">
-                                                <p className="px-4 pb-2 text-brand-3xs text-brand-gray50 font-medium">
-                                                    aID {item.messageId ? item.messageId.toLocaleString() : "0"}
-                                                </p>
-                                                <p className="px-4 leading-[1.3rem] opacity-[70%]">
-                                                    {item.messageContent}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <div className="px-2 mt-3">
-                                        <p className="text-brand-orange text-brand-info">
-                                            No one has answered this question.
-                                            <br />
-                                            Be the first!
-                                        </p>
-                                    </div>
-                                )}
-                            </InfiniteScroll>
+                {feedback && (
+                    <div style={{ borderTopWidth: "0px" }}>
+                        <div
+                            style={
+                                answers.length > 0
+                                    ? { borderTopWidth: "0px", borderBottomWidth: "1px", borderColor: "#EAE1DA" }
+                                    : { borderTopWidth: "0px", borderBottomWidth: "0px" }
+                            }
+                        >
+                            <p className="px-2 pb-3">{feedback.description}</p>
+                            <p className="px-2 text-brand-info text-brand-gray50 font-medium">{feedback.questions}</p>
                         </div>
-                    )
+
+                        {answers.length === 0 && <hr className="mt-4" />}
+
+                        <InfiniteScroll loadMore={fetchItems} hasMore={hasMoreItems} loader={loader}>
+                            {answers.length > 0 ? (
+                                answers.map((item) => (
+                                    <div
+                                        className="flex flex-row align-top border-b-[1px] border-brand-beige last:border-b-0"
+                                        key={item.messageId}
+                                    >
+                                        <div className="flex-col px-2 py-4">
+                                            <ConvoBubbles />
+                                        </div>
+
+                                        <div className="flex-col py-3 text-xs text-brand-brown">
+                                            <p className="px-4 pb-2 text-brand-3xs text-brand-gray50 font-medium">
+                                                aID {item.messageId ? item.messageId.toLocaleString() : "0"}
+                                            </p>
+                                            <p className="px-4 leading-[1.3rem] opacity-[70%]">{item.messageContent}</p>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="px-2 mt-3">
+                                    <p className="text-brand-orange text-brand-info">
+                                        No one has answered this question.
+                                        <br />
+                                        Be the first!
+                                    </p>
+                                </div>
+                            )}
+                        </InfiniteScroll>
+                    </div>
                 )}
             </div>
 
