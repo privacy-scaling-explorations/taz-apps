@@ -230,7 +230,7 @@ export default function Questions() {
                     className="rounded-full bg-brand-yellow ring-2 ring-brand-black py-3 px-4 drop-shadow text-brand-button font-medium text-brand-black hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-opacity-25"
                     onClick={openQuestionModal}
                 >
-                    Ask a question
+                    Add an event
                 </button>
             </div>
             {showTopBtn && (
@@ -246,6 +246,7 @@ export default function Questions() {
                 steps={steps}
                 fact={fact}
             />
+
             <QuestionModal
                 isOpen={questionModalIsOpen}
                 closeModal={closeQuestionModal}
@@ -264,19 +265,21 @@ export default function Questions() {
                 </Link>
                 <div className="px-6 pb-4">
                     <div className="flex flex-col w-full pt-5 pb-2">
-                        <h2 className="ml-2 text-2xl leading-5 font-extrabold">ASK AND ANSWER</h2>
-                        <h2 className="ml-2 text-2xl font-extrabold">QUESTIONS FREELY</h2>
+                        <h2 className="ml-2 text-2xl leading-5 font-extrabold">Check events</h2>
+                        <h2 className="ml-2 text-2xl font-extrabold">Create events</h2>
                     </div>
                     <p className="ml-2 text-brand-info text-brand-blue">
-                        Using your Semaphore ID, you can prove you're a member of the Devcon VI group without having to
-                        log in or identify yourself. Go ahead and ask those questions you don't want to admit you don't
-                        already know the answer to ;)
+                        Check on going events (Sample text)
+                    </p>
+                    <p className="ml-2 text-brand-info text-brand-blue">
+                        TODO: Add Filter mechanism
                     </p>
                 </div>
             </div>
 
             <div className="z-10 px-6 pb-8">
                 <div className="min-w-[200px] relative divide-y overflow-y-auto rounded-md border-2 border-brand-blue bg-white drop-shadow-lg">
+                    TODO: For each element, add more data about event (data, location, organized by, event type?)
                     <InfiniteScroll loadMore={fetchItems} hasMore={hasMoreItems} loader={loader}>
                         {questions.map((item) => (
                             <Link

@@ -8,7 +8,7 @@ dotenv.config({ path: "../../.env.local" })
 
 const tazMessageAbi = TazMessage.abi
 const tazMessageAddress = TAZMESSAGE_CONTRACT
-
+//TODO: Adapt this api to Semaphore 3.0 / Use Openzepelin Defender instead
 const provider = new ethers.providers.JsonRpcProvider(process.env.GOERLI_URL)
 
 export default async function handler(req, res) {

@@ -1,6 +1,8 @@
 import { Dialog, Transition } from "@headlessui/react"
 import { Fragment, useRef } from "react"
 
+// TODO: Change to Event Modal View
+// TODO: When Fetching Event Modal also fetch extra data from database
 export default function QuestionModalView({ isOpen, closeModal, handleQuestionChange, handleSubmit }) {
     const questionTextRef = useRef(null)
 
@@ -62,6 +64,8 @@ export default function QuestionModalView({ isOpen, closeModal, handleQuestionCh
                                 </div>
                                 <div className="p-4">
                                     <Dialog.Title as="h3" className="text-brand-brown mb-8">
+                                        TODO: Add more event input data
+
                                         Type your question
                                     </Dialog.Title>
                                     <textarea

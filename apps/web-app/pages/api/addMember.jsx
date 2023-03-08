@@ -6,7 +6,7 @@ import { GROUP_ID, TAZMESSAGE_CONTRACT } from "../../config/goerli.json"
 import { fetchWalletIndex } from "../../helpers/helpers"
 
 dotenv.config({ path: "../../.env.local" })
-
+// TODO: Adapt this api to Semaphore 3.0 / Use Openzepelin Defender instead
 export default async function handler(req, res) {
     const provider = new ethers.providers.JsonRpcProvider(process.env.GOERLI_URL)
     const tazMessageAbi = TazMessage.abi

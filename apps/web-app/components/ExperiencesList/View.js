@@ -79,31 +79,11 @@ function ExperiencesListComponent({ clearIdentity, urlIdentity }) {
                         <div className="text-brand-blue text-15px">Use your ID in TAZ Apps</div>
                         <div></div>
                     </div>
-                    <Link href="feedback">
-                        <div className="flex w-full flex-row items-center border-b-2 border-brand-blue py-3 px-4 cursor-pointer">
-                            <div className="w-[90%]">
-                                <p className="py-2 text-brand-h3 font-bold">Feedback</p>
-                                <p className="text-brand-info opacity-[70%]">Save your thoughts with the team</p>
-                            </div>
-                            <SelectorArrow />
-                        </div>
-                    </Link>
                     <Link href="questions">
                         <div className="flex w-full flex-row items-center border-b-2 border-brand-blue py-3 px-4 cursor-pointer">
                             <div className="w-[90%]">
-                                <p className="py-2 text-brand-h3 font-bold">Q&A</p>
-                                <p className="text-brand-info opacity-[70%]">Anonymously ask & answer questions</p>
-                            </div>
-                            <SelectorArrow />
-                        </div>
-                    </Link>
-                    <Link href="artGallery-page">
-                        <div className="flex w-full flex-row items-center py-3 px-4 cursor-pointer">
-                            <div className="w-[90%]">
-                                <p className="py-2 text-brand-h3 font-bold">Devcon VI Gallery</p>
-                                <p className="text-brand-info opacity-[70%]">
-                                    Draw on collaborative canvases and vote for your favorites
-                                </p>
+                                <p className="py-2 text-brand-h3 font-bold">Events</p>
+                                <p className="text-brand-info opacity-[70%]">Check out events</p>
                             </div>
                             <SelectorArrow />
                         </div>
@@ -116,35 +96,6 @@ function ExperiencesListComponent({ clearIdentity, urlIdentity }) {
                         <div className="text-15px text-brand-blue">Take your ID with you </div>
                         <div></div>
                     </div>
-                    <Link href={`https://www.zkitter.com/taz/#${urlIdentity}`} target="_blank" rel="noreferrer">
-                        <div className="flex w-full flex-row items-center border-b-2 border-brand-blue py-3 px-4 cursor-pointer">
-                            <div className="w-[90%]">
-                                <p className="py-2 text-brand-h3 font-bold">Zkitter</p>
-                                <p className="text-brand-info opacity-[70%]">Social media but make it anon</p>
-                            </div>
-                            <SelectorArrow />
-                        </div>
-                    </Link>
-                    <Link href={`https://www.heyanon.xyz/taz/#${urlIdentity}`} target="_blank" rel="noreferrer">
-                        <div className="flex w-full flex-row items-center py-3 px-4 cursor-pointer">
-                            <div className="w-[90%]">
-                                <p className="py-2 text-brand-h3 font-bold">heyanon!</p>
-                                <p className="text-brand-info opacity-[70%]">
-                                    Tweet anonymously to the @DevconAnon feed, from Personae Labs
-                                </p>
-                            </div>
-                            <SelectorArrow />
-                        </div>
-                    </Link>
-                </div>
-
-                <div className="relative flex flex-col items-center overflow-hidden mx-6 my-8 rounded-md border-2 border-brand-blue shadow-xl bg-white mt-20 mb-20">
-                    <div className="flex w-full justify-between bg-black text-15px text-brand-beige p-3">
-                        <div>💡</div>
-                        <div>FAQ</div>
-                        <div></div>
-                    </div>
-                    <Accordion />
                 </div>
 
                 <div className="relative flex items-left flex-col bg-black text-brand-yellow pt-8 mt-12">

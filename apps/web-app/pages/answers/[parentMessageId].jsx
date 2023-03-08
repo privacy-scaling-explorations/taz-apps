@@ -301,9 +301,15 @@ export default function Answers() {
                                 }
                             >
                                 <p className="px-2 text-brand-3xs text-brand-gray50 font-medium">
-                                    qID {question.messageId.toLocaleString()}
+                                    TODO: adapt new event page {question.messageId.toLocaleString()}
                                 </p>
-                                <p className="px-2 pb-4">{question.messageContent}</p>
+                                <p className="px-2 pb-4">Event Name </p>
+                                <p className="px-2 pb-4">Event Location </p>
+                                <p className="px-2 pb-4">Event Description </p>
+                                <p className="px-2 pb-4">Event Attendes </p>
+                                <button className="px-2 pb-4">Attend </button>
+                                <button className="px-2 pb-4">Favorite </button>
+                                <p className="px-2 pb-4">Comments Below </p>
                             </div>
 
                             <InfiniteScroll loadMore={fetchItems} hasMore={hasMoreItems} loader={loader}>
@@ -312,12 +318,13 @@ export default function Answers() {
                                         <div
                                             className="flex flex-row align-top border-b-[1px] border-brand-beige last:border-b-0"
                                             key={item.messageId}
+                                            
                                             // style={
                                             //   index + 1 === item.length
                                             //     ? { borderTopWidth: '0px', borderBottomWidth: '0px' }
                                             //     : { borderTopWidth: '0px', borderBottomWidth: '1px', borderColor: '#EAE1DA' }
                                             // }
-                                        >
+                                        >   
                                             <div className="flex-col px-2 py-4">
                                                 <ConvoBubbles />
                                             </div>
@@ -328,6 +335,8 @@ export default function Answers() {
                                                 </p>
                                                 <p className="px-4 leading-[1.3rem] opacity-[70%]">
                                                     {item.messageContent}
+                                                                                        TODO: adapt new event page {question.messageId.toLocaleString()}
+
                                                 </p>
                                             </div>
                                         </div>
