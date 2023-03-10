@@ -34,7 +34,7 @@ export default function Questions() {
     const [nextFetchSkip, setNextFetchSkip] = useState(0)
     const [newEvent, setNewEvent] = useState({
         name: "",
-        organizer: "",
+        organizers: [],
         startDate: new Date(),
         endDate: new Date(),
         startTime: "9:00",
@@ -62,6 +62,18 @@ export default function Questions() {
         const index = newEvent.tags.indexOf(tag)
         newEvent.tags.splice(index, 1)
         console.log("Tags after remove", newEvent.tags)
+    }
+
+    const addOrganizer = (organizer) => {
+        console.log("Organizer", organizer)
+        newEvent.organizers.push(organizer)
+        console.log("Organizerss after add", newEvent.organizers)
+    }
+
+    const removeOrganizer = (organizer) => {
+        const index = newEvent.organizers.indexOf(organizer)
+        newEvent.organizers.splice(index, 1)
+        console.log("Organizers after remove", newEvent.organizers)
     }
 
     const closeQuestionModal = () => {
@@ -99,20 +111,19 @@ export default function Questions() {
             name: newEvent.name,
             startDate: newEvent.startDate,
             endDate: newEvent.endDate,
-            organizer: newEvent.organizer,
+            organizers: newEvent.organizers,
             location: newEvent.location,
             startTime: newEvent.startTime,
             endTime: newEvent.endTime,
             tags: newEvent.tags,
             info: newEvent.info
         }
-        console.log("QUESTIONS PAGE | body", body)
 
         //send event to database
         try {
             await axios.post("/api/createEvent", body)
         } catch (error) {
-            alert("Your transaction has failed. Please try submitting again.")
+            alert("Event submission faild")
             internalCloseProcessingModal()
         }
 
@@ -123,6 +134,17 @@ export default function Questions() {
         ])
 
         setTimeout(internalCloseProcessingModal, 2000)
+        setNewEvent({
+            name: "",
+            organizers: [],
+            startDate: new Date(),
+            endDate: new Date(),
+            startTime: "9:00",
+            endTime: "9:00",
+            location: "",
+            tags: [],
+            info: ""
+        })
     }
 
     const rotateFact = () => {
@@ -233,6 +255,8 @@ export default function Questions() {
                 handleSubmit={handleSubmit}
                 addTag={addTag}
                 removeTag={removeTag}
+                addOrganizer={addOrganizer}
+                removeOrganizer={removeOrganizer}
             />
 
             {/* Begin Questions Board */}

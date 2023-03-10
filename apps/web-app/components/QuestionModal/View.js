@@ -1,5 +1,5 @@
 import { Dialog, Transition } from "@headlessui/react"
-import { Fragment, useRef, useState } from "react"
+import { Fragment, useRef, useState, useEffect } from "react"
 import DatePicker from "react-datepicker"
 
 import "react-datepicker/dist/react-datepicker.css"
@@ -13,13 +13,18 @@ export default function QuestionModalView({
     newEvent,
     setNewEvent,
     addTag,
-    removeTag
+    removeTag,
+    addOrganizer,
+    removeOrganizer
 }) {
     const questionTextRef = useRef(null)
 
     console.log("TAGS", newEvent.tags)
 
     const [tag, setTag] = useState("")
+    const [organizer, setOrganizer] = useState("")
+
+    useEffect(() => {}, [newEvent])
     return (
         <Transition appear show={isOpen} as={Fragment}>
             <Dialog as="div" initialFocus={questionTextRef} className="relative z-40" onClose={closeModal}>
@@ -76,7 +81,7 @@ export default function QuestionModalView({
                                         cancel
                                     </button>
                                 </div>
-                                <div className="p-4 h-[800px]">
+                                <div className="p-4">
                                     <Dialog.Title as="h3" className="text-brand-brown mb-8">
                                         Create New Event
                                     </Dialog.Title>
@@ -138,18 +143,6 @@ export default function QuestionModalView({
                                             </div>
                                         </div>
                                         <div className="flex flex-col gap-1 my-2">
-                                            <label htmlFor="organizers">Organizer</label>
-                                            <input
-                                                className="border border-2 p-1"
-                                                type="text"
-                                                id="name"
-                                                placeholder="organizer"
-                                                onChange={(e) =>
-                                                    setNewEvent({ ...newEvent, organizer: e.target.value })
-                                                }
-                                            />
-                                        </div>
-                                        <div className="flex flex-col gap-1 my-2">
                                             <label htmlFor="tags">Location</label>
                                             <input
                                                 className="border border-2 p-1"
@@ -160,7 +153,54 @@ export default function QuestionModalView({
                                             />
                                         </div>
                                         <div className="flex flex-col gap-1 my-2">
+                                            <label htmlFor="tags">Organizers</label>
+
+                                            <div className="flex flex-row gap-1">
+                                                <input
+                                                    id="organizers"
+                                                    type="text"
+                                                    className="border border-2 p-1"
+                                                    value={organizer}
+                                                    onChange={(e) => setOrganizer(e.target.value)}
+                                                />
+                                                <button
+                                                    className="bg-black text-white rounded border border-2 p-1"
+                                                    onClick={() => addOrganizer(organizer)}
+                                                >
+                                                    Add
+                                                </button>
+                                            </div>
+                                            <ul className="flex flex-row items-start">
+                                                {newEvent.organizers.map((organizer) => {
+                                                    return (
+                                                        <li className="mx-1 bg-gray-200 p-1 rounded">
+                                                            {organizer}{" "}
+                                                            <button onClick={() => removeOrganizer(organizer)}>
+                                                                X
+                                                            </button>
+                                                        </li>
+                                                    )
+                                                })}
+                                            </ul>
+                                        </div>
+                                        <div className="flex flex-col gap-1 my-2">
                                             <label htmlFor="tags">Tags</label>
+
+                                            <div className="flex flex-row gap-1">
+                                                <input
+                                                    id="tags"
+                                                    type="text"
+                                                    className="border border-2 p-1"
+                                                    value={tag}
+                                                    onChange={(e) => setTag(e.target.value)}
+                                                />
+                                                <button
+                                                    className="bg-black text-white rounded border border-2 p-1"
+                                                    onClick={() => addTag(tag)}
+                                                >
+                                                    Add
+                                                </button>
+                                            </div>
                                             <ul className="flex flex-row items-start">
                                                 {newEvent.tags.map((tag) => {
                                                     return (
@@ -170,14 +210,6 @@ export default function QuestionModalView({
                                                     )
                                                 })}
                                             </ul>
-                                            <input
-                                                id="tags"
-                                                type="text"
-                                                className="border border-2 p-1"
-                                                value={tag}
-                                                onChange={(e) => setTag(e.target.value)}
-                                            />
-                                            <button onClick={() => addTag(tag)}>Add</button>
                                         </div>
                                         <div className="my-2">
                                             <label htmlFor="info">Additional information</label>
