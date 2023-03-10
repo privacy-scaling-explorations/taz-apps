@@ -23,8 +23,8 @@ export default function QuestionModalView({ isOpen, closeModal, handleSubmit, ne
                     <div className="fixed inset-0 bg-black bg-opacity-25" />
                 </Transition.Child>
 
-                <div className="fixed inset-0 overflow-y-auto">
-                    <div className="flex min-h-full items-center justify-center p-4 text-center">
+                <div className="fixed inset-0 overflow-y-auto h-[900px]">
+                    <div className="flex h-[900px] items-center justify-center p-4 text-center">
                         <Transition.Child
                             as={Fragment}
                             enter="ease-out duration-300"
@@ -64,74 +64,96 @@ export default function QuestionModalView({ isOpen, closeModal, handleSubmit, ne
                                         cancel
                                     </button>
                                 </div>
-                                <div className="p-4 h-[500px]">
+                                <div className="p-4 h-[700px]">
                                     <Dialog.Title as="h3" className="text-brand-brown mb-8">
                                         Create New Event
                                     </Dialog.Title>
                                     <div className="flex flex-col">
-                                        <div className="flex flex-col gap-1">
+                                        <div className="flex flex-col gap-1 my-1">
                                             <label htmlFor="name">Event Name</label>
                                             <input
+                                                className="border border-2 p-1"
                                                 type="text"
                                                 id="name"
                                                 placeholder="event name"
                                                 onChange={(e) => setNewEvent({ ...newEvent, name: e.target.value })}
                                             />
                                         </div>
-                                        <div>
-                                            <label>Start Date</label>
-                                            <DatePicker
-                                                selected={newEvent.startDate}
-                                                onChange={(date) => setNewEvent({ ...newEvent, startDate: date })}
-                                            />
+                                        <div className="flex fex-row my-2">
+                                            <div>
+                                                <label>Event Start</label>
+                                                <DatePicker
+                                                    className="border border-2 p-1"
+                                                    selected={newEvent.startDate}
+                                                    onChange={(date) => setNewEvent({ ...newEvent, startDate: date })}
+                                                />
+                                            </div>
+                                            <div>
+                                                <label htmlFor="time">Time</label>
+                                                <input
+                                                    className="border border-2 p-1"
+                                                    type="time"
+                                                    id="startTime"
+                                                    name="startTime"
+                                                    value={newEvent.startTime}
+                                                    onChange={(e) => setNewEvent({ ...newEvent, startTime: e.target.value })}
+                                                />
+                                            </div>
                                         </div>
-                                        <div>
-                                            <label htmlFor="time">Start Time</label>
-                                            <input
-                                                type="time"
-                                                id="time"
-                                                name="appt"
-                                                min="09:00"
-                                                max="18:00"
-                                                onChange={(e) => setNewEvent({ ...newEvent, time: e.target.value })}
-                                            />
+                                        <div className="flex fex-row my-2">
+                                            <div>
+                                                <label>Event End</label>
+                                                <DatePicker
+                                                    className="border border-2 p-1"
+                                                    selected={newEvent.endDate}
+                                                    onChange={(date) => setNewEvent({ ...newEvent, endDate: date })}
+                                                />
+                                            </div>
+                                            <div>
+                                                <label htmlFor="time">Time</label>
+                                                <input
+                                                    className="border border-2 p-1"
+                                                    type="time"
+                                                    id="endTime"
+                                                    name="endTime"
+                                                    value={newEvent.endTime}
+                                                    onChange={(e) => setNewEvent({ ...newEvent, endTime: e.target.value })}
+                                                />
+                                            </div>
                                         </div>
-                                        <div>
-                                            <label>End Date</label>
-                                            <DatePicker
-                                                selected={newEvent.endDate}
-                                                onChange={(date) => setNewEvent({ ...newEvent, endDate: date })}
-                                            />
-                                        </div>
-                                        <div>
-                                            <label htmlFor="time">End Time</label>
-                                            <input
-                                                type="time"
-                                                id="time"
-                                                name="appt"
-                                                min="09:00"
-                                                max="18:00"
-                                                onChange={(e) => setNewEvent({ ...newEvent, time: e.target.value })}
-                                            />
-                                        </div>
-                                        <div className="flex flex-col gap-1">
+                                        <div className="flex flex-col gap-1 my-2">
                                             <label htmlFor="organizers">Organizer</label>
                                             <input
+                                                className="border border-2 p-1"
                                                 type="text"
                                                 id="name"
-                                                placeholder="organizers"
+                                                placeholder="organizer"
                                                 onChange={(e) =>
                                                     setNewEvent({ ...newEvent, organizer: e.target.value })
                                                 }
                                             />
                                         </div>
-                                        <div className="flex flex-col gap-1">
+                                        <div className="flex flex-col gap-1 my-2">
                                             <label htmlFor="tags">Location</label>
                                             <input
+                                                className="border border-2 p-1"
                                                 type="text"
                                                 id="location"
                                                 placeholder="location"
                                                 onChange={(e) => setNewEvent({ ...newEvent, location: e.target.value })}
+                                            />
+                                        </div>
+                                        <div className="my-2">
+                                            <label htmlFor="info">Additional information</label>
+                                            <textarea
+                                                className="border border-2 p-1"
+                                                placeholder="Additional info"
+                                                name="info"
+                                                id="info"
+                                                cols="30"
+                                                rows="5"
+                                                value={newEvent.info}
+                                                onChange={(e) => setNewEvent({ ...newEvent, info: e.target.value })}
                                             />
                                         </div>
                                         <button

@@ -37,10 +37,11 @@ export default function Questions() {
         organizer: "",
         startDate: new Date(),
         endDate: new Date(),
-        startTime: "",
-        endTime: "",
+        startTime: "9:00",
+        endTime: "9:00",
         location: "",
-        tags: []
+        tags: [],
+        info: ""
     })
     const [questions, setQuestions] = useState([])
     const [test, setTest] = useState(true)
@@ -88,8 +89,10 @@ export default function Questions() {
             endDate: newEvent.endDate,
             organizer: newEvent.organizer,
             location: newEvent.location,
-            time: newEvent.time,
-            tags: newEvent.tags
+            startTime: newEvent.startTime,
+            endTime: newEvent.endTime,
+            tags: newEvent.tags,
+            info: newEvent.info
         }
         console.log("QUESTIONS PAGE | body", body)
 

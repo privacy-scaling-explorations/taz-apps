@@ -6,7 +6,7 @@ const supabase = createClient(supabaseUrl, supabaseKey)
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
-        const { name, startDate, endDate, location, time, organizer, tags } = req.body
+        const { name, startDate, endDate, location, startTime, endTime, organizer, tags, info } = req.body
         console.log(req.body)
         const response = await supabase
             .from("events")
@@ -15,9 +15,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 startDate: startDate,
                 endDate: endDate,
                 location: location,
-                time: time,
+                startTime: startTime,
+                endTime: endTime,
                 organizer: organizer,
-                tags: tags
+                tags: tags,
+                info: info
             })
         console.log("Response: ", response)
 
