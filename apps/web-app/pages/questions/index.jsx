@@ -1,38 +1,18 @@
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect } from "react"
 import axios from "axios"
-import { ethers } from "ethers"
 import Link from "next/link"
-import InfiniteScroll from "react-infinite-scroller"
 import QuestionModal from "../../components/QuestionModal"
-import { useGenerateProof } from "../../hooks/useGenerateProof"
-import ProcessingModal from "../../components/ProcessingModal"
-import { Subgraphs } from "../../helpers/subgraphs"
 import BackToTopArrow from "../../components/svgElements/BackToTopArrow"
 import YellowCircle from "../../components/svgElements/YellowCircle"
 import Ellipse from "../../components/svgElements/Ellipse"
 import RedCircle from "../../components/svgElements/RedCircle"
-import SelectorArrow from "../../components/ArrowNavigators/SelectorArrow"
 import BackTAZ from "../../components/ArrowNavigators/BackTAZ"
 import Footer from "../../components/Footer"
-import Loading from "../../components/Loading"
 import Calendar from "../../components/Calendar"
-
-const {
-    API_REQUEST_TIMEOUT,
-    FACT_ROTATION_INTERVAL,
-    CHAINED_MODAL_DELAY,
-    ITEMS_PER_FETCH
-} = require("../../config/goerli.json")
-const { FACTS } = require("../../data/facts.json")
 
 export default function Questions() {
     const [questionModalIsOpen, setQuestionModalIsOpen] = useState(false)
-    const [processingModalIsOpen, setProcessingModalIsOpen] = useState(false)
-    const [steps, setSteps] = useState([])
-    const [fact, setFact] = useState(FACTS[Math.floor(Math.random() * FACTS.length)])
     const [showTopBtn, setShowTopBtn] = useState(false)
-    const [fetching, setFetching] = useState(false)
-    const [nextFetchSkip, setNextFetchSkip] = useState(0)
     const [newEvent, setNewEvent] = useState({
         name: "",
         organizers: [],
@@ -44,14 +24,21 @@ export default function Questions() {
         tags: [],
         info: ""
     })
-    const [questions, setQuestions] = useState([])
-    const [test, setTest] = useState(true)
-    const hasMoreItems = nextFetchSkip > -1
-    const loader = (
-        <div className="p-12 flex justify-center">
-            <Loading size="xl" />
-        </div>
-    )
+    const [events, setEvents] = useState([])
+
+    const fetchEvents = async () => {
+        try {
+            const response = await axios.get("/api/fetchEvents")
+            console.log("response frontend:", response.data)
+            setEvents(response.data)
+        } catch (error) {
+            console.log("fetching events failed", error)
+        }
+    }
+
+    useEffect(() => {
+        fetchEvents()
+    }, [])
 
     const addTag = (tag) => {
         console.log("TAG", tag)
@@ -85,29 +72,10 @@ export default function Questions() {
         setQuestionModalIsOpen(true)
     }
 
-    const internalCloseProcessingModal = () => {
-        setProcessingModalIsOpen(false)
-    }
-
-    const closeProcessingModal = () => {
-        setProcessingModalIsOpen(true)
-    }
-
-    const openProcessingModal = () => {
-        setProcessingModalIsOpen(true)
-    }
-
-    const handleEventChange = (event) => {
-        setNewEvent(event.target.value)
-    }
-
     const handleSubmit = async (event) => {
         event.preventDefault()
 
         closeQuestionModal()
-        setTimeout(openProcessingModal, CHAINED_MODAL_DELAY)
-
-        //body will be event data
         const body = {
             name: newEvent.name,
             startDate: newEvent.startDate,
@@ -120,7 +88,6 @@ export default function Questions() {
             info: newEvent.info
         }
 
-        //send event to database
         try {
             await axios.post("/api/createEvent", body)
         } catch (error) {
@@ -128,13 +95,6 @@ export default function Questions() {
             internalCloseProcessingModal()
         }
 
-        setSteps([
-            { status: "complete", text: "Generated zero knowledge proof" },
-            { status: "complete", text: "Submitted transaction with proof and question" },
-            { status: "processing", text: "Updating questions from on-chain events" }
-        ])
-
-        setTimeout(internalCloseProcessingModal, 2000)
         setNewEvent({
             name: "",
             organizers: [],
@@ -148,13 +108,8 @@ export default function Questions() {
         })
     }
 
-    const rotateFact = () => {
-        setFact(FACTS[FACTS.indexOf(fact) + 1 === FACTS.length ? 0 : FACTS.indexOf(fact) + 1])
-    }
-
     useEffect(() => {
         // Set up scroll listening for scroll to top button
-        console.log("new event", newEvent)
         const windowHeight = window.outerHeight
         window.addEventListener("scroll", () => {
             if (window.scrollY > windowHeight) {
@@ -171,45 +126,6 @@ export default function Questions() {
             behavior: "smooth"
         })
     }
-
-    const fetchItems = useCallback(async () => {
-        if (fetching) return
-
-        setFetching(true)
-
-        try {
-            const subgraphs = new Subgraphs()
-            const items = await subgraphs.getMessages(0, ITEMS_PER_FETCH, nextFetchSkip)
-
-            // Check local storage for any items cached pending tx finalization
-            if (nextFetchSkip === 0) {
-                const savedItem = JSON.parse(window.localStorage.getItem("savedQuestion"))
-                if (savedItem) {
-                    const found = items.some((item) => savedItem && item.messageContent === savedItem.messageContent)
-                    if (found) {
-                        window.localStorage.removeItem("savedQuestion")
-                    } else {
-                        items.unshift(savedItem)
-                    }
-                }
-            }
-
-            setQuestions(questions.concat(items))
-
-            if (items.length === ITEMS_PER_FETCH) {
-                setNextFetchSkip(nextFetchSkip + items.length)
-            } else {
-                setNextFetchSkip(-1) // -1 indicates fetching is complete
-            }
-
-            // console.log('QUESTIONS PAGE | fetched questions', items)
-        } catch (err) {
-            setNextFetchSkip(-1)
-            console.error("Error fetching data from subgraph: ", err)
-        } finally {
-            setFetching(false)
-        }
-    }, [questions, fetching, nextFetchSkip])
 
     return (
         <div className="min-h-[700px] relative overflow-hidden h-auto flex flex-col">
@@ -239,17 +155,9 @@ export default function Questions() {
                     </button>
                 </div>
             )}
-            <ProcessingModal
-                isOpen={processingModalIsOpen}
-                closeModal={closeProcessingModal}
-                steps={steps}
-                fact={fact}
-                test={test}
-            />
 
             <QuestionModal
                 isOpen={questionModalIsOpen}
-                test={test}
                 closeModal={closeQuestionModal}
                 setNewEvent={setNewEvent}
                 newEvent={newEvent}
@@ -259,8 +167,6 @@ export default function Questions() {
                 addOrganizer={addOrganizer}
                 removeOrganizer={removeOrganizer}
             />
-
-            {/* Begin Questions Board */}
 
             <div className="z-10 ">
                 <Link href="/experiences-page">
@@ -282,7 +188,7 @@ export default function Questions() {
             <div className="z-10 px-6 pb-8">
                 <div className="min-w-[200px] relative divide-y overflow-y-auto rounded-md border-2 border-brand-blue bg-white drop-shadow-lg">
                     TODO: For each element, add more data about event (data, location, organized by, event type?)
-                    <Calendar />
+                    <Calendar events={events} />
                     {/* <InfiniteScroll loadMore={fetchItems} hasMore={hasMoreItems} loader={loader}>
                         {questions.map((item) => (
                             <Link
@@ -313,12 +219,3 @@ export default function Questions() {
         </div>
     )
 }
-
-/* export async function getServerSideProps() {
-const subgraphs = new Subgraphs()
-const questions = await subgraphs.getMessages(0)
-// console.log('QUESTIONS PAGE | fetched questions', questions)
-return {
-    props: { questionsProp: questions }
-}
-} */
