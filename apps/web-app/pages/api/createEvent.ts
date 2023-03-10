@@ -12,11 +12,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             .from("events")
             .insert({
                 name: name,
-                startDate: startDate,
-                endDate: endDate,
+                start_date: startDate,
+                end_date: endDate,
                 location: location,
-                startTime: startTime,
-                endTime: endTime,
+                start_time: startTime,
+                end_time: endTime,
                 organizers: organizers,
                 tags: tags,
                 info: info
