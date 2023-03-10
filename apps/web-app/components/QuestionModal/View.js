@@ -1,10 +1,47 @@
 import { Dialog, Transition } from "@headlessui/react"
-import { Fragment, useRef } from "react"
+import { Fragment, useRef, useState, useEffect } from "react"
+import DatePicker from "react-datepicker"
+
+import "react-datepicker/dist/react-datepicker.css"
 
 // TODO: Change to Event Modal View
 // TODO: When Fetching Event Modal also fetch extra data from database
-export default function QuestionModalView({ isOpen, closeModal, handleQuestionChange, handleSubmit }) {
+export default function QuestionModalView({
+    isOpen,
+    closeModal,
+    handleSubmit,
+    newEvent,
+    setNewEvent,
+    addTag,
+    removeTag,
+    addOrganizer,
+    removeOrganizer
+}) {
     const questionTextRef = useRef(null)
+
+    const [tag, setTag] = useState("")
+    const [organizer, setOrganizer] = useState("")
+    const [rerender, setRerender] = useState(true)
+
+    const handleAddTag = (tag) => {
+        addTag(tag)
+        setTag("")
+    }
+
+    const handleRemoveTag = (tag) => {
+        removeTag(tag)
+        setRerender(!rerender)
+    }
+
+    const handleAddOrganizer = (organizer) => {
+        addOrganizer(organizer)
+        setOrganizer("")
+    }
+
+    const handleRemoveOrganizer = (organizer) => {
+        removeOrganizer(organizer)
+        setRerender(!rerender)
+    }
 
     return (
         <Transition appear show={isOpen} as={Fragment}>
@@ -21,8 +58,8 @@ export default function QuestionModalView({ isOpen, closeModal, handleQuestionCh
                     <div className="fixed inset-0 bg-black bg-opacity-25" />
                 </Transition.Child>
 
-                <div className="fixed inset-0 overflow-y-auto">
-                    <div className="flex min-h-full items-center justify-center p-4 text-center">
+                <div className="fixed inset-0 overflow-y-auto h-[900px]">
+                    <div className="flex h-[900px] items-center justify-center p-4 text-center">
                         <Transition.Child
                             as={Fragment}
                             enter="ease-out duration-300"
@@ -64,26 +101,154 @@ export default function QuestionModalView({ isOpen, closeModal, handleQuestionCh
                                 </div>
                                 <div className="p-4">
                                     <Dialog.Title as="h3" className="text-brand-brown mb-8">
-                                        TODO: Add more event input data
-
-                                        Type your question
+                                        Create New Event
                                     </Dialog.Title>
-                                    <textarea
-                                        ref={questionTextRef}
-                                        onChange={handleQuestionChange}
-                                        rows={8}
-                                        maxLength={280}
-                                        className="w-full p-4 border-2 mb-1 border-brand-blue text-brand-black rounded-lg"
-                                        defaultValue=""
-                                    />
-                                    {/* <p className="mb-7 flex justify-center text-xs text-brand-red">Must be less than 280 characters</p> */}
-                                    <div className="flex justify-center mb-3 mt-7">
+                                    <div className="flex flex-col">
+                                        <div className="flex flex-col gap-1 my-1">
+                                            <label htmlFor="name">Event Name</label>
+                                            <input
+                                                className="border border-2 p-1"
+                                                type="text"
+                                                id="name"
+                                                placeholder="event name"
+                                                onChange={(e) => setNewEvent({ ...newEvent, name: e.target.value })}
+                                            />
+                                        </div>
+                                        <div className="flex justify-start gap-4 my-2">
+                                            <div className="w-[200px]">
+                                                <label>Event Start</label>
+                                                <DatePicker
+                                                    className="border border-2 p-1 w-[200px]"
+                                                    selected={newEvent.startDate}
+                                                    onChange={(date) => setNewEvent({ ...newEvent, startDate: date })}
+                                                />
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <label htmlFor="startTime">Time</label>
+                                                <input
+                                                    className="border border-2 p-1"
+                                                    type="time"
+                                                    id="startTime"
+                                                    name="startTime"
+                                                    value={newEvent.startTime}
+                                                    onChange={(e) =>
+                                                        setNewEvent({ ...newEvent, startTime: e.target.value })
+                                                    }
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="flex justify-start gap-4 my-2">
+                                            <div className="w-[200px]">
+                                                <label>Event End</label>
+                                                <DatePicker
+                                                    className="border border-2 p-1 w-[200px]"
+                                                    selected={newEvent.endDate}
+                                                    onChange={(date) => setNewEvent({ ...newEvent, endDate: date })}
+                                                />
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <label htmlFor="endTime">Time</label>
+                                                <input
+                                                    className="border border-2 p-1"
+                                                    type="time"
+                                                    id="endTime"
+                                                    name="endTime"
+                                                    value={newEvent.endTime}
+                                                    onChange={(e) =>
+                                                        setNewEvent({ ...newEvent, endTime: e.target.value })
+                                                    }
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="flex flex-col gap-1 my-2">
+                                            <label htmlFor="tags">Location</label>
+                                            <input
+                                                className="border border-2 p-1"
+                                                type="text"
+                                                id="location"
+                                                placeholder="location"
+                                                onChange={(e) => setNewEvent({ ...newEvent, location: e.target.value })}
+                                            />
+                                        </div>
+                                        <div className="flex flex-col gap-1 my-2 w-full">
+                                            <label htmlFor="tags">Organizers</label>
+                                            <div className="flex flex-row gap-4">
+                                                <input
+                                                    id="organizers"
+                                                    type="text"
+                                                    className="border border-2 p-1 w-full"
+                                                    placeholder="add organizer"
+                                                    value={organizer}
+                                                    onChange={(e) => setOrganizer(e.target.value)}
+                                                />
+                                                <button
+                                                    className="bg-black text-white rounded border border-2 py-1 px-2"
+                                                    onClick={() => handleAddOrganizer(organizer)}
+                                                >
+                                                    Add
+                                                </button>
+                                            </div>
+                                            <ul className="flex flex-row items-start">
+                                                {newEvent.organizers.map((organizer) => {
+                                                    return (
+                                                        <li className="mx-1 bg-gray-200 p-1 rounded text-sm">
+                                                            {organizer}{" "}
+                                                            <button onClick={() => handleRemoveOrganizer(organizer)}>
+                                                                X
+                                                            </button>
+                                                        </li>
+                                                    )
+                                                })}
+                                            </ul>
+                                        </div>
+                                        <div className="flex flex-col gap-1 my-2 w-full">
+                                            <label htmlFor="tags">Tags</label>
+
+                                            <div className="flex flex-row gap-4">
+                                                <input
+                                                    id="tags"
+                                                    type="text"
+                                                    className="border border-2 p-1 w-full"
+                                                    placeholder="add tag"
+                                                    value={tag}
+                                                    onChange={(e) => setTag(e.target.value)}
+                                                />
+                                                <button
+                                                    className="bg-black text-white rounded border border-2 py-1 px-2"
+                                                    onClick={() => handleAddTag(tag)}
+                                                >
+                                                    Add
+                                                </button>
+                                            </div>
+                                            <ul className="flex flex-row items-start">
+                                                {newEvent.tags.map((tag) => {
+                                                    return (
+                                                        <li className="mx-1 bg-gray-200 p-1 rounded text-sm">
+                                                            {tag}{" "}
+                                                            <button onClick={() => handleRemoveTag(tag)}>X</button>
+                                                        </li>
+                                                    )
+                                                })}
+                                            </ul>
+                                        </div>
+                                        <div className="my-2">
+                                            <label htmlFor="info">Additional Information</label>
+                                            <textarea
+                                                className="border border-2 p-1 w-full"
+                                                placeholder="Additional info"
+                                                name="info"
+                                                id="info"
+                                                rows="5"
+                                                value={newEvent.info}
+                                                onChange={(e) => setNewEvent({ ...newEvent, info: e.target.value })}
+                                            />
+                                        </div>
                                         <button
                                             type="button"
                                             className="inline-flex justify-center rounded-full border border-transparent bg-brand-black px-12 py-1 text-sm font-medium text-brand-beige hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-beige focus-visible:ring-offset-2"
                                             onClick={handleSubmit}
                                         >
-                                            Ask anonymously
+                                            Create Event
                                         </button>
                                     </div>
                                 </div>

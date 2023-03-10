@@ -26,23 +26,56 @@ const {
 const { FACTS } = require("../../data/facts.json")
 
 export default function Questions() {
-    const [generateFullProof] = useGenerateProof()
     const [questionModalIsOpen, setQuestionModalIsOpen] = useState(false)
     const [processingModalIsOpen, setProcessingModalIsOpen] = useState(false)
-    const [question, setQuestion] = useState()
-    const [identityKey, setIdentityKey] = useState("")
-    const [questions, setQuestions] = useState([])
     const [steps, setSteps] = useState([])
     const [fact, setFact] = useState(FACTS[Math.floor(Math.random() * FACTS.length)])
     const [showTopBtn, setShowTopBtn] = useState(false)
     const [fetching, setFetching] = useState(false)
     const [nextFetchSkip, setNextFetchSkip] = useState(0)
+    const [newEvent, setNewEvent] = useState({
+        name: "",
+        organizers: [],
+        startDate: new Date(),
+        endDate: new Date(),
+        startTime: "09:00",
+        endTime: "18:00",
+        location: "",
+        tags: [],
+        info: ""
+    })
+    const [questions, setQuestions] = useState([])
+    const [test, setTest] = useState(true)
     const hasMoreItems = nextFetchSkip > -1
     const loader = (
         <div className="p-12 flex justify-center">
             <Loading size="xl" />
         </div>
     )
+
+    const addTag = (tag) => {
+        console.log("TAG", tag)
+        newEvent.tags.push(tag)
+        console.log("TAGS AFTER ADD", newEvent.tags)
+    }
+
+    const removeTag = (tag) => {
+        const index = newEvent.tags.indexOf(tag)
+        newEvent.tags.splice(index, 1)
+        console.log("Tags after remove", newEvent.tags)
+    }
+
+    const addOrganizer = (organizer) => {
+        console.log("Organizer", organizer)
+        newEvent.organizers.push(organizer)
+        console.log("Organizerss after add", newEvent.organizers)
+    }
+
+    const removeOrganizer = (organizer) => {
+        const index = newEvent.organizers.indexOf(organizer)
+        newEvent.organizers.splice(index, 1)
+        console.log("Organizers after remove", newEvent.organizers)
+    }
 
     const closeQuestionModal = () => {
         setQuestionModalIsOpen(false)
@@ -64,8 +97,8 @@ export default function Questions() {
         setProcessingModalIsOpen(true)
     }
 
-    const handleQuestionChange = (event) => {
-        setQuestion(event.target.value)
+    const handleEventChange = (event) => {
+        setNewEvent(event.target.value)
     }
 
     const handleSubmit = async (event) => {
@@ -74,61 +107,24 @@ export default function Questions() {
         closeQuestionModal()
         setTimeout(openProcessingModal, CHAINED_MODAL_DELAY)
 
-        setSteps([
-            { status: "processing", text: "Generating zero knowledge proof" },
-            { status: "queued", text: "Submit transaction with proof and question" },
-            { status: "queued", text: "Update questions from on-chain events" }
-        ])
-
-        const messageContent = question
-        const signal = ethers.utils.id(messageContent).slice(35)
-        const { solidityProof, nullifierHash, externalNullifier, merkleTreeRoot, groupId } = await generateFullProof(
-            identityKey,
-            signal
-        )
-
-        setSteps([
-            { status: "complete", text: "Generated zero knowledge proof" },
-            { status: "processing", text: "Submitting transaction with proof and question" },
-            { status: "queued", text: "Update questions from on-chain events" }
-        ])
-
+        //body will be event data
         const body = {
-            parentMessageId: 0,
-            messageContent,
-            merkleTreeRoot,
-            groupId,
-            signal,
-            nullifierHash,
-            externalNullifier,
-            solidityProof
+            name: newEvent.name,
+            startDate: newEvent.startDate,
+            endDate: newEvent.endDate,
+            organizers: newEvent.organizers,
+            location: newEvent.location,
+            startTime: newEvent.startTime,
+            endTime: newEvent.endTime,
+            tags: newEvent.tags,
+            info: newEvent.info
         }
-        console.log("QUESTIONS PAGE | body", body)
+
+        //send event to database
         try {
-            const postResponse = await axios.post("/api/postMessage", body, {
-                timeout: API_REQUEST_TIMEOUT
-            })
-            if (postResponse.status === 201) {
-                const newQuestion = {
-                    messageId: 0,
-                    txHash: postResponse.data.hash,
-                    messageContent
-                }
-                const updatedQuestions = [newQuestion].concat(questions)
-                setQuestions(updatedQuestions)
-
-                console.log("QUESTIONS PAGE | updatedQuestions", updatedQuestions)
-                console.log("QUESTIONS PAGE | postResponse.status", postResponse.status)
-                console.log("QUESTIONS PAGE | postResponse.data.hash", postResponse.data.hash)
-
-                // Cache question while tx completes
-                window.localStorage.setItem("savedQuestion", JSON.stringify(newQuestion))
-            } else if (postResponse.status === 203) {
-                alert("Your transaction has failed. Please try submitting again.")
-                internalCloseProcessingModal()
-            }
+            await axios.post("/api/createEvent", body)
         } catch (error) {
-            alert("Your transaction has failed. Please try submitting again.")
+            alert("Event submission faild")
             internalCloseProcessingModal()
         }
 
@@ -139,6 +135,17 @@ export default function Questions() {
         ])
 
         setTimeout(internalCloseProcessingModal, 2000)
+        setNewEvent({
+            name: "",
+            organizers: [],
+            startDate: new Date(),
+            endDate: new Date(),
+            startTime: "09:00",
+            endTime: "18:00",
+            location: "",
+            tags: [],
+            info: ""
+        })
     }
 
     const rotateFact = () => {
@@ -146,13 +153,8 @@ export default function Questions() {
     }
 
     useEffect(() => {
-        let identityKeyTemp = ""
-        if (identityKeyTemp === "") {
-            identityKeyTemp = window.localStorage.getItem("identity")
-            setIdentityKey(identityKeyTemp)
-        }
-
         // Set up scroll listening for scroll to top button
+        console.log("new event", newEvent)
         const windowHeight = window.outerHeight
         window.addEventListener("scroll", () => {
             if (window.scrollY > windowHeight) {
@@ -162,10 +164,6 @@ export default function Questions() {
             }
         })
     }, [])
-
-    useEffect(() => {
-        setTimeout(rotateFact, FACT_ROTATION_INTERVAL)
-    }, [fact])
 
     const goToTop = () => {
         window.scrollTo({
@@ -246,13 +244,20 @@ export default function Questions() {
                 closeModal={closeProcessingModal}
                 steps={steps}
                 fact={fact}
+                test={test}
             />
 
             <QuestionModal
                 isOpen={questionModalIsOpen}
+                test={test}
                 closeModal={closeQuestionModal}
-                handleQuestionChange={handleQuestionChange}
+                setNewEvent={setNewEvent}
+                newEvent={newEvent}
                 handleSubmit={handleSubmit}
+                addTag={addTag}
+                removeTag={removeTag}
+                addOrganizer={addOrganizer}
+                removeOrganizer={removeOrganizer}
             />
 
             {/* Begin Questions Board */}
