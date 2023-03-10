@@ -140,8 +140,8 @@ export default function Questions() {
             organizers: [],
             startDate: new Date(),
             endDate: new Date(),
-            startTime: "9:00",
-            endTime: "9:00",
+            startTime: "09:00",
+            endTime: "18:00",
             location: "",
             tags: [],
             info: ""

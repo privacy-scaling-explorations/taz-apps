@@ -232,7 +232,7 @@ export default function QuestionModalView({
                                             </ul>
                                         </div>
                                         <div className="my-2">
-                                            <label htmlFor="info">Additional information</label>
+                                            <label htmlFor="info">Additional Information</label>
                                             <textarea
                                                 className="border border-2 p-1 w-full"
                                                 placeholder="Additional info"
@@ -248,7 +248,7 @@ export default function QuestionModalView({
                                             className="inline-flex justify-center rounded-full border border-transparent bg-brand-black px-12 py-1 text-sm font-medium text-brand-beige hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-beige focus-visible:ring-offset-2"
                                             onClick={handleSubmit}
                                         >
-                                            Ask anonymously
+                                            Create Event
                                         </button>
                                     </div>
                                 </div>
