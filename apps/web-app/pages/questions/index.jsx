@@ -35,9 +35,10 @@ export default function Questions() {
     const [newEvent, setNewEvent] = useState({
         name: "",
         organizer: "",
-        startDate: "",
-        endDate: "",
-        time: "",
+        startDate: new Date(),
+        endDate: new Date(),
+        startTime: "",
+        endTime: "",
         location: "",
         tags: []
     })

@@ -1,11 +1,13 @@
 import { Dialog, Transition } from "@headlessui/react"
 import { Fragment, useRef } from "react"
+import DatePicker from "react-datepicker"
+
+import "react-datepicker/dist/react-datepicker.css"
 
 // TODO: Change to Event Modal View
 // TODO: When Fetching Event Modal also fetch extra data from database
-export default function QuestionModalView({ isOpen, closeModal, handleQuestionChange, handleSubmit }) {
+export default function QuestionModalView({ isOpen, closeModal, handleSubmit, newEvent, setNewEvent }) {
     const questionTextRef = useRef(null)
-
     return (
         <Transition appear show={isOpen} as={Fragment}>
             <Dialog as="div" initialFocus={questionTextRef} className="relative z-40" onClose={closeModal}>
@@ -62,22 +64,76 @@ export default function QuestionModalView({ isOpen, closeModal, handleQuestionCh
                                         cancel
                                     </button>
                                 </div>
-                                <div className="p-4">
+                                <div className="p-4 h-[500px]">
                                     <Dialog.Title as="h3" className="text-brand-brown mb-8">
-                                        TODO: Add more event input data
-
-                                        Type your question
+                                        Create New Event
                                     </Dialog.Title>
-                                    <textarea
-                                        ref={questionTextRef}
-                                        onChange={handleQuestionChange}
-                                        rows={8}
-                                        maxLength={280}
-                                        className="w-full p-4 border-2 mb-1 border-brand-blue text-brand-black rounded-lg"
-                                        defaultValue=""
-                                    />
-                                    {/* <p className="mb-7 flex justify-center text-xs text-brand-red">Must be less than 280 characters</p> */}
-                                    <div className="flex justify-center mb-3 mt-7">
+                                    <div className="flex flex-col">
+                                        <div className="flex flex-col gap-1">
+                                            <label htmlFor="name">Event Name</label>
+                                            <input
+                                                type="text"
+                                                id="name"
+                                                placeholder="event name"
+                                                onChange={(e) => setNewEvent({ ...newEvent, name: e.target.value })}
+                                            />
+                                        </div>
+                                        <div>
+                                            <label>Start Date</label>
+                                            <DatePicker
+                                                selected={newEvent.startDate}
+                                                onChange={(date) => setNewEvent({ ...newEvent, startDate: date })}
+                                            />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="time">Start Time</label>
+                                            <input
+                                                type="time"
+                                                id="time"
+                                                name="appt"
+                                                min="09:00"
+                                                max="18:00"
+                                                onChange={(e) => setNewEvent({ ...newEvent, time: e.target.value })}
+                                            />
+                                        </div>
+                                        <div>
+                                            <label>End Date</label>
+                                            <DatePicker
+                                                selected={newEvent.endDate}
+                                                onChange={(date) => setNewEvent({ ...newEvent, endDate: date })}
+                                            />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="time">End Time</label>
+                                            <input
+                                                type="time"
+                                                id="time"
+                                                name="appt"
+                                                min="09:00"
+                                                max="18:00"
+                                                onChange={(e) => setNewEvent({ ...newEvent, time: e.target.value })}
+                                            />
+                                        </div>
+                                        <div className="flex flex-col gap-1">
+                                            <label htmlFor="organizers">Organizer</label>
+                                            <input
+                                                type="text"
+                                                id="name"
+                                                placeholder="organizers"
+                                                onChange={(e) =>
+                                                    setNewEvent({ ...newEvent, organizer: e.target.value })
+                                                }
+                                            />
+                                        </div>
+                                        <div className="flex flex-col gap-1">
+                                            <label htmlFor="tags">Location</label>
+                                            <input
+                                                type="text"
+                                                id="location"
+                                                placeholder="location"
+                                                onChange={(e) => setNewEvent({ ...newEvent, location: e.target.value })}
+                                            />
+                                        </div>
                                         <button
                                             type="button"
                                             className="inline-flex justify-center rounded-full border border-transparent bg-brand-black px-12 py-1 text-sm font-medium text-brand-beige hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-beige focus-visible:ring-offset-2"
