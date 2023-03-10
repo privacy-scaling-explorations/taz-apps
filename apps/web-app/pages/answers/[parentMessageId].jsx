@@ -26,6 +26,7 @@ const {
 } = require("../../config/goerli.json")
 const { FACTS } = require("../../data/facts.json")
 
+
 export default function Answers() {
     const [generateFullProof] = useGenerateProof()
     const [answerModalIsOpen, setAnswerModalIsOpen] = useState(false)
@@ -39,6 +40,9 @@ export default function Answers() {
     const [showTopBtn, setShowTopBtn] = useState(false)
     const [fetching, setFetching] = useState(false)
     const [nextFetchSkip, setNextFetchSkip] = useState(0)
+
+    const [event,setEvent] = useState()
+
     const hasMoreItems = nextFetchSkip > -1
     const loader = (
         <div className="p-12 flex justify-center">
@@ -180,6 +184,22 @@ export default function Answers() {
         })
     }, [])
 
+    const fetchEventId = async () => {
+        try {
+            const res = await axios.get(`/api/fetchEvents/${parentMessageId}`)
+            setEvent(res.data)
+        } catch (error) {
+            console.log("fetching events failed", error)
+        }
+
+    }
+    useEffect(() => {
+        if (parentMessageId) {
+            fetchEventId()
+        }
+
+    },[parentMessageId])
+
     useEffect(() => {
         setTimeout(rotateFact, FACT_ROTATION_INTERVAL)
     }, [fact])
@@ -291,56 +311,60 @@ export default function Answers() {
                         </p>
                     </div>
                 ) : (
-                    question && (
+                    event && (
                         <div className="border border-black">
                             <div className="border border-brand-blue rounded-md p-4 text-center">
-                                <h1 className="text-4xl font-bold">Meeting Call</h1>
+                                    <h1 className="text-4xl font-bold">{event.name}</h1>
                                 <div className="flex flex-col w-full justify-center my-5">
-                                    <h1>{`2020/12/22 -> 2020/12/23 , 23:00 PM`}</h1>
-                                    <h1>{`Luštica Bay, Montenegro`}</h1>
+                                    <h1>{`${event.startDate} -> ${event.endDate} , ${event.startTime}`}</h1>
+                                    <h1>{event.location}</h1>
                                 </div>
-                                <div className="flex w-full justify-center gap-2">
-                                    <h1 className="font-bold">Organizers:</h1>
-                                    <h1>Vitalik</h1>
-                                    <h1>Vitalik</h1>
-                                    <h1>Vitalik</h1>
-                                    <h1>Vitalik</h1>
-                                    </div>
+                                <div className="flex w-full justify-center gap-2 mb-2">
+                                        <h1 className="font-bold">Organizers:</h1>
+                                        {
+                                            event.organizers.map((item,index) => (
+                                                    <h1 key={index} className="bg-green-200 p-1 rounded-md text-sm uppercase">{item}</h1>
+                                                ))
+                                        }
+                                </div>
 
-                                    <div className="flex w-full justify-center gap-2">
+                                <div className="flex w-full justify-center gap-2 mb-2">
                                     <h1>Tags:</h1>
-                                    <h1>Ethereum</h1>
-                                    <h1>Weekend</h1>
-                                    </div>
+                                    {
+                                            event.tags.map((item,index) => (
+                                                    <h1 key={index} className="bg-green-200 p-1 rounded-md text-sm uppercase">{item}</h1>
+                                                ))
+                                        }
+                                </div>
 
-                                    <div className="flex w-full justify-center mb-5">
-                                    <h1>Additional Info.:</h1>
-                                    <h1>Lorem ipsu meuakso jajdal jahu kjahwi dajdlakdja akjdla dajlioiduap</h1>
-                                    </div>
+                                <div className="flex w-full justify-center gap-2 mb-5">
+                                    <h1>Additional Information:</h1>
+                                        <h1>{event.info}</h1>
+                                </div>
 
-                                    <div className="w-full flex justify-center gap-5 my-5">
-                    <button
-                        type="button"
-                        className="rounded-full bg-brand-yellow ring-2 ring-brand-black py-3 px-4 drop-shadow text-brand-button font-medium text-brand-black hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-opacity-25"
-                    >
-                        Attend
-                                        </button>
-                                        <button
-                        type="button"
-                        className="rounded-full bg-brand-yellow ring-2 ring-brand-black py-3 px-4 drop-shadow text-brand-button font-medium text-brand-black hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-opacity-25"
-                    >
-                        Favorite
-                    </button>
-                </div>
+                                <div className="w-full flex justify-center gap-5 my-5">
+                                    <button
+                                        type="button"
+                                        className="rounded-full bg-brand-yellow ring-2 ring-brand-black px-4 py-1 drop-shadow text-brand-button font-medium text-brand-black hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-opacity-25"
+                                    >
+                                        Attend
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="rounded-full bg-brand-yellow ring-2 ring-brand-black py-1 px-4 drop-shadow text-brand-button font-medium text-brand-black hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-opacity-25"
+                                    >
+                                        Favorite
+                                    </button>
+                                </div>
                                 <p className="px-2 pb-4">Comments Below </p>
                             </div>
 
-                            <InfiniteScroll loadMore={fetchItems} hasMore={hasMoreItems} loader={loader}>
+                            {/* <InfiniteScroll loadMore={fetchItems} hasMore={hasMoreItems} loader={loader}>
                                 {answers.length > 0 ? (
                                     answers.map((item, index) => (
                                         <div
                                             className="flex flex-row align-top border-b-[1px] border-brand-beige last:border-b-0"
-                                            key={item.messageId}
+                                            key={index}
 
                                             // style={
                                             //   index + 1 === item.length
@@ -372,7 +396,7 @@ export default function Answers() {
                                         </p>
                                     </div>
                                 )}
-                            </InfiniteScroll>
+                            </InfiniteScroll> */}
                         </div>
                     )
                 )}
