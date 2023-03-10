@@ -28,7 +28,7 @@ const Calendar = (props: any) => {
                             ? events.map((event, index) => (
                                   <>
                                       <div className="border border-[#ccc] p-2">{event.name}</div>
-                                      <div className="border border-[#ccc] p-2">{`${event.start_date} ${event.start_time}-> ${event.end_date} ${event.end_time}`}</div>
+                                      <div className="border border-[#ccc] p-2">{`${event.startDate} ${event.startTime}-> ${event.endDate} ${event.endTime}`}</div>
                                       <div className="border border-[#ccc] p-2">{event.location}</div>
                                       <div className="border border-[#ccc] p-2">
                                           {event.organizers.map((item) => (
