@@ -19,12 +19,30 @@ export default function QuestionModalView({
 }) {
     const questionTextRef = useRef(null)
 
-    console.log("TAGS", newEvent.tags)
-
     const [tag, setTag] = useState("")
     const [organizer, setOrganizer] = useState("")
+    const [rerender, setRerender] = useState(true)
 
-    useEffect(() => {}, [newEvent])
+    const handleAddTag = (tag) => {
+        addTag(tag)
+        setTag("")
+    }
+
+    const handleRemoveTag = (tag) => {
+        removeTag(tag)
+        setRerender(!rerender)
+    }
+
+    const handleAddOrganizer = (organizer) => {
+        addOrganizer(organizer)
+        setOrganizer("")
+    }
+
+    const handleRemoveOrganizer = (organizer) => {
+        removeOrganizer(organizer)
+        setRerender(!rerender)
+    }
+
     return (
         <Transition appear show={isOpen} as={Fragment}>
             <Dialog as="div" initialFocus={questionTextRef} className="relative z-40" onClose={closeModal}>
@@ -96,17 +114,17 @@ export default function QuestionModalView({
                                                 onChange={(e) => setNewEvent({ ...newEvent, name: e.target.value })}
                                             />
                                         </div>
-                                        <div className="flex fex-row my-2">
-                                            <div>
+                                        <div className="flex justify-start gap-4 my-2">
+                                            <div className="w-[200px]">
                                                 <label>Event Start</label>
                                                 <DatePicker
-                                                    className="border border-2 p-1"
+                                                    className="border border-2 p-1 w-[200px]"
                                                     selected={newEvent.startDate}
                                                     onChange={(date) => setNewEvent({ ...newEvent, startDate: date })}
                                                 />
                                             </div>
-                                            <div>
-                                                <label htmlFor="time">Time</label>
+                                            <div className="flex flex-col">
+                                                <label htmlFor="startTime">Time</label>
                                                 <input
                                                     className="border border-2 p-1"
                                                     type="time"
@@ -119,17 +137,17 @@ export default function QuestionModalView({
                                                 />
                                             </div>
                                         </div>
-                                        <div className="flex fex-row my-2">
-                                            <div>
+                                        <div className="flex justify-start gap-4 my-2">
+                                            <div className="w-[200px]">
                                                 <label>Event End</label>
                                                 <DatePicker
-                                                    className="border border-2 p-1"
+                                                    className="border border-2 p-1 w-[200px]"
                                                     selected={newEvent.endDate}
                                                     onChange={(date) => setNewEvent({ ...newEvent, endDate: date })}
                                                 />
                                             </div>
-                                            <div>
-                                                <label htmlFor="time">Time</label>
+                                            <div className="flex flex-col">
+                                                <label htmlFor="endTime">Time</label>
                                                 <input
                                                     className="border border-2 p-1"
                                                     type="time"
@@ -152,20 +170,20 @@ export default function QuestionModalView({
                                                 onChange={(e) => setNewEvent({ ...newEvent, location: e.target.value })}
                                             />
                                         </div>
-                                        <div className="flex flex-col gap-1 my-2">
+                                        <div className="flex flex-col gap-1 my-2 w-full">
                                             <label htmlFor="tags">Organizers</label>
-
-                                            <div className="flex flex-row gap-1">
+                                            <div className="flex flex-row gap-4">
                                                 <input
                                                     id="organizers"
                                                     type="text"
-                                                    className="border border-2 p-1"
+                                                    className="border border-2 p-1 w-full"
+                                                    placeholder="add organizer"
                                                     value={organizer}
                                                     onChange={(e) => setOrganizer(e.target.value)}
                                                 />
                                                 <button
-                                                    className="bg-black text-white rounded border border-2 p-1"
-                                                    onClick={() => addOrganizer(organizer)}
+                                                    className="bg-black text-white rounded border border-2 py-1 px-2"
+                                                    onClick={() => handleAddOrganizer(organizer)}
                                                 >
                                                     Add
                                                 </button>
@@ -173,9 +191,9 @@ export default function QuestionModalView({
                                             <ul className="flex flex-row items-start">
                                                 {newEvent.organizers.map((organizer) => {
                                                     return (
-                                                        <li className="mx-1 bg-gray-200 p-1 rounded">
+                                                        <li className="mx-1 bg-gray-200 p-1 rounded text-sm">
                                                             {organizer}{" "}
-                                                            <button onClick={() => removeOrganizer(organizer)}>
+                                                            <button onClick={() => handleRemoveOrganizer(organizer)}>
                                                                 X
                                                             </button>
                                                         </li>
@@ -183,20 +201,21 @@ export default function QuestionModalView({
                                                 })}
                                             </ul>
                                         </div>
-                                        <div className="flex flex-col gap-1 my-2">
+                                        <div className="flex flex-col gap-1 my-2 w-full">
                                             <label htmlFor="tags">Tags</label>
 
-                                            <div className="flex flex-row gap-1">
+                                            <div className="flex flex-row gap-4">
                                                 <input
                                                     id="tags"
                                                     type="text"
-                                                    className="border border-2 p-1"
+                                                    className="border border-2 p-1 w-full"
+                                                    placeholder="add tag"
                                                     value={tag}
                                                     onChange={(e) => setTag(e.target.value)}
                                                 />
                                                 <button
-                                                    className="bg-black text-white rounded border border-2 p-1"
-                                                    onClick={() => addTag(tag)}
+                                                    className="bg-black text-white rounded border border-2 py-1 px-2"
+                                                    onClick={() => handleAddTag(tag)}
                                                 >
                                                     Add
                                                 </button>
@@ -204,8 +223,9 @@ export default function QuestionModalView({
                                             <ul className="flex flex-row items-start">
                                                 {newEvent.tags.map((tag) => {
                                                     return (
-                                                        <li className="mx-1 bg-gray-200 p-1 rounded">
-                                                            {tag} <button onClick={() => removeTag(tag)}>X</button>
+                                                        <li className="mx-1 bg-gray-200 p-1 rounded text-sm">
+                                                            {tag}{" "}
+                                                            <button onClick={() => handleRemoveTag(tag)}>X</button>
                                                         </li>
                                                     )
                                                 })}
@@ -214,11 +234,10 @@ export default function QuestionModalView({
                                         <div className="my-2">
                                             <label htmlFor="info">Additional information</label>
                                             <textarea
-                                                className="border border-2 p-1"
+                                                className="border border-2 p-1 w-full"
                                                 placeholder="Additional info"
                                                 name="info"
                                                 id="info"
-                                                cols="30"
                                                 rows="5"
                                                 value={newEvent.info}
                                                 onChange={(e) => setNewEvent({ ...newEvent, info: e.target.value })}
