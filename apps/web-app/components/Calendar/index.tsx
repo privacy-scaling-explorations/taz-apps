@@ -1,6 +1,6 @@
 import React from "react"
 
-const columns = ["Name", "Time", "Location", "Organizer", "Tags", "Additional Info"]
+const columns = ["Name", "Time", "Location", "Organizers", "Tags", "Additional Info"]
 
 const Calendar = (props: any) => {
     const { events } = props
