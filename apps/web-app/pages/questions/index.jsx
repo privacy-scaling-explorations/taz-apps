@@ -52,6 +52,18 @@ export default function Questions() {
         </div>
     )
 
+    const addTag = (tag) => {
+        console.log("TAG", tag)
+        newEvent.tags.push(tag)
+        console.log("TAGS AFTER ADD", newEvent.tags)
+    }
+
+    const removeTag = (tag) => {
+        const index = newEvent.tags.indexOf(tag)
+        newEvent.tags.splice(index, 1)
+        console.log("Tags after remove", newEvent.tags)
+    }
+
     const closeQuestionModal = () => {
         setQuestionModalIsOpen(false)
     }
@@ -219,6 +231,8 @@ export default function Questions() {
                 setNewEvent={setNewEvent}
                 newEvent={newEvent}
                 handleSubmit={handleSubmit}
+                addTag={addTag}
+                removeTag={removeTag}
             />
 
             {/* Begin Questions Board */}

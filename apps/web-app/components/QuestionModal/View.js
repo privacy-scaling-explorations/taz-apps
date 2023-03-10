@@ -1,13 +1,25 @@
 import { Dialog, Transition } from "@headlessui/react"
-import { Fragment, useRef } from "react"
+import { Fragment, useRef, useState } from "react"
 import DatePicker from "react-datepicker"
 
 import "react-datepicker/dist/react-datepicker.css"
 
 // TODO: Change to Event Modal View
 // TODO: When Fetching Event Modal also fetch extra data from database
-export default function QuestionModalView({ isOpen, closeModal, handleSubmit, newEvent, setNewEvent }) {
+export default function QuestionModalView({
+    isOpen,
+    closeModal,
+    handleSubmit,
+    newEvent,
+    setNewEvent,
+    addTag,
+    removeTag
+}) {
     const questionTextRef = useRef(null)
+
+    console.log("TAGS", newEvent.tags)
+
+    const [tag, setTag] = useState("")
     return (
         <Transition appear show={isOpen} as={Fragment}>
             <Dialog as="div" initialFocus={questionTextRef} className="relative z-40" onClose={closeModal}>
@@ -64,7 +76,7 @@ export default function QuestionModalView({ isOpen, closeModal, handleSubmit, ne
                                         cancel
                                     </button>
                                 </div>
-                                <div className="p-4 h-[700px]">
+                                <div className="p-4 h-[800px]">
                                     <Dialog.Title as="h3" className="text-brand-brown mb-8">
                                         Create New Event
                                     </Dialog.Title>
@@ -96,7 +108,9 @@ export default function QuestionModalView({ isOpen, closeModal, handleSubmit, ne
                                                     id="startTime"
                                                     name="startTime"
                                                     value={newEvent.startTime}
-                                                    onChange={(e) => setNewEvent({ ...newEvent, startTime: e.target.value })}
+                                                    onChange={(e) =>
+                                                        setNewEvent({ ...newEvent, startTime: e.target.value })
+                                                    }
                                                 />
                                             </div>
                                         </div>
@@ -117,7 +131,9 @@ export default function QuestionModalView({ isOpen, closeModal, handleSubmit, ne
                                                     id="endTime"
                                                     name="endTime"
                                                     value={newEvent.endTime}
-                                                    onChange={(e) => setNewEvent({ ...newEvent, endTime: e.target.value })}
+                                                    onChange={(e) =>
+                                                        setNewEvent({ ...newEvent, endTime: e.target.value })
+                                                    }
                                                 />
                                             </div>
                                         </div>
@@ -142,6 +158,26 @@ export default function QuestionModalView({ isOpen, closeModal, handleSubmit, ne
                                                 placeholder="location"
                                                 onChange={(e) => setNewEvent({ ...newEvent, location: e.target.value })}
                                             />
+                                        </div>
+                                        <div className="flex flex-col gap-1 my-2">
+                                            <label htmlFor="tags">Tags</label>
+                                            <ul className="flex flex-row items-start">
+                                                {newEvent.tags.map((tag) => {
+                                                    return (
+                                                        <li className="mx-1 bg-gray-200 p-1 rounded">
+                                                            {tag} <button onClick={() => removeTag(tag)}>X</button>
+                                                        </li>
+                                                    )
+                                                })}
+                                            </ul>
+                                            <input
+                                                id="tags"
+                                                type="text"
+                                                className="border border-2 p-1"
+                                                value={tag}
+                                                onChange={(e) => setTag(e.target.value)}
+                                            />
+                                            <button onClick={() => addTag(tag)}>Add</button>
                                         </div>
                                         <div className="my-2">
                                             <label htmlFor="info">Additional information</label>
