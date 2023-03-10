@@ -15,6 +15,7 @@ import SelectorArrow from "../../components/ArrowNavigators/SelectorArrow"
 import BackTAZ from "../../components/ArrowNavigators/BackTAZ"
 import Footer from "../../components/Footer"
 import Loading from "../../components/Loading"
+import Calendar from "../../components/Calendar"
 
 const {
     API_REQUEST_TIMEOUT,
@@ -281,7 +282,8 @@ export default function Questions() {
             <div className="z-10 px-6 pb-8">
                 <div className="min-w-[200px] relative divide-y overflow-y-auto rounded-md border-2 border-brand-blue bg-white drop-shadow-lg">
                     TODO: For each element, add more data about event (data, location, organized by, event type?)
-                    <InfiniteScroll loadMore={fetchItems} hasMore={hasMoreItems} loader={loader}>
+                    <Calendar />
+                    {/* <InfiniteScroll loadMore={fetchItems} hasMore={hasMoreItems} loader={loader}>
                         {questions.map((item) => (
                             <Link
                                 href={
@@ -299,7 +301,7 @@ export default function Questions() {
                                 </div>
                             </Link>
                         ))}
-                    </InfiniteScroll>
+                    </InfiniteScroll> */}
                 </div>
             </div>
 
