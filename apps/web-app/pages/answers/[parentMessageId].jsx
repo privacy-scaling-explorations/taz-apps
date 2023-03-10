@@ -292,23 +292,46 @@ export default function Answers() {
                     </div>
                 ) : (
                     question && (
-                        <div style={{ borderTopWidth: "0px" }}>
-                            <div
-                                style={
-                                    answers.length > 0
-                                        ? { borderTopWidth: "0px", borderBottomWidth: "1px", borderColor: "#EAE1DA" }
-                                        : { borderTopWidth: "0px", borderBottomWidth: "0px" }
-                                }
-                            >
-                                <p className="px-2 text-brand-3xs text-brand-gray50 font-medium">
-                                    TODO: adapt new event page {question.messageId.toLocaleString()}
-                                </p>
-                                <p className="px-2 pb-4">Event Name </p>
-                                <p className="px-2 pb-4">Event Location </p>
-                                <p className="px-2 pb-4">Event Description </p>
-                                <p className="px-2 pb-4">Event Attendes </p>
-                                <button className="px-2 pb-4">Attend </button>
-                                <button className="px-2 pb-4">Favorite </button>
+                        <div className="border border-black">
+                            <div className="border border-brand-blue rounded-md p-4 text-center">
+                                <h1 className="text-4xl font-bold">Meeting Call</h1>
+                                <div className="flex flex-col w-full justify-center my-5">
+                                    <h1>{`2020/12/22 -> 2020/12/23 , 23:00 PM`}</h1>
+                                    <h1>{`Luštica Bay, Montenegro`}</h1>
+                                </div>
+                                <div className="flex w-full justify-center gap-2">
+                                    <h1 className="font-bold">Organizers:</h1>
+                                    <h1>Vitalik</h1>
+                                    <h1>Vitalik</h1>
+                                    <h1>Vitalik</h1>
+                                    <h1>Vitalik</h1>
+                                    </div>
+
+                                    <div className="flex w-full justify-center gap-2">
+                                    <h1>Tags:</h1>
+                                    <h1>Ethereum</h1>
+                                    <h1>Weekend</h1>
+                                    </div>
+
+                                    <div className="flex w-full justify-center mb-5">
+                                    <h1>Additional Info.:</h1>
+                                    <h1>Lorem ipsu meuakso jajdal jahu kjahwi dajdlakdja akjdla dajlioiduap</h1>
+                                    </div>
+
+                                    <div className="w-full flex justify-center gap-5 my-5">
+                    <button
+                        type="button"
+                        className="rounded-full bg-brand-yellow ring-2 ring-brand-black py-3 px-4 drop-shadow text-brand-button font-medium text-brand-black hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-opacity-25"
+                    >
+                        Attend
+                                        </button>
+                                        <button
+                        type="button"
+                        className="rounded-full bg-brand-yellow ring-2 ring-brand-black py-3 px-4 drop-shadow text-brand-button font-medium text-brand-black hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-opacity-25"
+                    >
+                        Favorite
+                    </button>
+                </div>
                                 <p className="px-2 pb-4">Comments Below </p>
                             </div>
 
@@ -318,13 +341,13 @@ export default function Answers() {
                                         <div
                                             className="flex flex-row align-top border-b-[1px] border-brand-beige last:border-b-0"
                                             key={item.messageId}
-                                            
+
                                             // style={
                                             //   index + 1 === item.length
                                             //     ? { borderTopWidth: '0px', borderBottomWidth: '0px' }
                                             //     : { borderTopWidth: '0px', borderBottomWidth: '1px', borderColor: '#EAE1DA' }
                                             // }
-                                        >   
+                                        >
                                             <div className="flex-col px-2 py-4">
                                                 <ConvoBubbles />
                                             </div>
@@ -335,8 +358,7 @@ export default function Answers() {
                                                 </p>
                                                 <p className="px-4 leading-[1.3rem] opacity-[70%]">
                                                     {item.messageContent}
-                                                                                        TODO: adapt new event page {question.messageId.toLocaleString()}
-
+                                                    TODO: adapt new event page {question.messageId.toLocaleString()}
                                                 </p>
                                             </div>
                                         </div>

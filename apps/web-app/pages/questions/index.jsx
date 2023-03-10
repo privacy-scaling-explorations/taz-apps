@@ -15,6 +15,7 @@ import SelectorArrow from "../../components/ArrowNavigators/SelectorArrow"
 import BackTAZ from "../../components/ArrowNavigators/BackTAZ"
 import Footer from "../../components/Footer"
 import Loading from "../../components/Loading"
+import Calendar from "../../components/Calendar"
 
 const {
     API_REQUEST_TIMEOUT,
@@ -268,19 +269,16 @@ export default function Questions() {
                         <h2 className="ml-2 text-2xl leading-5 font-extrabold">Check events</h2>
                         <h2 className="ml-2 text-2xl font-extrabold">Create events</h2>
                     </div>
-                    <p className="ml-2 text-brand-info text-brand-blue">
-                        Check on going events (Sample text)
-                    </p>
-                    <p className="ml-2 text-brand-info text-brand-blue">
-                        TODO: Add Filter mechanism
-                    </p>
+                    <p className="ml-2 text-brand-info text-brand-blue">Check on going events (Sample text)</p>
+                    <p className="ml-2 text-brand-info text-brand-blue">TODO: Add Filter mechanism</p>
                 </div>
             </div>
 
             <div className="z-10 px-6 pb-8">
                 <div className="min-w-[200px] relative divide-y overflow-y-auto rounded-md border-2 border-brand-blue bg-white drop-shadow-lg">
                     TODO: For each element, add more data about event (data, location, organized by, event type?)
-                    <InfiniteScroll loadMore={fetchItems} hasMore={hasMoreItems} loader={loader}>
+                    <Calendar />
+                    {/* <InfiniteScroll loadMore={fetchItems} hasMore={hasMoreItems} loader={loader}>
                         {questions.map((item) => (
                             <Link
                                 href={
@@ -298,7 +296,7 @@ export default function Questions() {
                                 </div>
                             </Link>
                         ))}
-                    </InfiniteScroll>
+                    </InfiniteScroll> */}
                 </div>
             </div>
 
