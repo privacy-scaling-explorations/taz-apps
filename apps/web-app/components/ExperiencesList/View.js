@@ -54,7 +54,7 @@ function ExperiencesListComponent({ clearIdentity, urlIdentity }) {
                     </div>
                 </div>
 
-                <div className="relative flex flex-col items-center overflow-hidden mx-6 my-8 rounded-md border-2 border-brand-blue shadow-xl bg-white mb-8">
+                {/* <div className="relative flex flex-col items-center overflow-hidden mx-6 my-8 rounded-md border-2 border-brand-blue shadow-xl bg-white mb-8">
                     <div className="flex w-full justify-between border-b-2 border-brand-blue bg-brand-orange p-3">
                         <div>😎</div>
                         <div className="text-brand-beige text-15px">IMPORTANT: Save your ID</div>
@@ -71,12 +71,12 @@ function ExperiencesListComponent({ clearIdentity, urlIdentity }) {
                             <SelectorArrow />
                         </div>
                     </Link>
-                </div>
+                </div> */}
 
                 <div className="relative flex flex-col items-center overflow-hidden mx-6 my-8 rounded-md border-2 border-brand-blue shadow-xl bg-white mb-8">
                     <div className="flex w-full justify-between border-b-2 border-brand-blue bg-brand-beige2 p-3">
                         <div>✌️</div>
-                        <div className="text-brand-blue text-15px">Use your ID in TAZ Apps</div>
+                        <div className="text-brand-blue text-15px">Checkout the events at Zuzalu</div>
                         <div></div>
                     </div>
                     <Link href="questions">
