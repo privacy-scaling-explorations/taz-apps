@@ -1,8 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import { createClient } from "@supabase/supabase-js"
+
 const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co"
 const supabaseKey = process.env.SUPABASE_KEY
-const supabase = createClient(supabaseUrl, supabaseKey)
+const supabase = createClient(supabaseUrl, supabaseKey as string)
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
