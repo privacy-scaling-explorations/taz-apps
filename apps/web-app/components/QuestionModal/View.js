@@ -235,7 +235,6 @@ export default function QuestionModalView({
 
                                             <ul className="flex flex-row items-start">
                                                 {newEvent.organizers.map((organizer) => {
-                                                    console.log(organizer)
                                                     return (
                                                         <li className="mx-1 bg-gray-200 p-1 rounded text-sm">
                                                             {organizer}{" "}
