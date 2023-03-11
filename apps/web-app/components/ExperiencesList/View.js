@@ -116,7 +116,7 @@ function ExperiencesListComponent({ clearIdentity, urlIdentity }) {
                         </div>
                     </div>
 
-                    <a
+                    {/* <a
                         href="https://pse-team.notion.site/About-the-TAZ-app-1ae2793046414468b56472f43725961e"
                         target="_blank"
                         className="pl-9 pb-10 underline"
@@ -139,7 +139,7 @@ function ExperiencesListComponent({ clearIdentity, urlIdentity }) {
                         rel="noreferrer"
                     >
                         Semaphore Grants Round
-                    </a>
+                    </a> */}
                     <a href="https://appliedzkp.org/" target="_blank" className="pl-9 pb-12 underline" rel="noreferrer">
                         Privacy & Scaling Explorations
                     </a>
