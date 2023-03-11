@@ -1,13 +1,10 @@
 import Link from "next/link"
 
-// import { textAlign } from 'html2canvas/dist/types/css/property-descriptors/text-align'
-
 import BlueCircle from "../svgElements/BlueCircle"
 import YellowCircle from "../svgElements/YellowCircle"
 import ShadowBunny from "../svgElements/ShadowBunny"
 import Ellipse from "../svgElements/Ellipse"
 import SelectorArrow from "../ArrowNavigators/SelectorArrow"
-import Accordion from "../FAQ/Accordion"
 import Footer from "../Footer"
 
 function ExperiencesListComponent({ clearIdentity, urlIdentity }) {
@@ -79,7 +76,7 @@ function ExperiencesListComponent({ clearIdentity, urlIdentity }) {
                         <div className="text-brand-blue text-15px">Checkout the events at Zuzalu</div>
                         <div></div>
                     </div>
-                    <Link href="questions">
+                    <Link href="events">
                         <div className="flex w-full flex-row items-center border-b-2 border-brand-blue py-3 px-4 cursor-pointer">
                             <div className="w-[90%]">
                                 <p className="py-2 text-brand-h3 font-bold">Events</p>

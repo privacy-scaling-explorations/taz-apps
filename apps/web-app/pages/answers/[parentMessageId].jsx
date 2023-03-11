@@ -390,7 +390,7 @@ export default function Answers() {
             /> */}
             {/* Begin Answer Board */}
             <div className="flex-grow mx-6 my-8 text-brand-brown p-4 min-w-[200px] min-h-[100%] relative divide-y overflow-y-auto border-2 border-brand-blue rounded-md bg-white drop-shadow-lg">
-                <Link href="/questions" className="cursor-pointer brand">
+                <Link href="/events" className="cursor-pointer brand">
                     <RiArrowLeftLine className="fill-brand-gray50 cursor-pointer mb-4 border-0" />
                 </Link>
 
