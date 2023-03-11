@@ -17,6 +17,7 @@ import RedCircle from "../../components/svgElements/RedCircle"
 import BackToTopArrow from "../../components/svgElements/BackToTopArrow"
 import ConvoBubbles from "../../components/svgElements/ConvoBubbles"
 import Loading from "../../components/Loading"
+import QuestionModal from "../../components/QuestionModal"
 
 const {
     API_REQUEST_TIMEOUT,
@@ -25,7 +26,6 @@ const {
     ITEMS_PER_FETCH
 } = require("../../config/goerli.json")
 const { FACTS } = require("../../data/facts.json")
-
 
 export default function Answers() {
     const [generateFullProof] = useGenerateProof()
@@ -41,7 +41,52 @@ export default function Answers() {
     const [fetching, setFetching] = useState(false)
     const [nextFetchSkip, setNextFetchSkip] = useState(0)
 
-    const [event,setEvent] = useState()
+    const [questionModalIsOpen, setQuestionModalIsOpen] = useState(false)
+
+    const [newEvent, setNewEvent] = useState({
+        name: "",
+        organizers: [],
+        startDate: new Date(),
+        endDate: new Date(),
+        startTime: "09:00",
+        endTime: "18:00",
+        location: "",
+        tags: [],
+        info: ""
+    })
+
+    const closeQuestionModal = () => {
+        setQuestionModalIsOpen(false)
+    }
+
+    const openQuestionModal = () => {
+        setQuestionModalIsOpen(true)
+    }
+
+    const addTag = (tag) => {
+        newEvent.tags.push(tag)
+        console.log("TAGS AFTER ADD", newEvent.tags)
+    }
+
+    const removeTag = (tag) => {
+        const index = newEvent.tags.indexOf(tag)
+        newEvent.tags.splice(index, 1)
+        console.log("Tags after remove", newEvent.tags)
+    }
+
+    const addOrganizer = (organizer) => {
+        console.log("Organizer", organizer)
+        newEvent.organizers.push(organizer)
+        console.log("Organizerss after add", newEvent.organizers)
+    }
+
+    const removeOrganizer = (organizer) => {
+        const index = newEvent.organizers.indexOf(organizer)
+        newEvent.organizers.splice(index, 1)
+        console.log("Organizers after remove", newEvent.organizers)
+    }
+
+    const [event, setEvent] = useState()
 
     const hasMoreItems = nextFetchSkip > -1
     const loader = (
@@ -74,6 +119,34 @@ export default function Answers() {
 
     const handleAnswerChange = (event) => {
         setAnswer(event.target.value)
+    }
+
+    const handleUpdateEvent = async (event) => {
+        event.preventDefault()
+
+        closeQuestionModal()
+        const body = {
+            name: newEvent.name,
+            startDate: newEvent.startDate,
+            endDate: newEvent.endDate,
+            organizers: newEvent.organizers,
+            location: newEvent.location,
+            startTime: newEvent.startTime,
+            endTime: newEvent.endTime,
+            tags: newEvent.tags,
+            info: newEvent.info,
+            id:parentMessageId
+        }
+
+
+
+        try {
+            await axios.post("/api/updateEvent", body)
+        } catch (error) {
+            alert("Event submission faild")
+            internalCloseProcessingModal()
+        }
+
     }
 
     const handleSubmit = async (event) => {
@@ -188,17 +261,26 @@ export default function Answers() {
         try {
             const res = await axios.get(`/api/fetchEvents/${parentMessageId}`)
             setEvent(res.data)
+            setNewEvent({
+                endDate: new Date(res.data.endDate),
+                endTime: res.data.endTime,
+                info: res.data.info,
+                location: res.data.location,
+                name: res.data.name,
+                organizers: res.data.organizers,
+                startDate: new Date(res.data.startDate),
+                startTime: res.data.startTime,
+                tags: res.data.tags,
+            })
         } catch (error) {
             console.log("fetching events failed", error)
         }
-
     }
     useEffect(() => {
         if (parentMessageId) {
             fetchEventId()
         }
-
-    },[parentMessageId])
+    }, [parentMessageId])
 
     useEffect(() => {
         setTimeout(rotateFact, FACT_ROTATION_INTERVAL)
@@ -281,6 +363,19 @@ export default function Answers() {
                 </div>
             )}
 
+            <QuestionModal
+                isOpen={questionModalIsOpen}
+                closeModal={closeQuestionModal}
+                setNewEvent={setNewEvent}
+                newEvent={newEvent}
+                handleSubmit={handleUpdateEvent}
+                addTag={addTag}
+                removeTag={removeTag}
+                addOrganizer={addOrganizer}
+                removeOrganizer={removeOrganizer}
+                isUpdateEvent={true}
+            />
+
             <ProcessingModal
                 isOpen={processingModalIsOpen}
                 closeModal={closeProcessingModal}
@@ -312,34 +407,40 @@ export default function Answers() {
                     </div>
                 ) : (
                     event && (
-                        <div className="border border-black">
+                        <div className="border border-black relative">
+                            <div
+                                className="absolute top-5 left-5 rounded-full bg-brand-yellow ring-2 ring-brand-black px-5"
+                                onClick={openQuestionModal}
+                            >
+                                <h1>Edit Event</h1>
+                            </div>
                             <div className="border border-brand-blue rounded-md p-4 text-center">
-                                    <h1 className="text-4xl font-bold">{event.name}</h1>
+                                <h1 className="text-4xl font-bold">{event.name}</h1>
                                 <div className="flex flex-col w-full justify-center my-5">
                                     <h1>{`${event.startDate} -> ${event.endDate} , ${event.startTime}`}</h1>
                                     <h1>{event.location}</h1>
                                 </div>
                                 <div className="flex w-full justify-center gap-2 mb-2">
-                                        <h1 className="font-bold">Organizers:</h1>
-                                        {
-                                            event.organizers.map((item,index) => (
-                                                    <h1 key={index} className="bg-green-200 p-1 rounded-md text-sm uppercase">{item}</h1>
-                                                ))
-                                        }
+                                    <h1 className="font-bold">Organizers:</h1>
+                                    {event.organizers.map((item, index) => (
+                                        <h1 key={index} className="bg-green-200 p-1 rounded-md text-sm uppercase">
+                                            {item}
+                                        </h1>
+                                    ))}
                                 </div>
 
                                 <div className="flex w-full justify-center gap-2 mb-2">
                                     <h1>Tags:</h1>
-                                    {
-                                            event.tags.map((item,index) => (
-                                                    <h1 key={index} className="bg-green-200 p-1 rounded-md text-sm uppercase">{item}</h1>
-                                                ))
-                                        }
+                                    {event.tags.map((item, index) => (
+                                        <h1 key={index} className="bg-green-200 p-1 rounded-md text-sm uppercase">
+                                            {item}
+                                        </h1>
+                                    ))}
                                 </div>
 
                                 <div className="flex w-full justify-center gap-2 mb-5">
                                     <h1>Additional Information:</h1>
-                                        <h1>{event.info}</h1>
+                                    <h1>{event.info}</h1>
                                 </div>
 
                                 <div className="w-full flex justify-center gap-5 my-5">
@@ -359,7 +460,7 @@ export default function Answers() {
                                 <p className="px-2 pb-4">Comments Below </p>
                             </div>
 
-                            {/* <InfiniteScroll loadMore={fetchItems} hasMore={hasMoreItems} loader={loader}>
+                            <InfiniteScroll loadMore={fetchItems} hasMore={hasMoreItems} loader={loader}>
                                 {answers.length > 0 ? (
                                     answers.map((item, index) => (
                                         <div
@@ -396,7 +497,7 @@ export default function Answers() {
                                         </p>
                                     </div>
                                 )}
-                            </InfiniteScroll> */}
+                            </InfiniteScroll>
                         </div>
                     )
                 )}

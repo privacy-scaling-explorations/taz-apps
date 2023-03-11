@@ -96,6 +96,15 @@ function ExperiencesListComponent({ clearIdentity, urlIdentity }) {
                         <div className="text-15px text-brand-blue">Take your ID with you </div>
                         <div></div>
                     </div>
+                    <Link href="myevent">
+                        <div className="flex w-full flex-row items-center border-b-2 border-brand-blue py-3 px-4 cursor-pointer">
+                            <div className="w-[90%]">
+                                <p className="py-2 text-brand-h3 font-bold">My Events</p>
+                                <p className="text-brand-info opacity-[70%]">Check out past/on going/favorite events</p>
+                            </div>
+                            <SelectorArrow />
+                        </div>
+                    </Link>
                 </div>
 
                 <div className="relative flex items-left flex-col bg-black text-brand-yellow pt-8 mt-12">
