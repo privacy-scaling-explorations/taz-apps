@@ -11,7 +11,8 @@ const QuestionModal = ({
     addTag,
     removeTag,
     addOrganizer,
-    removeOrganizer
+    removeOrganizer,
+    isUpdateEvent
 }) => (
     <QuestionModalView
         isOpen={isOpen}
@@ -24,6 +25,7 @@ const QuestionModal = ({
         removeTag={removeTag}
         addOrganizer={addOrganizer}
         removeOrganizer={removeOrganizer}
+        isUpdateEvent={isUpdateEvent}
     />
 )
 
