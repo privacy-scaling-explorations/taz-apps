@@ -23,7 +23,7 @@ interface EventsProps {
 
 const Accordian = (props: any) => {
 
-  console.log(props)
+
   function handleActive(event: any) {
     props.setActive(event.target.id)
     if (props.active === props.week) {
