@@ -135,10 +135,8 @@ export default function Answers() {
             endTime: newEvent.endTime,
             tags: newEvent.tags,
             info: newEvent.info,
-            id:parentMessageId
+            id: parentMessageId
         }
-
-
 
         try {
             await axios.post("/api/updateEvent", body)
@@ -146,7 +144,6 @@ export default function Answers() {
             alert("Event submission faild")
             internalCloseProcessingModal()
         }
-
     }
 
     // const handleSubmit = async (event) => {
@@ -270,7 +267,7 @@ export default function Answers() {
                 organizers: res.data.organizers,
                 startDate: new Date(res.data.startDate),
                 startTime: res.data.startTime,
-                tags: res.data.tags,
+                tags: res.data.tags
             })
         } catch (error) {
             console.log("fetching events failed", error)
@@ -390,9 +387,9 @@ export default function Answers() {
             /> */}
             {/* Begin Answer Board */}
             <div className="flex-grow mx-6 my-8 text-brand-brown p-4 min-w-[200px] min-h-[100%] relative divide-y overflow-y-auto border-2 border-brand-blue rounded-md bg-white drop-shadow-lg">
-                <Link href="/events" className="cursor-pointer brand">
+                <div onClick={()=>router.back()}>
                     <RiArrowLeftLine className="fill-brand-gray50 cursor-pointer mb-4 border-0" />
-                </Link>
+                </div>
 
                 {parentMessageId === "0" && txHash ? (
                     <div className="p-4">
@@ -459,45 +456,6 @@ export default function Answers() {
                                 </div>
                                 <p className="px-2 pb-4">Comments Below </p>
                             </div>
-
-                            {/* <InfiniteScroll loadMore={fetchItems} hasMore={hasMoreItems} loader={loader}>
-                                {answers.length > 0 ? (
-                                    answers.map((item, index) => (
-                                        <div
-                                            className="flex flex-row align-top border-b-[1px] border-brand-beige last:border-b-0"
-                                            key={index}
-
-                                            // style={
-                                            //   index + 1 === item.length
-                                            //     ? { borderTopWidth: '0px', borderBottomWidth: '0px' }
-                                            //     : { borderTopWidth: '0px', borderBottomWidth: '1px', borderColor: '#EAE1DA' }
-                                            // }
-                                        >
-                                            <div className="flex-col px-2 py-4">
-                                                <ConvoBubbles />
-                                            </div>
-
-                                            <div className="flex-col py-3 text-xs text-brand-brown">
-                                                <p className="px-4 pb-2 text-brand-3xs text-brand-gray50 font-medium">
-                                                    aID {item.messageId ? item.messageId.toLocaleString() : "0"}
-                                                </p>
-                                                <p className="px-4 leading-[1.3rem] opacity-[70%]">
-                                                    {item.messageContent}
-                                                    TODO: adapt new event page {question.messageId.toLocaleString()}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <div className="px-2 mt-3">
-                                        <p className="text-brand-orange text-brand-info">
-                                            No one has answered this question.
-                                            <br />
-                                            Be the first!
-                                        </p>
-                                    </div>
-                                )}
-                            </InfiniteScroll> */}
                         </div>
                     )
                 )}

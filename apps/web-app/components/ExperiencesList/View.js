@@ -1,5 +1,7 @@
 import Link from "next/link"
 
+import { Identity } from "@semaphore-protocol/identity"
+
 import BlueCircle from "../svgElements/BlueCircle"
 import YellowCircle from "../svgElements/YellowCircle"
 import ShadowBunny from "../svgElements/ShadowBunny"
@@ -13,6 +15,11 @@ function ExperiencesListComponent({ clearIdentity, urlIdentity }) {
             top: 0,
             behavior: "smooth"
         })
+    }
+
+    const createSemaphoreID = () => {
+        const { commitment } = new Identity("secret-message")
+        localStorage.setItem("semaphore-id", commitment)
     }
 
     return (
@@ -69,6 +76,22 @@ function ExperiencesListComponent({ clearIdentity, urlIdentity }) {
                         </div>
                     </Link>
                 </div> */}
+
+                <div className="relative flex flex-col items-center overflow-hidden mx-6 my-8 rounded-md border-2 border-brand-blue shadow-xl bg-white mb-8">
+                    <div className="flex w-full justify-between border-b-2 border-brand-blue bg-brand-beige2 p-3">
+                        <div className="text-brand-blue text-15px">Create Your ID</div>
+                        <div></div>
+                    </div>
+                    <div
+                        className="flex w-full flex-row items-center border-b-2 border-brand-blue py-3 px-4 cursor-pointer hover:bg-gray-200"
+                        onClick={createSemaphoreID}
+                    >
+                        <div className="w-[90%]">
+                            <p className="py-2 text-brand-h3 font-bold">Create My ID</p>
+                        </div>
+                        <SelectorArrow />
+                    </div>
+                </div>
 
                 <div className="relative flex flex-col items-center overflow-hidden mx-6 my-8 rounded-md border-2 border-brand-blue shadow-xl bg-white mb-8">
                     <div className="flex w-full justify-between border-b-2 border-brand-blue bg-brand-beige2 p-3">
