@@ -10,6 +10,9 @@ module.exports = withPWA({
     eslint: {
         ignoreDuringBuilds: true
     },
+    experimental: {
+        esmExternals: false
+    },
     webpack(config, options) {
         if (!options.isServer) {
             config.resolve.fallback.fs = false

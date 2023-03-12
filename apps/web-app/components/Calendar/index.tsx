@@ -28,7 +28,7 @@ const Calendar = (props: EventsProps) => {
         return (
             <div className="w-full my-10">
                 <div>
-                    <h1 className="text-lg">Zulalu Oficial Events Schedule</h1>
+                    <h1 className="text-lg px-2">Zulalu Oficial Events Schedule</h1>
                 </div>
                 <div className="py-5 flex justify-center">
                     <div className="">
