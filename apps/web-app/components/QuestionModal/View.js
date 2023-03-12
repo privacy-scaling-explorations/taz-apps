@@ -43,13 +43,13 @@ export default function QuestionModalView({
 
     const handleAddOrganizer = async (organizer) => {
       console.log(organizer.slice(1))
-      const { data, error } = await supabase
-          .from('users')
-          .select('userName')
-          .eq(organizer.slice(1))
-        if (!error) {
-          // Fix: if not in DB don't add
-        }
+      // const { data, error } = await supabase
+      //     .from('users')
+      //     .select('userName')
+      //     .eq(organizer.slice(1))
+      //   if (!error) {
+      //     // Fix: if not in DB don't add
+      //   }
       addOrganizer(organizer.slice(1))
       setOrganizer("")
     }
@@ -77,7 +77,7 @@ export default function QuestionModalView({
 
     return (
         <Transition appear show={isOpen} as={Fragment}>
-            <Dialog as="div" initialFocus={questionTextRef} className="relative z-40" onClose={closeModal}>
+            <Dialog as="div" initialFocus={questionTextRef} className="relative z-40 " onClose={closeModal}>
                 <Transition.Child
                     as={Fragment}
                     enter="ease-out duration-300"
@@ -90,7 +90,7 @@ export default function QuestionModalView({
                     <div className="fixed inset-0 bg-black bg-opacity-25" />
                 </Transition.Child>
 
-                <div className="fixed inset-0 overflow-y-auto h-[900px]">
+                <div className="fixed inset-0 overflow-scroll h-[100%]">
                     <div className="flex h-[900px] items-center justify-center p-4 text-center">
                         <Transition.Child
                             as={Fragment}
