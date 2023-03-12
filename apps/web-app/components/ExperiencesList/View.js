@@ -1,13 +1,10 @@
 import Link from "next/link"
 
-// import { textAlign } from 'html2canvas/dist/types/css/property-descriptors/text-align'
-
 import BlueCircle from "../svgElements/BlueCircle"
 import YellowCircle from "../svgElements/YellowCircle"
 import ShadowBunny from "../svgElements/ShadowBunny"
 import Ellipse from "../svgElements/Ellipse"
 import SelectorArrow from "../ArrowNavigators/SelectorArrow"
-import Accordion from "../FAQ/Accordion"
 import Footer from "../Footer"
 
 function ExperiencesListComponent({ clearIdentity, urlIdentity }) {
@@ -54,7 +51,7 @@ function ExperiencesListComponent({ clearIdentity, urlIdentity }) {
                     </div>
                 </div>
 
-                <div className="relative flex flex-col items-center overflow-hidden mx-6 my-8 rounded-md border-2 border-brand-blue shadow-xl bg-white mb-8">
+                {/* <div className="relative flex flex-col items-center overflow-hidden mx-6 my-8 rounded-md border-2 border-brand-blue shadow-xl bg-white mb-8">
                     <div className="flex w-full justify-between border-b-2 border-brand-blue bg-brand-orange p-3">
                         <div>😎</div>
                         <div className="text-brand-beige text-15px">IMPORTANT: Save your ID</div>
@@ -71,15 +68,15 @@ function ExperiencesListComponent({ clearIdentity, urlIdentity }) {
                             <SelectorArrow />
                         </div>
                     </Link>
-                </div>
+                </div> */}
 
                 <div className="relative flex flex-col items-center overflow-hidden mx-6 my-8 rounded-md border-2 border-brand-blue shadow-xl bg-white mb-8">
                     <div className="flex w-full justify-between border-b-2 border-brand-blue bg-brand-beige2 p-3">
                         <div>✌️</div>
-                        <div className="text-brand-blue text-15px">Use your ID in TAZ Apps</div>
+                        <div className="text-brand-blue text-15px">Checkout the events at Zuzalu</div>
                         <div></div>
                     </div>
-                    <Link href="questions">
+                    <Link href="events">
                         <div className="flex w-full flex-row items-center border-b-2 border-brand-blue py-3 px-4 cursor-pointer">
                             <div className="w-[90%]">
                                 <p className="py-2 text-brand-h3 font-bold">Events</p>
@@ -96,6 +93,15 @@ function ExperiencesListComponent({ clearIdentity, urlIdentity }) {
                         <div className="text-15px text-brand-blue">Take your ID with you </div>
                         <div></div>
                     </div>
+                    <Link href="myevent">
+                        <div className="flex w-full flex-row items-center border-b-2 border-brand-blue py-3 px-4 cursor-pointer">
+                            <div className="w-[90%]">
+                                <p className="py-2 text-brand-h3 font-bold">My Events</p>
+                                <p className="text-brand-info opacity-[70%]">Check out past/on going/favorite events</p>
+                            </div>
+                            <SelectorArrow />
+                        </div>
+                    </Link>
                 </div>
 
                 <div className="relative flex items-left flex-col bg-black text-brand-yellow pt-8 mt-12">
@@ -107,7 +113,7 @@ function ExperiencesListComponent({ clearIdentity, urlIdentity }) {
                         </div>
                     </div>
 
-                    <a
+                    {/* <a
                         href="https://pse-team.notion.site/About-the-TAZ-app-1ae2793046414468b56472f43725961e"
                         target="_blank"
                         className="pl-9 pb-10 underline"
@@ -130,7 +136,7 @@ function ExperiencesListComponent({ clearIdentity, urlIdentity }) {
                         rel="noreferrer"
                     >
                         Semaphore Grants Round
-                    </a>
+                    </a> */}
                     <a href="https://appliedzkp.org/" target="_blank" className="pl-9 pb-12 underline" rel="noreferrer">
                         Privacy & Scaling Explorations
                     </a>

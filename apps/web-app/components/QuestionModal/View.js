@@ -21,7 +21,8 @@ export default function QuestionModalView({
     addTag,
     removeTag,
     addOrganizer,
-    removeOrganizer
+    removeOrganizer,
+    isUpdateEvent = false
 }) {
     const questionTextRef = useRef(null)
 
@@ -142,6 +143,7 @@ export default function QuestionModalView({
                                                 type="text"
                                                 id="name"
                                                 placeholder="event name"
+                                                value={newEvent.name}
                                                 onChange={(e) => setNewEvent({ ...newEvent, name: e.target.value })}
                                             />
                                         </div>
@@ -196,6 +198,7 @@ export default function QuestionModalView({
                                             <input
                                                 className="border border-2 p-1"
                                                 type="text"
+                                                value={newEvent.location}
                                                 id="location"
                                                 placeholder="location"
                                                 onChange={(e) => setNewEvent({ ...newEvent, location: e.target.value })}
@@ -234,16 +237,14 @@ export default function QuestionModalView({
                                             </div>
 
                                             <ul className="flex flex-row items-start">
-                                                {newEvent.organizers.map((organizer) => {
-                                                    return (
-                                                        <li className="mx-1 bg-gray-200 p-1 rounded text-sm">
-                                                            {organizer}{" "}
-                                                            <button onClick={() => handleRemoveOrganizer(organizer)}>
-                                                                X
-                                                            </button>
-                                                        </li>
-                                                    )
-                                                })}
+                                                {newEvent.organizers.map((organizer, index) => (
+                                                    <li key={index} className="mx-1 bg-gray-200 p-1 rounded text-sm">
+                                                        {organizer}{" "}
+                                                        <button onClick={() => handleRemoveOrganizer(organizer)}>
+                                                            X
+                                                        </button>
+                                                    </li>
+                                                ))}
                                             </ul>
                                         </div>
                                         <div className="flex flex-col gap-1 my-2 w-full">
@@ -268,14 +269,11 @@ export default function QuestionModalView({
 
                                             </div>
                                             <ul className="flex flex-row items-start">
-                                                {newEvent.tags.map((tag) => {
-                                                    return (
-                                                        <li className="mx-1 bg-gray-200 p-1 rounded text-sm">
-                                                            {tag}{" "}
-                                                            <button onClick={() => handleRemoveTag(tag)}>X</button>
-                                                        </li>
-                                                    )
-                                                })}
+                                                {newEvent.tags.map((tag, index) => (
+                                                    <li key={index} className="mx-1 bg-gray-200 p-1 rounded text-sm">
+                                                        {tag} <button onClick={() => handleRemoveTag(tag)}>X</button>
+                                                    </li>
+                                                ))}
                                             </ul>
                                         </div>
                                         <div className="my-2">
@@ -295,7 +293,7 @@ export default function QuestionModalView({
                                             className="inline-flex justify-center rounded-full border border-transparent bg-brand-black px-12 py-1 text-sm font-medium text-brand-beige hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-beige focus-visible:ring-offset-2"
                                             onClick={handleSubmit}
                                         >
-                                            Create Event
+                                            {isUpdateEvent ? "Update Event" : "Create Event"}
                                         </button>
                                     </div>
                                 </div>

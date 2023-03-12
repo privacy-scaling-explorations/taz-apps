@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { useState, useEffect } from "react"
 import { useRouter } from "next/router"
 import ExperiencesListComponent from "./View"

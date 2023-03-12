@@ -1,3 +1,5 @@
+/* eslint-disable import/no-unresolved */
+/* eslint-disable no-undef */
 import { useState, useEffect } from "react"
 import axios from "axios"
 import Link from "next/link"
@@ -29,7 +31,6 @@ export default function Questions() {
     const fetchEvents = async () => {
         try {
             const response = await axios.get("/api/fetchEvents")
-            console.log("response frontend:", response.data)
             setEvents(response.data)
         } catch (error) {
             console.log("fetching events failed", error)
@@ -41,7 +42,6 @@ export default function Questions() {
     }, [])
 
     const addTag = (tag) => {
-        console.log("TAG", tag)
         newEvent.tags.push(tag)
         console.log("TAGS AFTER ADD", newEvent.tags)
     }
@@ -178,36 +178,15 @@ export default function Questions() {
                 <div className="px-6 pb-4">
                     <div className="flex flex-col w-full pt-5 pb-2">
                         <h2 className="ml-2 text-2xl leading-5 font-extrabold">Check events</h2>
-                        <h2 className="ml-2 text-2xl font-extrabold">Create events</h2>
                     </div>
                     <p className="ml-2 text-brand-info text-brand-blue">Check on going events (Sample text)</p>
-                    <p className="ml-2 text-brand-info text-brand-blue">TODO: Add Filter mechanism</p>
+                    {/* <p className="ml-2 text-brand-info text-brand-blue">TODO: Add Filter mechanism</p> */}
                 </div>
             </div>
 
             <div className="z-10 px-6 pb-8">
                 <div className="min-w-[200px] relative divide-y overflow-y-auto rounded-md border-2 border-brand-blue bg-white drop-shadow-lg">
-                    TODO: For each element, add more data about event (data, location, organized by, event type?)
                     <Calendar events={events} />
-                    {/* <InfiniteScroll loadMore={fetchItems} hasMore={hasMoreItems} loader={loader}>
-                        {questions.map((item) => (
-                            <Link
-                                href={
-                                    item.messageId !== 0
-                                        ? `/answers/${item.messageId}`
-                                        : `/answers/${item.messageId}/?txHash=${item.txHash}`
-                                }
-                                key={item.messageId}
-                            >
-                                <div className="flex w-full flex-row items-center border-brand-blue border-b-[1px] p-4 cursor-pointer">
-                                    <p className="text-brand-brown opacity-[85%] text-sm leading-5 w-[100%]">
-                                        {item.messageContent}
-                                    </p>
-                                    <SelectorArrow />
-                                </div>
-                            </Link>
-                        ))}
-                    </InfiniteScroll> */}
                 </div>
             </div>
 

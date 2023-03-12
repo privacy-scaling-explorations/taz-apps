@@ -7,7 +7,22 @@ const supabase = createClient(supabaseUrl, supabaseKey as string)
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
-        const response = await supabase.from("events").select()
+        const { name, startDate, endDate, organizers, location, startTime, endTime, tags, info, id } = req.body
+
+        const response = await supabase
+            .from("events")
+            .update({
+                name,
+                startDate,
+                endDate,
+                organizers,
+                location,
+                startTime,
+                endTime,
+                tags,
+                info
+            })
+            .eq("id", id)
 
         res.status(200).send(response.data)
     } catch (err: any) {
