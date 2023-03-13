@@ -1,8 +1,14 @@
 import { Dialog, Transition } from "@headlessui/react"
 import { Fragment, useRef, useState, useEffect } from "react"
 import DatePicker from "react-datepicker"
-
+import { createClient } from "@supabase/supabase-js"
+const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co"
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY
+const supabase = createClient(supabaseUrl, supabaseKey)
 import "react-datepicker/dist/react-datepicker.css"
+import TextInput from 'react-autocomplete-input';
+import 'react-autocomplete-input/dist/bundle.css';
+
 
 // TODO: Change to Event Modal View
 // TODO: When Fetching Event Modal also fetch extra data from database
@@ -23,6 +29,7 @@ export default function QuestionModalView({
     const [tag, setTag] = useState("")
     const [organizer, setOrganizer] = useState("")
     const [rerender, setRerender] = useState(true)
+    const [allUsers, setAllUsers] = useState([]);
 
     const handleAddTag = (tag) => {
         addTag(tag)
@@ -34,9 +41,17 @@ export default function QuestionModalView({
         setRerender(!rerender)
     }
 
-    const handleAddOrganizer = (organizer) => {
-        addOrganizer(organizer)
-        setOrganizer("")
+    const handleAddOrganizer = async (organizer) => {
+      console.log(organizer.slice(1))
+      // const { data, error } = await supabase
+      //     .from('users')
+      //     .select('userName')
+      //     .eq(organizer.slice(1))
+      //   if (!error) {
+      //     // Fix: if not in DB don't add
+      //   }
+      addOrganizer(organizer.slice(1))
+      setOrganizer("")
     }
 
     const handleRemoveOrganizer = (organizer) => {
@@ -44,9 +59,25 @@ export default function QuestionModalView({
         setRerender(!rerender)
     }
 
+    useEffect(() => {
+      (async() => {
+        try {
+          const { data, error } = await supabase
+            .from('users')
+            .select('userName')
+          data.forEach(element => {
+            setAllUsers([...allUsers, element.userName])
+          });
+        } catch (error) {
+          console.log(error)
+        }
+
+      })()
+    }, [])
+
     return (
         <Transition appear show={isOpen} as={Fragment}>
-            <Dialog as="div" initialFocus={questionTextRef} className="relative z-40" onClose={closeModal}>
+            <Dialog as="div" initialFocus={questionTextRef} className="relative z-40 " onClose={closeModal}>
                 <Transition.Child
                     as={Fragment}
                     enter="ease-out duration-300"
@@ -59,7 +90,7 @@ export default function QuestionModalView({
                     <div className="fixed inset-0 bg-black bg-opacity-25" />
                 </Transition.Child>
 
-                <div className="fixed inset-0 overflow-y-auto h-[900px]">
+                <div className="fixed inset-0 overflow-scroll h-[100%]">
                     <div className="flex h-[900px] items-center justify-center p-4 text-center">
                         <Transition.Child
                             as={Fragment}
@@ -175,15 +206,28 @@ export default function QuestionModalView({
                                         </div>
                                         <div className="flex flex-col gap-1 my-2 w-full">
                                             <label htmlFor="tags">Organizers</label>
+                                            <p className="text-xs font-weight: 100">Prefix @ with a name to search. Eg. @Vitalik</p>
                                             <div className="flex flex-row gap-4">
-                                                <input
+                                                {/* <input
                                                     id="organizers"
                                                     type="text"
                                                     className="border border-2 p-1 w-full"
                                                     placeholder="add organizer"
                                                     value={organizer}
                                                     onChange={(e) => setOrganizer(e.target.value)}
-                                                />
+                                                /> */}
+                                                <TextInput
+                                                    id="organizers"
+                                                    type="text"
+                                                    className="border border-2 p-1 w-full"
+                                                    placeholder="add organizer"
+
+                                                    trigger={"@"}
+                                                    options={allUsers}
+                                                    offsetY={50}
+                                                    onSelect={(e) => setOrganizer(e)}
+                                                    // onChange={(e) => setTag(e.target.value)}
+                                                    />
                                                 <button
                                                     className="bg-black text-white rounded border border-2 py-1 px-2"
                                                     onClick={() => handleAddOrganizer(organizer)}
@@ -191,6 +235,7 @@ export default function QuestionModalView({
                                                     Add
                                                 </button>
                                             </div>
+
                                             <ul className="flex flex-row items-start">
                                                 {newEvent.organizers.map((organizer, index) => (
                                                     <li key={index} className="mx-1 bg-gray-200 p-1 rounded text-sm">
@@ -214,12 +259,14 @@ export default function QuestionModalView({
                                                     value={tag}
                                                     onChange={(e) => setTag(e.target.value)}
                                                 />
+
                                                 <button
                                                     className="bg-black text-white rounded border border-2 py-1 px-2"
                                                     onClick={() => handleAddTag(tag)}
                                                 >
                                                     Add
                                                 </button>
+
                                             </div>
                                             <ul className="flex flex-row items-start">
                                                 {newEvent.tags.map((tag, index) => (
