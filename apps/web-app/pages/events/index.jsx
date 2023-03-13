@@ -12,7 +12,7 @@ import BackTAZ from "../../components/ArrowNavigators/BackTAZ"
 import Footer from "../../components/Footer"
 import Calendar from "../../components/Calendar"
 
-export default function Questions() {
+export default function Events() {
     const [questionModalIsOpen, setQuestionModalIsOpen] = useState(false)
     const [showTopBtn, setShowTopBtn] = useState(false)
     const [newEvent, setNewEvent] = useState({

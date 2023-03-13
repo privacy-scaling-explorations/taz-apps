@@ -23,7 +23,6 @@ interface EventsProps {
 
 const Accordian = (props: any) => {
 
-
   function handleActive(event: any) {
     props.setActive(event.target.id)
     
