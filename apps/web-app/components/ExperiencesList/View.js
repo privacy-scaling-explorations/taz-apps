@@ -88,9 +88,19 @@ function ExperiencesListComponent({ clearIdentity, urlIdentity }) {
                     >
                         <div className="w-[90%]">
                             <p className="py-2 text-brand-h3 font-bold">Create My ID</p>
+                            <p className="text-brand-info opacity-[70%]">Create your temporary semaphore id</p>
                         </div>
                         <SelectorArrow />
                     </div>
+                    <Link href="myprofile">
+                        <div className="flex w-full flex-row items-center border-b-2 border-brand-blue py-3 px-4 cursor-pointer hover:bg-gray-200">
+                            <div className="w-[90%]">
+                                <p className="py-2 text-brand-h3 font-bold">My Profile</p>
+                                <p className="text-brand-info opacity-[70%]">Check out your profile</p>
+                            </div>
+                            <SelectorArrow />
+                        </div>
+                    </Link>
                 </div>
 
                 <div className="relative flex flex-col items-center overflow-hidden mx-6 my-8 rounded-md border-2 border-brand-blue shadow-xl bg-white mb-8">
@@ -116,7 +126,7 @@ function ExperiencesListComponent({ clearIdentity, urlIdentity }) {
                         <div className="text-15px text-brand-blue">Take your ID with you </div>
                         <div></div>
                     </div>
-                    <Link href="myevent">
+                    <Link href="myevents">
                         <div className="flex w-full flex-row items-center border-b-2 border-brand-blue py-3 px-4 cursor-pointer">
                             <div className="w-[90%]">
                                 <p className="py-2 text-brand-h3 font-bold">My Events</p>
