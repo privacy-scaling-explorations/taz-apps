@@ -26,7 +26,8 @@ const Accordian = (props: any) => {
 
   function handleActive(event: any) {
     props.setActive(event.target.id)
-    if (props.active === props.week) {
+    
+      if (props.active === props.week) {
       props.setActive("")
     }
   }
