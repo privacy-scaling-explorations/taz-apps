@@ -6,9 +6,8 @@ const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co"
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY
 const supabase = createClient(supabaseUrl, supabaseKey)
 import "react-datepicker/dist/react-datepicker.css"
-import TextInput from 'react-autocomplete-input';
-import 'react-autocomplete-input/dist/bundle.css';
-
+import TextInput from "react-autocomplete-input"
+import "react-autocomplete-input/dist/bundle.css"
 
 // TODO: Change to Event Modal View
 // TODO: When Fetching Event Modal also fetch extra data from database
@@ -29,7 +28,7 @@ export default function QuestionModalView({
     const [tag, setTag] = useState("")
     const [organizer, setOrganizer] = useState("")
     const [rerender, setRerender] = useState(true)
-    const [allUsers, setAllUsers] = useState([]);
+    const [allUsers, setAllUsers] = useState([])
 
     const handleAddTag = (tag) => {
         addTag(tag)
@@ -42,16 +41,16 @@ export default function QuestionModalView({
     }
 
     const handleAddOrganizer = async (organizer) => {
-      console.log(organizer.slice(1))
-      // const { data, error } = await supabase
-      //     .from('users')
-      //     .select('userName')
-      //     .eq(organizer.slice(1))
-      //   if (!error) {
-      //     // Fix: if not in DB don't add
-      //   }
-      addOrganizer(organizer.slice(1))
-      setOrganizer("")
+        console.log(organizer.slice(1))
+        // const { data, error } = await supabase
+        //     .from('users')
+        //     .select('userName')
+        //     .eq(organizer.slice(1))
+        //   if (!error) {
+        //     // Fix: if not in DB don't add
+        //   }
+        addOrganizer(organizer.slice(1))
+        setOrganizer("")
     }
 
     const handleRemoveOrganizer = (organizer) => {
@@ -60,19 +59,19 @@ export default function QuestionModalView({
     }
 
     useEffect(() => {
-      (async() => {
-        try {
-          const { data, error } = await supabase
-            .from('users')
-            .select('userName')
-          data.forEach(element => {
-            setAllUsers([...allUsers, element.userName])
-          });
-        } catch (error) {
-          console.log(error)
-        }
-
-      })()
+        ;(async () => {
+            try {
+                const { data, error } = await supabase.from("users").select("userName")
+                console.log("Data: ", data)
+                const userNames = data.map((element) => {
+                    return element.userName
+                })
+                setAllUsers(userNames)
+                console.log("all users: ", allUsers)
+            } catch (error) {
+                console.log(error)
+            }
+        })()
     }, [])
 
     return (
@@ -206,7 +205,9 @@ export default function QuestionModalView({
                                         </div>
                                         <div className="flex flex-col gap-1 my-2 w-full">
                                             <label htmlFor="tags">Organizers</label>
-                                            <p className="text-xs font-weight: 100">Prefix @ with a name to search. Eg. @Vitalik</p>
+                                            <p className="text-xs font-weight: 100">
+                                                Prefix @ with a name to search. Eg. @Vitalik
+                                            </p>
                                             <div className="flex flex-row gap-4">
                                                 {/* <input
                                                     id="organizers"
@@ -221,13 +222,11 @@ export default function QuestionModalView({
                                                     type="text"
                                                     className="border border-2 p-1 w-full"
                                                     placeholder="add organizer"
-
                                                     trigger={"@"}
                                                     options={allUsers}
                                                     offsetY={50}
-                                                    onSelect={(e) => setOrganizer(e)}
-                                                    // onChange={(e) => setTag(e.target.value)}
-                                                    />
+                                                    onSelect={(e) => handleAddOrganizer(e)}
+                                                />
                                                 <button
                                                     className="bg-black text-white rounded border border-2 py-1 px-2"
                                                     onClick={() => handleAddOrganizer(organizer)}
@@ -266,7 +265,6 @@ export default function QuestionModalView({
                                                 >
                                                     Add
                                                 </button>
-
                                             </div>
                                             <ul className="flex flex-row items-start">
                                                 {newEvent.tags.map((tag, index) => (
