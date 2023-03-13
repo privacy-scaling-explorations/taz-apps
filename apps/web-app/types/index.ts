@@ -11,7 +11,7 @@ export interface EventsDTO {
     created_at: Date
     endDate: Date
     endTime: string
-    id: 21
+    id: number
     info: string
     location: string
     name: string
@@ -27,10 +27,12 @@ export interface ParticipantsDTO {
     user_id: number
     events: EventsDTO
     users: UserDTO[]
+    id: number
 }
 
 export interface FavoritedEventsDTO {
     created_at: Date
+    id: number
     event_id: number
     user_id: number
     events: EventsDTO
