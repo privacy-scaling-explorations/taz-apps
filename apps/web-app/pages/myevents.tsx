@@ -1,8 +1,10 @@
 import { GetServerSideProps } from "next"
 
+import axios from "axios"
 import { FavoritedEventsDTO, ParticipantsDTO, UserDTO } from "../types"
 
 import MyEventsComponent from "../components/MyEvent"
+
 
 type Props = {
     pastEvents: ParticipantsDTO[]
@@ -24,9 +26,9 @@ export default function MyEvents({ pastEvents, attendingEvents, favoritesEvents,
 
 export const getServerSideProps: GetServerSideProps = async ({ res }) => {
     try {
-        const usersResult = await fetch(`https://taz-zulalu-web-app.vercel.app/api/fetchUsers`)
-        const participantsResult = await fetch(`https://taz-zulalu-web-app.vercel.app/api/fetchParticipants`)
-        const usersFavoriteEventsResult = await fetch(`https://taz-zulalu-web-app.vercel.app/api/fetchFavoritedEvents`)
+        const usersResult = await axios.get('/api/fetchUsers')
+        const participantsResult = await axios.get('/api/fetchUsers')
+        const usersFavoriteEventsResult = await axios.get('/api/fetchUsers')
 
         const usersData: UserDTO[] = await usersResult.json()
         const participantsData: ParticipantsDTO[] = await participantsResult.json()
