@@ -30,9 +30,9 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
         const participantsResult = await axios.get('/api/fetchUsers')
         const usersFavoriteEventsResult = await axios.get('/api/fetchUsers')
 
-        const usersData: UserDTO[] = await usersResult.json()
-        const participantsData: ParticipantsDTO[] = await participantsResult.json()
-        const usersFavoriteData: FavoritedEventsDTO[] = await usersFavoriteEventsResult.json()
+        const usersData: any = usersResult
+        const participantsData: any = participantsResult
+        const usersFavoriteData: any = await usersFavoriteEventsResult
 
         // mocked user for now (fetching user 1 from db)
         // since we implement user authentication in the server side, we need to fetch user dinamically
