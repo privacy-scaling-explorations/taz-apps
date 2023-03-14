@@ -7,6 +7,7 @@ import "react-datepicker/dist/react-datepicker.css"
 import TextInput from "react-autocomplete-input"
 import "react-autocomplete-input/dist/bundle.css"
 import axios from "axios"
+import DatePicker from "react-datepicker"
 
 // TODO: Change to Event Modal View
 // TODO: When Fetching Event Modal also fetch extra data from database
