@@ -89,8 +89,8 @@ export default function QuestionModalView({
                     <div className="fixed inset-0 bg-black bg-opacity-25" />
                 </Transition.Child>
 
-                <div className="fixed inset-0 overflow-scroll h-[100%]">
-                    <div className="flex h-[900px] items-center justify-center p-4 text-center">
+                <div className="fixed inset-0  h-full">
+                    <div className="flex h-full items-center justify-center p-4 text-center">
                         <Transition.Child
                             as={Fragment}
                             enter="ease-out duration-300"
@@ -100,7 +100,7 @@ export default function QuestionModalView({
                             leaveFrom="opacity-100 scale-100"
                             leaveTo="opacity-0 scale-95"
                         >
-                            <Dialog.Panel className="w-10/12 max-w-md transform overflow-hidden rounded-lg border-brand-blue border-2 bg-white text-left align-middle shadow-xl transition-all">
+                            <Dialog.Panel className="w-10/12 h-[100%] max-w-md transform overflow-scroll rounded-lg border-brand-blue border-2 bg-white text-left align-middle shadow-xl transition-all">
                                 <div className="p-4 mb-1 bg-brand-beige border-b-2 border-brand-blue">
                                     <button
                                         type="button"
@@ -135,7 +135,7 @@ export default function QuestionModalView({
                                         Create New Event
                                     </Dialog.Title>
                                     <div className="flex flex-col">
-                                        <div className="flex flex-col gap-1 my-1">
+                                        <div className="flex flex-col gap-1 my-1 w-full">
                                             <label htmlFor="name">Event Name</label>
                                             <input
                                                 className="border border-2 p-1"
@@ -146,16 +146,16 @@ export default function QuestionModalView({
                                                 onChange={(e) => setNewEvent({ ...newEvent, name: e.target.value })}
                                             />
                                         </div>
-                                        <div className="flex justify-start gap-4 my-2">
-                                            <div className="w-[200px]">
+                                        <div className="flex flex-col md:flex-row justify-start gap-4 my-2">
+                                            <div className="flex flex-col w-full">
                                                 <label>Event Start</label>
                                                 <DatePicker
-                                                    className="border border-2 p-1 w-[200px]"
+                                                    className="border border-2 p-1 w-full"
                                                     selected={newEvent.startDate}
                                                     onChange={(date) => setNewEvent({ ...newEvent, startDate: date })}
                                                 />
                                             </div>
-                                            <div className="flex flex-col">
+                                            <div className="flex flex-col w-full">
                                                 <label htmlFor="startTime">Time</label>
                                                 <input
                                                     className="border border-2 p-1"
@@ -169,16 +169,16 @@ export default function QuestionModalView({
                                                 />
                                             </div>
                                         </div>
-                                        <div className="flex justify-start gap-4 my-2">
-                                            <div className="w-[200px]">
+                                        <div className="flex flex-col md:flex-row justify-start gap-4 my-2">
+                                            <div className="flex flex-col w-full">
                                                 <label>Event End</label>
                                                 <DatePicker
-                                                    className="border border-2 p-1 w-[200px]"
+                                                    className="border border-2 p-1 w-full"
                                                     selected={newEvent.endDate}
                                                     onChange={(date) => setNewEvent({ ...newEvent, endDate: date })}
                                                 />
                                             </div>
-                                            <div className="flex flex-col">
+                                            <div className="flex flex-col w-full">
                                                 <label htmlFor="endTime">Time</label>
                                                 <input
                                                     className="border border-2 p-1"
