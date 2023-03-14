@@ -125,8 +125,8 @@ export default function Event({ event, participants, favoritedEvents }: Props) {
 export const getServerSideProps: GetServerSideProps = async ({ res, query }) => {
     try {
         const response = await fetch(`https://taz-zulalu-web-app.vercel.app/api/fetchEvents/${query.parentMessageId}`)
-        const participantsResponse = await fetch("https://taz-zulalu-web-app.vercel.app/fetchParticipants")
-        const favoritedEventsResponse = await fetch("https://taz-zulalu-web-app.vercel.app/fetchFavoritedEvents")
+        const participantsResponse = await fetch("https://taz-zulalu-web-app.vercel.app/api/fetchParticipants")
+        const favoritedEventsResponse = await fetch("https://taz-zulalu-web-app.vercel.app/api/fetchFavoritedEvents")
         const event = await response.json()
         const participants = await participantsResponse.json()
         const favoritedEvents = await favoritedEventsResponse.json()
