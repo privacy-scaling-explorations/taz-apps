@@ -20,7 +20,8 @@ function SimpleMap() {
     <>
     <div className='shadow-xl' >
       <LoadScript
-        googleMapsApiKey="AIzaSyDicf8wy42J9FTusBpk5MtLA5G4zTMvL6E"
+        googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAP_API}
+
       >
         <GoogleMap
           mapContainerStyle={containerStyle}
