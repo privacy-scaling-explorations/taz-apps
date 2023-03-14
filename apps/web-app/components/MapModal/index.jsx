@@ -1,4 +1,4 @@
-import MapModalView from "./View.jsx"
+import MapModalView from "./view.jsx"
 
 const MapModal = ({ isOpen, closeModal }) => (
     <MapModalView
