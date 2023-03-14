@@ -144,7 +144,7 @@ const MyProfileComponent = ({ attendingEvents, pastEvents, userEventsFavorited, 
     return (
         <div className="grid">
             <div className="z-10 col-start-1 row-start-1 text-brand-brown">
-                <div className="flex flex-col max-w-full w-full m-auto md:max-w-[1280px] my-10 max-h-full md:max-h-[70vh] h-full relative">
+                <div className="flex flex-col max-w-full w-full m-auto md:max-w-[1280px] my-10 h-full relative">
                     <Link href="/experiences-page">
                         <div className="flex max-w-[76px] max-h-[32px] bg-black mb-7 px-1 text-xl text-brand-beige2 cursor-pointer absolute top-5 left-5 z-10">
                             <BackTAZ />
