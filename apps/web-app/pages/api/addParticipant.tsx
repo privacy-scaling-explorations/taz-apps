@@ -7,15 +7,13 @@ const supabase = createClient(supabaseUrl, supabaseKey as string)
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
-        const { userName, email, semaphoreId, code } = req.body
-        await supabase.from("users").insert({
-            userName,
-            email,
-            code,
-            semaphoreId
+        const { user_id, event_id } = req.body
+        await supabase.from("participants").insert({
+            user_id,
+            event_id
         })
 
-        res.status(201).json("user created")
+        res.status(200).send("Participant added")
     } catch (err: any) {
         console.log("error: ", err)
         res.status(500).json({ statusCode: 500, message: err.message })

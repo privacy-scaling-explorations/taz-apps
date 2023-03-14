@@ -1,9 +1,9 @@
 import ExperiencesList from "../components/ExperiencesList"
 
-export default function ExperiencesListPage({}) {
+export default function ExperiencesListPage() {
     return (
         <div>
-            <ExperiencesList />{" "}
+            <ExperiencesList />
         </div>
     )
 }

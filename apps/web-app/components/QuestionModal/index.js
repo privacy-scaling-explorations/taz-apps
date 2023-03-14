@@ -4,7 +4,6 @@ import QuestionModalView from "./View"
 const QuestionModal = ({
     isOpen,
     closeModal,
-    handleQuestionChange,
     handleSubmit,
     newEvent,
     setNewEvent,
@@ -17,7 +16,6 @@ const QuestionModal = ({
     <QuestionModalView
         isOpen={isOpen}
         closeModal={closeModal}
-        handleQuestionChange={handleQuestionChange}
         handleSubmit={handleSubmit}
         newEvent={newEvent}
         setNewEvent={setNewEvent}
