@@ -1,97 +1,23 @@
-import { useEffect, useState } from "react"
-
 import { useRouter } from "next/router"
 
 import Link from "next/link"
 
-import axios from "axios"
-
 import BackTAZ from "../ArrowNavigators/BackTAZ"
 import Loading from "../Loading"
 
-type UserDTO = {
-    code: string
-    created_at: Date
-    email: string
-    id: number
-    semaphoreId: string
-    userName: string
+import { FavoritedEventsDTO, ParticipantsDTO, UserDTO } from "../../types"
+
+type Props = {
+    pastEvents: ParticipantsDTO[]
+    attendingEvents: ParticipantsDTO[]
+    favoritesEvents: FavoritedEventsDTO[]
+    user: UserDTO | undefined
 }
 
-type EventsDTO = {
-    created_at: Date
-    endDate: Date
-    endTime: string
-    id: 21
-    info: string
-    location: string
-    name: string
-    organizers: string[]
-    startDate: Date
-    startTime: string
-    tags: string[]
-}
-
-type ParticipantsDTO = {
-    created_at: Date
-    event_id: number
-    user_id: number
-    events: EventsDTO
-    users: UserDTO[]
-}
-
-type FavoritedEventsDTO = {
-    created_at: Date
-    event_id: number
-    user_id: number
-    events: EventsDTO
-    users: UserDTO[]
-}
-
-const MyEventsComponent = () => {
+const MyEventsComponent = ({ user, favoritesEvents, attendingEvents, pastEvents }: Props) => {
     const router = useRouter()
-    const [user, setUser] = useState<UserDTO>()
-    const [participants, setParticipants] = useState<ParticipantsDTO[]>()
-    const [favoritedEvents, setFavoritedEvents] = useState<FavoritedEventsDTO[]>()
 
-    const fetchUsers = async () => {
-        await axios
-            .get("/api/fetchUsers")
-            .then((res) => {
-                const sempahoreId = localStorage.getItem("semaphore-id")
-                const userWithSameSemaphoreId = res.data.find((item: UserDTO) => item.semaphoreId === sempahoreId)
-                if (userWithSameSemaphoreId) {
-                    setUser(userWithSameSemaphoreId)
-                }
-            })
-            .catch((err) => console.log(err))
-    }
-
-    const fetchParticipants = async () => {
-        await axios
-            .get("/api/fetchParticipants")
-            .then((res) => {
-                setParticipants(res.data)
-            })
-            .catch((err) => console.log(err))
-    }
-
-    const fetchFavoritedEvents = async () => {
-        await axios
-            .get("/api/fetchFavoritedEvents")
-            .then((res) => {
-                setFavoritedEvents(res.data)
-            })
-            .catch((err) => console.log(err))
-    }
-
-    useEffect(() => {
-        fetchUsers()
-        fetchParticipants()
-        fetchFavoritedEvents()
-    }, [])
-
-    if (!user || !participants || !favoritedEvents) {
+    if (!user) {
         return (
             <div className="mx-6 my-8">
                 <Link href="/experiences-page">
@@ -108,23 +34,6 @@ const MyEventsComponent = () => {
             </div>
         )
     }
-
-    const userEvents = participants.filter((item: ParticipantsDTO) => item.user_id === user.id)
-    const userEventsFavorited = favoritedEvents.filter((item: ParticipantsDTO) => item.user_id === user.id)
-    const pastEvents = userEvents.filter((item: ParticipantsDTO) => {
-        const todayDate = new Date().getTime()
-        const eventDate = new Date(item.events.endDate).getTime()
-        if (todayDate > eventDate) {
-            return item
-        }
-    })
-    const attendingEvents = userEvents.filter((item: ParticipantsDTO) => {
-        const todayDate = new Date().getTime()
-        const eventDate = new Date(item.events.endDate).getTime()
-        if (todayDate < eventDate) {
-            return item
-        }
-    })
 
     const goToEventPage = (id: number) => {
         router.push(`/answers/${id}`)
@@ -151,7 +60,7 @@ const MyEventsComponent = () => {
                     <h1>Past Events</h1>
                     <div className="flex flex-wrap py-10 gap-5 justify-center md:justify-start">
                         {pastEvents.length !== 0 ? (
-                            pastEvents.map((item: ParticipantsDTO, index) => (
+                            pastEvents.map((item, index) => (
                                 <div key={index} className="h-[150px] flex flex-col justify-between">
                                     <div className="flex flex-col items-center justify-center w-full h-full gap-4 ring-2 ring-brand-black rounded-t-md">
                                         <h1>{item.events.name}</h1>
@@ -176,7 +85,7 @@ const MyEventsComponent = () => {
                     <h1>Attending Events</h1>
                     <div className="flex flex-wrap py-10 gap-5 justify-center md:justify-start">
                         {attendingEvents.length !== 0 ? (
-                            attendingEvents.map((item: ParticipantsDTO, index) => (
+                            attendingEvents.map((item, index) => (
                                 <div key={index} className="h-[150px] flex flex-col justify-between w-[200px]">
                                     <div className="flex flex-col items-center justify-center w-full h-full gap-4 ring-2 ring-brand-black rounded-t-md">
                                         <h1>{item.events.name}</h1>
@@ -205,8 +114,8 @@ const MyEventsComponent = () => {
                 <div className="flex-grow text-center md:text-start text-brand-brown p-4 min-w-[200px] min-h-[100%] relative divide-y overflow-y-auto border-2 border-brand-blue rounded-md bg-white drop-shadow-lg">
                     <h1>Favorites Events</h1>
                     <div className="flex flex-wrap py-10 gap-5 justify-center md:justify-start">
-                        {userEventsFavorited.length !== 0 ? (
-                            userEventsFavorited.map((item: FavoritedEventsDTO, index) => (
+                        {favoritesEvents.length !== 0 ? (
+                            favoritesEvents.map((item, index) => (
                                 <div key={index} className="h-[150px] flex flex-col justify-between w-[200px]">
                                     <div className="flex flex-col items-center justify-center w-full h-full gap-4 ring-2 ring-brand-black rounded-t-md">
                                         <h1>{item.events.name}</h1>

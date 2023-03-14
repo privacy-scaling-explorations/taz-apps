@@ -180,7 +180,6 @@ export default function Events() {
                         <h2 className="ml-2 text-2xl leading-5 font-extrabold">Check events</h2>
                     </div>
                     <p className="ml-2 text-brand-info text-brand-blue">Check on going events (Sample text)</p>
-                    {/* <p className="ml-2 text-brand-info text-brand-blue">TODO: Add Filter mechanism</p> */}
                 </div>
             </div>
 
@@ -194,7 +193,6 @@ export default function Events() {
                 <Footer />
             </div>
 
-            {/* End Questions Board */}
         </div>
     )
 }
