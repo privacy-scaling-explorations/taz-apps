@@ -112,7 +112,72 @@ const fetchOrganizers = async () => {
     const data = await response.json();
     return data;
   }
-  
+
+  async function createOrder() {
+
+    const orderData = {
+        "email": "dummy@example.org",
+        "locale": "en",
+        "sales_channel": "web",
+        "fees": [
+          {
+            "fee_type": "payment",
+            "value": "0.25",
+            "description": "",
+            "internal_type": "",
+            "tax_rule": 2
+          }
+        ],
+        "payment_provider": "banktransfer",
+        "invoice_address": {
+          "is_business": false,
+          "company": "Sample company",
+          "name_parts": {"full_name": "John Doe"},
+          "street": "Sesam Street 12",
+          "zipcode": "12345",
+          "city": "Sample City",
+          "country": "GB",
+          "state": "",
+          "internal_reference": "",
+          "vat_id": ""
+        },
+        "positions": [
+          {
+            "positionid": 1,
+            "item": 1,
+            "variation": null,
+            "price": "23.00",
+            "attendee_name_parts": {
+              "full_name": "Peter"
+            },
+            "attendee_email": null,
+            "addon_to": null,
+            "answers": [
+              {
+                "question": 1,
+                "answer": "23",
+                "options": []
+              }
+            ],
+            "subevent": null
+          }
+        ]
+      };
+    const response = await fetch('/api/pretix-create-order', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json, text/javascript',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(orderData)
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    return response.json();
+  }
 
   return (
     <div className="max-w-4xl mx-auto mt-8">
@@ -121,6 +186,8 @@ const fetchOrganizers = async () => {
       <button className="bg-blue-500 text-white py-2 px-4 rounded" onClick={fetchPretixEvents}>Pretix Events</button>
       <button className="bg-blue-500 text-white py-2 px-4 rounded" onClick={fetchPretixEvent}>Pretix Event</button>
       <button className="bg-blue-500 text-white py-2 px-4 rounded" onClick={createEvent}>Pretix Create Event</button>
+      <button className="bg-blue-500 text-white py-2 px-4 rounded" onClick={createOrder}>Pretix Create Order</button>
+
 
 
 
