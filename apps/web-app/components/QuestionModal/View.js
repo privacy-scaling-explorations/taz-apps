@@ -1,14 +1,16 @@
 import "react-autocomplete-input/dist/bundle.css"
 import { Dialog, Transition } from "@headlessui/react"
-// import { createClient } from "@supabase/supabase-js"
+import { createClient } from "@supabase/supabase-js"
 import { Fragment, useRef, useState, useEffect } from "react"
 import "react-datepicker/dist/react-datepicker.css"
 import TextInput from "react-autocomplete-input"
 import DatePicker from "react-datepicker"
 
-// const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co"
-// const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY
-// const supabase = createClient(supabaseUrl, supabaseKey)
+const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co"
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY
+const supabase = createClient(supabaseUrl, supabaseKey)
+
+console.log("supabase key",supabaseKey)
 
 // TODO: Change to Event Modal View
 // TODO: When Fetching Event Modal also fetch extra data from database
