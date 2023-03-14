@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import Link from "next/link"
-import MapModal from "../MapModal/Index.jsx"
+import MapModal from "../MapModal/index.jsx"
 import Loading from "../Loading"
 
 const columns = ["Name", "Time", "Location", "Organizers", "Tags", "Additional Info"]
