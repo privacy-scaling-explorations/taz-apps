@@ -36,7 +36,7 @@ const MyEventsComponent = ({ user, favoritesEvents, attendingEvents, pastEvents 
     }
 
     const goToEventPage = (id: number) => {
-        router.push(`/answers/${id}`)
+        router.push(`/event/${id}`)
     }
 
     return (

@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import Link from "next/link"
-import MapModal from "../MapModal"
+import MapModal from "../MapModal/index.jsx"
 import Loading from "../Loading"
 
 const columns = ["Name", "Time", "Location", "Organizers", "Tags", "Additional Info"]
@@ -82,7 +82,7 @@ const Accordian = (props: any) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {props.events.map((event, index) => {
+                            {props.events.map((event : any, index : any) => {
                                 const {
                                     name,
                                     endDate,
@@ -120,7 +120,7 @@ const Accordian = (props: any) => {
                                             <td className="border border-black p-2">
                                                 <div className="flex gap-2 flex-wrap">
                                                     {organizers &&
-                                                        organizers.map((item, i) => (
+                                                        organizers.map((item : any, i : any) => (
                                                             <div key={i} className="uppercase">
                                                                 <h1 className="bg-green-200 p-1 rounded-md text-[12px] tracking-widest">
                                                                     {item}
@@ -132,7 +132,7 @@ const Accordian = (props: any) => {
                                             <td className="border border-black p-2">
                                                 <div className="flex flex-wrap gap-2">
                                                     {tags &&
-                                                        tags.map((item, i) => (
+                                                        tags.map((item : any, i: any) => (
                                                             <div key={i} className="uppercase">
                                                                 <h1 className="bg-green-200 p-1 rounded-md text-[12px] tracking-widest">
                                                                     {item}
