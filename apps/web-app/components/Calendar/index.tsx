@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import Link from "next/link"
-
+import MapModal from "../MapModal"
 import Loading from "../Loading"
 
 const columns = ["Name", "Time", "Location", "Organizers", "Tags", "Additional Info"]
@@ -155,8 +155,18 @@ const Accordian = (props: any) => {
 }
 
 const Calendar = (props: EventsProps) => {
-    const [active, setActive] = useState("Week 1")
-    const { events } = props
+  const [active, setActive] = useState("Week 1");
+  const [mapModalOpen, setMapModalOpen] = useState(false);
+  const { events } = props
+
+  function openMapModal() {
+    setMapModalOpen(true);
+  }
+
+  function closeMapModal() {
+    setMapModalOpen(false)
+  }
+
 
     if (events.length === 0) {
         return (
@@ -175,7 +185,21 @@ const Calendar = (props: EventsProps) => {
 
     return (
         <div className="w-full my-10">
-            <h1 className="text-lg px-2">Zulalu Oficial Events Schedule</h1>
+
+            <div className="ml-2 flex items-center flex-row">
+            <h1 className="text-lg px-2 align-self:center">Zulalu Oficial Events Schedule</h1>
+                <button
+                    type="button"
+                    className="mr-4 ml-4 align-self:center bg-brand-yellow ring-2 ring-slate-100 py-3 px-4 drop-shadow text-brand-button font-medium text-brand-black hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-opacity-25"
+                    onClick={openMapModal}
+                >
+                    Event Map
+                </button>
+            </div>
+            <MapModal
+                isOpen={mapModalOpen}
+                closeModal={closeMapModal}
+            />
             <div className="py-5 w-full overflox-x-auto">
                 {/* When inputting dates make sure to append a zero on single digit days */}
                 <Accordian
