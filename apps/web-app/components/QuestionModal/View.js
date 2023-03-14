@@ -1,10 +1,12 @@
 import "react-autocomplete-input/dist/bundle.css"
 import { Dialog, Transition } from "@headlessui/react"
-// import { createClient } from "@supabase/supabase-js"
+import { createClient } from "@supabase/supabase-js"
 import { Fragment, useRef, useState, useEffect } from "react"
+import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 import TextInput from "react-autocomplete-input"
 import "react-autocomplete-input/dist/bundle.css"
+import axios from "axios"
 
 // TODO: Change to Event Modal View
 // TODO: When Fetching Event Modal also fetch extra data from database
@@ -58,8 +60,8 @@ export default function QuestionModalView({
     useEffect(() => {
         ;(async () => {
             try {
-                const { data, error } = await supabase.from("users").select("userName")
-                console.log("Data: ", data)
+                const {data, error} = await axios.get('/api/fetchUsers')
+                console.log("Response", data)
                 const userNames = data.map((element) => {
                     return element.userName
                 })
