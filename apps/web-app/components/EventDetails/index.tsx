@@ -197,7 +197,7 @@ const EventDetails = ({ event, participants, favoritedEvents, setUpdateEventModa
                     <h1>Edit Event</h1>
                 </div>
                 <div className="border border-brand-blue rounded-md p-4 text-center">
-                    <h1 className="text-4xl font-bold">{event.name}</h1>
+                    <h1 className="text-4xl font-bold mt-10">{event.name}</h1>
                     <div className="flex flex-col w-full justify-center my-5">
                         <h1>{`${event.startDate} -> ${event.endDate} , ${event.startTime}`}</h1>
                         <h1>{event.location}</h1>

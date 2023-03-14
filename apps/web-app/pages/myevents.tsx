@@ -24,9 +24,9 @@ export default function MyEvents({ pastEvents, attendingEvents, favoritesEvents,
 
 export const getServerSideProps: GetServerSideProps = async ({ res }) => {
     try {
-        const usersResult = await fetch(`http://localhost:3000/api/fetchUsers`)
-        const participantsResult = await fetch(`http://localhost:3000/api/fetchParticipants`)
-        const usersFavoriteEventsResult = await fetch(`http://localhost:3000/api/fetchFavoritedEvents`)
+        const usersResult = await fetch(`/api/fetchUsers`)
+        const participantsResult = await fetch(`/api/fetchParticipants`)
+        const usersFavoriteEventsResult = await fetch(`/api/fetchFavoritedEvents`)
 
         const usersData: UserDTO[] = await usersResult.json()
         const participantsData: ParticipantsDTO[] = await participantsResult.json()

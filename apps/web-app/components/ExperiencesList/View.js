@@ -79,9 +79,9 @@ function ExperiencesListComponent({ clearIdentity, urlIdentity }) {
 
                 <div className="relative flex flex-col items-center overflow-hidden mx-6 my-8 rounded-md border-2 border-brand-blue shadow-xl bg-white mb-8">
                     <div className="flex w-full justify-between border-b-2 border-brand-blue bg-brand-beige2 p-3">
-                        <div className="text-brand-blue text-15px">Create Your ID</div>
+                        <div className="text-brand-blue text-15px">Check your Profile</div>
                     </div>
-                    <div
+                    {/* <div
                         className="flex w-full flex-row items-center border-b-2 border-brand-blue py-3 px-4 cursor-pointer hover:bg-gray-200"
                         onClick={createSemaphoreID}
                     >
@@ -90,7 +90,7 @@ function ExperiencesListComponent({ clearIdentity, urlIdentity }) {
                             <p className="text-brand-info opacity-[70%]">Create your temporary semaphore id</p>
                         </div>
                         <SelectorArrow />
-                    </div>
+                    </div> */}
                     <Link href="myprofile">
                         <div className="flex w-full flex-row items-center border-b-2 border-brand-blue py-3 px-4 cursor-pointer hover:bg-gray-200">
                             <div className="w-[90%]">
