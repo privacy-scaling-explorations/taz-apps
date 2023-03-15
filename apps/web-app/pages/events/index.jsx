@@ -97,7 +97,7 @@ export default function Events() {
             // TODO: Pass item data to pretixCreateItem function
             // Add an Item on Pretix event
             // TODO: Solve create Item error
-            // pretixCreateItem();
+            pretixCreateItem();
 
         } catch (error) {
             alert("Event submission faild")

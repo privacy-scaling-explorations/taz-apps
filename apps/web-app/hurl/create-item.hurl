@@ -1,11 +1,11 @@
-POST https://pretix.eu/api/v1/organizers/bigevents/events/ticket/items/
+POST https://pretix.eu/api/v1/organizers/taz-zuzalu/events/ticket/items/
 Host: pretix.eu
 Authorization: Token h074quiq51d5xwk55tax7t7an12v3bb1rbdvk16209fsf4d1tqqtg9o68yy5jgmz
 Accept: application/json, text/javascript
 Content-Type: application/json
 
 {
-  "id": 1,
+  "id": 100,
   "name": {"en": "Standard ticket"},
   "internal_name": "",
   "sales_channels": ["web"],
@@ -16,7 +16,7 @@ Content-Type: application/json
   "description": null,
   "free_price": false,
   "tax_rate": "0.00",
-  "tax_rule": 1,
+  "tax_rule": null,
   "admission": false,
   "personalized": false,
   "issue_giftcard": false,

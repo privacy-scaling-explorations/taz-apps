@@ -16,7 +16,7 @@ const PretixWidget = dynamic(() => import('../components/PretixWidget'), {
 const PretixTest = () => {
 //   const [events, setEvents] = useState([]);
 //   const [newEvent, setNewEvent] = useState({});
-    const [data,setData] = useState("String");
+    // const [data,setData] = useState("String");
 
 //   useEffect(() => {
 //     axios.get(`${API_URL}/organizers/${ORGANIZER}/events/`, {
@@ -290,7 +290,7 @@ const fetchOrganizers = async () => {
       "description": null,
       "free_price": false,
       "tax_rate": "0.00",
-      "tax_rule": 1,
+      "tax_rule": null,
       "admission": false,
       "personalized": false,
       "issue_giftcard": false,
@@ -434,7 +434,7 @@ const fetchOrganizers = async () => {
         <h1>Welcome to My Page!</h1>
         <PretixWidget event="https://pretix.eu/taz-zuzalu/ticket/" subevent="3869116" />
       </>
-      <div>{data}</div>
+      {/* <div>{data}</div> */}
 
 
     </div>

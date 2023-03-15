@@ -182,7 +182,7 @@ export const pretixFetchEvents = async () => {
   export const pretixCreateItem = async () => {
 
     const itemData = {
-      "id": random(),
+      "id": Math.random(),
       "name": {"en": "Standard ticket"},
       "internal_name": "",
       "sales_channels": ["web"],
@@ -193,7 +193,7 @@ export const pretixFetchEvents = async () => {
       "description": null,
       "free_price": false,
       "tax_rate": "0.00",
-      "tax_rule": 1,
+      "tax_rule": null,
       "admission": false,
       "personalized": false,
       "issue_giftcard": false,
