@@ -3,3 +3,36 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.pretix-widget-attribution a {
+    @apply hidden;
+}
+
+.pretix-widget-loading {
+    @apply hidden;
+}
+
+.pretix-widget :not([class]):not([id]) button {
+    @apply bg-brand-yellow;
+    @apply text-brand-black;
+    @apply rounded-full;
+    @apply drop-shadow;
+    @apply font-medium;
+    @apply ring-2;
+    @apply ring-brand-black;
+    @apply w-auto;
+    @apply border-0;
+    @apply py-1;
+    @apply px-12;
+    @apply my-2;
+}
+
+.pretix-widget :not([class]):not([id]) button:hover {
+    @apply bg-brand-yellow;
+    @apply text-black;
+}
+
+.pretix-widget :not([class]):not([id]) button:focus {
+    @apply bg-brand-yellow;
+    @apply text-black;
+}

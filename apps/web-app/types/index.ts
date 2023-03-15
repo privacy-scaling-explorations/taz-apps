@@ -19,6 +19,8 @@ export interface EventsDTO {
     startDate: Date
     startTime: string
     tags: string[]
+    slug: string
+    publicUrl: string
 }
 
 export interface ParticipantsDTO {
