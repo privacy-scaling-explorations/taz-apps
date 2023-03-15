@@ -1,5 +1,6 @@
 // pages/api/create-event.js
 export default async function handler(req, res) {
+
     const auth = process.env.NEXT_PUBLIC_PRETIX_API;
     const headers = {
       'Accept': 'application/json, text/javascript',
@@ -7,13 +8,14 @@ export default async function handler(req, res) {
       'Content-Type': 'application/json'
     };
     const body = JSON.stringify(req.body);
-  
+    console.log(body)
     try {
       const response = await fetch('https://pretix.eu/api/v1/organizers/taz-zuzalu/events/', {
         method: 'POST',
         headers,
         body
       });
+
       if (response.ok) {
         const data = await response.json();
         res.status(200).json(data);
@@ -25,4 +27,3 @@ export default async function handler(req, res) {
       res.status(500).json({ message: 'Internal server error' });
     }
   }
-  

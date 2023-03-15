@@ -67,8 +67,8 @@ const fetchOrganizers = async () => {
   async function createEvent() {
     // TODO: transform event data into input
     const eventData = {
-        "name": {"en": "Sample Conference"},
-        "slug": "test1000",
+        "name": {"en": "Sample Conference1"},
+        "slug": "test1001",
         "live": false,
         "testmode": false,
         "currency": "EUR",
@@ -83,7 +83,7 @@ const fetchOrganizers = async () => {
         "location": null,
         "geo_lat": null,
         "geo_lon": null,
-        "has_subevents": false,
+        "has_subevents": true,
         "meta_data": {},
         "timezone": "Europe/Berlin",
         "item_meta_properties": {},
@@ -106,12 +106,59 @@ const fetchOrganizers = async () => {
       },
       body: JSON.stringify(eventData)
     });
+    console.log(response)
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
     return data;
   }
+
+  async function createSubEvent() {
+    // TODO: transform event data into input
+    const eventData = {
+      "name": {"en": "First Sample Subevent"},
+      "active": false,
+      "is_public": true,
+      "date_from": "2017-12-27T10:00:00Z",
+      "date_to": null,
+      "date_admission": null,
+      "presale_start": null,
+      "presale_end": null,
+      "location": null,
+      "geo_lat": null,
+      "geo_lon": null,
+      "seating_plan": null,
+      "seat_category_mapping": {},
+      "item_price_overrides": [
+        {
+          "item": 2,
+          "disabled": false,
+          "available_from": null,
+          "available_until": null,
+          "price": "12.00"
+        }
+      ],
+      "variation_price_overrides": [],
+      "meta_data": {}
+    };
+
+    const apiUrl = '/api/pretix-create-subevent';
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(eventData)
+    });
+    console.log(response)
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+  }
+
 
   async function createOrder() {
 
@@ -171,11 +218,11 @@ const fetchOrganizers = async () => {
       },
       body: JSON.stringify(orderData)
     });
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
+
     return response.json();
   }
 
@@ -187,6 +234,7 @@ const fetchOrganizers = async () => {
       <button className="bg-blue-500 text-white py-2 px-4 rounded" onClick={fetchPretixEvent}>Pretix Event</button>
       <button className="bg-blue-500 text-white py-2 px-4 rounded" onClick={createEvent}>Pretix Create Event</button>
       <button className="bg-blue-500 text-white py-2 px-4 rounded" onClick={createOrder}>Pretix Create Order</button>
+      <button className="bg-blue-500 text-white py-2 px-4 rounded" onClick={createSubEvent}>Create Subevent</button>
 
 
 
