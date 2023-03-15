@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   };
 
   try {
-    const response = await fetch('https://pretix.eu/api/v1/taz-zuzalu/events/ticket/subevents/', {
+    const response = await fetch('https://pretix.eu/api/v1/organizers/taz-zuzalu/events/ticket/subevents/', {
       method: 'GET',
       headers
     });

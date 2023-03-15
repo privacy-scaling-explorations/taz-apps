@@ -11,6 +11,7 @@ import RedCircle from "../../components/svgElements/RedCircle"
 import BackTAZ from "../../components/ArrowNavigators/BackTAZ"
 import Footer from "../../components/Footer"
 import Calendar from "../../components/Calendar"
+import { pretixCreateEvent, pretixCreateItem } from "../../components/PretixFunction"
 
 export default function Events() {
     const [questionModalIsOpen, setQuestionModalIsOpen] = useState(false)
@@ -90,6 +91,14 @@ export default function Events() {
 
         try {
             await axios.post("/api/createEvent", body)
+            // TODO: Pass event data to pretixCreateEvent function
+            // Create Event or Subevent(to be defined) on Pretix
+            pretixCreateEvent();
+            // TODO: Pass item data to pretixCreateItem function
+            // Add an Item on Pretix event
+            // TODO: Solve create Item error
+            // pretixCreateItem();
+
         } catch (error) {
             alert("Event submission faild")
             internalCloseProcessingModal()

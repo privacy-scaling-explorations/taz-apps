@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   };
 
   try {
-    const response = await fetch('https://pretix.eu/api/v1/organizers/taz-zuzalu/teams/1/members/', {
+    const response = await fetch('https://pretix.eu/api/v1/organizers/taz-zuzalu/teams/17820/members/', {
       method: 'GET',
       headers
     });

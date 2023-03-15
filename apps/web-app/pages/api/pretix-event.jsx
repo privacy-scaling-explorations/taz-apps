@@ -9,7 +9,7 @@ export default async function handler(req, res) {
   
     try {
       // TODO: use event name as input, currently using "sampleconf"
-      const response = await fetch('https://pretix.eu/api/v1/organizers/taz-zuzalu/events/sampleconf/', { headers });
+      const response = await fetch('https://pretix.eu/api/v1/organizers/taz-zuzalu/events/test100/', { headers });
       if (response.ok) {
         const data = await response.json();
         res.status(200).json(data);

@@ -9,7 +9,7 @@ export default async function handler(req, res) {
   };
 
   try {
-    const response = await fetch('https://pretix.eu/api/v1/organizers/taz-zuzalu/events/sampleconf/items/', {
+    const response = await fetch('https://pretix.eu/api/v1/organizers/taz-zuzalu/events/ticket/items/', {
       method: 'POST',
       headers,
       body: JSON.stringify(req.body)

@@ -1,36 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import dynamic from 'next/dynamic';
+import { random } from 'nanoid';
 import { v4 as uuidv4 } from 'uuid';
 
-
-const PretixWidget = dynamic(() => import('../components/PretixWidget'), {
-  ssr: false
-});
-
-
-// const API_URL = 'https://pretix.eu/api/v1';
-// const ORGANIZER = 'your-organizer-slug';
-// const EVENT_NAME = 'your-event-name';
-
-const PretixTest = () => {
-//   const [events, setEvents] = useState([]);
-//   const [newEvent, setNewEvent] = useState({});
-    const [data,setData] = useState("String");
-
-//   useEffect(() => {
-//     axios.get(`${API_URL}/organizers/${ORGANIZER}/events/`, {
-//       headers: { 'Accept': 'application/json, text/javascript' },
-//     })
-//       .then((response) => {
-//         setEvents(response.data.results);
-//       })
-//       .catch((error) => {
-//         console.error(error);
-//       });
-//   }, []);
-
-const fetchOrganizers = async () => {
+export const pretixFetchOrganizers = async () => {
     try {
       const response = await fetch('/api/organizers');
       if (response.ok) {
@@ -44,7 +15,7 @@ const fetchOrganizers = async () => {
     }
   };
 
-  const fetchPretixEvents = async () => {
+export const pretixFetchEvents = async () => {
     try {
       const response = await fetch('/api/pretix-events');
       if (response.ok) {
@@ -58,13 +29,13 @@ const fetchOrganizers = async () => {
     }
   };
   // TODO: Receive event name as input
-  const fetchPretixEvent = async () => {
+  export const pretixFetchEvent = async () => {
     try {
       const response = await fetch('/api/pretix-event');
       if (response.ok) {
         const data = await response.json();
         console.log(data);
-         
+
       } else {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -73,13 +44,13 @@ const fetchOrganizers = async () => {
     }
   };
 
-  const fetchSubEvents = async () => {
+  export const pretixFetchSubEvents = async () => {
     try {
       const response = await fetch('/api/pretix-get-subevents');
       if (response.ok) {
         const data = await response.json();
         console.log(data);
-         
+
       } else {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -89,10 +60,9 @@ const fetchOrganizers = async () => {
   };
 
 
-  async function createEvent() {
+  export async function pretixCreateEvent() {
     // TODO: transform event data into input
-    const eventData =
-      {
+    const eventData = {
         "name": {"en": "Sample Conf"},
         "slug": uuidv4(),
         "live": false,
@@ -122,7 +92,7 @@ const fetchOrganizers = async () => {
           "pretixpos",
           "resellers"
         ]
-      }
+      };
 
     const apiUrl = '/api/pretix-create-event';
     const response = await fetch(apiUrl, {
@@ -140,7 +110,7 @@ const fetchOrganizers = async () => {
     console.log(data)
   }
 
-  async function createSubEvent() {
+  export async function pretixCreateSubEvent() {
     // TODO: transform event data into input
     const eventData = {
       "name": {"en": "test"},
@@ -174,84 +144,17 @@ const fetchOrganizers = async () => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    console.log(data);
+    return data;
   }
 
 
-  async function createOrder() {
 
-    const orderData = {
-        "email": "dummy@example.org",
-        "locale": "en",
-        "sales_channel": "web",
-        "fees": [
-          {
-            "fee_type": "payment",
-            "value": "0.25",
-            "description": "",
-            "internal_type": "",
-            "tax_rule": 2
-          }
-        ],
-        "payment_provider": "banktransfer",
-        "invoice_address": {
-          "is_business": false,
-          "company": "Sample company",
-          "name_parts": {"full_name": "John Doe"},
-          "street": "Sesam Street 12",
-          "zipcode": "12345",
-          "city": "Sample City",
-          "country": "GB",
-          "state": "",
-          "internal_reference": "",
-          "vat_id": ""
-        },
-        "positions": [
-          {
-            "positionid": 1,
-            "item": 1,
-            "variation": null,
-            "price": "23.00",
-            "attendee_name_parts": {
-              "full_name": "Peter"
-            },
-            "attendee_email": null,
-            "addon_to": null,
-            "answers": [
-              {
-                "question": 1,
-                "answer": "23",
-                "options": []
-              }
-            ],
-            "subevent": null
-          }
-        ]
-      };
-    const response = await fetch('/api/pretix-create-order', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json, text/javascript',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(orderData)
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    return response.json();
-  }
-
-
-  const fetchItems = async () => {
+  export const pretixFetchItems = async () => {
     try {
       const response = await fetch('/api/pretix-get-items');
       if (response.ok) {
         const data = await response.json();
         console.log(data);
-        // setData(data);
 
       } else {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -261,13 +164,13 @@ const fetchOrganizers = async () => {
     }
   };
 
-  const fetchTeams = async () => {
+  export const PretixFetchTeams = async () => {
     try {
       const response = await fetch('/api/pretix-get-teams');
       if (response.ok) {
         const data = await response.json();
         console.log(data);
-         
+
       } else {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -276,10 +179,10 @@ const fetchOrganizers = async () => {
     }
   };
 
-  const createItem = async () => {
+  export const pretixCreateItem = async () => {
 
     const itemData = {
-      "id": Math.random(),
+      "id": random(),
       "name": {"en": "Standard ticket"},
       "internal_name": "",
       "sales_channels": ["web"],
@@ -388,13 +291,13 @@ const fetchOrganizers = async () => {
 
   }
 
-  const fetchTeamMembers = async () => {
+  export const pretixFetchTeamMembers = async () => {
     try {
       const response = await fetch('/api/pretix-get-team-members');
       if (response.ok) {
         const data = await response.json();
         console.log(data);
-         
+
       } else {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -402,43 +305,3 @@ const fetchOrganizers = async () => {
       console.log(error);
     }
   };
-
-
-  return (
-    <div className="max-w-4xl mx-auto mt-8">
-      <h1 className="text-3xl font-bold mb-4">Fetch Pretix Data</h1>
-      <div className="flex flex-wrap">
-      <button className="bg-blue-500 text-white py-2 px-4 rounded mr-4 mb-4" onClick={fetchOrganizers}>Get organizers</button>
-      <button className="bg-blue-500 text-white py-2 px-4 rounded mr-4 mb-4" onClick={fetchPretixEvents}>Pretix Events</button>
-      <button className="bg-blue-500 text-white py-2 px-4 rounded mr-4 mb-4" onClick={fetchPretixEvent}>Pretix Event</button>
-      <button className="bg-blue-500 text-white py-2 px-4 rounded mr-4 mb-4" onClick={fetchSubEvents}>Get Subevents</button>
-      <button className="bg-blue-500 text-white py-2 px-4 rounded mr-4 mb-4" onClick={fetchTeams}>Get Teams</button>
-      <button className="bg-blue-500 text-white py-2 px-4 rounded mr-4 mb-4" onClick={fetchTeamMembers}>Get Team Members</button>
-      <button className="bg-blue-500 text-white py-2 px-4 rounded mr-4 mb-4" onClick={fetchItems}>Get Items</button>
-      
-
-
-
-    </div>
-    <h1 className="text-3xl font-bold mb-4">Create Pretix</h1>
-      <div className="flex flex-wrap">
-      <button className="bg-green-500 text-white py-2 px-4 rounded mr-4 mb-4" onClick={createEvent}>Create Event</button>
-      <button className="bg-green-500 text-white py-2 px-4 rounded mr-4 mb-4" onClick={createSubEvent}>Create Team</button>
-      <button className="bg-green-500 text-white py-2 px-4 rounded mr-4 mb-4" onClick={createSubEvent}>Invite TeamMember</button>
-      <button className="bg-green-500 text-white py-2 px-4 rounded mr-4 mb-4" onClick={createSubEvent}>Create Subevent</button>
-      <button className="bg-green-500 text-white py-2 px-4 rounded mr-4 mb-4" onClick={createItem}>Create Item</button>
-    </div>
-
-
-      <>
-        <h1>Welcome to My Page!</h1>
-        <PretixWidget event="https://pretix.eu/taz-zuzalu/ticket/" subevent="3869116" />
-      </>
-      <div>{data}</div>
-
-
-    </div>
-  );
-};
-
-export default PretixTest;
