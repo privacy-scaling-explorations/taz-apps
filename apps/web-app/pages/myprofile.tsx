@@ -26,9 +26,10 @@ export default function MyProfile({ pastEvents, attendingEvents, userEventsFavor
 
 export const getServerSideProps: GetServerSideProps = async ({ res }) => {
     try {
-        const usersResult = await fetch(`https://taz-zulalu-web-app.vercel.app/api/fetchUsers`)
-        const participantsResult = await fetch(`https://taz-zulalu-web-app.vercel.app/api/fetchParticipants`)
-        const usersFavoriteEventsResult = await fetch(`https://taz-zulalu-web-app.vercel.app/api/fetchFavoritedEvents`)
+        const url = process.env.URL_TO_FETCH
+        const usersResult = await fetch(`${url}/api/fetchUsers`)
+        const participantsResult = await fetch(`${url}/api/fetchParticipants`)
+        const usersFavoriteEventsResult = await fetch(`${url}/api/fetchFavoritedEvents`)
 
         const usersData: UserDTO[] = await usersResult.json()
         const participantsData: ParticipantsDTO[] = await participantsResult.json()
