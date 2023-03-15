@@ -1,14 +1,15 @@
 import "react-toastify/dist/ReactToastify.css"
 
 import axios from "axios"
-
 import { useRouter } from "next/router"
-
 import { ToastContainer, toast } from "react-toastify"
-
 import { RiArrowLeftLine } from "react-icons/ri"
-
+import dynamic from "next/dynamic"
 import { EventsDTO, ParticipantsDTO, FavoritedEventsDTO } from "../../types"
+
+const PretixWidget = dynamic(() => import("../PretixWidget"), {
+    ssr: false
+})
 
 type Props = {
     event: EventsDTO
@@ -244,6 +245,19 @@ const EventDetails = ({ event, participants, favoritedEvents, setUpdateEventModa
                         >
                             {checkIfUserHadFavorited ? "Favorited" : "Favorite"}
                         </button>
+                    </div>
+
+                    {/* <div className="w-full flex justify-center gap-5 my-5">
+                        <button
+                            type="button"
+                            onClick={() => handleClickRegister()}
+                            className="rounded-full bg-brand-yellow ring-2 ring-brand-black px-4 py-1 drop-shadow text-brand-button font-medium text-brand-black hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-opacity-25"
+                        >
+                            Register
+                        </button>
+                    </div> */}
+                    <div>
+                        <PretixWidget event={event.publicUrl} />
                     </div>
                 </div>
             </div>
