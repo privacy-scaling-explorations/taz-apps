@@ -6,7 +6,7 @@ Content-Type: application/json
 
 {
   "id": 100,
-  "name": {"en": "Standard ticket"},
+  "name": {"en": "Standard ticket0000"},
   "internal_name": "",
   "sales_channels": ["web"],
   "default_price": "23.00",
@@ -17,8 +17,8 @@ Content-Type: application/json
   "free_price": false,
   "tax_rate": "0.00",
   "tax_rule": null,
-  "admission": false,
-  "personalized": false,
+  "admission": true,
+  "personalized": true,
   "issue_giftcard": false,
   "meta_data": {},
   "position": 0,
