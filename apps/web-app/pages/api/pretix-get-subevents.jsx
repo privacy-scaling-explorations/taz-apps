@@ -8,11 +8,11 @@ export default async function handler(req, res) {
   };
 
   try {
-    const response = await fetch('https://pretix.eu/api/v1/taz-zuzalu/bigevents/events/sampleconf/subevents/', {
+    const response = await fetch('https://pretix.eu/api/v1/taz-zuzalu/events/ticket/subevents/', {
       method: 'GET',
       headers
     });
-
+    console.log(response)
     if (response.ok) {
       const data = await response.json();
       res.status(200).json(data);
