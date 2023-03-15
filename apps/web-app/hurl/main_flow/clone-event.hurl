@@ -5,8 +5,8 @@ Accept: application/json, text/javascript
 Content-Type: application/json
 
 {
-  "name": {"en": "Zuzalu Event Name Cloned 2"},
-  "slug": "cloned-zuzalu-event-2",
+  "name": {"en": "Zuzalu Event Name Cloned 3"},
+  "slug": "cloned-zuzalu-event-3",
   "live": false,
   "testmode": true,
   "currency": "EUR",

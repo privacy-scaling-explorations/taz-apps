@@ -91,13 +91,13 @@ export default function Events() {
 
         try {
             await axios.post("/api/createEvent", body)
-            // TODO: Pass event data to pretixCreateEvent function
-            // Create Event or Subevent(to be defined) on Pretix
-            pretixCreateEvent();
-            // TODO: Pass item data to pretixCreateItem function
-            // Add an Item on Pretix event
-            // TODO: Solve create Item error
-            pretixCreateItem();
+            //TODO: Implement
+            // 1. Clone the event -> Name - Date - Location - slug
+
+            // 2. Patch Event (make it live) -> make live
+
+            // 2.1 Fetch Item ID from this even slug
+            // 3. Patch Items -> Name - Price - Description
 
         } catch (error) {
             alert("Event submission faild")
