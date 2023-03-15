@@ -1,5 +1,8 @@
+/* eslint-disable consistent-return */
+/* eslint-disable array-callback-return */
 import React, { useState } from "react"
 import Link from "next/link"
+import { MdKeyboardArrowDown } from "react-icons/md"
 import MapModal from "../MapModal/index.jsx"
 import Loading from "../Loading"
 
@@ -21,7 +24,17 @@ interface EventsProps {
     }[]
 }
 
-const Accordian = (props: any) => {
+type AccordianProps = {
+    events: EventsProps["events"]
+    week: string
+    date: string
+    startingDate: string
+    endingDate: string
+    active: string
+    setActive: (s: string) => void
+}
+
+const Accordian = (props: AccordianProps) => {
     function handleActive(event: any) {
         props.setActive(event.target.id)
 
@@ -50,19 +63,7 @@ const Accordian = (props: any) => {
                         aria-controls="accordion-flush-body-1"
                     >
                         <span className="px-2 text-lg text-black">{props.week}</span>
-                        <svg
-                            data-accordion-icon
-                            className="w-6 h-6 shrink-0"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path
-                                fill-rule="evenodd"
-                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                clip-rule="evenodd"
-                            ></path>
-                        </svg>
+                        <MdKeyboardArrowDown size={30} />
                     </button>
                 </h2>
                 <div
@@ -82,7 +83,7 @@ const Accordian = (props: any) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {props.events.map((event : any, index : any) => {
+                            {props.events.map((event: any, index: any) => {
                                 const {
                                     name,
                                     endDate,
@@ -120,7 +121,7 @@ const Accordian = (props: any) => {
                                             <td className="border border-black p-2">
                                                 <div className="flex gap-2 flex-wrap">
                                                     {organizers &&
-                                                        organizers.map((item : any, i : any) => (
+                                                        organizers.map((item: any, i: any) => (
                                                             <div key={i} className="uppercase">
                                                                 <h1 className="bg-green-200 p-1 rounded-md text-[12px] tracking-widest">
                                                                     {item}
@@ -132,7 +133,7 @@ const Accordian = (props: any) => {
                                             <td className="border border-black p-2">
                                                 <div className="flex flex-wrap gap-2">
                                                     {tags &&
-                                                        tags.map((item : any, i: any) => (
+                                                        tags.map((item: any, i: any) => (
                                                             <div key={i} className="uppercase">
                                                                 <h1 className="bg-green-200 p-1 rounded-md text-[12px] tracking-widest">
                                                                     {item}
@@ -155,18 +156,17 @@ const Accordian = (props: any) => {
 }
 
 const Calendar = (props: EventsProps) => {
-  const [active, setActive] = useState("Week 1");
-  const [mapModalOpen, setMapModalOpen] = useState(false);
-  const { events } = props
+    const [active, setActive] = useState("Week 1")
+    const [mapModalOpen, setMapModalOpen] = useState(false)
+    const { events } = props
 
-  function openMapModal() {
-    setMapModalOpen(true);
-  }
+    function openMapModal() {
+        setMapModalOpen(true)
+    }
 
-  function closeMapModal() {
-    setMapModalOpen(false)
-  }
-
+    function closeMapModal() {
+        setMapModalOpen(false)
+    }
 
     if (events.length === 0) {
         return (
@@ -185,9 +185,8 @@ const Calendar = (props: EventsProps) => {
 
     return (
         <div className="w-full my-10">
-
             <div className="ml-2 flex items-center flex-row">
-            <h1 className="text-lg px-2 align-self:center">Zulalu Oficial Events Schedule</h1>
+                <h1 className="text-lg px-2 align-self:center">Zulalu Oficial Events Schedule</h1>
                 <button
                     type="button"
                     className="mr-4 ml-4 align-self:center bg-brand-yellow ring-2 ring-slate-100 py-3 px-4 drop-shadow text-brand-button font-medium text-brand-black hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-opacity-25"
@@ -196,10 +195,7 @@ const Calendar = (props: EventsProps) => {
                     Event Map
                 </button>
             </div>
-            <MapModal
-                isOpen={mapModalOpen}
-                closeModal={closeMapModal}
-            />
+            <MapModal isOpen={mapModalOpen} closeModal={closeMapModal} />
             <div className="py-5 w-full overflox-x-auto">
                 {/* When inputting dates make sure to append a zero on single digit days */}
                 <Accordian

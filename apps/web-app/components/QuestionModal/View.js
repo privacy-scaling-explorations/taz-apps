@@ -1,11 +1,9 @@
 import "react-autocomplete-input/dist/bundle.css"
 import { Dialog, Transition } from "@headlessui/react"
-import { createClient } from "@supabase/supabase-js"
 import { Fragment, useRef, useState, useEffect } from "react"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 import TextInput from "react-autocomplete-input"
-import "react-autocomplete-input/dist/bundle.css"
 import axios from "axios"
 
 // TODO: Change to Event Modal View
@@ -60,13 +58,9 @@ export default function QuestionModalView({
     useEffect(() => {
         ;(async () => {
             try {
-                const {data, error} = await axios.get('/api/fetchUsers')
-                console.log("Response", data)
-                const userNames = data.map((element) => {
-                    return element.userName
-                })
+                const { data } = await axios.get("/api/fetchUsers")
+                const userNames = data.map((element) => element.userName)
                 setAllUsers(userNames)
-                console.log("all users: ", allUsers)
             } catch (error) {
                 console.log(error)
             }
@@ -226,7 +220,7 @@ export default function QuestionModalView({
                                                     offsetY={50}
                                                     onSelect={(e) => setOrganizer(e)}
                                                     // onChange={(e) => setTag(e.target.value)}
-                                                    />
+                                                />
                                                 <button
                                                     className="bg-black text-white rounded border border-2 py-1 px-2"
                                                     onClick={() => handleAddOrganizer(organizer)}
