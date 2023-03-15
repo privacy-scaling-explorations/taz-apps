@@ -280,7 +280,7 @@ const fetchOrganizers = async () => {
 
     const itemData = {
       "id": Math.random(),
-      "name": {"en": "Standard ticket"},
+      "name": {"en": "Standard ticket 1000"},
       "internal_name": "",
       "sales_channels": ["web"],
       "default_price": "23.00",
@@ -292,7 +292,7 @@ const fetchOrganizers = async () => {
       "tax_rate": "0.00",
       "tax_rule": null,
       "admission": false,
-      "personalized": false,
+      "personalized": true,
       "issue_giftcard": false,
       "meta_data": {},
       "position": 0,
@@ -432,7 +432,7 @@ const fetchOrganizers = async () => {
 
       <>
         <h1>Welcome to My Page!</h1>
-        <PretixWidget event="https://pretix.eu/taz-zuzalu/ticket/" subevent="3869116" />
+        <PretixWidget event="https://pretix.eu/taz-zuzalu/cloned-zuzalu-event-3/" />
       </>
       {/* <div>{data}</div> */}
 
