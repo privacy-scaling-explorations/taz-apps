@@ -8,7 +8,7 @@ export default async function handler(req, res) {
       'Content-Type': 'application/json'
     };
     const body = JSON.stringify(req.body);
-    console.log(body)
+    
     try {
       const response = await fetch('https://pretix.eu/api/v1/organizers/taz-zuzalu/events/', {
         method: 'POST',
