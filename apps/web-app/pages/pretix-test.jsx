@@ -432,7 +432,7 @@ const fetchOrganizers = async () => {
 
       <>
         <h1>Welcome to My Page!</h1>
-        <PretixWidget event="https://pretix.eu/taz-zuzalu/ticket/" subevent="3869116" />
+        <PretixWidget event="https://pretix.eu/taz-zuzalu/cloned-zuzalu-event-3/" />
       </>
       {/* <div>{data}</div> */}
 

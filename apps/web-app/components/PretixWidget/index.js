@@ -17,7 +17,7 @@ const PretixWidget = ({ event, subevent }) => {
   return (
     <>
       <link rel="stylesheet" type="text/css" href="https://pretix.eu/taz-zuzalu/ticket/widget/v1.css" />
-      {typeof window !== 'undefined' && <pretix-widget event={event} subevent={subevent}></pretix-widget>}
+      {typeof window !== 'undefined' && <pretix-widget event={event} ></pretix-widget>}
       <noscript>
         <div className="pretix-widget">
           <div className="pretix-widget-info-message">
