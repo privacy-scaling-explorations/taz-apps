@@ -2,6 +2,7 @@ import "react-autocomplete-input/dist/bundle.css"
 import "react-datepicker/dist/react-datepicker.css"
 import { Dialog, Transition } from "@headlessui/react"
 import { Fragment, useRef, useState } from "react"
+import axios from "axios"
 
 import ModalSteps from "./ModalSteps"
 import Step1 from "./Step1"
@@ -45,6 +46,50 @@ const AddEventModal = ({ isOpen, closeModal }: Props) => {
         price: "",
         description: ""
     })
+
+    const handleSubmit = async () => {
+        console.log("Event submitted")
+        const clonedEventRes = await axios.post("/api/pretix-clone-event", {
+            name: { en: newEvent.name },
+            slug: newEvent.name.toLowerCase().split(" ").join("-"),
+            live: false,
+            currency: "EUR",
+            date_from: newEvent.startDate,
+            date_to: newEvent.endDate,
+            date_admission: null,
+            presale_start: null,
+            presale_end: null,
+            location: newEvent.location,
+            geo_lat: null,
+            geo_lon: null,
+            seating_plan: null,
+            seat_category_mapping: {},
+            meta_data: {},
+            timezone: "Europe/Berlin",
+            item_meta_properties: {},
+            plugins: ["pretix.plugins.stripe", "pretix.plugins.paypal"],
+            sales_channels: ["web", "pretixpos", "resellers"]
+        })
+
+        console.log("Cloned event url and slug: ", clonedEventRes.data.public_url, clonedEventRes.data.slug)
+    
+        const patchResponse = await axios.post(`/api/pretix-update-event/${clonedEventRes.data.slug}`, {
+            live: true
+        })
+
+        console.log("Patch response: ", patchResponse)
+    
+        const createEventDB = await axios.post("/api/createEvent", {
+            ...newEvent,
+            publicUrl: clonedEventRes.data.public_url,
+            slug: clonedEventRes.data.slug
+        })
+
+        console.log("DB response: ", createEventDB)
+    
+        if (createEventDB.data === "Event created") {
+        }
+    }
 
     return (
         <Transition appear show={isOpen} as={Fragment}>
@@ -110,7 +155,7 @@ const AddEventModal = ({ isOpen, closeModal }: Props) => {
                                     {steps === 2 && (
                                         <Step2 setSteps={setSteps} newTicket={newTicket} setNewTicket={setNewTicket} />
                                     )}
-                                    {steps === 3 && <Step3 setSteps={setSteps} />}
+                                    {steps === 3 && <Step3 setSteps={setSteps} newEvent={newEvent} newTicket={newTicket} handleSubmit={handleSubmit}/>}
                                 </div>
                             </Dialog.Panel>
                         </Transition.Child>
