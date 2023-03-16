@@ -3,6 +3,7 @@ import fetch from 'node-fetch';
 const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co"
 const supabaseKey = process.env.SUPABASE_KEY
 const supabase = createClient(supabaseUrl, supabaseKey)
+import axios from 'axios'
 
 export default async function handler(req, res) {
 
@@ -12,23 +13,21 @@ export default async function handler(req, res) {
     'Authorization': `Token ${auth}`,
     'Content-Type': 'application/json'
   };
-  // const body = JSON.stringify(req.body);
-  const body = {"name":{"en":"Hackathon 3"}}
+  const body = JSON.stringify(req.body.data);
+
   try {
     const { data, error } = await supabase
             .from("events")
             .select('slug')
-            .eq("name", req.body.name)
-    console.log(body, data[0].slug)
-    const response = await fetch(`https://pretix.eu/api/v1/organizers/taz-zuzalu/events/${data[0].slug}/`, {
-      method: 'PATCH',
-      headers,
-      body
-    });
+            .eq("id", req.body.id)
+
+    const response = await axios.patch(`https://pretix.eu/api/v1/organizers/taz-zuzalu/events/${data[0].slug}/`,
+      req.body.data,
+      {headers}
+  )
     console.log(response)
-    if (response.ok) {
-      const data = await response.json();
-      res.status(200).json(data);
+    if (response.status === 200) {
+      res.status(200).json(response.data);
     } else {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
