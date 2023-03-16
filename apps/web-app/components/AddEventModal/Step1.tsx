@@ -57,43 +57,7 @@ const Step1 = ({ newEvent, setNewEvent, setSteps }: Props) => {
         setRerender(!rerender)
     }
 
-    const handleSubmit = async () => {
-        // const clonedEventRes = await axios.post("/api/pretix-clone-event", {
-        //     name: { en: newEvent.name },
-        //     slug: newEvent.name.toLowerCase().split(" ").join("-"),
-        //     live: false,
-        //     currency: "EUR",
-        //     date_from: newEvent.startDate,
-        //     date_to: newEvent.endDate,
-        //     date_admission: null,
-        //     presale_start: null,
-        //     presale_end: null,
-        //     location: newEvent.location,
-        //     geo_lat: null,
-        //     geo_lon: null,
-        //     seating_plan: null,
-        //     seat_category_mapping: {},
-        //     meta_data: {},
-        //     timezone: "Europe/Berlin",
-        //     item_meta_properties: {},
-        //     plugins: ["pretix.plugins.stripe", "pretix.plugins.paypal"],
-        //     sales_channels: ["web", "pretixpos", "resellers"]
-        // })
 
-        // await axios.post(`/api/pretix-update-event/${clonedEventRes.data.slug}`, {
-        //     live: true
-        // })
-
-        // const createEventDB = await axios.post("/api/createEvent", {
-        //     ...newEvent,
-        //     publicUrl: clonedEventRes.data.public_url,
-        //     slug: clonedEventRes.data.slug
-        // })
-
-        // if (createEventDB.data === "Event created") {
-        setSteps(2)
-        // }
-    }
     return (
         <div className="flex flex-col w-full">
             <div className="flex flex-col gap-1 my-1 w-full">
@@ -236,7 +200,7 @@ const Step1 = ({ newEvent, setNewEvent, setSteps }: Props) => {
                 <button
                     type="button"
                     className="w-[200px] inline-flex justify-center rounded-full border border-transparent bg-brand-black px-12 py-1 text-sm font-medium text-brand-beige hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-beige focus-visible:ring-offset-2"
-                    onClick={handleSubmit}
+                    onClick={() => setSteps(2)}
                 >
                     Next Step
                 </button>

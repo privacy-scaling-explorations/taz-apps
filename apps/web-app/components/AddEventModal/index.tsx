@@ -2,6 +2,7 @@ import "react-autocomplete-input/dist/bundle.css"
 import "react-datepicker/dist/react-datepicker.css"
 import { Dialog, Transition } from "@headlessui/react"
 import { Fragment, useRef, useState } from "react"
+import axios from "axios"
 
 import ModalSteps from "./ModalSteps"
 import Step1 from "./Step1"
@@ -25,6 +26,9 @@ type Props = {
     closeModal: (b: boolean) => void
 }
 
+//Add frontend to allow multiple tickets and set ticket quotas
+//Add organizers from fetchUsers
+
 const AddEventModal = ({ isOpen, closeModal }: Props) => {
     const questionTextRef = useRef(null)
     const [steps, setSteps] = useState(1)
@@ -45,6 +49,72 @@ const AddEventModal = ({ isOpen, closeModal }: Props) => {
         price: "",
         description: ""
     })
+
+    const [ticketAmount, setTicketAmount] = useState(1)
+
+    const handleSubmit = async () => {
+        //Step 1 Clone event from template
+
+        const clonedEventRes = await axios.post("/api/pretix-clone-event", {
+            name: { en: newEvent.name },
+            slug: newEvent.name.toLowerCase().split(" ").join("-"),
+            live: false,
+            currency: "EUR",
+            date_from: newEvent.startDate,
+            date_to: newEvent.endDate,
+            date_admission: null,
+            presale_start: null,
+            presale_end: null,
+            location: newEvent.location,
+            geo_lat: null,
+            geo_lon: null,
+            seating_plan: null,
+            seat_category_mapping: {},
+            meta_data: {},
+            timezone: "Europe/Berlin",
+            item_meta_properties: {},
+            plugins: ["pretix.plugins.stripe", "pretix.plugins.paypal"],
+            sales_channels: ["web", "pretixpos", "resellers"]
+        })
+
+        console.log("Cloned event url and slug: ", clonedEventRes.data.public_url, clonedEventRes.data.slug)
+
+        //Step 2 Create items (tickets)
+
+        const ticketCreatedRes = await axios.post(`/api/pretix-create-item/${clonedEventRes.data.slug}`, { newTicket })
+
+        console.log("tickets created: ", ticketCreatedRes.data)
+
+        //Step 3 Get items (tickets)
+        const getTicketsRes = await axios.get(`/api/pretix-get-items/${clonedEventRes.data.slug}`)
+
+        console.log("get tickets: ", getTicketsRes.data)
+
+        //Step 4 Create Quota
+        const quotaCreatedRes = await axios.post(`/api/pretix-create-quota/${clonedEventRes.data.slug}`, {
+            ticketAmount: ticketAmount,
+            ticketId: getTicketsRes.data.results[0].id,
+            variationId1: getTicketsRes.data.results[0].variations[0].id
+        })
+
+        console.log("Quota creatd: ", quotaCreatedRes.data)
+
+        //Step 5 Go Live
+        const patchResponse = await axios.post(`/api/pretix-go-live/${clonedEventRes.data.slug}`, {
+            live: true
+        })
+
+        console.log("Go Live response: ", patchResponse.data)
+
+        //Step 6 Add to database
+        const createEventDB = await axios.post("/api/createEvent", {
+            ...newEvent,
+            publicUrl: clonedEventRes.data.public_url,
+            slug: clonedEventRes.data.slug
+        })
+
+        console.log("DB response: ", createEventDB)
+    }
 
     return (
         <Transition appear show={isOpen} as={Fragment}>
@@ -108,9 +178,22 @@ const AddEventModal = ({ isOpen, closeModal }: Props) => {
                                         <Step1 newEvent={newEvent} setNewEvent={setNewEvent} setSteps={setSteps} />
                                     )}
                                     {steps === 2 && (
-                                        <Step2 setSteps={setSteps} newTicket={newTicket} setNewTicket={setNewTicket} />
+                                        <Step2
+                                            setSteps={setSteps}
+                                            newTicket={newTicket}
+                                            setNewTicket={setNewTicket}
+                                            ticketAmount={ticketAmount}
+                                            setTicketAmount={setTicketAmount}
+                                        />
                                     )}
-                                    {steps === 3 && <Step3 setSteps={setSteps} />}
+                                    {steps === 3 && (
+                                        <Step3
+                                            setSteps={setSteps}
+                                            newEvent={newEvent}
+                                            newTicket={newTicket}
+                                            handleSubmit={handleSubmit}
+                                        />
+                                    )}
                                 </div>
                             </Dialog.Panel>
                         </Transition.Child>
