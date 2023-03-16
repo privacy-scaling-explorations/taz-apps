@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     const body = req.body
 
     try {
-        const response = await axios.post("https://pretix.eu/api/v1/organizers/taz-zuzalu/events/ticket/clone/", body, {
+        const response = await axios.post("https://pretix.eu/api/v1/organizers/taz-zuzalu/events/zuzalu-3/clone/", body, {
             headers: headers
         })
         console.log("RESPONSE: ", response)
