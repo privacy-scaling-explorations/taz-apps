@@ -75,7 +75,16 @@ export default function Event({ event, participants, favoritedEvents }: Props) {
             id: parentMessageId
         }
 
+        const pretixBody = {
+          name: {"en": newEvent.name}
+        }
+
         try {
+            await axios.post("/api/pretix-update-event", {
+                slug: newEvent.name,
+                data: pretixBody,
+                name: newEvent.name
+            })
             await axios.post("/api/updateEvent", body).then((_res) => {
                 setUpdateEventModal(false)
             })

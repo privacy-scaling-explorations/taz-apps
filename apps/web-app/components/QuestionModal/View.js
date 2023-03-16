@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 import TextInput from "react-autocomplete-input"
 import axios from "axios"
+import { useRouter } from 'next/router'
 
 // TODO: Change to Event Modal View
 // TODO: When Fetching Event Modal also fetch extra data from database
@@ -26,6 +27,9 @@ export default function QuestionModalView({
     const [organizer, setOrganizer] = useState("")
     const [rerender, setRerender] = useState(true)
     const [allUsers, setAllUsers] = useState([])
+
+    const router = useRouter()
+
 
     const handleAddTag = (tag) => {
         addTag(tag)
@@ -125,7 +129,7 @@ export default function QuestionModalView({
                                 </div>
                                 <div className="p-4">
                                     <Dialog.Title as="h3" className="text-brand-brown mb-8">
-                                        Create New Event
+                                        {isUpdateEvent ? 'Edit Event' : 'Create New Event'}
                                     </Dialog.Title>
                                     <div className="flex flex-col">
                                         <div className="flex flex-col gap-1 my-1 w-full">
