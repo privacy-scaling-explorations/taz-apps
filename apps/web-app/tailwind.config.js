@@ -22,10 +22,6 @@ module.exports = {
             },
             colors: {
                 brand: {
-                    primary: "#35655F",
-                    secondary: "#52B5A4",
-                    lightBase: "#F8FFFE",
-                    darkBase: "#1C2928",
                     beige: "#EAE1DA",
                     beige2: "#F0EBE8",
                     beige3: "#B8AEA7",
@@ -44,9 +40,16 @@ module.exports = {
                     brown: "#402917",
                     brown2: "#513E2E",
                     green: "#35655F",
-                    purple: "#8679AB",
+                    purple: "#8679AB"
+                },
+                zulalu: {
+                    primary: "#35655F",
+                    secondary: "#52B5A4",
+                    lightBase: "#F8FFFE",
+                    darkBase: "#1C2928",
                     gradient1: "#D2F8E8CC",
-                    gradient2: "#FFF250CC"
+                    gradient2: "#FFF250CC",
+                    yellow: "#FCD270"
                 }
             },
             boxShadow: {
@@ -56,6 +59,9 @@ module.exports = {
                 flip: "-1"
             },
             backgroundImage: {
+                "gradient-radial": "radial-gradient(50.56% 39.32% at 49.87% 33.22%, #468C80 8.85%, #325F57 100%)",
+                "gradient-linear":
+                    "linear-gradient(106.41deg, rgba(210, 248, 232, 0.8) 58.63%, rgba(255, 242, 80, 0.8) 99.09%)",
                 mountains: "url('/mountains.png')",
                 zulaluVector: "url('/zulalu-vector.png')"
             }

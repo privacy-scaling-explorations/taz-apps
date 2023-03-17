@@ -1,15 +1,15 @@
 // import type { AppProps } from "next/app"
 
 import { IdentityContextProvider } from "../context/IdentityContextProvider"
-import { UserIdentityProvider } from "../context/UserIdentityContext"
+import {  PassportModalContextProvider} from "../context/PassportModalContext"
 import "../styles/globals.css"
 import "../styles/drawingComponent.css"
 
 const MyApp = ({ Component, pageProps }) => (
     <IdentityContextProvider>
-        <UserIdentityProvider>
+        <PassportModalContextProvider>
             <Component {...pageProps} />
-        </UserIdentityProvider>
+        </PassportModalContextProvider>
     </IdentityContextProvider>
 )
 
