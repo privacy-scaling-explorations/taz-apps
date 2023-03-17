@@ -2,7 +2,7 @@ import "react-toastify/dist/ReactToastify.css"
 
 import axios from "axios"
 import { useRouter } from "next/router"
-import { ToastContainer, toast } from "react-toastify"
+import { toast } from "react-toastify"
 import { RiArrowLeftLine } from "react-icons/ri"
 import dynamic from "next/dynamic"
 import { EventsDTO, ParticipantsDTO, FavoritedEventsDTO } from "../../types"
@@ -176,19 +176,6 @@ const EventDetails = ({ event, participants, favoritedEvents, setUpdateEventModa
             <div onClick={() => router.back()}>
                 <RiArrowLeftLine className="fill-brand-gray50 cursor-pointer mb-4 border-0" />
             </div>
-
-            <ToastContainer
-                position="top-center"
-                autoClose={3000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-            />
 
             <div className="border border-black relative">
                 <div

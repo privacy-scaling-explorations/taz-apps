@@ -1,14 +1,10 @@
-import "react-autocomplete-input/dist/bundle.css"
+import "react-datepicker/dist/react-datepicker.css"
 import { Dialog, Transition } from "@headlessui/react"
 import { Fragment, useRef, useState, useEffect } from "react"
 import DatePicker from "react-datepicker"
-import "react-datepicker/dist/react-datepicker.css"
-import TextInput from "react-autocomplete-input"
 import axios from "axios"
-import { useRouter } from 'next/router'
+import { UserDTO } from "../../types"
 
-// TODO: Change to Event Modal View
-// TODO: When Fetching Event Modal also fetch extra data from database
 export default function QuestionModalView({
     isOpen,
     closeModal,
@@ -26,10 +22,10 @@ export default function QuestionModalView({
     const [tag, setTag] = useState("")
     const [organizer, setOrganizer] = useState("")
     const [rerender, setRerender] = useState(true)
-    const [allUsers, setAllUsers] = useState([])
 
-    const router = useRouter()
-
+    const [suggestions, setSuggestions] = useState<UserDTO[]>([])
+    const [display, setDisplay] = useState(false)
+    const wraperRef = useRef(null)
 
     const handleAddTag = (tag) => {
         addTag(tag)
@@ -42,34 +38,47 @@ export default function QuestionModalView({
     }
 
     const handleAddOrganizer = async (organizer) => {
-        console.log(organizer.slice(1))
-        // const { data, error } = await supabase
-        //     .from('users')
-        //     .select('userName')
-        //     .eq(organizer.slice(1))
-        //   if (!error) {
-        //     // Fix: if not in DB don't add
-        //   }
-        addOrganizer(organizer.slice(1))
+        addOrganizer(organizer)
         setOrganizer("")
+        setDisplay(false)
     }
 
-    const handleRemoveOrganizer = (organizer) => {
-        removeOrganizer(organizer)
+    const handleRemoveOrganizer = (idx: number) => {
+        removeOrganizer(idx)
         setRerender(!rerender)
     }
 
+    const handleClickOutside = (event) => {
+        const { current: wrap } = wraperRef
+        if (wrap && !wrap.contains(event.target)) {
+            setDisplay(false)
+        }
+    }
+
+    const fetchUsers = async () => {
+        await axios
+            .get("/api/fetchUsers")
+            .then((res) => {
+                setSuggestions(res.data)
+            })
+            .catch((err) => console.log(err))
+    }
     useEffect(() => {
-        ;(async () => {
-            try {
-                const { data } = await axios.get("/api/fetchUsers")
-                const userNames = data.map((element) => element.userName)
-                setAllUsers(userNames)
-            } catch (error) {
-                console.log(error)
-            }
-        })()
+        fetchUsers()
     }, [])
+
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClickOutside)
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside)
+        }
+    }, [])
+
+    const checkIfAnyOtherSuggestion =
+        suggestions
+            .filter((item) => !newEvent.organizers.includes(item.userName))
+            .filter(({ userName }) => userName.toLowerCase().indexOf(organizer.toLowerCase()) > -1).length !== 0
 
     return (
         <Transition appear show={isOpen} as={Fragment}>
@@ -129,7 +138,7 @@ export default function QuestionModalView({
                                 </div>
                                 <div className="p-4">
                                     <Dialog.Title as="h3" className="text-brand-brown mb-8">
-                                        {isUpdateEvent ? 'Edit Event' : 'Create New Event'}
+                                        {isUpdateEvent ? "Edit Event" : "Create New Event"}
                                     </Dialog.Title>
                                     <div className="flex flex-col">
                                         <div className="flex flex-col gap-1 my-1 w-full">
@@ -202,43 +211,64 @@ export default function QuestionModalView({
                                         </div>
                                         <div className="flex flex-col gap-1 my-2 w-full">
                                             <label htmlFor="tags">Organizers</label>
-                                            <p className="text-xs font-weight: 100">
-                                                Prefix @ with a name to search. Eg. @Vitalik
-                                            </p>
-                                            <div className="flex flex-row gap-4">
-                                                {/* <input
-                                                    id="organizers"
-                                                    type="text"
-                                                    className="border border-2 p-1 w-full"
-                                                    placeholder="add organizer"
-                                                    value={organizer}
-                                                    onChange={(e) => setOrganizer(e.target.value)}
-                                                /> */}
-                                                <TextInput
-                                                    id="organizers"
-                                                    type="text"
-                                                    className="border border-2 p-1 w-full"
-                                                    placeholder="add organizer"
-                                                    trigger={"@"}
-                                                    options={allUsers}
-                                                    offsetY={50}
-                                                    onSelect={(e) => setOrganizer(e)}
-                                                    // onChange={(e) => setTag(e.target.value)}
-                                                />
-                                                <button
-                                                    className="bg-black text-white rounded border border-2 py-1 px-2"
-                                                    onClick={() => handleAddOrganizer(organizer)}
-                                                >
-                                                    Add
-                                                </button>
+                                            <div className="flex flex-col relative" ref={wraperRef}>
+                                                <div className="flex flex-row gap-4">
+                                                    <input
+                                                        id="organizers"
+                                                        type="text"
+                                                        className="border border-2 p-1 w-full"
+                                                        placeholder="add organizer"
+                                                        value={organizer}
+                                                        onChange={(e) => setOrganizer(e.target.value)}
+                                                        onClick={() => setDisplay(true)}
+                                                    />
+                                                </div>
+                                                {display && (
+                                                    <div className="border border-t-transparent bg-white flex flex-col absolute top-[35px] w-full z-10">
+                                                        {checkIfAnyOtherSuggestion ? (
+                                                            suggestions
+                                                                .filter(
+                                                                    (item) =>
+                                                                        !newEvent.organizers.includes(item.userName)
+                                                                )
+                                                                .filter(
+                                                                    ({ userName }) =>
+                                                                        userName
+                                                                            .toLowerCase()
+                                                                            .indexOf(organizer.toLowerCase()) > -1
+                                                                )
+                                                                .map((user, index) => (
+                                                                    <div
+                                                                        key={index}
+                                                                        onClick={() =>
+                                                                            handleAddOrganizer(user.userName)
+                                                                        }
+                                                                        className="flex h-[50px] items-center px-2 uppercase hover:bg-black hover:text-white cursor-pointer transition duration-300 ease-in-out"
+                                                                    >
+                                                                        <span>{user.userName}</span>
+                                                                    </div>
+                                                                ))
+                                                        ) : (
+                                                            <div className="flex h-[50px] items-center px-2 uppercase hover:bg-black hover:text-white cursor-pointer transition duration-300 ease-in-out">
+                                                                <span>No user found</span>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                )}
                                             </div>
 
-                                            <ul className="flex flex-row items-start">
-                                                {newEvent.organizers.map((organizer, index) => (
-                                                    <li key={index} className="mx-1 bg-gray-200 p-1 rounded text-sm">
-                                                        {organizer}{" "}
-                                                        <button onClick={() => handleRemoveOrganizer(organizer)}>
-                                                            X
+                                            <ul className="flex flex-row items-start gap-2">
+                                                {newEvent.organizers.map((item, index) => (
+                                                    <li
+                                                        key={index}
+                                                        className="relative mx-1 bg-gray-200 p-1 rounded text-sm"
+                                                    >
+                                                        {item}
+                                                        <button
+                                                            className="absolute top-0"
+                                                            onClick={() => handleRemoveOrganizer(index)}
+                                                        >
+                                                            x
                                                         </button>
                                                     </li>
                                                 ))}
@@ -279,7 +309,7 @@ export default function QuestionModalView({
                                                 placeholder="Additional info"
                                                 name="info"
                                                 id="info"
-                                                rows="5"
+                                                rows={5}
                                                 value={newEvent.info}
                                                 onChange={(e) => setNewEvent({ ...newEvent, info: e.target.value })}
                                             />

@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import "react-toastify/dist/ReactToastify.css"
 import { useState } from "react"
 import { useRouter } from "next/router"
 import { GetServerSideProps } from "next"
 import axios from "axios"
-
+import { ToastContainer, toast } from "react-toastify"
 import Footer from "../../components/Footer"
 import BlueCircle from "../../components/svgElements/BlueCircle"
 import Ellipse from "../../components/svgElements/Ellipse"
@@ -33,7 +34,9 @@ export default function Event({ event, participants, favoritedEvents }: Props) {
         organizers: event.organizers,
         startDate: new Date(event.startDate),
         startTime: event.startTime,
-        tags: event.tags
+        tags: event.tags,
+        publicUrl: event.publicUrl,
+        slug: event.slug
     })
 
     const addTag = (tag: string) => {
@@ -53,9 +56,8 @@ export default function Event({ event, participants, favoritedEvents }: Props) {
         console.log("Organizerss after add", newEvent.organizers)
     }
 
-    const removeOrganizer = (organizer: string) => {
-        const index = newEvent.organizers.indexOf(organizer)
-        newEvent.organizers.splice(index, 1)
+    const removeOrganizer = (idx: number) => {
+        newEvent.organizers.splice(idx, 1)
         console.log("Organizers after remove", newEvent.organizers)
     }
 
@@ -76,21 +78,44 @@ export default function Event({ event, participants, favoritedEvents }: Props) {
         }
 
         const pretixBody = {
-          name: {"en": newEvent.name},
-          date_from: newEvent.startDate,
-          date_to: newEvent.endDate,
+            name: { en: newEvent.name },
+            date_from: newEvent.startDate,
+            date_to: newEvent.endDate
         }
 
         try {
-            await axios.post("/api/pretix-update-event", {
-                id: parentMessageId,
-                data: pretixBody,
-            })
+            // not working
+            // await axios.post(`/api/pretix-update-event/${newEvent.slug}`, {
+            //     data: pretixBody
+            // })
+
             await axios.post("/api/updateEvent", body).then((_res) => {
                 setUpdateEventModal(false)
             })
+
+            router.push(router.asPath)
+
+            toast.success("Event Updated", {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light"
+            })
         } catch (error) {
-            alert("Event submission faild")
+            toast.error("Update Failed", {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light"
+            })
         }
     }
 
@@ -105,6 +130,19 @@ export default function Event({ event, participants, favoritedEvents }: Props) {
             <div className="fixed top-[60%] left-[-25%]">
                 <BlueCircle />
             </div>
+
+            <ToastContainer
+                position="top-center"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
 
             <QuestionModal
                 isOpen={updateEventModal}
