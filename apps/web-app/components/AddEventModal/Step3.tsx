@@ -11,17 +11,17 @@ const Step3 = ({ setSteps, newEvent, newTicket, handleSubmit }: Props) => {
     return (
 <div className="flex flex-col w-full gap-8 bg-white p-8 rounded-lg shadow-md">
     <div className="flex flex-col gap-4">
-        <h1 className="text-lg font-bold uppercase">Event Details:</h1>
+        <h1 className="text-lg font-bold uppercase ">Event Details:</h1>
         <div className="flex flex-wrap md:flex-nowrap justify-between">
             <div className="flex flex-col gap-2 w-full md:w-auto">
                 <h2 className="font-bold">Name: <span className="font-normal">{newEvent.name}</span></h2>
                 <h2 className="font-bold">From: <span className="font-normal">{newEvent.startDate.toDateString()} at {newEvent.startTime}</span></h2>
                 <h2 className="font-bold">To: <span className="font-normal">{newEvent.endDate.toDateString()} by {newEvent.endTime}</span></h2>
             </div>
-            <div className="flex flex-col gap-2 w-full md:w-auto mr-20">
+            <div className="flex flex-col gap-2 w-full md:w-auto pr-40">
                 <h2 className="font-bold">Location: <span className="font-normal">{newEvent.location}</span></h2>
                 <h2 className="font-bold">Organizers:</h2>
-                <ul className="list-disc list-inside">
+                <ul className="list-disc list-inside ml-10">
                     {newEvent.organizers.map((i: string) => <li key={i}>{i}</li>)}
                 </ul>
                 <h2 className="font-bold">Tags:</h2>
