@@ -53,6 +53,8 @@ const AddEventModal = ({ isOpen, closeModal }: Props) => {
     })
 
     const [ticketAmount, setTicketAmount] = useState(1)
+    const [hasVouchers, setHasVouchers] = useState(false)
+    const [voucherAmount, setVoucherAmount] = useState(1)
 
     const handleSubmit = async () => {
         // Step 1 Clone event from template
@@ -107,6 +109,15 @@ const AddEventModal = ({ isOpen, closeModal }: Props) => {
         })
 
         console.log("Go Live response: ", patchResponse.data)
+
+        //Optional step: Create voucher
+        if (hasVouchers) {
+            const voucherResponse = await axios.post(`/api/pretix-create-voucher/${clonedEventRes.data.slug}`, {
+                voucherAmount,
+                quotaId: quotaCreatedRes.data.id
+            })
+            console.log("Voucher response: ", voucherResponse.data)
+        }
 
         // Step 6 Add to database
         const createEventDB = await axios.post("/api/createEvent", {
@@ -190,6 +201,10 @@ const AddEventModal = ({ isOpen, closeModal }: Props) => {
                                             setNewTicket={setNewTicket}
                                             ticketAmount={ticketAmount}
                                             setTicketAmount={setTicketAmount}
+                                            setHasVouchers={setHasVouchers}
+                                            hasVouchers={hasVouchers}
+                                            voucherAmount={voucherAmount}
+                                            setVoucherAmount={setVoucherAmount}
                                         />
                                     )}
                                     {steps === 3 && (

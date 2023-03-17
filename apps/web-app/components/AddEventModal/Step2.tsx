@@ -1,6 +1,7 @@
 /* eslint-disable prefer-const */
 
 // import { useState } from "react"
+import axios from "axios"
 
 type Props = {
     setSteps: (step: number) => void
@@ -12,9 +13,23 @@ type Props = {
     setNewTicket: (newTicket: { name: string; price: string; description: string }) => void
     ticketAmount: number
     setTicketAmount: Function
+    setHasVouchers: Function
+    hasVouchers: boolean
+    voucherAmount: number
+    setVoucherAmount: Function
 }
 
-const Step2 = ({ setSteps, newTicket, setNewTicket, ticketAmount, setTicketAmount }: Props) => {
+const Step2 = ({
+    setSteps,
+    newTicket,
+    setNewTicket,
+    ticketAmount,
+    setTicketAmount,
+    hasVouchers,
+    setHasVouchers,
+    voucherAmount,
+    setVoucherAmount
+}: Props) => {
     const { name, price, description } = newTicket
     // const [pretixTickets, setPretixTickets] = useState([])
     const handleSubmit = async () => {
@@ -67,6 +82,23 @@ const Step2 = ({ setSteps, newTicket, setNewTicket, ticketAmount, setTicketAmoun
                         onChange={(e) => setTicketAmount(e.target.value)}
                     />
                 </div>
+                <div>
+                    Create vouchers?
+                    <input checked={hasVouchers} type="checkbox" onChange={() => setHasVouchers(!hasVouchers)} />
+                </div>
+                {hasVouchers ?
+                <div className="flex flex-col gap-1 my-1">
+                    <label htmlFor="amount">Amount of Vouchers</label>
+                    <input
+                        className="border border-2 mx-2"
+                        id="amount"
+                        type="number"
+                        min="0"
+                        max="1000"
+                        value={voucherAmount}
+                        onChange={(e) => setVoucherAmount(e.target.value)}
+                    />
+                </div> : ""}
             </div>
             <div className="w-full flex flex-col md:flex-row gap-5 justify-center items-center mt-5">
                 <button
