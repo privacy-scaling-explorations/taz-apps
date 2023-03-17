@@ -44,6 +44,7 @@ const Step3 = ({ setSteps, newEvent, newTicket, handleSubmit }: Props) => {
             <h2 className="font-bold">Name: <span className="font-normal">{newTicket.name}</span></h2>
             <h2 className="font-bold">Price: <span className="font-normal">{newTicket.price}</span></h2>
             <h2 className="font-bold">Description: <span className="font-normal">{newTicket.description}</span></h2>
+            <h2 className="font-bold">Amount: <span className="font-normal">{newTicket.amount}</span></h2>
         </div>
     </div>
 

@@ -1,6 +1,6 @@
 /* eslint-disable prefer-const */
 
-import { useState } from "react"
+// import { useState } from "react"
 
 type Props = {
     setSteps: (step: number) => void
@@ -16,7 +16,7 @@ type Props = {
 
 const Step2 = ({ setSteps, newTicket, setNewTicket, ticketAmount, setTicketAmount }: Props) => {
     const { name, price, description } = newTicket
-    const [pretixTickets, setPretixTickets] = useState([])
+    // const [pretixTickets, setPretixTickets] = useState([])
     const handleSubmit = async () => {
         console.log(newTicket)
         setSteps(3)
@@ -57,7 +57,15 @@ const Step2 = ({ setSteps, newTicket, setNewTicket, ticketAmount, setTicketAmoun
                 />
                 <div className="flex flex-col gap-1 my-1">
                     <label htmlFor="amount">Amount of seats</label>
-                    <input className="border border-2 mx-2" id="amount" type="number" min="0" max="1000" value={ticketAmount} onChange={(e) => setTicketAmount(e.target.value)} />
+                    <input
+                        className="border border-2 mx-2"
+                        id="amount"
+                        type="number"
+                        min="0"
+                        max="1000"
+                        value={ticketAmount}
+                        onChange={(e) => setTicketAmount(e.target.value)}
+                    />
                 </div>
             </div>
             <div className="w-full flex flex-col md:flex-row gap-5 justify-center items-center mt-5">
