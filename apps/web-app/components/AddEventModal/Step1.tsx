@@ -1,9 +1,10 @@
 /* eslint-disable prefer-const */
 import "react-autocomplete-input/dist/bundle.css"
 import "react-datepicker/dist/react-datepicker.css"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import DatePicker from "react-datepicker"
-// import axios from "axios"
+import axios from "axios"
+import { UserDTO } from "../../types"
 
 type Props = {
     newEvent: {
@@ -35,11 +36,15 @@ const Step1 = ({ newEvent, setNewEvent, setSteps }: Props) => {
     const [organizer, setOrganizer] = useState("")
     const [tag, setTag] = useState("")
     const [rerender, setRerender] = useState(true)
+    const [suggestions, setSuggestions] = useState<UserDTO[]>([])
+    const [display, setDisplay] = useState(false)
+    const wraperRef = useRef(null)
     const { endDate, endTime, info, location, name, organizers, startDate, startTime, tags } = newEvent
 
-    const handleAddOrganizer = () => {
-        setNewEvent({ ...newEvent, organizers: [...newEvent.organizers, organizer] })
+    const handleAddOrganizer = (user: string) => {
+        setNewEvent({ ...newEvent, organizers: [...newEvent.organizers, user] })
         setOrganizer("")
+        setDisplay(false)
     }
 
     const handleRemoveOrganizer = (index: number) => {
@@ -56,6 +61,38 @@ const Step1 = ({ newEvent, setNewEvent, setSteps }: Props) => {
         tags.splice(index, 1)
         setRerender(!rerender)
     }
+
+    const handleClickOutside = (event) => {
+        const { current: wrap } = wraperRef
+        if (wrap && !wrap.contains(event.target)) {
+            setDisplay(false)
+        }
+    }
+
+    const fetchUsers = async () => {
+        await axios
+            .get("/api/fetchUsers")
+            .then((res) => {
+                setSuggestions(res.data)
+            })
+            .catch((err) => console.log(err))
+    }
+    useEffect(() => {
+        fetchUsers()
+    }, [])
+
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClickOutside)
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside)
+        }
+    }, [])
+
+    const checkIfAnyOtherSuggestion =
+        suggestions
+            .filter((item) => !organizers.includes(item.userName))
+            .filter(({ userName }) => userName.toLowerCase().indexOf(organizer.toLowerCase()) > -1).length !== 0
 
     return (
         <div className="flex flex-col w-full">
@@ -127,29 +164,51 @@ const Step1 = ({ newEvent, setNewEvent, setSteps }: Props) => {
             <div className="flex flex-col gap-1 my-2 w-full">
                 <label htmlFor="tags">Organizers</label>
                 <p className="text-xs font-weight: 100">Prefix @ with a name to search. Eg. @Vitalik</p>
-                <div className="flex flex-row gap-4">
-                    <input
-                        id="organizers"
-                        type="text"
-                        className="border border-2 p-1 w-full"
-                        placeholder="add organizer"
-                        value={organizer}
-                        onChange={(e) => setOrganizer(e.target.value)}
-                    />
-
-                    <button
-                        className="bg-black text-white rounded border border-2 py-1 px-2"
-                        onClick={handleAddOrganizer}
-                    >
-                        Add
-                    </button>
+                <div className="flex flex-col relative" ref={wraperRef}>
+                    <div className="flex flex-row gap-4">
+                        <input
+                            id="organizers"
+                            type="text"
+                            className="border border-2 p-1 w-full"
+                            placeholder="add organizer"
+                            value={organizer}
+                            onChange={(e) => setOrganizer(e.target.value)}
+                            onClick={() => setDisplay(true)}
+                        />
+                    </div>
+                    {display && (
+                        <div className="border border-t-transparent bg-white flex flex-col absolute top-[35px] w-full z-10">
+                            {checkIfAnyOtherSuggestion ? (
+                                suggestions
+                                    .filter((item) => !organizers.includes(item.userName))
+                                    .filter(
+                                        ({ userName }) => userName.toLowerCase().indexOf(organizer.toLowerCase()) > -1
+                                    )
+                                    .map((user, index) => (
+                                        <div
+                                            key={index}
+                                            onClick={() => handleAddOrganizer(user.userName)}
+                                            className="flex h-[50px] items-center px-2 uppercase hover:bg-black hover:text-white cursor-pointer transition duration-300 ease-in-out"
+                                        >
+                                            <span>{user.userName}</span>
+                                        </div>
+                                    ))
+                            ) : (
+                                <div className="flex h-[50px] items-center px-2 uppercase hover:bg-black hover:text-white cursor-pointer transition duration-300 ease-in-out">
+                                    <span>No user found</span>
+                                </div>
+                            )}
+                        </div>
+                    )}
                 </div>
 
                 <ul className="flex flex-row items-start">
                     {organizers.map((item, index) => (
-                        <li key={index} className="mx-1 bg-gray-200 p-1 rounded text-sm">
+                        <li key={index} className="relative mx-1 bg-gray-200 p-1 rounded text-sm">
                             {item}
-                            <button onClick={() => handleRemoveOrganizer(index)}>X</button>
+                            <button className="absolute top-0" onClick={() => handleRemoveOrganizer(index)}>
+                                x
+                            </button>
                         </li>
                     ))}
                 </ul>
@@ -176,9 +235,11 @@ const Step1 = ({ newEvent, setNewEvent, setSteps }: Props) => {
                 </div>
                 <ul className="flex flex-row items-start">
                     {newEvent.tags.map((item, index) => (
-                        <li key={index} className="mx-1 bg-gray-200 p-1 rounded text-sm">
+                        <li key={index} className="relative mx-1 bg-gray-200 p-1 rounded text-sm">
                             {item}
-                            <button onClick={() => handleRemoveTag(index)}>X</button>
+                            <button className="absolute top-0" onClick={() => handleRemoveTag(index)}>
+                                X
+                            </button>
                         </li>
                     ))}
                 </ul>
