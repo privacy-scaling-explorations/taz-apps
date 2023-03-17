@@ -5,6 +5,8 @@ export interface UserDTO {
     id: number
     semaphoreId: string
     userName: string
+    url: string
+    publicUrl: string
 }
 
 export interface EventsDTO {

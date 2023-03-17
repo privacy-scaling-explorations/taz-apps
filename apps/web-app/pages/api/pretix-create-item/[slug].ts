@@ -90,7 +90,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             { headers }
         )
 
-        if (response.status == 201) {
+        if (response.status === 201) {
             res.status(201).json(response.data)
         } else {
             throw new Error(`HTTP error! status: ${response.status}`)

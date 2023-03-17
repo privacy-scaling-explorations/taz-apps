@@ -26,8 +26,8 @@ type Props = {
     closeModal: (b: boolean) => void
 }
 
-//Add frontend to allow multiple tickets and set ticket quotas
-//Add organizers from fetchUsers
+// Add frontend to allow multiple tickets and set ticket quotas
+// Add organizers from fetchUsers
 
 const AddEventModal = ({ isOpen, closeModal }: Props) => {
     const questionTextRef = useRef(null)
@@ -53,7 +53,7 @@ const AddEventModal = ({ isOpen, closeModal }: Props) => {
     const [ticketAmount, setTicketAmount] = useState(1)
 
     const handleSubmit = async () => {
-        //Step 1 Clone event from template
+        // Step 1 Clone event from template
 
         const clonedEventRes = await axios.post("/api/pretix-clone-event", {
             name: { en: newEvent.name },
@@ -79,34 +79,34 @@ const AddEventModal = ({ isOpen, closeModal }: Props) => {
 
         console.log("Cloned event url and slug: ", clonedEventRes.data.public_url, clonedEventRes.data.slug)
 
-        //Step 2 Create items (tickets)
+        // Step 2 Create items (tickets)
 
         const ticketCreatedRes = await axios.post(`/api/pretix-create-item/${clonedEventRes.data.slug}`, { newTicket })
 
         console.log("tickets created: ", ticketCreatedRes.data)
 
-        //Step 3 Get items (tickets)
+        // Step 3 Get items (tickets)
         const getTicketsRes = await axios.get(`/api/pretix-get-items/${clonedEventRes.data.slug}`)
 
         console.log("get tickets: ", getTicketsRes.data)
 
-        //Step 4 Create Quota
+        // Step 4 Create Quota
         const quotaCreatedRes = await axios.post(`/api/pretix-create-quota/${clonedEventRes.data.slug}`, {
-            ticketAmount: ticketAmount,
+            ticketAmount,
             ticketId: getTicketsRes.data.results[0].id,
             variationId1: getTicketsRes.data.results[0].variations[0].id
         })
 
         console.log("Quota creatd: ", quotaCreatedRes.data)
 
-        //Step 5 Go Live
+        // Step 5 Go Live
         const patchResponse = await axios.post(`/api/pretix-go-live/${clonedEventRes.data.slug}`, {
             live: true
         })
 
         console.log("Go Live response: ", patchResponse.data)
 
-        //Step 6 Add to database
+        // Step 6 Add to database
         const createEventDB = await axios.post("/api/createEvent", {
             ...newEvent,
             publicUrl: clonedEventRes.data.public_url,

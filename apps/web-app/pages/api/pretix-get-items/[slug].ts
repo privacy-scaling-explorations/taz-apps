@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next"
 
-export default async function handler(req:NextApiRequest, res:NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     console.log("get items triggered")
     const auth = process.env.NEXT_PUBLIC_PRETIX_API
     const headers = {
@@ -11,14 +11,13 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 
     try {
         const response = await fetch(`https://pretix.eu/api/v1/organizers/taz-zuzalu/events/${req.query.slug}/items/`, {
-            method: 'GET',
+            method: "GET",
             headers
-          });
+        })
 
-          console.log("get items: ", response)
+        console.log("get items: ", response)
 
-
-        if (response.status == 200) {
+        if (response.status === 200) {
             const data = await response.json()
             res.status(200).json(data)
         } else {
