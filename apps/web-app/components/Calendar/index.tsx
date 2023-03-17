@@ -168,19 +168,6 @@ const Calendar = (props: EventsProps) => {
         setMapModalOpen(false)
     }
 
-    if (events.length === 0) {
-        return (
-            <div className="w-full my-10">
-                <div>
-                    <h1 className="text-lg">Zulalu Oficial Events Schedule</h1>
-                </div>
-                <div className="py-5 flex justify-center">
-                    <div className="">No Events</div>
-                </div>
-            </div>
-        )
-    }
-
     if (!events) {
         return (
             <div className="w-full my-10">
@@ -191,6 +178,19 @@ const Calendar = (props: EventsProps) => {
                     <div className="">
                         <Loading />
                     </div>
+                </div>
+            </div>
+        )
+    }
+
+    if (events.length === 0) {
+        return (
+            <div className="w-full my-10">
+                <div>
+                    <h1 className="text-lg">Zulalu Oficial Events Schedule</h1>
+                </div>
+                <div className="py-5 flex justify-center">
+                    <div className="">No Events</div>
                 </div>
             </div>
         )

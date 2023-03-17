@@ -3,7 +3,7 @@ import { createClient } from "@supabase/supabase-js"
 // import fetch from "node-fetch"
 
 const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co"
-const supabaseKey = process.env.SUPABASE_KEY
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY
 const supabase = createClient(supabaseUrl, supabaseKey as string)
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
