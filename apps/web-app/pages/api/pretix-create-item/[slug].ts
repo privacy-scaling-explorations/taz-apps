@@ -14,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const body = {
         id: 1,
-        name: { en: `${req.query.slug} ticket` },
+        name: { en: `${newTicket.name}` },
         internal_name: "",
         sales_channels: ["web"],
         default_price: `${newTicket.price}`,
