@@ -1,7 +1,5 @@
-/* eslint-disable import/no-unresolved */
-/* eslint-disable no-undef */
-import { useState, useEffect } from "react"
-import axios from "axios"
+import { useState } from "react"
+import { GetServerSideProps } from "next"
 import Link from "next/link"
 import AddEventModal from "../../components/AddEventModal"
 import YellowCircle from "../../components/svgElements/YellowCircle"
@@ -11,25 +9,14 @@ import BackTAZ from "../../components/ArrowNavigators/BackTAZ"
 import Footer from "../../components/Footer"
 import Calendar from "../../components/Calendar"
 
-export default function Events() {
+import { EventsDTO } from "../../types"
+
+type Props = {
+    events: EventsDTO[]
+}
+
+export default function Events({ events }: Props) {
     const [openAddEventModal, setOpenAddEventModal] = useState(false)
-
-    const [events, setEvents] = useState([])
-
-    const fetchEvents = async () => {
-        try {
-            const response = await axios.get("/api/fetchEvents")
-            setEvents(response.data)
-        } catch (error) {
-            console.log("fetching events failed", error)
-        }
-    }
-
-    useEffect(() => {
-        fetchEvents()
-    }, [])
-
-
 
     return (
         <div className="min-h-[700px] relative overflow-hidden h-auto flex flex-col">
@@ -47,15 +34,13 @@ export default function Events() {
                 <button
                     type="button"
                     className="rounded-full bg-brand-yellow ring-2 ring-brand-black py-3 px-4 drop-shadow text-brand-button font-medium text-brand-black hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-opacity-25"
-                    onClick={()=>setOpenAddEventModal(true)}
+                    onClick={() => setOpenAddEventModal(true)}
                 >
                     Add an event
                 </button>
             </div>
 
             <AddEventModal closeModal={setOpenAddEventModal} isOpen={openAddEventModal} />
-
-
 
             <div className="z-10 ">
                 <Link href="/experiences-page">
@@ -81,7 +66,23 @@ export default function Events() {
             <div className="flex w-full relative justify-center bg-black pb-3 pt-9">
                 <Footer />
             </div>
-
         </div>
     )
+}
+
+export const getServerSideProps: GetServerSideProps = async ({ res }) => {
+    try {
+        const url = process.env.URL_TO_FETCH
+
+        const eventsResponse = await fetch(`${url}/api/fetchEvents`)
+        const events = await eventsResponse.json()
+        return {
+            props: { events }
+        }
+    } catch (error) {
+        res.statusCode = 404
+        return {
+            props: {}
+        }
+    }
 }

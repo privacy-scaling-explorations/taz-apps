@@ -1,6 +1,7 @@
 import "react-autocomplete-input/dist/bundle.css"
 import "react-datepicker/dist/react-datepicker.css"
 import { Dialog, Transition } from "@headlessui/react"
+import { useRouter } from "next/router"
 import { Fragment, useRef, useState } from "react"
 import axios from "axios"
 
@@ -30,6 +31,7 @@ type Props = {
 // Add organizers from fetchUsers
 
 const AddEventModal = ({ isOpen, closeModal }: Props) => {
+    const router = useRouter()
     const questionTextRef = useRef(null)
     const [steps, setSteps] = useState(1)
     const [newEvent, setNewEvent] = useState<NewEventState>({
@@ -114,6 +116,10 @@ const AddEventModal = ({ isOpen, closeModal }: Props) => {
         })
 
         console.log("DB response: ", createEventDB)
+
+        router.push(router.asPath)
+
+        closeModal(false)
     }
 
     return (

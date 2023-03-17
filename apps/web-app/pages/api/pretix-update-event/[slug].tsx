@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next"
 
-export default async function handler(req:NextApiRequest, res:NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const auth = process.env.NEXT_PUBLIC_PRETIX_API
     const headers = {
         Accept: "application/json, text/javascript",
@@ -9,14 +9,12 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     }
     const body = JSON.stringify(req.body)
 
-
     try {
         const response = await fetch(`https://pretix.eu/api/v1/organizers/taz-zuzalu/events/${req.query.slug}/`, {
             method: "PATCH",
             headers,
             body
         })
-
 
         if (response.ok) {
             const data = await response.json()

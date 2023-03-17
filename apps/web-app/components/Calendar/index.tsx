@@ -175,6 +175,19 @@ const Calendar = (props: EventsProps) => {
                     <h1 className="text-lg">Zulalu Oficial Events Schedule</h1>
                 </div>
                 <div className="py-5 flex justify-center">
+                    <div className="">No Events</div>
+                </div>
+            </div>
+        )
+    }
+
+    if (!events) {
+        return (
+            <div className="w-full my-10">
+                <div>
+                    <h1 className="text-lg">Zulalu Oficial Events Schedule</h1>
+                </div>
+                <div className="py-5 flex justify-center">
                     <div className="">
                         <Loading />
                     </div>
@@ -197,13 +210,12 @@ const Calendar = (props: EventsProps) => {
             </div>
             <MapModal isOpen={mapModalOpen} closeModal={closeMapModal} />
             <div className="py-5 w-full overflox-x-auto">
-                {/* When inputting dates make sure to append a zero on single digit days */}
                 <Accordian
                     events={events}
                     week={"Week 1"}
-                    date={"March 25-April 2, 2023"}
-                    startingDate={"2023-03-25"}
-                    endingDate={"2023-04-02"}
+                    date={"March 17-June 2, 2023"}
+                    startingDate={"2023-01-25"}
+                    endingDate={"2023-06-02"}
                     active={active}
                     setActive={setActive}
                 />
