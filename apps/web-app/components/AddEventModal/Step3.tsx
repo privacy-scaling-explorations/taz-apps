@@ -3,11 +3,11 @@
 type Props = {
     setSteps: (step: number) => void
     newEvent: any
-    newTickets: any
+    newTicket: any
     handleSubmit: Function
 }
 
-const Step3 = ({ setSteps, newEvent, newTickets, handleSubmit }: Props) => (
+const Step3 = ({ setSteps, newEvent, newTicket, handleSubmit }: Props) => (
     <div className="flex flex-col w-full gap-4">
         <div className="flex flex-col gap-1 my-1 w-full">
             <h1 className="text-lg font-bold uppercase">Event Details:</h1>
@@ -36,10 +36,10 @@ const Step3 = ({ setSteps, newEvent, newTickets, handleSubmit }: Props) => (
         <div className="flex flex-col gap-1 my-1 w-full">
             <h1 className="text-lg font-bold uppercase">Tickets Details:</h1>
             <div className="flex flex-col">
-                <h1>Ticket Name: {newTickets.name}</h1>
-                <h1>Ticker Price: {newTickets.price}</h1>
-                <h1>Ticker Description: {newTickets.description}</h1>
-                <h1>Amount: {newTickets.amount}</h1>
+                <h1>Ticket Name: {newTicket.name}</h1>
+                <h1>Ticker Price: {newTicket.price}</h1>
+                <h1>Ticker Description: {newTicket.description}</h1>
+                <h1>Amount: {newTicket.amount}</h1>
             </div>
         </div>
 

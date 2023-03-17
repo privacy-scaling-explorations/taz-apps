@@ -21,19 +21,13 @@ type NewEventState = {
     info: string
 }
 
-type NewTicketsState = {
-    name: string
-    price: string
-    description: string
-    amount: string
-}
-
 type Props = {
     isOpen: boolean
     closeModal: (b: boolean) => void
 }
 
 // Add frontend to allow multiple tickets and set ticket quotas
+// Add organizers from fetchUsers
 
 const AddEventModal = ({ isOpen, closeModal }: Props) => {
     const questionTextRef = useRef(null)
@@ -50,7 +44,13 @@ const AddEventModal = ({ isOpen, closeModal }: Props) => {
         info: ""
     })
 
-    const [newTickets, setNewTickets] = useState<NewTicketsState[]>([])
+    const [newTicket, setNewTicket] = useState({
+        name: "",
+        price: "",
+        description: ""
+    })
+
+    const [ticketAmount, setTicketAmount] = useState(1)
 
     const handleSubmit = async () => {
         // Step 1 Clone event from template
@@ -81,7 +81,7 @@ const AddEventModal = ({ isOpen, closeModal }: Props) => {
 
         // Step 2 Create items (tickets)
 
-        const ticketCreatedRes = await axios.post(`/api/pretix-create-item/${clonedEventRes.data.slug}`, { newTickets })
+        const ticketCreatedRes = await axios.post(`/api/pretix-create-item/${clonedEventRes.data.slug}`, { newTicket })
 
         console.log("tickets created: ", ticketCreatedRes.data)
 
@@ -92,7 +92,7 @@ const AddEventModal = ({ isOpen, closeModal }: Props) => {
 
         // Step 4 Create Quota
         const quotaCreatedRes = await axios.post(`/api/pretix-create-quota/${clonedEventRes.data.slug}`, {
-            ticketAmount: 100,
+            ticketAmount,
             ticketId: getTicketsRes.data.results[0].id,
             variationId1: getTicketsRes.data.results[0].variations[0].id
         })
@@ -180,15 +180,17 @@ const AddEventModal = ({ isOpen, closeModal }: Props) => {
                                     {steps === 2 && (
                                         <Step2
                                             setSteps={setSteps}
-                                            newTickets={newTickets}
-                                            setNewTickets={setNewTickets}
+                                            newTicket={newTicket}
+                                            setNewTicket={setNewTicket}
+                                            ticketAmount={ticketAmount}
+                                            setTicketAmount={setTicketAmount}
                                         />
                                     )}
                                     {steps === 3 && (
                                         <Step3
                                             setSteps={setSteps}
                                             newEvent={newEvent}
-                                            newTickets={newTickets}
+                                            newTicket={newTicket}
                                             handleSubmit={handleSubmit}
                                         />
                                     )}
