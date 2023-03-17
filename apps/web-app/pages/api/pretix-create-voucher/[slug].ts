@@ -11,16 +11,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     console.log("Req body quota: ", req.body)
-    const {voucherAmount, quotaId} = req.body
+    const {voucher, quotaId} = req.body
 
     const body = {
-        code: "43K6LKM37FBVR2YG",
-        max_usages: voucherAmount,
+        code: voucher.code,
+        max_usages: voucher.amount,
         valid_until: null,
         block_quota: false,
         allow_ignore_quota: false,
         price_mode: "set",
-        value: "12.00",
+        value: voucher.price,
         item: null,
         variation: null,
         quota: quotaId,

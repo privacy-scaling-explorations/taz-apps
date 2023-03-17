@@ -15,8 +15,12 @@ type Props = {
     setTicketAmount: Function
     setHasVouchers: Function
     hasVouchers: boolean
-    voucherAmount: number
-    setVoucherAmount: Function
+    voucher: {
+        code: string
+        amount: number
+        price: number
+    }
+    setVoucher: Function
 }
 
 const Step2 = ({
@@ -27,8 +31,8 @@ const Step2 = ({
     setTicketAmount,
     hasVouchers,
     setHasVouchers,
-    voucherAmount,
-    setVoucherAmount
+    voucher,
+    setVoucher
 }: Props) => {
     const { name, price, description } = newTicket
     // const [pretixTickets, setPretixTickets] = useState([])
@@ -53,7 +57,8 @@ const Step2 = ({
                 <label htmlFor="price">Ticket Price</label>
                 <input
                     className="border border-2 p-1"
-                    type="text"
+                    type="number"
+                    min="0"
                     id="price"
                     placeholder="ticket price"
                     value={price}
@@ -86,19 +91,46 @@ const Step2 = ({
                     Create vouchers?
                     <input checked={hasVouchers} type="checkbox" onChange={() => setHasVouchers(!hasVouchers)} />
                 </div>
-                {hasVouchers ?
-                <div className="flex flex-col gap-1 my-1">
-                    <label htmlFor="amount">Amount of Vouchers</label>
-                    <input
-                        className="border border-2 mx-2"
-                        id="amount"
-                        type="number"
-                        min="0"
-                        max="1000"
-                        value={voucherAmount}
-                        onChange={(e) => setVoucherAmount(e.target.value)}
-                    />
-                </div> : ""}
+                {hasVouchers ? (
+                    <div>
+                        <div className="flex flex-col gap-1 my-1">
+                            <label htmlFor="amount">Voucher code</label>
+                            <input
+                                className="border border-2 mx-2"
+                                id="amount"
+                                type="text"
+                                value={voucher.code}
+                                onChange={(e) => setVoucher({ ...voucher, code: e.target.value })}
+                            />
+                        </div>
+                        <div className="flex flex-col gap-1 my-1">
+                            <label htmlFor="amount">Amount of Vouchers</label>
+                            <input
+                                className="border border-2 mx-2"
+                                id="amount"
+                                type="number"
+                                min="0"
+                                max="1000"
+                                value={voucher.amount}
+                                onChange={(e) => setVoucher({ ...voucher, amount: e.target.value })}
+                            />
+                        </div>
+                        <div className="flex flex-col gap-1 my-1">
+                            <label htmlFor="amount">Voucher price</label>
+                            <input
+                                className="border border-2 mx-2"
+                                id="amount"
+                                type="number"
+                                min="0"
+                                max="1000"
+                                value={voucher.price}
+                                onChange={(e) => setVoucher({ ...voucher, price: e.target.value })}
+                            />
+                        </div>
+                    </div>
+                ) : (
+                    ""
+                )}
             </div>
             <div className="w-full flex flex-col md:flex-row gap-5 justify-center items-center mt-5">
                 <button
