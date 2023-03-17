@@ -1,12 +1,5 @@
-// import dynamic from "next/dynamic"
-// import { useState, useEffect } from "react"
-import ExperiencesList from "../components/ExperiencesList"
+import HomeTemplate from "../templates/Home"
 
-// const InvitationCheck = dynamic(() => import("../components/InvitationCheck"), {
-//     ssr: false
-// })
+const Home = () => <HomeTemplate />
 
-export default function Home() {
-
-    return <div><ExperiencesList /> </div>
-}
+export default Home

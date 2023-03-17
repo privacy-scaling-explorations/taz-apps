@@ -22,6 +22,10 @@ module.exports = {
             },
             colors: {
                 brand: {
+                    primary: "#35655F",
+                    secondary: "#52B5A4",
+                    lightBase: "#F8FFFE",
+                    darkBase: "#1C2928",
                     beige: "#EAE1DA",
                     beige2: "#F0EBE8",
                     beige3: "#B8AEA7",
@@ -39,8 +43,10 @@ module.exports = {
                     orange2: "#EE8C45",
                     brown: "#402917",
                     brown2: "#513E2E",
-                    green: "#90B188",
-                    purple: "#8679AB"
+                    green: "#35655F",
+                    purple: "#8679AB",
+                    gradient1: "#D2F8E8CC",
+                    gradient2: "#FFF250CC"
                 }
             },
             boxShadow: {
@@ -48,6 +54,10 @@ module.exports = {
             },
             scale: {
                 flip: "-1"
+            },
+            backgroundImage: {
+                mountains: "url('/mountains.png')",
+                zulaluVector: "url('/zulalu-vector.png')"
             }
         }
     },
