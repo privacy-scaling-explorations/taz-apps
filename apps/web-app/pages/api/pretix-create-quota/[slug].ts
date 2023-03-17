@@ -10,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         "Content-Type": "application/json"
     }
 
-    const { ticketAmount, ticketId, variationId1} = req.body
+    const { ticketAmount, ticketId, variationId1 } = req.body
     console.log("Req body quota: ", req.body)
 
     const body = {
@@ -30,7 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             { headers }
         )
 
-        if (response.status == 201) {
+        if (response.status === 201) {
             res.status(201).json(response.data)
         } else {
             throw new Error(`HTTP error! status: ${response.status}`)

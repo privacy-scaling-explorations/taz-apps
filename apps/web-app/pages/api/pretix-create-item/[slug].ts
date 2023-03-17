@@ -10,14 +10,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         "Content-Type": "application/json"
     }
 
-    const { newTicket } = req.body
+    const { newTickets } = req.body
 
     const body = {
         id: 1,
         name: { en: `${req.query.slug} ticket` },
         internal_name: "",
         sales_channels: ["web"],
-        default_price: `${newTicket.price}`,
+        default_price: `${newTickets[0].price}`,
         original_price: null,
         category: null,
         active: true,
@@ -59,26 +59,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         validity_dynamic_duration_months: null,
         validity_dynamic_start_choice: false,
         validity_dynamic_start_choice_day_limit: null,
-        variations: [
-            {
-                value: { en: `${newTicket.name}` },
-                default_price: `${newTicket.price}`,
-                price: `${newTicket.price}`,
-                original_price: null,
-                active: true,
-                checkin_attention: false,
-                require_approval: false,
-                require_membership: false,
-                require_membership_types: [],
-                sales_channels: ["web"],
-                available_from: null,
-                available_until: null,
-                hide_without_voucher: false,
-                description: null,
-                meta_data: {},
-                position: 0
-            }
-        ],
+        variations: newTickets.map((item: any) => ({
+            value: { en: `${item.name}` },
+            default_price: `${item.price}`,
+            price: `${item.price}`,
+            original_price: null,
+            active: true,
+            checkin_attention: false,
+            require_approval: false,
+            require_membership: false,
+            require_membership_types: [],
+            sales_channels: ["web"],
+            available_from: null,
+            available_until: null,
+            hide_without_voucher: false,
+            description: null,
+            meta_data: {},
+            position: 0
+        })),
         addons: [],
         bundles: []
     }
@@ -90,7 +88,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             { headers }
         )
 
-        if (response.status == 201) {
+        if (response.status === 201) {
             res.status(201).json(response.data)
         } else {
             throw new Error(`HTTP error! status: ${response.status}`)
