@@ -76,7 +76,7 @@ const Step2 = ({
                     onChange={(e) => setNewTicket({ ...newTicket, description: e.target.value })}
                 />
                 <div className="flex flex-col gap-1 my-1">
-                    <label htmlFor="amount">Amount of seats</label>
+                    <label htmlFor="amount">Amount of tickets</label>
                     <input
                         className="border border-2 mx-2"
                         id="amount"
@@ -94,7 +94,7 @@ const Step2 = ({
                 {hasVouchers ? (
                     <div>
                         <div className="flex flex-col gap-1 my-1">
-                            <label htmlFor="amount">Voucher code</label>
+                            <label htmlFor="amount">Voucher code (has to be atleast 5 characters.)</label>
                             <input
                                 className="border border-2 mx-2"
                                 id="amount"
