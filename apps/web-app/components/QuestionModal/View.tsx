@@ -111,7 +111,7 @@ export default function QuestionModalView({
                                     <button
                                         type="button"
                                         className="flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-beige2"
-                                        onClick={closeModal}
+                                        onClick={() => closeModal(false)}
                                     >
                                         <svg
                                             className="mr-2"
