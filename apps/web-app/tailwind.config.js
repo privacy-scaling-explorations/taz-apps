@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 
 module.exports = {
-    content: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
+    content: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}", "./templates/**/*.{js,ts,jsx,tsx}"],
     theme: {
         extend: {
             fontFamily: {
@@ -13,7 +13,7 @@ module.exports = {
                 "brand-4xl": ["2.75rem", "2.6rem"],
                 "brand-2xs": [".75rem", ".75rem"],
                 "brand-3xs": ".625rem",
-                "brand-h1": "32px",
+                "brand-h1": "52px",
                 "brand-h2": "20px",
                 "brand-h3": "16px",
                 "brand-button": "14px",
