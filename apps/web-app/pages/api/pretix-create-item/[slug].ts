@@ -59,26 +59,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         validity_dynamic_duration_months: null,
         validity_dynamic_start_choice: false,
         validity_dynamic_start_choice_day_limit: null,
-        variations: [
-            {
-                value: { en: `${newTicket.name}` },
-                default_price: `${newTicket.price}`,
-                price: `${newTicket.price}`,
-                original_price: null,
-                active: true,
-                checkin_attention: false,
-                require_approval: false,
-                require_membership: false,
-                require_membership_types: [],
-                sales_channels: ["web"],
-                available_from: null,
-                available_until: null,
-                hide_without_voucher: false,
-                description: null,
-                meta_data: {},
-                position: 0
-            }
-        ],
+        // variations: [
+        //     {
+        //         value: { en: `${newTicket.name}` },
+        //         default_price: `${newTicket.price}`,
+        //         price: `${newTicket.price}`,
+        //         original_price: null,
+        //         active: true,
+        //         checkin_attention: false,
+        //         require_approval: false,
+        //         require_membership: false,
+        //         require_membership_types: [],
+        //         sales_channels: ["web"],
+        //         available_from: null,
+        //         available_until: null,
+        //         hide_without_voucher: false,
+        //         description: null,
+        //         meta_data: {},
+        //         position: 0
+        //     }
+        // ],
         addons: [],
         bundles: []
     }

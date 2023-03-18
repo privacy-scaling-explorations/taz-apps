@@ -1,4 +1,5 @@
 import NextImage from "next/image"
+import NextLink from "next/link"
 import { usePassportModalContext } from "../../context/PassportModalContext"
 
 const Header = () => {
@@ -13,9 +14,15 @@ const Header = () => {
                 <button className="bg-zulalu-primary text-white py-[8px] px-[16px] rounded-[8px]">Buy a badge</button>
             </div>
             <ul className="flex gap-5 items-center">
-                <li>About</li>
-                <li>Schedule</li>
-                <li>FAQ</li>
+                <li>
+                    <NextLink href="/">About</NextLink>
+                </li>
+                <li>
+                    <NextLink href="/events">Schedule</NextLink>
+                </li>
+                <li>
+                    <NextLink href="/">FAQ</NextLink>
+                </li>
                 <li>
                     <button
                         className="bg-zulalu-primary text-white py-[8px] px-[16px] rounded-[8px]"
