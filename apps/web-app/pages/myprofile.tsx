@@ -2,7 +2,7 @@ import React from "react"
 
 import { GetServerSideProps } from "next"
 
-import MyProfileComponent from "../components/MyProfile"
+import MyProfilePage from "../templates/MyProfilePage"
 
 import { FavoritedEventsDTO, ParticipantsDTO, UserDTO } from "../types"
 
@@ -14,14 +14,7 @@ type Props = {
 }
 
 export default function MyProfile({ pastEvents, attendingEvents, userEventsFavorited, userInfo }: Props) {
-    return (
-        <MyProfileComponent
-            pastEvents={pastEvents}
-            attendingEvents={attendingEvents}
-            userEventsFavorited={userEventsFavorited}
-            userInfo={userInfo}
-        />
-    )
+    return <MyProfilePage />
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ res }) => {
