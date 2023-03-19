@@ -20,7 +20,8 @@
     "ts-node": {
         "compilerOptions": {
             "target": "esnext",
-            "module": "commonjs"
+            "module": "commonjs",
+            "jsx": "react-jsx"
         }
     }
 }
