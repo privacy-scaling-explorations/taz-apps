@@ -1,4 +1,4 @@
-GET https://pretix.eu/api/v1/organizers/taz-zuzalu/events/test-zuzalu-3/items/
+GET https://pretix.eu/api/v1/organizers/taz-zuzalu/events/gym-muay-thai/items/
 Host: pretix.eu
-Authorization: Token h074quiq51d5xwk55tax7t7an12v3bb1rbdvk16209fsf4d1tqqtg9o68yy5jgmz
+Authorization: Token gqmo1r79hsljkjv2dcr9pgo93x6aj4dzbflxgq4fdmrdc7tjh99fc4quhf8tju9i
 Accept: application/json, text/javascript
