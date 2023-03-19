@@ -19,9 +19,9 @@ const Header = () => {
                 </div> */}
             </div>
             <ul className="flex gap-5 items-center text-white">
-                <li>About</li>
+                {/* <li>About</li> */}
                 <li>Schedule</li>
-                <li>FAQ</li>
+                {/* <li>FAQ</li> */}
                 <li>
                     <button
                         className="bg-zulalu-primary text-white py-[8px] px-[16px] rounded-[8px]"
@@ -29,6 +29,9 @@ const Header = () => {
                     >
                         Connect Passport
                     </button>
+                </li>
+                <li>
+                    <NextLink href="/myprofile">My Profile</NextLink>
                 </li>
             </ul>
         </div>

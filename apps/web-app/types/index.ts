@@ -23,7 +23,24 @@ export interface EventsDTO {
     tags: string[]
     slug: string
     publicUrl: string
-    sessions: []
+    type: String
+    sessions: SessionsDTO[]
+}
+
+export interface SessionsDTO {
+    id: number
+    created_at: Date
+    name: string
+    location: string
+    startDate: Date
+    endDate: Date
+    startTime: string
+    tags: string[]
+    endTime: string
+    info: string
+    organizers: string[]
+    event_id: number
+    isOpen: boolean
 }
 
 export interface ParticipantsDTO {
