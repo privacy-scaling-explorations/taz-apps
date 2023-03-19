@@ -4,7 +4,6 @@ type TicketsState = {
     name: string
     price: string
     description: string
-    amount: string
 }
 
 type Props = {
@@ -13,9 +12,10 @@ type Props = {
     newTickets: TicketsState[]
     handleSubmit: Function
     isLoading: boolean
+    amountTickets: string
 }
 
-const Step3 = ({ setSteps, newEvent, newTickets, handleSubmit, isLoading }: Props) => (
+const Step3 = ({ setSteps, newEvent, newTickets, handleSubmit, isLoading, amountTickets }: Props) => (
     <div className="flex flex-col w-full gap-8 bg-white p-8 rounded-lg shadow-md">
         <div className="flex flex-col gap-4">
             <h1 className="text-lg font-bold uppercase ">Event Details:</h1>
@@ -77,7 +77,7 @@ const Step3 = ({ setSteps, newEvent, newTickets, handleSubmit, isLoading }: Prop
                         Description: <span className="font-normal">{item.description}</span>
                     </h2>
                     <h2 className="font-bold">
-                        Amount: <span className="font-normal">{item.amount}</span>
+                        Amount: <span className="font-normal">{amountTickets}</span>
                     </h2>
                 </div>
             ))}

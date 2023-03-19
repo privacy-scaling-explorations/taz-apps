@@ -26,7 +26,6 @@ type TicketsState = {
     name: string
     price: string
     description: string
-    amount: string
 }
 
 type Props = {
@@ -52,6 +51,8 @@ const AddEventModal = ({ isOpen, closeModal }: Props) => {
     })
 
     const [newTickets, setNewTickets] = useState<TicketsState[]>([])
+
+    const [amountTickets, setAmountTickets] = useState("0")
 
     const [hasVouchers, setHasVouchers] = useState(false)
     const [voucher, setVoucher] = useState({
@@ -89,41 +90,46 @@ const AddEventModal = ({ isOpen, closeModal }: Props) => {
 
         console.log("Cloned event url and slug: ", clonedEventRes.data.public_url, clonedEventRes.data.slug)
 
-        // Step 2 Create items && Create Quota for the item (tickets)
+        // Step 2 Create items (tickets)
 
+        const ticketIds: string[] = []
         for (let i = 0; i < newTickets.length; i++) {
             const newTicket = newTickets[i]
             const ticketCreatedRes = await axios.post(`/api/pretix-create-item/${clonedEventRes.data.slug}`, {
                 newTicket
             })
 
+            ticketIds.push(ticketCreatedRes.data.id)
+
             console.log("tickets created: ", ticketCreatedRes.data)
-
-            const quotaCreatedRes = await axios.post(`/api/pretix-create-quota/${clonedEventRes.data.slug}`, {
-                ticketAmount: newTicket.amount,
-                ticketId: ticketCreatedRes.data.id
-            })
-
-            console.log("Quota creatd: ", quotaCreatedRes.data)
         }
 
-        // Step 3 Go Live
+        // Step 3 Create Quota for the item
+
+        const quotaCreatedRes = await axios.post(`/api/pretix-create-quota/${clonedEventRes.data.slug}`, {
+            ticketAmount: amountTickets,
+            ticketId: ticketIds
+        })
+
+        console.log("Quota creatd: ", quotaCreatedRes.data)
+
+        // Step 4 Go Live
         const patchResponse = await axios.post(`/api/pretix-go-live/${clonedEventRes.data.slug}`, {
             live: true
         })
 
         console.log("Go Live response: ", patchResponse.data)
 
-        // // Optional step: Create voucher
-        // if (hasVouchers) {
-        //     const voucherResponse = await axios.post(`/api/pretix-create-voucher/${clonedEventRes.data.slug}`, {
-        //         voucher,
-        //         quotaId: quotaCreatedRes.data.id
-        //     })
-        //     console.log("Voucher response: ", voucherResponse.data)
-        // }
+        // Optional step: Create voucher
+        if (hasVouchers) {
+            const voucherResponse = await axios.post(`/api/pretix-create-voucher/${clonedEventRes.data.slug}`, {
+                voucher,
+                quotaId: quotaCreatedRes.data.id
+            })
+            console.log("Voucher response: ", voucherResponse.data)
+        }
 
-        // Step 4 Add to database
+        // Step 5 Add to database
         const createEventDB = await axios.post("/api/createEvent", {
             ...newEvent,
             publicUrl: clonedEventRes.data.public_url,
@@ -230,6 +236,8 @@ const AddEventModal = ({ isOpen, closeModal }: Props) => {
                                             hasVouchers={hasVouchers}
                                             voucher={voucher}
                                             setVoucher={setVoucher}
+                                            setAmountTickets={setAmountTickets}
+                                            amountTickets={amountTickets}
                                         />
                                     )}
                                     {steps === 3 && (
@@ -239,6 +247,7 @@ const AddEventModal = ({ isOpen, closeModal }: Props) => {
                                             newTickets={newTickets}
                                             handleSubmit={handleSubmit}
                                             isLoading={isLoading}
+                                            amountTickets={amountTickets}
                                         />
                                     )}
                                 </div>

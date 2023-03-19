@@ -4,7 +4,6 @@ type TicketsState = {
     name: string
     price: string
     description: string
-    amount: string
 }
 
 type Props = {
@@ -19,22 +18,32 @@ type Props = {
         price: number
     }
     setVoucher: Function
+    amountTickets: string
+    setAmountTickets: Function
 }
 
-const Step2 = ({ setSteps, newTickets, setNewTickets, hasVouchers, setHasVouchers, voucher, setVoucher }: Props) => {
+const Step2 = ({
+    setSteps,
+    newTickets,
+    setNewTickets,
+    hasVouchers,
+    setHasVouchers,
+    voucher,
+    setVoucher,
+    amountTickets,
+    setAmountTickets
+}: Props) => {
     const [pretixTicket, setPretixTicket] = useState<TicketsState>({
         name: "",
         price: "",
-        description: "",
-        amount: ""
+        description: ""
     })
 
     const handleAddTicket = () => {
-        const isValid = pretixTicket.name && pretixTicket.price && pretixTicket.amount
+        const isValid = pretixTicket.name && pretixTicket.price
         if (isValid) {
             setNewTickets([...newTickets, pretixTicket])
             setPretixTicket({
-                amount: "",
                 description: "",
                 name: "",
                 price: ""
@@ -52,7 +61,7 @@ const Step2 = ({ setSteps, newTickets, setNewTickets, hasVouchers, setHasVoucher
         setSteps(3)
     }
     return (
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col w-full overflow-scroll">
             <div className="flex flex-col gap-1 my-1 w-full">
                 <label htmlFor="name">Ticket Name</label>
                 <input
@@ -95,8 +104,8 @@ const Step2 = ({ setSteps, newTickets, setNewTickets, hasVouchers, setHasVoucher
                     type="number"
                     min="0"
                     max="1000"
-                    value={pretixTicket.amount}
-                    onChange={(e) => setPretixTicket({ ...pretixTicket, amount: e.target.value })}
+                    value={amountTickets}
+                    onChange={(e) => setAmountTickets(e.target.value)}
                 />
             </div>
             <div className="flex flex-col gap-1 my-1 w-full">
@@ -167,7 +176,6 @@ const Step2 = ({ setSteps, newTickets, setNewTickets, hasVouchers, setHasVoucher
                                     <h1>Name:{ticket.name}</h1>
                                     <h1>${ticket.price}</h1>
                                     <h1>Desc:{ticket.description}</h1>
-                                    <h1>Amount:{ticket.amount}</h1>
                                 </div>
                                 <div className="w-full bg-brand-yellow h-[30px] flex items-center">
                                     <button className="w-full" onClick={() => handleRemoveTicket(index)}>
