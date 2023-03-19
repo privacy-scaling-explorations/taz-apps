@@ -131,7 +131,7 @@ const EventPage = ({ event, favoritedEvents, participants }: Props) => {
                         <h1 className={`text-black`}>ZK Week</h1>
                     </div>
                     <div className="flex gap-5">
-                        <button className="bg-white border border-[#35655F] text-zulalu-primary py-[8px] px-[16px] rounded-[8px]">
+                        <button className="bg-white border border-primary text-zulalu-primary py-[8px] px-[16px] rounded-[8px]">
                             CONTACT ORGANIZERS
                         </button>
                         <button className="bg-zulalu-primary text-white py-[8px] px-[16px] rounded-[8px]">
@@ -165,10 +165,15 @@ const EventPage = ({ event, favoritedEvents, participants }: Props) => {
                     </div>
                 </div>
                 <div className="flex w-full bg-white rounded-[8px] p-5 h-full">
-                    <div className="border border-black flex">
-                        <div className="border border-black flex">
-                            <h1>Sessions</h1>
-                            <button className="bg-zulalu-primary text-white py-[8px] px-[16px] rounded-[8px]">
+                    <div className="border border-black flex justify-between w-full">
+                        <div className="border border-black flex justify-center items-center gap-5">
+                            <h1 className="text-[40px]">Sessions</h1>
+                            <button className="bg-zulalu-primary h-[40px] text-white py-[8px] px-[16px] rounded-[8px]">
+                                TICKETS
+                            </button>
+                        </div>
+                        <div className="border border-black flex justify-center items-center gap-5">
+                            <button className="bg-white border border-primary text-zulalu-primary py-[8px] px-[16px] rounded-[8px]">
                                 TICKETS
                             </button>
                         </div>

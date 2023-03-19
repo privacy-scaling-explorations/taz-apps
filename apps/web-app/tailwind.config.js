@@ -52,6 +52,15 @@ module.exports = {
                     yellow: "#FCD270"
                 }
             },
+            borderColor: {
+                primary: "#35655F",
+                secondary: "#52B5A4",
+                lightBase: "#F8FFFE",
+                darkBase: "#1C2928",
+                gradient1: "#D2F8E8CC",
+                gradient2: "#FFF250CC",
+                yellow: "#FCD270"
+            },
             boxShadow: {
                 question: "4px 4px 25px rgba(0, 0, 0, 0.25)"
             },
