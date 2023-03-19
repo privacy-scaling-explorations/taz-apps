@@ -5,8 +5,9 @@ module.exports = {
     theme: {
         extend: {
             fontFamily: {
-                sans: ["JetBrains Mono"],
-                year: ["Poppins"]
+                sans: ["Open Sans", "sans-serif"],
+                year: ["Poppins"],
+                cinzel: ["Cinzel", "sans-serif"]
             },
             fontSize: {
                 "brand-sm": ".9rem",
