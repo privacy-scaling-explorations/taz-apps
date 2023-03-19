@@ -23,6 +23,7 @@ export interface EventsDTO {
     tags: string[]
     slug: string
     publicUrl: string
+    sessions: []
 }
 
 export interface ParticipantsDTO {

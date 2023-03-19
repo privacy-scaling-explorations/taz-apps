@@ -5,12 +5,12 @@ Accept: application/json, text/javascript
 Content-Type: application/json
 
 {
-  "name": {"en": "Sample Conference"},
-  "slug": "sampleconf42",
-  "live": false,
-  "testmode": false,
+  "name": {"en": "Zuzalu Template"},
+  "slug": "zuzalu-template",
+  "live": true,
+  "testmode": true,
   "currency": "EUR",
-  "date_from": "2017-12-27T10:00:00Z",
+  "date_from": "2023-03-27T10:00:00Z",
   "date_to": null,
   "date_admission": null,
   "is_public": false,

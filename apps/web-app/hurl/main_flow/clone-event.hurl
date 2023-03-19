@@ -1,12 +1,12 @@
-POST https://pretix.eu/api/v1/organizers/taz-zuzalu/events/zuzalu-3/clone/
+POST https://pretix.eu/api/v1/organizers/taz-zuzalu/events/test-correct-dates/clone/
 Host: pretix.eu
-Authorization: Token h074quiq51d5xwk55tax7t7an12v3bb1rbdvk16209fsf4d1tqqtg9o68yy5jgmz
+Authorization: Token tf0ba4h6m3tom6as5h86wfoutnby9me04vzz47bxz58f65ucv5zpt6q56jh8u6gg
 Accept: application/json, text/javascript
 Content-Type: application/json
 
 {
-  "name": {"en": "Zuzalu 3 Clone"},
-  "slug": "test-zuzalu-3",
+  "name": {"en": "Zuzalu F"},
+  "slug": "zuzalu-f",
   "live": false,
   "testmode": true,
   "currency": "EUR",

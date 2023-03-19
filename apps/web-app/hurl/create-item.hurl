@@ -5,11 +5,11 @@ Accept: application/json, text/javascript
 Content-Type: application/json
 
 {
-  "id": 100,
-  "name": {"en": "Standard ticket0000"},
+  "id": 1,
+  "name": {"en": "Standard ticket"},
   "internal_name": "",
   "sales_channels": ["web"],
-  "default_price": "23.00",
+  "default_price": "33.00",
   "original_price": null,
   "category": null,
   "active": true,
