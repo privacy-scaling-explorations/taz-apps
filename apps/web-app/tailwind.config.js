@@ -1,19 +1,20 @@
 /** @type {import('tailwindcss').Config} */
 
 module.exports = {
-    content: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
+    content: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}", "./templates/**/*.{js,ts,jsx,tsx}"],
     theme: {
         extend: {
             fontFamily: {
-                sans: ["JetBrains Mono"],
-                year: ["Poppins"]
+                sans: ["Open Sans", "sans-serif"],
+                year: ["Poppins"],
+                cinzel: ["Cinzel", "sans-serif"]
             },
             fontSize: {
                 "brand-sm": ".9rem",
                 "brand-4xl": ["2.75rem", "2.6rem"],
                 "brand-2xs": [".75rem", ".75rem"],
                 "brand-3xs": ".625rem",
-                "brand-h1": "32px",
+                "brand-h1": "52px",
                 "brand-h2": "20px",
                 "brand-h3": "16px",
                 "brand-button": "14px",
@@ -51,6 +52,15 @@ module.exports = {
                     gradient2: "#FFF250CC",
                     yellow: "#FCD270"
                 }
+            },
+            borderColor: {
+                primary: "#35655F",
+                secondary: "#52B5A4",
+                lightBase: "#F8FFFE",
+                darkBase: "#1C2928",
+                gradient1: "#D2F8E8CC",
+                gradient2: "#FFF250CC",
+                yellow: "#FCD270"
             },
             boxShadow: {
                 question: "4px 4px 25px rgba(0, 0, 0, 0.25)"
