@@ -16,6 +16,8 @@
         "no-alert": "off",
         "no-plusplus":"off",
         "class-methods-use-this":"off",
+        "radix":"off",
+        "no-await-in-loop":"off",
         "no-unused-vars":"off",
         "no-unused-expressions":"off",
         "global-require":"off",

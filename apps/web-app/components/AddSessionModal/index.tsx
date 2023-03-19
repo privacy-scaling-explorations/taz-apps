@@ -229,7 +229,11 @@ const AddSessionModal = ({ isOpen, closeModal, eventId }: Props) => {
                                 <div className="flex flex-col h-full md:h-[900px]  p-5 ">
                                     <ModalSteps steps={steps} />
                                     {steps === 1 && (
-                                        <Step1 newSession={newSession} setNewSession={setNewSession} setSteps={setSteps} />
+                                        <Step1
+                                            newSession={newSession}
+                                            setNewSession={setNewSession}
+                                            setSteps={setSteps}
+                                        />
                                     )}
                                     {steps === 2 && (
                                         <Step2

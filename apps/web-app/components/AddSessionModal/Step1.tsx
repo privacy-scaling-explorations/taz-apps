@@ -6,29 +6,22 @@ import DatePicker from "react-datepicker"
 import axios from "axios"
 import { UserDTO } from "../../types"
 
+type NewSessionState = {
+    name: string
+    organizers: string[]
+    startDate: Date
+    endDate: Date
+    startTime: string
+    endTime: string
+    location: string
+    tags: string[]
+    info: string
+    eventId: number
+}
+
 type Props = {
-    newSession: {
-        name: string
-        organizers: string[]
-        startDate: Date
-        endDate: Date
-        startTime: string
-        endTime: string
-        location: string
-        tags: string[]
-        info: string
-    }
-    setNewSession: (newEvent: {
-        name: string
-        organizers: string[]
-        startDate: Date
-        endDate: Date
-        startTime: string
-        endTime: string
-        location: string
-        tags: string[]
-        info: string
-    }) => void
+    newSession: NewSessionState
+    setNewSession: (newEvent: NewSessionState) => void
     setSteps: (steps: number) => void
 }
 
