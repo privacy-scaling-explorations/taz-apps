@@ -1,4 +1,5 @@
 import NextImage from "next/image"
+import NextLink from "next/link"
 import { usePassportModalContext } from "../../context/PassportModalContext"
 
 const Header = () => {

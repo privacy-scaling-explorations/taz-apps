@@ -172,7 +172,10 @@ const Step1 = ({ newEvent, setNewEvent, setSteps }: Props) => {
                             className="border border-2 p-1 w-full"
                             placeholder="add organizer"
                             value={organizer}
-                            onChange={(e) => setOrganizer(e.target.value)}
+                            onChange={(e) => {
+                                setOrganizer(e.target.value)
+                                setDisplay(true)
+                            }}
                             onClick={() => setDisplay(true)}
                         />
                     </div>
