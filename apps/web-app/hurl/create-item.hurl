@@ -1,6 +1,6 @@
-POST https://pretix.eu/api/v1/organizers/taz-zuzalu/events/zuzalu1/items/
+POST https://pretix.eu/api/v1/organizers/taz-zuzalu/events/gym-muay-thai/items/
 Host: pretix.eu
-Authorization: Token h074quiq51d5xwk55tax7t7an12v3bb1rbdvk16209fsf4d1tqqtg9o68yy5jgmz
+Authorization: Token gqmo1r79hsljkjv2dcr9pgo93x6aj4dzbflxgq4fdmrdc7tjh99fc4quhf8tju9i
 Accept: application/json, text/javascript
 Content-Type: application/json
 
@@ -51,44 +51,6 @@ Content-Type: application/json
   "validity_dynamic_duration_months": null,
   "validity_dynamic_start_choice": false,
   "validity_dynamic_start_choice_day_limit": null,
-  "variations": [
-    {
-       "value": {"en": "Student"},
-       "default_price": "10.00",
-       "price": "10.00",
-       "original_price": null,
-       "active": true,
-       "checkin_attention": false,
-       "require_approval": false,
-       "require_membership": false,
-       "require_membership_types": [],
-       "sales_channels": ["web"],
-       "available_from": null,
-       "available_until": null,
-       "hide_without_voucher": false,
-       "description": null,
-       "meta_data": {},
-       "position": 0
-    },
-    {
-       "value": {"en": "Regular"},
-       "default_price": null,
-       "price": "23.00",
-       "original_price": null,
-       "active": true,
-       "checkin_attention": false,
-       "require_approval": false,
-       "require_membership": false,
-       "require_membership_types": [],
-       "sales_channels": ["web"],
-       "available_from": null,
-       "available_until": null,
-       "hide_without_voucher": false,
-       "description": null,
-       "meta_data": {},
-       "position": 1
-    }
-  ],
   "addons": [],
   "bundles": []
 }

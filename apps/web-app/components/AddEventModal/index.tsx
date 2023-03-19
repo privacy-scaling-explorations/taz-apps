@@ -22,17 +22,21 @@ type NewEventState = {
     info: string
 }
 
+type TicketsState = {
+    name: string
+    price: string
+    description: string
+}
+
 type Props = {
     isOpen: boolean
     closeModal: (b: boolean) => void
 }
 
-// Add frontend to allow multiple tickets and set ticket quotas
-// Add organizers from fetchUsers
-
 const AddEventModal = ({ isOpen, closeModal }: Props) => {
     const router = useRouter()
     const questionTextRef = useRef(null)
+    const [isLoading, setIsLoading] = useState(false)
     const [steps, setSteps] = useState(1)
     const [newEvent, setNewEvent] = useState<NewEventState>({
         name: "",
@@ -46,13 +50,10 @@ const AddEventModal = ({ isOpen, closeModal }: Props) => {
         info: ""
     })
 
-    const [newTicket, setNewTicket] = useState({
-        name: "",
-        price: "",
-        description: ""
-    })
+    const [newTickets, setNewTickets] = useState<TicketsState[]>([])
 
-    const [ticketAmount, setTicketAmount] = useState(1)
+    const [amountTickets, setAmountTickets] = useState("0")
+
     const [hasVouchers, setHasVouchers] = useState(false)
     const [voucher, setVoucher] = useState({
         code: "",
@@ -61,6 +62,8 @@ const AddEventModal = ({ isOpen, closeModal }: Props) => {
     })
 
     const handleSubmit = async () => {
+        setIsLoading(true)
+
         // Step 1 Clone event from template
 
         const clonedEventRes = await axios.post("/api/pretix-clone-event", {
@@ -89,32 +92,35 @@ const AddEventModal = ({ isOpen, closeModal }: Props) => {
 
         // Step 2 Create items (tickets)
 
-        const ticketCreatedRes = await axios.post(`/api/pretix-create-item/${clonedEventRes.data.slug}`, { newTicket })
+        const ticketIds: string[] = []
+        for (let i = 0; i < newTickets.length; i++) {
+            const newTicket = newTickets[i]
+            const ticketCreatedRes = await axios.post(`/api/pretix-create-item/${clonedEventRes.data.slug}`, {
+                newTicket
+            })
 
-        console.log("tickets created: ", ticketCreatedRes.data)
+            ticketIds.push(ticketCreatedRes.data.id)
 
-        // Step 3 Get items (tickets)
-        const getTicketsRes = await axios.get(`/api/pretix-get-items/${clonedEventRes.data.slug}`)
+            console.log("tickets created: ", ticketCreatedRes.data)
+        }
 
-        console.log("get tickets: ", getTicketsRes.data)
+        // Step 3 Create Quota for the item
 
-        // Step 4 Create Quota
         const quotaCreatedRes = await axios.post(`/api/pretix-create-quota/${clonedEventRes.data.slug}`, {
-            ticketAmount,
-            ticketId: getTicketsRes.data.results[0].id,
-            variationId1: getTicketsRes.data.results[0].variations[0].id
+            ticketAmount: amountTickets,
+            ticketId: ticketIds
         })
 
         console.log("Quota creatd: ", quotaCreatedRes.data)
 
-        // Step 5 Go Live
+        // Step 4 Go Live
         const patchResponse = await axios.post(`/api/pretix-go-live/${clonedEventRes.data.slug}`, {
             live: true
         })
 
         console.log("Go Live response: ", patchResponse.data)
 
-        //Optional step: Create voucher
+        // Optional step: Create voucher
         if (hasVouchers) {
             const voucherResponse = await axios.post(`/api/pretix-create-voucher/${clonedEventRes.data.slug}`, {
                 voucher,
@@ -123,7 +129,7 @@ const AddEventModal = ({ isOpen, closeModal }: Props) => {
             console.log("Voucher response: ", voucherResponse.data)
         }
 
-        // Step 6 Add to database
+        // Step 5 Add to database
         const createEventDB = await axios.post("/api/createEvent", {
             ...newEvent,
             publicUrl: clonedEventRes.data.public_url,
@@ -132,8 +138,31 @@ const AddEventModal = ({ isOpen, closeModal }: Props) => {
 
         console.log("DB response: ", createEventDB)
 
+        // refresh to see new event created
         router.push(router.asPath)
 
+        // CLEAN EVERYTHING AFTER CREATING EVENT
+
+        setIsLoading(false)
+        setSteps(1)
+        setNewEvent({
+            name: "",
+            organizers: [],
+            startDate: new Date(),
+            endDate: new Date(),
+            startTime: "09:00",
+            endTime: "18:00",
+            location: "",
+            tags: [],
+            info: ""
+        })
+        setNewTickets([])
+        setHasVouchers(false)
+        setVoucher({
+            code: "",
+            amount: 1,
+            price: 0
+        })
         closeModal(false)
     }
 
@@ -201,22 +230,24 @@ const AddEventModal = ({ isOpen, closeModal }: Props) => {
                                     {steps === 2 && (
                                         <Step2
                                             setSteps={setSteps}
-                                            newTicket={newTicket}
-                                            setNewTicket={setNewTicket}
-                                            ticketAmount={ticketAmount}
-                                            setTicketAmount={setTicketAmount}
+                                            newTickets={newTickets}
+                                            setNewTickets={setNewTickets}
                                             setHasVouchers={setHasVouchers}
                                             hasVouchers={hasVouchers}
                                             voucher={voucher}
                                             setVoucher={setVoucher}
+                                            setAmountTickets={setAmountTickets}
+                                            amountTickets={amountTickets}
                                         />
                                     )}
                                     {steps === 3 && (
                                         <Step3
                                             setSteps={setSteps}
                                             newEvent={newEvent}
-                                            newTicket={newTicket}
+                                            newTickets={newTickets}
                                             handleSubmit={handleSubmit}
+                                            isLoading={isLoading}
+                                            amountTickets={amountTickets}
                                         />
                                     )}
                                 </div>
