@@ -4,6 +4,9 @@ module.exports = {
     content: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}", "./templates/**/*.{js,ts,jsx,tsx}"],
     theme: {
         extend: {
+            fontWeight: {
+                semibold: "600"
+            },
             fontFamily: {
                 sans: ["Open Sans", "sans-serif"],
                 year: ["Poppins"],
