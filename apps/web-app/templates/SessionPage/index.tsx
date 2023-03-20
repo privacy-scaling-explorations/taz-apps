@@ -59,7 +59,7 @@ const SessionPage = ({ session, createRsvp, deleteRsvp }: Props) => {
                         )}
                         {rsvpId !== 0 && (
                             <button
-                                onClick={() => onDeleteRsvp(rsvpId)}
+                                onClick={() => onDeleteRsvp()}
                                 className="flex gap-2 items-center bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]"
                             >
                                 <NextImage src={"/vector-circle-check.svg"} width={16} height={16} />
