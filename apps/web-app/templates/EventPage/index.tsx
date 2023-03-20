@@ -1,7 +1,9 @@
-import { useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
+
 import { useRouter } from "next/router"
 import NextImage from "next/image"
 import Link from "next/link"
+import moment from "moment"
 import AddSessionModal from "../../components/AddSessionModal"
 import Sessions from "../../components/Sessions"
 // import QuestionModal from "../../components/QuestionModal"
@@ -16,23 +18,29 @@ type Props = {
     favoritedEvents: FavoritedEventsDTO[]
 }
 
-
-
 const EventPage = ({ event, favoritedEvents, participants }: Props) => {
     const router = useRouter()
     const { parentMessageId } = router.query
-    console.log(event)
-    console.log(event.publicUrl)
-
+    const wraperRef = useRef(null)
 
     const [openAddSessionModal, setOpenAddSessionModal] = useState(false)
     const [updateEventModal, setUpdateEventModal] = useState(false)
+    const [selectedOptions, setSelectedOptions] = useState<string[]>([])
+    const [openFilterOptions, setOpenFilterOptions] = useState(false)
 
-    const startDate = new Date(event.startDate).getDay()
-    const startWeekDay = new Date(event.startDate).toLocaleDateString("en-US", { weekday: "long" })
-    const endDate = new Date(event.endDate).getDay()
-    const eventMonth = new Date(event.startDate).toLocaleDateString("en-US", { month: "long" })
-    const eventYear = new Date(event.startDate).getUTCFullYear()
+    const startDate = moment(new Date(event.startDate)).add(1, "day")
+    const endDate = moment(new Date(event.endDate)).add(1, "day")
+    const formattedDate = `${startDate.format("MMM D")}-${endDate.format("D, YYYY")}`
+
+    const filterSince = new Date(event.startDate)
+    const filterAfter = new Date(event.endDate)
+
+    const dateOptions = []
+
+    for (let date = filterSince; date <= filterAfter; date.setDate(date.getDate() + 1)) {
+        const option = moment(new Date(date)).add(1, "day").format("dddd, MMMM Do, YYYY")
+        dateOptions.push(option)
+    }
 
     const checkIfUserHaveAttended = participants
         .filter((item) => item.user_id === 1)
@@ -40,7 +48,38 @@ const EventPage = ({ event, favoritedEvents, participants }: Props) => {
 
     const checkIfUserHadFavorited = favoritedEvents
         .filter((item) => item.user_id === 1)
-        .find((item) => item.event_id === event.id) 
+        .find((item) => item.event_id === event.id)
+
+    const handleOptionChange = (option: string) => {
+        if (selectedOptions.includes(option)) {
+            setSelectedOptions(selectedOptions.filter((item) => item !== option))
+        } else {
+            setSelectedOptions([...selectedOptions, option])
+        }
+    }
+
+    const filteredSessions =
+        selectedOptions.length !== 0
+            ? event.sessions.filter((item) => {
+                  const sessionDate = moment(new Date(item.startDate)).add(1, "day").format("dddd, MMMM Do, YYYY")
+
+                  return selectedOptions.includes(sessionDate)
+              })
+            : event.sessions
+
+    const handleClickOutside = (event: any) => {
+        const { current: wrap } = wraperRef
+        if (wrap && !wrap.contains(event.target)) {
+            setOpenFilterOptions(false)
+        }
+    }
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClickOutside)
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside)
+        }
+    }, [])
 
     return (
         <BaseTemplate>
@@ -56,10 +95,10 @@ const EventPage = ({ event, favoritedEvents, participants }: Props) => {
                             CONTACT ORGANIZERS
                         </button>
                         <a href={event.publicUrl} target="_blank">
-                        <div className="bg-zulalu-primary text-white py-[8px] px-[16px] rounded-[8px] gap-[8px] flex flex-row items-center justify-center hover:bg-zulalu-primary-light cursor-pointer">
-                            <NextImage src={"/ticket.svg"} width={13} height={12} />
-                            <p>TICKETS</p>
-                        </div>
+                            <div className="bg-zulalu-primary text-white py-[8px] px-[16px] rounded-[8px] gap-[8px] flex flex-row items-center justify-center hover:bg-zulalu-primary-light cursor-pointer">
+                                <NextImage src={"/ticket.svg"} width={13} height={12} />
+                                <p>TICKETS</p>
+                            </div>
                         </a>
                         <button
                             className="text-[#F8FFFE] bg-[#35655F] rounded-[8px] flex flex-row justify-center items-center py-[8px] px-[16px] flex flex-row gap-[8px]"
@@ -82,12 +121,12 @@ const EventPage = ({ event, favoritedEvents, participants }: Props) => {
                     </div>
                     <div className="flex flex-col w-2/6 pl-5 pr-20">
                         <div className="flex my-5 w-full">
-                            <h1 className="text-black text-[52px] font-[600]">{event.name}</h1>
+                            <h1 className="text-black text-[10px] font-[600]">{event.name}</h1>
                         </div>
                         <div className="flex flex-col w-full gap-4">
                             <div className="flex gap-1 items-center justify-start">
                                 <NextImage src={"/vector-calendar.svg"} alt="calendar" width={15} height={15} />
-                                <h1 className="text-zulalu-secondary">{`${eventMonth} ${startDate}-${endDate}, ${eventYear}`}</h1>
+                                <h1 className="text-zulalu-secondary">{formattedDate}</h1>
                             </div>
                             <h1>
                                 Join us for presentations, workshops, and roundtables to discuss beginner ZK, ZK for
@@ -124,22 +163,43 @@ const EventPage = ({ event, favoritedEvents, participants }: Props) => {
                             />
                         </div>
                         <div className="flex justify-center items-center gap-5">
-                            <button className="uppercase bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] gap-[8px] text-[16px] rounded-[8px] flex flex-row justify-center items-center">
-                                <p>{`${startWeekDay},${eventMonth} ${startDate}TH, ${eventYear}`}</p>
-                                <NextImage src={"/arrow-down.svg"} width={8} height={4} />
-                            </button>
-                            <button className="bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] gap-[8px] text-[16px] rounded-[8px] flex flex-row justify-center items-center">
+                            <button
+                                onClick={() => setSelectedOptions([])}
+                                className="bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] gap-[8px] text-[16px] rounded-[8px] flex flex-row justify-center items-center"
+                            >
                                 <p>ALL SESSIONS</p>
                                 <NextImage src={"/arrow-down.svg"} width={8} height={4} />
                             </button>
-                            <button className="uppercase bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] gap-[8px] text-[16px] rounded-[8px] flex flex-row justify-center items-center">
-                                <p>{`${startWeekDay},${eventMonth} ${startDate}TH, ${eventYear}`}</p>
-                                <NextImage src={"/arrow-down.svg"} width={8} height={4} />
-                            </button>
+                            <div className="flex flex-col relative w-[auto]" ref={wraperRef}>
+                                <button
+                                    onClick={() => setOpenFilterOptions(!openFilterOptions)}
+                                    className="flex justify-between uppercase bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] gap-[8px] text-[16px] rounded-[8px] flex flex-row justify-center items-center"
+                                >
+                                    <p>{formattedDate}</p>
+                                    <NextImage src={"/arrow-down.svg"} width={8} height={4} />
+                                </button>
+                                {openFilterOptions && (
+                                    <div className="flex z-[10] flex-col gap-3 bg-white border w-full py-[8px] px-[16px] border-primary absolute top-[45px] text-zulalu-primary rounded-[8px]">
+                                        {dateOptions.map((item, index) => (
+                                            <label key={index} className="flex w-full items-center gap-2 capitalize">
+                                                <input
+                                                    type="checkbox"
+                                                    name="checkbox"
+                                                    value="value"
+                                                    checked={selectedOptions.includes(item)}
+                                                    onChange={() => handleOptionChange(item)}
+                                                />
+                                                {item}
+                                            </label>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
                     <Sessions
                         event={event}
+                        sessions={filteredSessions}
                         checkIfUserHaveAttended={checkIfUserHaveAttended}
                         checkIfUserHadFavorited={checkIfUserHadFavorited}
                     />
