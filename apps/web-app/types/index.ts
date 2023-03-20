@@ -42,6 +42,7 @@ export interface SessionsDTO {
     event_id: number
     isOpen: boolean
     rsvps: RsvpDTO[]
+    hasTicket: boolean
 }
 
 export interface RsvpDTO {
