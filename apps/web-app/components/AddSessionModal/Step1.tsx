@@ -55,9 +55,10 @@ const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
         setRerender(!rerender)
     }
 
-    const handleClickOutside = (event: any) => {
-        const { current: wrap } = wraperRef
-        if (wrap && !wrap.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+        const { current: wrap } = wraperRef as { current: HTMLElement | null }
+
+        if (wrap && !wrap.contains(event.target as Node)) {
             setDisplay(false)
         }
     }

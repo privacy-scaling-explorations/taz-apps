@@ -243,9 +243,9 @@ const EventDetails = ({ event, participants, favoritedEvents, setUpdateEventModa
                             Register
                         </button>
                     </div> */}
-                    <div>
+                    {/* <div>
                         <PretixWidget event={event.publicUrl} />
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

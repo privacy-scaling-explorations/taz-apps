@@ -1,9 +1,11 @@
 import NextImage from "next/image"
-import { SessionsDTO } from "../../types"
+import { RsvpDTO, SessionsDTO } from "../../types"
 import BaseTemplate from "../Base"
 
 type Props = {
     session: SessionsDTO
+    createRsvp: (userId: number, sessionId: number) => Promise<RsvpDTO | null>
+    deleteRsvp: (id: number) => Promise<boolean>
 }
 
 const SessionPage = ({ session }: Props) => {
