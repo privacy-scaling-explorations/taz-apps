@@ -181,12 +181,19 @@ const Sessions = ({ event, checkIfUserHadFavorited, checkIfUserHaveAttended, ses
                                     onClick={() => handleClickFavorite()}
                                 />
                             </div>
+                            {item.hasTicket ?
+                            <button
+                                className="bg-[#35655F] text-white py-[4px] px-[16px] text-[16px] rounded-[6px]"
+                                onClick={() => handleClickAttend()}
+                            >
+                                Buy Ticket
+                            </button> :
                             <button
                                 className="bg-[#35655F] text-white py-[4px] px-[16px] text-[16px] rounded-[6px]"
                                 onClick={() => handleClickAttend()}
                             >
                                 RSVP
-                            </button>
+                            </button>}
                         </div>
                         <div className="w-full flex flex-row gap-[32px] justify-between items-center">
                             <div className="flex flex-row items-start gap-[8px]">

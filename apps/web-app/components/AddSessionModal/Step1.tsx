@@ -17,6 +17,7 @@ type NewSessionState = {
     tags: string[]
     info: string
     eventId: number
+    hasTicket: boolean
 }
 
 type Props = {
@@ -39,6 +40,8 @@ const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
         setOrganizer("")
         setDisplay(false)
     }
+
+    console.log(newSession.hasTicket)
 
     const handleRemoveOrganizer = (index: number) => {
         organizers.splice(index, 1)
@@ -237,6 +240,27 @@ const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
                         </li>
                     ))}
                 </ul>
+            </div>
+            <div className="flex flex-col my-2">
+                <label htmlFor="">How do you want people to show attendance?</label>
+                <div>
+                    <label htmlFor="ticket">Ticket</label>
+                    <input
+                        type="radio"
+                        id="ticket"
+                        value="ticket"
+                        checked={newSession.hasTicket}
+                        onChange={() => setNewSession({ ...newSession, hasTicket: !newSession.hasTicket })}
+                    />
+                    <label htmlFor="RSVP">RSVP</label>
+                    <input
+                        type="radio"
+                        id="RSVP"
+                        value="RSVP"
+                        checked={!newSession.hasTicket}
+                        onChange={() => setNewSession({ ...newSession, hasTicket: !newSession.hasTicket })}
+                    />
+                </div>
             </div>
             <div className="flex flex-col my-2">
                 <label htmlFor="info">Additional Information</label>
