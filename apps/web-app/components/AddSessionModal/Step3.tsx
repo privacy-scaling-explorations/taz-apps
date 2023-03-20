@@ -86,7 +86,7 @@ const Step3 = ({ setSteps, newSession, newTickets, handleSubmit, isLoading, amou
         <div className="w-full flex flex-col md:flex-row gap-5 justify-center items-center mt-5">
             <button
                 type="button"
-                className="w-[200px] inline-flex justify-center rounded-full border border-transparent bg-brand-black px-12 py-1 text-sm font-medium text-brand-beige hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-beige focus-visible:ring-offset-2"
+                className="w-[200px] flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
                 onClick={() => setSteps(2)}
             >
                 Back
@@ -94,7 +94,7 @@ const Step3 = ({ setSteps, newSession, newTickets, handleSubmit, isLoading, amou
             <button
                 type="button"
                 disabled={isLoading}
-                className="w-[200px] inline-flex justify-center rounded-full border border-transparent bg-brand-black px-10 py-1 text-sm font-medium text-brand-beige hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-beige focus-visible:ring-offset-2"
+                className="w-[200px] flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
                 onClick={() => handleSubmit()}
             >
                 {isLoading ? <Loading size="xs" /> : "Confirm Event"}
