@@ -83,63 +83,62 @@ const SessionPage = ({ session, createRsvp, deleteRsvp }: Props) => {
                                 <h1 className="text-zulalu-secondary">{`${startTime} - ${endTime}`}</h1>
                             </div>
                             <div className="flex gap-1 items-center justify-start mt-4">
-                            <NextImage src={"/vector-location.svg"} alt="calendar" width={15} height={15} />
-                            <h1 className="text-zulalu-secondary">{location}</h1>
+                                <NextImage src={"/vector-location.svg"} alt="calendar" width={15} height={15} />
+                                <h1 className="text-zulalu-secondary">{location}</h1>
+                            </div>
+                        </div>
+                        <div className="flex flex-row gap-[24px] w-full mt-4">
+                            <div className="w-5/6 py-5">{session.info}</div>
+                            <div className="flex flex-wrap gap-[8px] w-3/6 p-5">
+                                {session.organizers &&
+                                    session.organizers.map((item, index) => (
+                                        <div
+                                            key={index}
+                                            className="flex w-auto rounded-[4px] gap-2 px-2 py-1 bg-[#E4EAEA] text-[16px]"
+                                        >
+                                            <NextImage src={"/user-icon-5.svg"} alt="calendar" width={24} height={24} />
+                                            <p>Organizer:</p>
+                                            <p className="font-bold">{item}</p>
+                                        </div>
+                                    ))}
+                            </div>
                         </div>
                     </div>
-                    <div className="flex flex-row gap-[24px] w-full mt-4">
-                        <div className="w-5/6 py-5">{session.info}</div>
-                        <div className="flex flex-wrap gap-[8px] w-3/6 p-5">
-                            {session.organizers &&
-                                session.organizers.map((item, index) => (
-                                    <div
-                                        key={index}
-                                        className="flex w-auto rounded-[4px] gap-2 px-2 py-1 bg-[#E4EAEA] text-[16px]"
-                                    >
-                                        <NextImage src={"/user-icon-5.svg"} alt="calendar" width={24} height={24} />
-                                        <p>Organizer:</p>
-                                        <p className="font-bold">{item}</p>
-                                    </div>
-                                ))}
+                    <div className="flex flex-col gap-5 py-4 md:py-[32px] px-5 w-full md:w-2/6">
+                        <div className="flex flex-col gap-[8px]">
+                            <h4 className="text-xl font-semibold">Tags</h4>
+                            <div className="flex flex-wrap gap-5">
+                                {session.tags &&
+                                    session.tags.map((tag, index) => (
+                                        <div
+                                            key={index}
+                                            className="bg-[#F8FFFE] capitalize rounded-[37px] py-[4px] px-[16px] flex flex-row items-center justify-center"
+                                        >
+                                            {tag}
+                                        </div>
+                                    ))}
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div className="flex flex-col gap-5 py-4 md:py-[32px] px-5 w-full md:w-2/6">
-                    <div className="flex flex-col gap-[8px]">
-                        <h4 className="text-xl font-semibold">Tags</h4>
-                        <div className="flex flex-wrap gap-5">
-                            {session.tags &&
-                                session.tags.map((tag, index) => (
-                                    <div
-                                        key={index}
-                                        className="bg-[#F8FFFE] capitalize rounded-[37px] py-[4px] px-[16px] flex flex-row items-center justify-center"
-                                    >
-                                        {tag}
-                                    </div>
-                                ))}
-                        </div>
-                    </div>
-                    <div className="flex flex-col gap-[8px]">
-                        <h4 className="text-xl font-semibold">About</h4>
-                        <div className="flex items-center gap-1">
-                            Format: <p className="font-bold">Live</p>
-                        </div>
-                        <div className="flex items-center gap-1">
-                            Track: <p className="font-bold">ZK</p>
-                        </div>
-                        <div className="flex items-center gap-1">
-                            Type: <p className="font-bold">Workshop</p>
-                        </div>
-                        <div className="flex items-center gap-1">
-                            Level: <p className="font-bold">Intermediate</p>
+                        <div className="flex flex-col gap-[8px]">
+                            <h4 className="text-xl font-semibold">About</h4>
+                            <div className="flex items-center gap-1">
+                                Format: <p className="font-bold">Live</p>
+                            </div>
+                            <div className="flex items-center gap-1">
+                                Track: <p className="font-bold">ZK</p>
+                            </div>
+                            <div className="flex items-center gap-1">
+                                Type: <p className="font-bold">Workshop</p>
+                            </div>
+                            <div className="flex items-center gap-1">
+                                Level: <p className="font-bold">Intermediate</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </BaseTemplate>
-)
-
+        </BaseTemplate>
+    )
 }
 
 export default SessionPage

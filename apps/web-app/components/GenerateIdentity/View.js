@@ -1,8 +1,9 @@
+/* eslint-disable import/no-unresolved */
 import Link from "next/link"
 // import { AnimatePresence } from 'framer-motion'
 // import LoadingModal from '../LoadingModal/Index.js'
 import ProcessingModal from "../ProcessingModal"
-import Header from "../Header/index.js"
+import Header from "../Header"
 import RedBunny from "../svgElements/RedBunny"
 import Camera from "../svgElements/Camera"
 import Footer from "../Footer"

@@ -56,8 +56,8 @@ const CalendarPage = ({ sessions }: Props) => {
     ]
 
     const handleClickOutside = (event: any) => {
-        const { current: dateCurrent } = dateRef
-        const { current: locationCurrent } = localtionRef
+        const { current: dateCurrent } = dateRef as { current: HTMLElement | null }
+        const { current: locationCurrent } = localtionRef as { current: HTMLElement | null }
         if (dateCurrent && !dateCurrent.contains(event.target)) {
             setOpenFilterOptions(false)
         }
