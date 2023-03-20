@@ -5,7 +5,13 @@ import { sha256 } from "js-sha256";
 
 const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co";
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey as string);
+const supabase = createClient(supabaseUrl, supabaseKey as string, {
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false,
+    detectSessionInUrl: false
+  }
+});
 
 export default async function handler(
   req: NextApiRequest,
@@ -20,7 +26,7 @@ export default async function handler(
     try {
       const findUser = await supabase
         .from("users")
-        .select("userName, uuid, email")
+        .select("id")
         .eq("email", email);
 
       if (findUser!.data!.length !== 0) {
@@ -47,7 +53,7 @@ export default async function handler(
 
         const findUserAfterCreate = await supabase
         .from("users")
-        .select("userName, uuid, email")
+        .select("id")
         .eq("email", email);
 
 
