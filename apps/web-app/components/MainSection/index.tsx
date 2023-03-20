@@ -1,8 +1,11 @@
 import { usePassportModalContext } from "../../context/PassportModalContext"
 import PassportModal from "../PassportModal"
+import { getUserOnID } from "../../hooks/getUserOnID"
 
 const MainSection = () => {
     const { openPassportModal, setOpenPassportModal } = usePassportModalContext()
+    const  userObj  = getUserOnID()
+
     return (
         <div className="flex min-h-[90vh] h-full w-full relative">
             <PassportModal openPassportModal={openPassportModal} setOpenPassportModal={setOpenPassportModal} />

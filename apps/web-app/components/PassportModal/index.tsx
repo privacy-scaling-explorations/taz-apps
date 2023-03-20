@@ -20,7 +20,7 @@ const PassportModal = ({ openPassportModal, setOpenPassportModal }: Props) => {
   async function zuzaluMembershipProof() {
     const proof = await requestZuzaluMembershipProof(
       "https://pcd-passport.com/",
-      "https://9ea0-189-203-105-58.ngrok.io/complete-identity-proof/",
+      "https://6bf3-2806-107e-13-6229-4d38-aba6-4ef-dec1.ngrok.io/complete-identity-proof/",
       "https://api.pcd-passport.com/semaphore/1",
       // eslint-disable-next-line no-return-assign
       (url) => (window.location.href = url)
