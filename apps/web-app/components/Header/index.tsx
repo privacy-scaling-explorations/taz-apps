@@ -7,10 +7,14 @@ const Header = () => {
     return (
         <div className="flex p-5 justify-between w-full m-auto z-10 bg-zulalu-darkBase items-center">
             <div className="flex relative overflow-hidden gap-5 items-center">
-                <div className="flex gap-2 items-center justify-center ">
-                    <NextImage src={"/logo.svg"} objectFit="contain" width="50px" height="50px" />
-                    <h1 className="uppercase tracking-[5px] text-[25px] text-white font-cinzel font-bold">ZULALU</h1>
-                </div>
+                <NextLink href={"/"}>
+                    <div className="flex cursor-pointer gap-2 items-center justify-center ">
+                        <NextImage src={"/logo.svg"} objectFit="contain" width="50px" height="50px" />
+                        <h1 className="uppercase tracking-[5px] text-[25px] text-white font-cinzel font-bold">
+                            ZULALU
+                        </h1>
+                    </div>
+                </NextLink>
                 <button className="bg-zulalu-primary text-white py-[8px] px-[16px] rounded-[8px]">Buy a badge</button>
                 {/* only be visible when passport connected */}
                 {/* <div className="flex items-center gap-2">
@@ -20,7 +24,9 @@ const Header = () => {
             </div>
             <ul className="flex gap-5 items-center text-white">
                 {/* <li>About</li> */}
-                <li>Schedule</li>
+                <NextLink href={"/events"}>
+                    <li className="cursor-pointer">Schedule</li>
+                </NextLink>
                 {/* <li>FAQ</li> */}
                 <li>
                     <button
