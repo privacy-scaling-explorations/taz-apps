@@ -100,7 +100,7 @@ const CalendarPage = ({ sessions }: Props) => {
 
     const filteredSessionsByDate =
         selectedWeeks.length > 0
-            ? sessions.filter((event) => {
+            ? filteredSessionsByLocation.filter((event) => {
                   const startDate = new Date(event.startDate)
                   const weekObj = filterOptions.find(
                       (week) =>
@@ -111,23 +111,22 @@ const CalendarPage = ({ sessions }: Props) => {
                   )
                   return weekObj && selectedWeeks.includes(String(weekObj.week))
               })
-            : sessions
-
-    const concactedSessions = Array.from(new Set([...filteredSessionsByDate, ...filteredSessionsByLocation]))
-
-    console.log(concactedSessions)
+            : filteredSessionsByLocation
 
     return (
         <BaseTemplate>
             <div className="flex flex-col border border-black p-5 bg-[#EEEEF0] gap-5 w-full h-full">
-                <div className="flex justify-between p-5 bg-white rounded-[8px]">
+                <div className="flex gap-5 md:gap-0 flex-col md:flex-row justify-between p-5 bg-white rounded-[16px]">
                     <div className="flex items-center gap-2">
                         <h1 className={`text-[#1C292899]`}>Program</h1>
                         <h1 className={`text-[#1C292899]`}>/</h1>
                         <h1 className={`text-black font-[600]`}>ZK Week</h1>
                     </div>
-                    <div className="flex flex-row gap-[8px] items-center">
-                        <button className="bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]">
+                    <div className="flex flex-row gap-[8px] justify-between items-center">
+                        <button className="flex md:hidden bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]">
+                            CONTACT
+                        </button>
+                        <button className="hidden md:flex bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]">
                             CONTACT ORGANIZERS
                         </button>
                         <Link href="events">
@@ -138,18 +137,19 @@ const CalendarPage = ({ sessions }: Props) => {
                         </Link>
                     </div>
                 </div>
-                <div className="flex h-full w-full rounded-[8px]">
+                <div className="flex h-full w-full items-center justify-center rounded-[8px]">
                     <NextImage
-                        src="/event-image.png"
-                        objectFit="cover"
+                        src="/calendar-image.png"
+                        objectFit="contain"
                         alt="event-image"
-                        width="1080px"
-                        height="300px"
+                        style={{ borderRadius: "18px" }}
+                        width="1400px"
+                        height="245px"
                     />
                 </div>
-                <div className="flex flex-col items-center pt-[16px] px-[32px] pb-[40px] bg-white gap-[8px] rounded-[8px]">
-                    <div className="w-full flex flex-row justify-between items-center p-[16px] gap-[24px]">
-                        <div className="flex flex-row items-center justify-center gap-[32px]">
+                <div className="flex flex-col items-center pt-[16px] md:px-[32px] px-[18px] pb-[40px] bg-white gap-[8px] rounded-[16px]">
+                    <div className="w-full flex flex-col lg:flex-row justify-between items-start lg:items-center p-[16px] gap-[24px]">
+                        <div className="flex flex-col md:flex-row items-start md:items-center justify-center gap-[32px]">
                             <h1 className="text-[40px] text-[#37352F] font-[600]">Week 1 | March 25-31</h1>
                             <button
                                 className="flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
@@ -163,8 +163,8 @@ const CalendarPage = ({ sessions }: Props) => {
                                 eventId={parentMessageId as string}
                             />
                         </div>
-                        <div className="flex justify-center items-center gap-5">
-                            <div className="flex flex-col relative w-[auto]" ref={localtionRef}>
+                        <div className="flex flex-col md:flex-row justify-center items-start md:items-start gap-5">
+                            <div className="flex flex-col relative w-[150px]" ref={localtionRef}>
                                 <button
                                     onClick={() => setOpenLocationFilter(!openLocationFilter)}
                                     className="flex justify-between uppercase bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] gap-[8px] text-[16px] rounded-[8px] flex flex-row justify-center items-center"
@@ -191,7 +191,10 @@ const CalendarPage = ({ sessions }: Props) => {
                                 )}
                             </div>
                             <button
-                                onClick={() => setSelectedWeeks([])}
+                                onClick={() => {
+                                    setSelectedLocations([])
+                                    setSelectedWeeks([])
+                                }}
                                 className="bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] gap-[8px] text-[16px] rounded-[8px] flex flex-row justify-center items-center"
                             >
                                 <p>ALL SESSIONS</p>
@@ -228,7 +231,7 @@ const CalendarPage = ({ sessions }: Props) => {
 
                     <div className="border border-black flex flex-col"></div>
 
-                    <CalendarPageSessions sessions={concactedSessions} />
+                    <CalendarPageSessions sessions={filteredSessionsByDate} />
                 </div>
                 {/* <ToastContainer
                     position="top-center"
