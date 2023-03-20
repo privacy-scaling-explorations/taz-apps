@@ -14,6 +14,7 @@
     "rules": {
         "no-underscore-dangle": "off",
         "no-alert": "off",
+        "prefer-const":"off",
         "no-plusplus":"off",
         "array-callback-return":"off",
         "consistent-return":"off",
