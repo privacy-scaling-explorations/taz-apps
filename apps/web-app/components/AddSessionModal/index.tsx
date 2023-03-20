@@ -20,7 +20,8 @@ type NewSessionState = {
     location: string
     tags: string[]
     info: string
-    eventId: number
+    eventId: number,
+    hasTicket: boolean
 }
 
 type TicketsState = {
@@ -50,7 +51,8 @@ const AddSessionModal = ({ isOpen, closeModal, eventId }: Props) => {
         location: "",
         tags: [],
         info: "",
-        eventId: parseInt(eventId)
+        eventId: parseInt(eventId),
+        hasTicket: false
     })
 
     const [newTickets, setNewTickets] = useState<TicketsState[]>([])
@@ -158,7 +160,8 @@ const AddSessionModal = ({ isOpen, closeModal, eventId }: Props) => {
             location: "",
             tags: [],
             info: "",
-            eventId: parseInt(eventId)
+            eventId: parseInt(eventId),
+            hasTicket: false
         })
         setNewTickets([])
         setHasVouchers(false)
