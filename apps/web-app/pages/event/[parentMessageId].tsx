@@ -9,23 +9,24 @@ type Props = {
     favoritedEvents: FavoritedEventsDTO[]
 }
 
-export default function Event({ event, participants, favoritedEvents }: Props) {
-    return <EventPage event={event} participants={participants} favoritedEvents={favoritedEvents} />
+export default function Event({ event, sessions }: Props) {
+    return <EventPage event={event} sessions={sessions} />
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ res, query }) => {
+    const LOGGED_IN_USER_ID = 1
     try {
         const url = process.env.URL_TO_FETCH
 
         const response = await fetch(`${url}/api/fetchEvents/${query.parentMessageId}`)
-        const participantsResponse = await fetch(`${url}/api/fetchParticipants`)
-        const favoritedEventsResponse = await fetch(`${url}/api/fetchFavoritedEvents`)
+        const sessionsResponse = await fetch(
+            `${url}/api/fetchSessionsByEvent/?eventId=${query.parentMessageId}&userId=${LOGGED_IN_USER_ID}`
+        )
         const event = await response.json()
-        const participants = await participantsResponse.json()
-        const favoritedEvents = await favoritedEventsResponse.json()
+        const sessions = await sessionsResponse.json()
 
         return {
-            props: { event, participants, favoritedEvents }
+            props: { event, sessions }
         }
     } catch (error) {
         res.statusCode = 404

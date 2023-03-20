@@ -43,6 +43,8 @@ export interface SessionsDTO {
     isOpen: boolean
     rsvps: RsvpDTO[]
     hasTicket: boolean
+    participants: ParticipantsDTO[]
+    favoritedSessions: FavoritedSessionsDTO[]
 }
 
 export interface RsvpDTO {
@@ -68,4 +70,11 @@ export interface FavoritedEventsDTO {
     user_id: number
     events: EventsDTO
     users: UserDTO[]
+}
+
+export interface FavoritedSessionsDTO {
+    created_at: Date
+    id: number
+    session_id: number
+    user_id: number
 }
