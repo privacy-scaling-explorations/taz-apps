@@ -41,6 +41,14 @@ export interface SessionsDTO {
     organizers: string[]
     event_id: number
     isOpen: boolean
+    rsvps: RsvpDTO[]
+}
+
+export interface RsvpDTO {
+    id: number
+    created_at: Date
+    session_id: number
+    user_id: number
 }
 
 export interface ParticipantsDTO {

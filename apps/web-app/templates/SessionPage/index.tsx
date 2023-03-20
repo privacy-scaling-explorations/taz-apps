@@ -1,17 +1,40 @@
+import { useState } from "react"
 import NextImage from "next/image"
-import { SessionsDTO } from "../../types"
+import { SessionsDTO, RsvpDTO } from "../../types"
 import BaseTemplate from "../Base"
 
 type Props = {
     session: SessionsDTO
+    createRsvp: (user_id: number, session_id: number) => Promise<RsvpDTO | null>
+    deleteRsvp: (id: number) => Promise<boolean>
 }
 
-const SessionPage = ({ session }: Props) => {
+const SessionPage = ({ session, createRsvp, deleteRsvp }: Props) => {
+    const LOGGED_IN_USER_ID = 1
+
     const { startDate, endTime, location, startTime } = session
+    const [rsvpId, setRsvpId] = useState(session.rsvps[0]?.id ?? 0)
 
     const startDateFormatted = new Date(startDate).toLocaleDateString("en-US", { day: "numeric" })
     const startWeekDayFormatted = new Date(startDate).toLocaleDateString("en-US", { weekday: "long" })
     const eventMonthFormatted = new Date(startDate).toLocaleDateString("en-US", { month: "long" })
+
+    const onCreateRvsp = async () => {
+        const newRsvp = await createRsvp(LOGGED_IN_USER_ID, session.id)
+        if (newRsvp !== null) {
+            console.log("Rsvp created: ", newRsvp)
+            setRsvpId(newRsvp.id)
+        }
+    }
+
+    const onDeleteRsvp = async () => {
+        const isDeleted = await deleteRsvp(rsvpId)
+        if (isDeleted) {
+            console.log("Rsvp deleted")
+            setRsvpId(0)
+        }
+    }
+
     return (
         <BaseTemplate>
             <div className="flex flex-col items-center bg-[#EEEEF0] h-[100vh] px-[24px] py-[24px] gap-[16px]">
@@ -26,9 +49,23 @@ const SessionPage = ({ session }: Props) => {
                             <NextImage src={"/vector-bookmark.svg"} width={12} height={16} />
                             BOOKMARK
                         </button>
-                        <button className="bg-zulalu-primary text-white py-[8px] px-[16px] rounded-[8px] gap-[8px] flex flex-row items-center justify-center">
-                            RSVP
-                        </button>
+                        {rsvpId === 0 && (
+                            <button
+                                onClick={onCreateRvsp}
+                                className="bg-zulalu-primary text-white py-[8px] px-[16px] rounded-[8px] gap-[8px] flex flex-row items-center justify-center"
+                            >
+                                RSVP
+                            </button>
+                        )}
+                        {rsvpId !== 0 && (
+                            <button
+                                onClick={() => onDeleteRsvp(rsvpId)}
+                                className="flex gap-2 items-center bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]"
+                            >
+                                <NextImage src={"/vector-circle-check.svg"} width={16} height={16} />
+                                SEE YOU THERE!
+                            </button>
+                        )}
                     </div>
                 </div>
                 <div className="w-full flex flex-row gap-[8px] h-full">
@@ -53,16 +90,17 @@ const SessionPage = ({ session }: Props) => {
                         <div className="flex flex-row gap-[24px]  w-full">
                             <div className="w-5/6 py-5">{session.info}</div>
                             <div className="flex flex-wrap gap-[8px] w-3/6 p-5">
-                                {session.organizers.map((item, index) => (
-                                    <div
-                                        key={index}
-                                        className="flex w-auto rounded-[4px] gap-2 px-2 py-1 bg-[#E4EAEA] text-[16px]"
-                                    >
-                                        <NextImage src={"/user-icon-5.svg"} alt="calendar" width={24} height={24} />
-                                        <p>Organizer:</p>
-                                        <p className="font-bold">{item}</p>
-                                    </div>
-                                ))}
+                                {session.organizers &&
+                                    session.organizers.map((item, index) => (
+                                        <div
+                                            key={index}
+                                            className="flex w-auto rounded-[4px] gap-2 px-2 py-1 bg-[#E4EAEA] text-[16px]"
+                                        >
+                                            <NextImage src={"/user-icon-5.svg"} alt="calendar" width={24} height={24} />
+                                            <p>Organizer:</p>
+                                            <p className="font-bold">{item}</p>
+                                        </div>
+                                    ))}
                             </div>
                         </div>
                     </div>
@@ -70,14 +108,15 @@ const SessionPage = ({ session }: Props) => {
                         <div className="flex flex-col gap-[8px]">
                             <h4 className="text-xl font-semibold">Tags</h4>
                             <div className="flex flex-wrap gap-5">
-                                {session.tags.map((tag, index) => (
-                                    <div
-                                        key={index}
-                                        className="bg-[#F8FFFE] capitalize rounded-[37px] py-[4px] px-[16px] flex flex-row items-center justify-center"
-                                    >
-                                        {tag}
-                                    </div>
-                                ))}
+                                {session.tags &&
+                                    session.tags.map((tag, index) => (
+                                        <div
+                                            key={index}
+                                            className="bg-[#F8FFFE] capitalize rounded-[37px] py-[4px] px-[16px] flex flex-row items-center justify-center"
+                                        >
+                                            {tag}
+                                        </div>
+                                    ))}
                             </div>
                         </div>
                         <div className="flex flex-col gap-[8px]">
