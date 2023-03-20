@@ -30,7 +30,7 @@ const EventsPage = ({ events }: Props) => (
                         <h1 className="font-semibold text-[40px]">MARCH 25th - MAY 25th, 2023</h1>
                     </div>
                     <NextLink href="/calendar-full">
-                        <div className="flex items-center gap-2 bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]">
+                        <div className="flex cursor-pointer items-center gap-2 bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]">
                             <NextImage src={"/vector-calendar.svg"} width={16} height={16} />
                             FULL PROGRAM
                         </div>

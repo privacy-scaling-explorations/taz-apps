@@ -7,11 +7,12 @@ import { FavoritedEventsDTO, ParticipantsDTO, SessionsDTO, EventsDTO } from "../
 
 type Props = {
     event: EventsDTO
+    sessions: SessionsDTO[]
     checkIfUserHaveAttended: ParticipantsDTO | undefined
     checkIfUserHadFavorited: FavoritedEventsDTO | undefined
 }
 
-const Sessions = ({ event, checkIfUserHadFavorited, checkIfUserHaveAttended }: Props) => {
+const Sessions = ({ event, checkIfUserHadFavorited, checkIfUserHaveAttended, sessions }: Props) => {
     const router = useRouter()
 
     const handleClickAttend = async () => {
@@ -157,7 +158,7 @@ const Sessions = ({ event, checkIfUserHadFavorited, checkIfUserHaveAttended }: P
     }
     return (
         <div className="w-full flex flex-col items-start py-[2px] gap-[16px] rounded-[16px]">
-            {event.sessions.map((item, index) => (
+            {sessions.map((item, index) => (
                 <div className="w-full" key={index}>
                     <div className="bg-[#1C2928] w-full flex flex-row items-center rounded-[8px]">
                         <p className="text-white py-[8px] px-[16px]">{item.startTime.slice(0, -3)}</p>
