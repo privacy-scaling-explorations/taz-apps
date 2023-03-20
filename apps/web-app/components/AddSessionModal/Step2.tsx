@@ -157,7 +157,7 @@ const Step2 = ({
             <div className="w-full flex flex-col md:flex-row gap-5 justify-center items-center my-5">
                 <button
                     type="button"
-                    className="w-[200px] inline-flex justify-center rounded-full border border-transparent bg-brand-black px-12 py-1 text-sm font-medium text-brand-beige hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-beige focus-visible:ring-offset-2"
+                    className="w-[200px] lex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
                     onClick={handleAddTicket}
                 >
                     Add Ticket
@@ -177,7 +177,7 @@ const Step2 = ({
                                     <h1>${ticket.price}</h1>
                                     <h1>Desc:{ticket.description}</h1>
                                 </div>
-                                <div className="w-full bg-brand-yellow h-[30px] flex items-center">
+                                <div className="w-full bg-zulalu-primary text-white h-[30px] flex items-center">
                                     <button className="w-full" onClick={() => handleRemoveTicket(index)}>
                                         delete ticket
                                     </button>
@@ -194,14 +194,14 @@ const Step2 = ({
             <div className="w-full flex flex-col md:flex-row gap-5 justify-center items-center mt-5">
                 <button
                     type="button"
-                    className="w-[200px] inline-flex justify-center rounded-full border border-transparent bg-brand-black px-12 py-1 text-sm font-medium text-brand-beige hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-beige focus-visible:ring-offset-2"
+                    className="w-[200px] flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
                     onClick={() => setSteps(1)}
                 >
                     Back
                 </button>
                 <button
                     type="button"
-                    className="w-[200px] inline-flex justify-center rounded-full border border-transparent bg-brand-black px-12 py-1 text-sm font-medium text-brand-beige hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-beige focus-visible:ring-offset-2"
+                    className="w-[200px] flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
                     onClick={handleSubmit}
                 >
                     Next Step

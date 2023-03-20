@@ -185,7 +185,7 @@ const AddSessionModal = ({ isOpen, closeModal, eventId }: Props) => {
                     <div className="fixed inset-0 bg-black bg-opacity-25" />
                 </Transition.Child>
 
-                <div className="fixed inset-0 h-full">
+                <div className="fixed inset-0 h-full ">
                     <div className="flex h-full items-center justify-center p-4 text-center">
                         <Transition.Child
                             as={Fragment}
@@ -196,7 +196,7 @@ const AddSessionModal = ({ isOpen, closeModal, eventId }: Props) => {
                             leaveFrom="opacity-100 scale-100"
                             leaveTo="opacity-0 scale-95"
                         >
-                            <Dialog.Panel className="flex flex-col w-5/6 h-[100%] overflow-scroll md:overflow-hidden md:h-auto max-w-full transform rounded-lg border-brand-blue border-2 bg-white text-left align-middle shadow-xl transition-all">
+                            <Dialog.Panel className="flex flex-col min-h-[200px] h-full w-5/6 h-[100%] overflow-scroll md:overflow-hidden md:h-auto max-w-full transform rounded-lg border-brand-blue border-2 bg-white text-left align-middle shadow-xl transition-all">
                                 <div className="p-4 bg-brand-beige border-b-2 border-brand-blue">
                                     <button
                                         type="button"
@@ -226,7 +226,7 @@ const AddSessionModal = ({ isOpen, closeModal, eventId }: Props) => {
                                         cancel
                                     </button>
                                 </div>
-                                <div className="flex flex-col h-full md:h-[900px]  p-5 ">
+                                <div className="flex flex-col h-full p-5 ">
                                     <ModalSteps steps={steps} />
                                     {steps === 1 && (
                                         <Step1
