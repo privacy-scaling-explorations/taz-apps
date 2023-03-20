@@ -8,154 +8,91 @@ import { FavoritedEventsDTO, ParticipantsDTO, SessionsDTO, EventsDTO } from "../
 type Props = {
     event: EventsDTO
     sessions: SessionsDTO[]
-    checkIfUserHaveAttended: ParticipantsDTO | undefined
-    checkIfUserHadFavorited: FavoritedEventsDTO | undefined
 }
 
-const Sessions = ({ event, checkIfUserHadFavorited, checkIfUserHaveAttended, sessions }: Props) => {
+const Sessions = ({ event, sessions }: Props) => {
     const router = useRouter()
+    const LOGGED_IN_USER_ID = 1
 
-    const handleClickAttend = async () => {
-        if (checkIfUserHaveAttended) {
-            await axios
-                .post("/api/removeParticipant", {
-                    id: checkIfUserHaveAttended.id
-                })
-                .then((res) => {
-                    if (res.status === 200) {
-                        toast.success("You are now not attending to this event anymore.", {
-                            position: "top-center",
-                            autoClose: 3000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                            theme: "light"
-                        })
-                        router.push(router.asPath)
-                    }
-                })
-                .catch((err) => {
-                    console.log(err)
-                    toast.error("Error", {
-                        position: "top-center",
-                        autoClose: 3000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "light"
-                    })
-                })
+    const makeToast = (isSuccess: boolean, message: string) => {
+        if (isSuccess) {
+            toast.success(message, {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light"
+            })
         } else {
-            await axios
-                .post("/api/addParticipant", {
-                    event_id: event.id,
-                    user_id: 1
-                })
-                .then((res) => {
-                    if (res.data === "Participant added") {
-                        toast.success("You are now attending to this event.", {
-                            position: "top-center",
-                            autoClose: 3000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                            theme: "light"
-                        })
-                        router.push(router.asPath)
-                    }
-                })
-                .catch((err) => {
-                    console.log(err)
-                    toast.error("Error", {
-                        position: "top-center",
-                        autoClose: 3000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "light"
-                    })
-                })
+            toast.error(message, {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light"
+            })
         }
     }
 
-    const handleClickFavorite = async () => {
-        if (checkIfUserHadFavorited) {
-            await axios
-                .post("/api/removeFavoriteEvent", {
-                    id: checkIfUserHadFavorited.id
-                })
-                .then((res) => {
-                    if (res.status === 200) {
-                        toast.success("This event is not anymore favorite.", {
-                            position: "top-center",
-                            autoClose: 3000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                            theme: "light"
-                        })
-                        router.push(router.asPath)
-                    }
-                })
-                .catch((err) => {
-                    console.log(err)
-                    toast.error("Error", {
-                        position: "top-center",
-                        autoClose: 3000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "light"
-                    })
-                })
-        } else {
-            await axios
-                .post("/api/addFavoriteEvent", {
-                    event_id: event.id,
-                    user_id: 1
-                })
-                .then((res) => {
-                    if (res.data === "Event favorited") {
-                        toast.success("You favorited this event.", {
-                            position: "top-center",
-                            autoClose: 3000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                            theme: "light"
-                        })
-                        router.push(router.asPath)
-                    }
-                })
-                .catch((err) => {
-                    console.log(err)
-                    toast.error("Error", {
-                        position: "top-center",
-                        autoClose: 3000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "light"
-                    })
-                })
-        }
+    const handleClickAttend = async (sessionId: number) => {
+        await axios
+            .post("/api/addParticipant", {
+                session_id: sessionId,
+                user_id: LOGGED_IN_USER_ID
+            })
+            .then((res) => {
+                if (res.data === "Participant added") {
+                    makeToast(true, "You are now attending this event.")
+                    router.push(router.asPath)
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+                makeToast(false, "Error")
+            })
     }
+
+    const handleAddFavorite = async (sessionId: number) => {
+        await axios
+            .post("/api/addFavoriteSession", {
+                session_id: sessionId,
+                user_id: LOGGED_IN_USER_ID
+            })
+            .then((res) => {
+                if (res.data === "Session favorited") {
+                    makeToast(true, "This session is now bookmarked.")
+                    router.push(router.asPath)
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+                makeToast(false, "Error")
+            })
+    }
+
+    const handleRemoveFavorite = async (favoritedSessionId: number) => {
+        await axios
+            .post("/api/removeFavoriteSession", {
+                id: favoritedSessionId
+            })
+            .then((res) => {
+                if (res.status === 200) {
+                    makeToast(true, "This session is no longer bookmarked.")
+                    router.push(router.asPath)
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+                makeToast(false, "Error")
+            })
+    }
+
     return (
         <div className="w-full flex flex-col items-start py-[2px] gap-[16px] rounded-[16px]">
             {sessions.map((item, index) => (
@@ -174,26 +111,43 @@ const Sessions = ({ event, checkIfUserHadFavorited, checkIfUserHaveAttended, ses
                                 </NextLink>
                                 <NextImage
                                     className="text-[#91A8A7] cursor-pointer"
-                                    src={"/vector-bookmark.svg"}
+                                    src={
+                                        item.favoritedSessions.length > 0
+                                            ? "/vector-bookmark2.svg"
+                                            : "/vector-bookmark.svg"
+                                    }
                                     alt="vector-bookmark"
                                     width={24}
                                     height={24}
-                                    onClick={() => handleClickFavorite()}
+                                    onClick={() => {
+                                        if (item.favoritedSessions.length > 0) {
+                                            handleRemoveFavorite(item.favoritedSessions[0].id)
+                                        } else {
+                                            handleAddFavorite(item.id)
+                                        }
+                                    }}
                                 />
                             </div>
-                            {item.hasTicket ?
-                            <button
-                                className="bg-[#35655F] text-white py-[4px] px-[16px] text-[16px] rounded-[6px]"
-                                onClick={() => handleClickAttend()}
-                            >
-                                Buy Ticket
-                            </button> :
-                            <button
-                                className="bg-[#35655F] text-white py-[4px] px-[16px] text-[16px] rounded-[6px]"
-                                onClick={() => handleClickAttend()}
-                            >
-                                RSVP
-                            </button>}
+                            {item.participants.length > 0 ? (
+                                <button className="flex gap-2 items-center bg-white border border-primary text-zulalu-primary font-[600] py-[4px] px-[16px] rounded-[8px] cursor-default">
+                                    <NextImage src={"/vector-circle-check.svg"} width={16} height={16} />
+                                    SEE YOU THERE!
+                                </button>
+                            ) : item.hasTicket ? (
+                                <button
+                                    className="bg-[#35655F] text-white py-[4px] px-[16px] text-[16px] rounded-[6px]"
+                                    onClick={() => handleClickAttend(item.id)}
+                                >
+                                    BUY TICKET
+                                </button>
+                            ) : (
+                                <button
+                                    className="bg-[#35655F] text-white py-[4px] px-[16px] text-[16px] rounded-[6px]"
+                                    onClick={() => handleClickAttend(item.id)}
+                                >
+                                    RSVP
+                                </button>
+                            )}
                         </div>
                         <div className="w-full flex flex-row gap-[32px] justify-between items-center">
                             <div className="flex flex-row items-start gap-[8px]">

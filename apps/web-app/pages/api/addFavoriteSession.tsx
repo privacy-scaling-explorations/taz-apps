@@ -8,12 +8,12 @@ const supabase = createClient(supabaseUrl, supabaseKey as string)
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
         const { user_id, session_id } = req.body
-        await supabase.from("participants").insert({
+        await supabase.from("favorited_sessions").insert({
             user_id,
             session_id
         })
 
-        res.status(200).send("Participant added")
+        res.status(200).send("Session favorited")
     } catch (err: any) {
         console.log("error: ", err)
         res.status(500).json({ statusCode: 500, message: err.message })

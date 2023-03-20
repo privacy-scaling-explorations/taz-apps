@@ -3,19 +3,20 @@ import React, { useEffect, useRef, useState } from "react"
 import { useRouter } from "next/router"
 import NextImage from "next/image"
 import moment from "moment"
+import { ToastContainer } from "react-toastify"
 import AddSessionModal from "../../components/AddSessionModal"
 import Sessions from "../../components/Sessions"
 
-import { EventsDTO, ParticipantsDTO, FavoritedEventsDTO } from "../../types"
+import { EventsDTO, SessionsDTO } from "../../types"
 import BaseTemplate from "../Base"
+import "react-toastify/dist/ReactToastify.css"
 
 type Props = {
     event: EventsDTO
-    participants: ParticipantsDTO[]
-    favoritedEvents: FavoritedEventsDTO[]
+    sessions: SessionsDTO[]
 }
 
-const EventPage = ({ event, favoritedEvents, participants }: Props) => {
+const EventPage = ({ event, sessions }: Props) => {
     const router = useRouter()
     const { parentMessageId } = router.query
     const wraperRef = useRef(null)
@@ -39,14 +40,6 @@ const EventPage = ({ event, favoritedEvents, participants }: Props) => {
         dateOptions.push(option)
     }
 
-    const checkIfUserHaveAttended = participants
-        .filter((item) => item.user_id === 1)
-        .find((item) => item.event_id === event.id)
-
-    const checkIfUserHadFavorited = favoritedEvents
-        .filter((item) => item.user_id === 1)
-        .find((item) => item.event_id === event.id)
-
     const handleOptionChange = (option: string) => {
         if (selectedOptions.includes(option)) {
             setSelectedOptions(selectedOptions.filter((item) => item !== option))
@@ -57,12 +50,12 @@ const EventPage = ({ event, favoritedEvents, participants }: Props) => {
 
     const filteredSessions =
         selectedOptions.length !== 0
-            ? event.sessions.filter((item) => {
+            ? sessions.filter((item) => {
                   const sessionDate = moment(new Date(item.startDate)).add(1, "day").format("dddd, MMMM Do, YYYY")
 
                   return selectedOptions.includes(sessionDate)
               })
-            : event.sessions
+            : sessions
 
     const handleClickOutside = (e: MouseEvent) => {
         const { current: wrap } = wraperRef as { current: HTMLElement | null }
@@ -197,25 +190,20 @@ const EventPage = ({ event, favoritedEvents, participants }: Props) => {
                             </div>
                         </div>
                     </div>
-                    <Sessions
-                        event={event}
-                        sessions={filteredSessions}
-                        checkIfUserHaveAttended={checkIfUserHaveAttended}
-                        checkIfUserHadFavorited={checkIfUserHadFavorited}
-                    />
+                    <Sessions event={event} sessions={filteredSessions} />
                 </div>
-                {/* <ToastContainer
-    position="top-center"
-    autoClose={3000}
-    hideProgressBar={false}
-    newestOnTop={false}
-    closeOnClick
-    rtl={false}
-    pauseOnFocusLoss
-    draggable
-    pauseOnHover
-    theme="light"
-  /> */}
+                <ToastContainer
+                    position="top-center"
+                    autoClose={3000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="light"
+                />
             </div>
         </BaseTemplate>
     )
