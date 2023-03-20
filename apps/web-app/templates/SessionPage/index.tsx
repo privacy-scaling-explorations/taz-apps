@@ -13,7 +13,7 @@ const SessionPage = ({ session, createRsvp, deleteRsvp }: Props) => {
     const LOGGED_IN_USER_ID = 1
 
     const { startDate, endTime, location, startTime } = session
-    const [rsvpId, setRsvpId] = useState(session.rsvp[0]?.id ?? 0)
+    const [rsvpId, setRsvpId] = useState(session.rsvps[0]?.id ?? 0)
 
     const startDateFormatted = new Date(startDate).toLocaleDateString("en-US", { day: "numeric" })
     const startWeekDayFormatted = new Date(startDate).toLocaleDateString("en-US", { weekday: "long" })

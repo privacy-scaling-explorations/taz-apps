@@ -7,11 +7,15 @@ const supabase = createClient(supabaseUrl, supabaseKey as string)
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
+        let userId: any = 0
+        if (req.query.userId !== undefined) {
+            userId = req.query.userId
+        }
         const response = await supabase
             .from("sessions")
-            .select("*, rsvp:id (*)")
+            .select("*, rsvps (*)")
             .eq("id", req.query.sessionId)
-            .eq("rsvp.user_id", req.query.userId)
+            .eq("rsvps.user_id", userId)
             .single()
         if (response.error === null) res.status(200).send(response.data)
         else res.status(response.status).send(response.error)
