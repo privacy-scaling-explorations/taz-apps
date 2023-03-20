@@ -1,7 +1,7 @@
 import { GetServerSideProps } from "next"
 
 import { EventsDTO, ParticipantsDTO, FavoritedEventsDTO } from "../types"
-import EventPage from "../templates/EventPage"
+import CalendarPage from "../templates/CalendarPage"
 
 type Props = {
     event: EventsDTO
@@ -10,7 +10,7 @@ type Props = {
 }
 
 export default function Event({ event, participants, favoritedEvents }: Props) {
-    return <EventPage event={event} participants={participants} favoritedEvents={favoritedEvents} />
+    return <CalendarPage event={event} participants={participants} favoritedEvents={favoritedEvents} />
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ res }) => {
