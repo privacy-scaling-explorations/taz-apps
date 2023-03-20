@@ -1,48 +1,64 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import {
   useSemaphorePassportProof
 } from "@pcd/passport-interface";
-import { sha256} from 'js-sha256';
-import { createClient } from "@supabase/supabase-js"
-const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co"
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY
-const supabase = createClient(supabaseUrl, supabaseKey as string)
+import axios from "axios"
 
-const RedirectPage: React.FC = () => {
-  const router = useRouter();
-
-  const { semaphoreProof } = useSemaphorePassportProof("https://api.pcd-passport.com/semaphore/1");
-
-  const signInWithSemaphoreProof = async (proof: any) => {
-    //
-    // IMPORTANT!!!! User Email must be changed
+async function setAuthStatus(proof: any) {
+  console.log("Did the proof make it", proof)
+  if (proof) {
     try {
-      // Check if a user with the Semaphore proof as the email already exists
-      const { data, error } = await supabase.auth.signUp({
-        email: "test1@test.com",
-        password: await sha256(JSON.stringify(proof)),
+      console.log("log my proof", proof)
+      const response = await axios({
+        method: 'post',
+        url: 'https://9ea0-189-203-105-58.ngrok.io/api/passport-user-login/',
+        data: proof,
+        headers: {
+          'Content-Type': 'application/json'
+        }
       });
-      console.log(data, error)
-      if (error) {
-        const  signIn  = await supabase.auth.signInWithPassword({
-          email: "test1@test.com",
-          password: await sha256(JSON.stringify(proof)),
-        });
-        console.log("Signed in:", signIn);
-      }
 
+      console.log(response);
+      localStorage.setItem('name', response.data.data[0].userName);
+      localStorage.setItem('uuid', response.data.data[0].uuid);
+      localStorage.setItem('email', response.data.data[0].email);
+      localStorage.setItem('role', "user");
+      return response.data;
     } catch (error) {
       console.error(error);
     }
-  };
+  } else {
+    alert("You are not registered for Zuzalu")
+  }
+}
+
+const RedirectPage: React.FC = () => {
+  const [isHookResolved, setIsHookResolved] = useState(false);
+  const router = useRouter();
+
+  const { semaphoreProof, semaphoreProofValid } = useSemaphorePassportProof("https://api.pcd-passport.com/semaphore/1");
+
+  useEffect(() => {
+
+    if (semaphoreProof !== undefined) {
+      // update the state once the hook is resolved
+      setIsHookResolved(true);
+    }
+  },);
 
   useEffect(() => {
     // Do any necessary processing here
-    signInWithSemaphoreProof(semaphoreProof)
-    console.log("Redirecting to index...");
-    router.push("/");
-  }, [semaphoreProof]);
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    console.log("hook resolved", isHookResolved)
+    if (isHookResolved) {
+      (async () => {
+        await setAuthStatus(semaphoreProof)
+        console.log("Redirecting to index...");
+      })()
+      router.push("/");
+    }
+  }, [isHookResolved, semaphoreProof, semaphoreProofValid]);
 
   return (
     <div>

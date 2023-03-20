@@ -11,9 +11,13 @@ const MainSection = () => {
             <div className="absolute bottom-0 right-0 w-[600px] h-[660px] z-[11] bg-zulaluVector bg-contain bg-no-repeat" />
             <div className="z-[11] flex w-full px-[72px] py-[180px]">
                 <div className="flex w-[700px] flex-col gap-5">
-                    <h1 className="text-[18px] text-zulalu-secondary">March 25 to May 25, 2023</h1>
-                    <h1 className="text-[40px]">A first-of-its-kind pop-up city community in Montenegro</h1>
-                    <h1 className="text-[21px]">
+                    <h1 className="text-[18px] md:text-[24px] text-blue md:mb-5 md:text-gray-900 ">
+                        March 25 to May 25, 2023
+                    </h1>
+                    <h1 className="text-[30px] md:text-[60px] md:mb-10">
+                        A first-of-its-kind pop-up city community in Montenegro
+                    </h1>
+                    <h1 className="text-[18px] md:text-[24px] md:w-[80%]">
                         Join 200 core residents for healthy living, co-working and learning through co-created events on
                         synthetic biology, ZK, public goods, longevity, and network states.
                     </h1>
