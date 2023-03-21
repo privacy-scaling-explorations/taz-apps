@@ -19,7 +19,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res, query }) => 
 
         const response = await fetch(`${url}/api/fetchEvents/${query.parentMessageId}`)
         const sessionsResponse = await fetch(
-            `https://taz-zulalu-web-app.vercel.app/api/fetchSessionsByEvent/?eventId=${query.parentMessageId}&userId=${LOGGED_IN_USER_ID}`
+            `${url}/api/fetchSessionsByEvent/?eventId=${query.parentMessageId}&userId=${LOGGED_IN_USER_ID}`
         )
         const event = await response.json()
         const sessions = await sessionsResponse.json()
@@ -28,7 +28,8 @@ export const getServerSideProps: GetServerSideProps = async ({ res, query }) => 
         return {
             props: { event, sessions }
         }
-    } catch (error) {
+    } catch (error : any) {
+        console.error('Error fetching sessions:', error.message);
         res.statusCode = 404
         return {
             props: {}
