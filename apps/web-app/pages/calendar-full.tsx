@@ -18,8 +18,6 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
     try {
         const url = process.env.URL_TO_FETCH
 
-        const response = await fetch(`${url}/api/fetchEvents/92`)
-
         const eventsResponse = await fetch(`${url}/api/fetchEvents`)
 
         const events: EventsDTO[] = await eventsResponse.json()
