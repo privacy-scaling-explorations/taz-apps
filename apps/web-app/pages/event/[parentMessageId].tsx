@@ -19,7 +19,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res, query }) => 
 
         const response = await fetch(`${url}/api/fetchEvents/${query.parentMessageId}`)
         const sessionsResponse = await fetch(
-            `${url}/api/fetchSessionsByEvent/?eventId=${query.parentMessageId}&userId=${LOGGED_IN_USER_ID}`
+            `${url}/api/fetchSessionsByEvent/${query.parentMessageId}/${LOGGED_IN_USER_ID}`
         )
         const event = await response.json()
         const sessions = await sessionsResponse.json()
