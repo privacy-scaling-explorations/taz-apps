@@ -4,16 +4,16 @@ import { useRouter } from "next/router"
 import NextImage from "next/image"
 import moment from "moment"
 import { ToastContainer } from "react-toastify"
-import { createClient } from "@supabase/supabase-js"
+import { createClient } from "@supabase/supabase-js";
 import AddSessionModal from "../../components/AddSessionModal"
 import Sessions from "../../components/Sessions"
 import { EventsDTO, SessionsDTO } from "../../types"
 import BaseTemplate from "../Base"
 import "react-toastify/dist/ReactToastify.css"
 
-const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co"
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY
-const supabase = createClient(supabaseUrl, supabaseKey as string)
+const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co";
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey as string);
 
 type Props = {
     event: EventsDTO
@@ -29,7 +29,7 @@ const EventPage = ({ event, sessions }: Props) => {
     const [updateEventModal, setUpdateEventModal] = useState(false)
     const [selectedOptions, setSelectedOptions] = useState<string[]>([])
     const [openFilterOptions, setOpenFilterOptions] = useState(false)
-    const [session, setSession] = useState<any>(null)
+    const [session, setSession] = useState<any>(null);
 
     const startDate = moment(new Date(event.startDate)).add(1, "day")
     const endDate = moment(new Date(event.endDate)).add(1, "day")
@@ -41,12 +41,12 @@ const EventPage = ({ event, sessions }: Props) => {
     const dateOptions = []
 
     useEffect(() => {
-        ;(async () => {
-            const userSession = await supabase.auth.getUser()
-            console.log("user object", userSession)
-            setSession(userSession)
-        })()
-    }, [])
+      (async () => {
+        const userSession = await supabase.auth.getUser();
+        console.log("user object", userSession);
+        setSession(userSession);
+      })();
+    }, []);
 
     for (let date = filterSince; date <= filterAfter; date.setDate(date.getDate() + 1)) {
         const option = moment(new Date(date)).add(1, "day").format("dddd, MMMM Do, YYYY")
@@ -105,17 +105,13 @@ const EventPage = ({ event, sessions }: Props) => {
                                 <p>TICKETS</p>
                             </div>
                         </a>
-                        {session && session.data.user.user_metadata.event === event.name ? (
-                            <button
-                                className="text-[#F8FFFE] bg-[#35655F] rounded-[8px] flex flex-row justify-center items-center py-[8px] px-[16px] flex flex-row gap-[8px]"
-                                onClick={() => setUpdateEventModal(true)}
-                            >
-                                <NextImage src={"/pencil.svg"} width={13} height={12} />
-                                <p>EDIT</p>
-                            </button>
-                        ) : (
-                            ""
-                        )}
+                        {session && session.data.user.user_metadata.event === event.name ?                         <button
+                            className="text-[#F8FFFE] bg-[#35655F] rounded-[8px] flex flex-row justify-center items-center py-[8px] px-[16px] flex flex-row gap-[8px]"
+                            onClick={() => setUpdateEventModal(true)}
+                        >
+                            <NextImage src={"/pencil.svg"} width={13} height={12} />
+                            <p>EDIT</p>
+                        </button> : ""}
                     </div>
                 </div>
                 <div className="flex flex-col md:flex-row w-full justify-start bg-white rounded-[8px] h-[682px]">
@@ -161,16 +157,14 @@ const EventPage = ({ event, sessions }: Props) => {
                         <div className="flex flex-col md:flex-row items-center justify-center gap-[32px] mb-5 md:mb-0">
                             <h1 className="text-[40px] text-[#37352F] font-[600]">Sessions</h1>
                             {console.log(event.name === "ZK Workshops\n", event.name)}
-                            {session && session.data.user.user_metadata.event === event.name ? (
-                                <button
-                                    className="flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
-                                    onClick={() => setOpenAddSessionModal(true)}
-                                >
-                                    CREATE SESSION
-                                </button>
-                            ) : (
-                                ""
-                            )}
+                            {session && session.data.user.user_metadata.event === event.name ?
+                            <button
+                                className="flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
+                                onClick={() => setOpenAddSessionModal(true)}
+                            >
+                                CREATE SESSION
+                            </button> 
+                             : ""}
                             <AddSessionModal
                                 closeModal={setOpenAddSessionModal}
                                 isOpen={openAddSessionModal}

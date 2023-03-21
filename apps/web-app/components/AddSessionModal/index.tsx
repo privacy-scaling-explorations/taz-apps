@@ -72,38 +72,41 @@ const AddSessionModal = ({ isOpen, closeModal, eventId, event }: Props) => {
     const handleSubmit = async () => {
         setIsLoading(true)
 
-        // Step 1 Create SubEvent
+        if (newSession.hasTicket) {
+            // Step 1 Create SubEvent
 
-        const subEventRes = await axios.post(`/api/pretix-create-subevent`, {
-            name: newSession.name,
-            startDate: newSession.startDate,
-            endDate: newSession.endDate,
-            slug: event.slug,
-            itemId: event.item_id
-        })
+            const subEventRes = await axios.post(`/api/pretix-create-subevent`, {
+                name: newSession.name,
+                startDate: newSession.startDate,
+                endDate: newSession.endDate,
+                slug: event.slug,
+                itemId: event.item_id
+            })
 
-        console.log("Created subEvent response: ", subEventRes.data)
+            console.log("Created subEvent response: ", subEventRes.data)
 
-        // // Step 3 Create Quota for the subEvent
+            // // Step 3 Create Quota for the subEvent
 
-        const quotaCreatedRes = await axios.post(`/api/pretix-create-quota/`, {
-            ticketAmount: amountTickets,
-            subEventId: subEventRes.data.id,
-            slug: event.slug,
-            itemId: event.item_id
-        })
+            const quotaCreatedRes = await axios.post(`/api/pretix-create-quota/`, {
+                ticketAmount: amountTickets,
+                subEventId: subEventRes.data.id,
+                slug: event.slug,
+                itemId: event.item_id
+            })
 
-        console.log("Quota creatd: ", quotaCreatedRes.data)
-
-        // Step 5 Add to database
-        const createEventDB = await axios.post("/api/createSession", {
-            ...newSession,
-            subEventId: subEventRes.data.id
-            // publicUrl: clonedEventRes.data.public_url,
-            // slug: clonedEventRes.data.slug
-        })
-
-        console.log("DB response: ", createEventDB)
+            console.log("Quota creatd: ", quotaCreatedRes.data)
+            // Step 5 Add to database
+            const createEventDB = await axios.post("/api/createSession", {
+                ...newSession,
+                subEventId: subEventRes.data.id
+            })
+            console.log("DB response: ", createEventDB)
+        } else {
+            const createEventDB = await axios.post("/api/createSession", {
+                ...newSession
+            })
+            console.log("DB response: ", createEventDB)
+        }
 
         // refresh to see new event created
         router.push(router.asPath)
