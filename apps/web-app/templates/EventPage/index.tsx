@@ -156,12 +156,12 @@ const EventPage = ({ event, sessions }: Props) => {
                     <div className="w-full flex flex-col md:flex-row justify-between items-center p-[16px] gap-[24px]">
                         <div className="flex flex-col md:flex-row items-center justify-center gap-[32px] mb-5 md:mb-0">
                             <h1 className="text-[40px] text-[#37352F] font-[600]">Sessions</h1>
-                            <button
+                            {session && session.data.user ? <button
                                 className="flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
                                 onClick={() => setOpenAddSessionModal(true)}
                             >
                                 CREATE SESSION
-                            </button>
+                            </button> : ""}
                             <AddSessionModal
                                 closeModal={setOpenAddSessionModal}
                                 isOpen={openAddSessionModal}

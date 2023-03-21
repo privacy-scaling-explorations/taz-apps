@@ -27,6 +27,12 @@ function SignupPage() {
     } catch (error) {}
   }
 
+  async function handleLogout() {
+    try {
+      await supabase.auth.signOut();
+    } catch (error) {}
+  }
+
   return (
     <div className="min-h-screen flex justify-center items-center bg-gray-100">
       <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8">
@@ -67,6 +73,12 @@ function SignupPage() {
             Sign up
           </button>
         </form>
+        <button
+          onClick={handleLogout}
+          className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 mt-4"
+        >
+          Log Out
+        </button>
       </div>
     </div>
   );

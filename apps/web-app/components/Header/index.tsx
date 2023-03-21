@@ -69,7 +69,7 @@ const Header = () => {
             Connect Passport
           </button>
         </li>
-        {session ? (
+        {session && session.data.user ? (
           <li>
             <NextLink href="/myprofile">My Profile</NextLink>
           </li>
