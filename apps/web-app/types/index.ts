@@ -50,6 +50,7 @@ export interface SessionsDTO {
     track: string
     type: string
     equipment: string
+    level: any
 }
 
 
