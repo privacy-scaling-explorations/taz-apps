@@ -21,8 +21,8 @@ const PassportModal = ({ openPassportModal, setOpenPassportModal }: Props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleEmailChange = (event) => setEmail(event.target.value);
-  const handlePasswordChange = (event) => setPassword(event.target.value);
+  const handleEmailChange = (event: any) => setEmail(event.target.value);
+  const handlePasswordChange = (event: any) => setPassword(event.target.value);
   const inputRef = useRef(null);
 
   async function zuzaluMembershipProof() {
@@ -36,7 +36,7 @@ const PassportModal = ({ openPassportModal, setOpenPassportModal }: Props) => {
     console.log(proof);
   }
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event : any) => {
     event.preventDefault();
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
