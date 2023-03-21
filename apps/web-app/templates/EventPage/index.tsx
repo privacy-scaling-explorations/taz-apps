@@ -21,6 +21,10 @@ type Props = {
 }
 
 const EventPage = ({ event, sessions }: Props) => {
+    console.log("Starting Page!")
+    console.log("Event2", event)
+    console.log("Sessions2", sessions)
+
     const router = useRouter()
     const { parentMessageId } = router.query
     const wraperRef = useRef(null)
