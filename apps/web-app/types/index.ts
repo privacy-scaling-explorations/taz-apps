@@ -52,6 +52,8 @@ export interface SessionsDTO {
     equipment: string
 }
 
+
+
 export interface RsvpDTO {
     id: number
     created_at: Date

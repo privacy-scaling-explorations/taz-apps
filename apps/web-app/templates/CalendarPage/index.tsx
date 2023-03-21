@@ -4,7 +4,7 @@ import NextImage from "next/image"
 import Link from "next/link"
 
 import { createClient } from "@supabase/supabase-js";
-import { getUserSession } from "../../hooks/getUserSession";
+// import { getUserSession } from "../../hooks/getUserSession";
 import { SessionsDTO } from "../../types"
 import BaseTemplate from "../Base"
 import { getUserOnID } from "../../hooks/getUserOnID"
