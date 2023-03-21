@@ -50,6 +50,7 @@ export interface SessionsDTO {
     track: string
     type: string
     equipment: string
+    subevent_id: number
     level: any
 }
 
