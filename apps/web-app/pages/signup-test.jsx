@@ -19,7 +19,8 @@ function SignupPage() {
         password,
         options: {
           data: {
-            role: "sub-organizer"
+            role: "sub-organizer",
+            event: 'ZK Workshops\n'
           },
         },
       });
