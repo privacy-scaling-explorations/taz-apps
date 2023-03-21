@@ -45,7 +45,14 @@ export interface SessionsDTO {
     hasTicket: boolean
     participants: ParticipantsDTO[]
     favoritedSessions: FavoritedSessionsDTO[]
+    team_members: any
+    format: any
+    type: any
+    level: any
+    track: any
 }
+
+
 
 export interface RsvpDTO {
     id: number

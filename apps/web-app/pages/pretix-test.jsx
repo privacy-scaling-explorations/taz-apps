@@ -277,7 +277,6 @@ const fetchOrganizers = async () => {
   };
 
   const createItem = async () => {
-
     const itemData = {
       "id": Math.random(),
       "name": {"en": "Standard ticket 1000"},

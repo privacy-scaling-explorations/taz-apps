@@ -91,7 +91,7 @@ const SessionPage = ({ session, createRsvp, deleteRsvp }: Props) => {
                         <div className="flex flex-row gap-[24px] w-full mt-4">
                             <div className="w-5/6 py-5">{session.info}</div>
                             <div className="flex flex-wrap gap-5 w-3/6 p-5">
-                                {session.team_members.map((item, index) => (
+                                {session.team_members.map((item : any, index : any) => (
                                     <div
                                         key={index}
                                         className="flex w-auto rounded-[4px] gap-2 px-2 py-1 bg-[#E4EAEA] text-[16px]"
