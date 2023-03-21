@@ -154,7 +154,8 @@ const Sessions = ({ event, sessions }: Props) => {
                                         className="bg-[#35655F] text-white py-[4px] px-[16px] text-[16px] rounded-[6px]"
                                         onClick={() => {
                                             setCurrentSubEventId(item.subevent_id)
-                                            setOpenBuyTicketModal(true)}}
+                                            setOpenBuyTicketModal(true)
+                                        }}
                                     >
                                         BUY TICKET
                                     </button>
@@ -176,7 +177,7 @@ const Sessions = ({ event, sessions }: Props) => {
                         </div>
                         <div className="w-full flex flex-row gap-[32px] justify-between items-center">
                             <div className="flex flex-row items-start gap-[8px]">
-                                {item.team_members?.map((organizer : any, key : any) => (
+                                {item.team_members?.map((organizer: any, key: any) => (
                                     <div
                                         className="flex flex-row items-center bg-[#E4EAEA] py-[4px] px-[8px] gap-[8px] text-sm rounded-[4px]"
                                         key={key}
