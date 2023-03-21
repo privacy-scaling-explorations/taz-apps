@@ -8,23 +8,21 @@ import { Fragment, useRef, useState } from "react"
 type Props = {
     isOpen: boolean
     closeModal: (b: boolean) => void
-    sessionId: number
+    subEventId: number
+    handleBuyTicket: Function
 }
 
-// initialFocus={questionTextRef}
-
-const BuyTicketModal = ({ isOpen, closeModal, sessionId }: Props) => {
+const BuyTicketModal = ({ isOpen, closeModal, subEventId, handleBuyTicket }: Props) => {
     const [step, setStep] = useState(1)
-
+    
     const resetAndClose = (close = false) => {
         setStep(1)
         closeModal(close)
     }
-
+    
     const handleYesClick = () => {
         setStep(2)
-
-        // Process the ticket order for sessionId
+        handleBuyTicket(subEventId)
 
         setTimeout(() => {
             setStep(3)

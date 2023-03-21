@@ -62,11 +62,7 @@ const Step2 = ({ setSteps, amountTickets, setAmountTickets, newSession, setNewSe
             </div>
             <div className="flex flex-col gap-1 my-2">
                 <label htmlFor="type">Type:</label>
-                <select
-                    id="type"
-                    name="type"
-                    onChange={(e) => setNewSession({ ...newSession, type: e.target.value })}
-                >
+                <select id="type" name="type" onChange={(e) => setNewSession({ ...newSession, type: e.target.value })}>
                     <option value="Workshop">Workshop</option>
                     <option value="Lecture">Lecture</option>
                     <option value="Other">Other</option>
@@ -115,6 +111,16 @@ const Step2 = ({ setSteps, amountTickets, setAmountTickets, newSession, setNewSe
                     max="1000"
                     value={amountTickets}
                     onChange={(e) => setAmountTickets(e.target.value)}
+                />
+            </div>
+            <div className="flex flex-col my-2">
+                <label htmlFor="equipment">Is any equipment needed?</label>
+                <input
+                    className="border border-2 mx-2"
+                    id="equipment"
+                    type="text"
+                    value={newSession.equipment}
+                    onChange={(e) => setNewSession({...newSession, equipment: e.target.value})}
                 />
             </div>
 

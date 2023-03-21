@@ -36,8 +36,8 @@ const Step3 = ({ setSteps, newSession, handleSubmit, isLoading, amountTickets }:
                     </h2>
                     <h2 className="font-bold">Organizers:</h2>
                     <ul className="list-disc list-inside ml-10">
-                        {newSession.organizers.map((i: string) => (
-                            <li key={i}>{i}</li>
+                        {newSession.team_members.map((item: {name: string, role: string}, index: number) => (
+                            <li key={index}>{item.role}: {item.name}</li>
                         ))}
                     </ul>
                     <h2 className="font-bold">Tags:</h2>

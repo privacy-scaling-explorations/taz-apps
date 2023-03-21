@@ -14,6 +14,7 @@ type Props = {
 
 const Sessions = ({ event, sessions }: Props) => {
     const [openBuyTicketModal, setOpenBuyTicketModal] = useState(false)
+    const [currentSubEventId, setCurrentSubEventId] = useState<any>(0)
 
     const router = useRouter()
     const LOGGED_IN_USER_ID = 1
@@ -151,14 +152,17 @@ const Sessions = ({ event, sessions }: Props) => {
                                 <>
                                     <button
                                         className="bg-[#35655F] text-white py-[4px] px-[16px] text-[16px] rounded-[6px]"
-                                        onClick={() => setOpenBuyTicketModal(true)}
+                                        onClick={() => {
+                                            setCurrentSubEventId(item.subevent_id)
+                                            setOpenBuyTicketModal(true)}}
                                     >
                                         BUY TICKET
                                     </button>
                                     <BuyTicketModal
                                         closeModal={closeOpenTicketModal}
                                         isOpen={openBuyTicketModal}
-                                        sessionId={item.id}
+                                        subEventId={currentSubEventId}
+                                        handleBuyTicket={handleBuyTicket}
                                     />
                                 </>
                             ) : (
