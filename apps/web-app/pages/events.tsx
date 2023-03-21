@@ -15,6 +15,10 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
     try {
         const url = process.env.URL_TO_FETCH
 
+        const sessionsResponse = await fetch(
+            `${url}/api/fetchSessionsByEvent/?eventId=92&userId=1`
+        )
+
         const eventsResponse = await fetch(`${url}/api/fetchEvents`)
         const events = await eventsResponse.json()
         return {
