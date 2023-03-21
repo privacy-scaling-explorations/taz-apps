@@ -7,7 +7,7 @@ import Ellipse from "../svgElements/Ellipse";
 import SelectorArrow from "../ArrowNavigators/SelectorArrow";
 import Footer from "../Footer";
 import SignInModal from "../SigInModal";
-import getUserSession from "../../scripts/getUserSession";
+import getUserSession from "../../hooks/getUserSession";
 import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co";
