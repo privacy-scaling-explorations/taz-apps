@@ -9,6 +9,7 @@ import { UserDTO } from "../../types"
 type NewSessionState = {
     name: string
     organizers: string[]
+    team_members: { name: string; role: string }[]
     startDate: Date
     endDate: Date
     startTime: string
@@ -18,6 +19,11 @@ type NewSessionState = {
     info: string
     eventId: number
     hasTicket: boolean
+    format: string
+    level: string
+    equipment: string
+    track: string
+    type: string
 }
 
 type Props = {
@@ -27,24 +33,23 @@ type Props = {
 }
 
 const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
-    const [organizer, setOrganizer] = useState("")
+    const [teamMember, setTeamMember] = useState({ name: "", role: "Speaker" })
     const [tag, setTag] = useState("")
     const [rerender, setRerender] = useState(true)
     const [suggestions, setSuggestions] = useState<UserDTO[]>([])
     const [display, setDisplay] = useState(false)
     const wraperRef = useRef(null)
-    const { endDate, endTime, info, location, name, organizers, startDate, startTime, tags } = newSession
+    const { endDate, endTime, info, location, name, organizers, team_members, startDate, startTime, tags } =
+        newSession
 
-    const handleAddOrganizer = (user: string) => {
-        setNewSession({ ...newSession, organizers: [...newSession.organizers, user] })
-        setOrganizer("")
+    const handleAddTeamMember = () => {
+        setNewSession({ ...newSession, team_members: [...newSession.team_members, teamMember] })
+        setTeamMember({ name: "", role: "Speaker" })
         setDisplay(false)
     }
 
-    console.log(newSession.hasTicket)
-
-    const handleRemoveOrganizer = (index: number) => {
-        organizers.splice(index, 1)
+    const handleRemoveTeamMember = (index: number) => {
+        team_members.splice(index, 1)
         setRerender(!rerender)
     }
 
@@ -86,10 +91,10 @@ const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
         }
     }, [])
 
-    const checkIfAnyOtherSuggestion =
-        suggestions
-            .filter((item) => !organizers.includes(item.userName))
-            .filter(({ userName }) => userName.toLowerCase().indexOf(organizer.toLowerCase()) > -1).length !== 0
+    // const checkIfAnyOtherSuggestion =
+    //     suggestions
+    //         .filter((item) => !organizers.includes(item.userName))
+    //         .filter(({ userName }) => userName.toLowerCase().indexOf(organizer.toLowerCase()) > -1).length !== 0
 
     return (
         <div className="flex flex-col w-full">
@@ -148,67 +153,69 @@ const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
                 </div>
             </div>
             <div className="flex flex-col gap-1 my-2">
-                <label htmlFor="tags">Location</label>
-                <input
-                    className="border border-2 p-1"
-                    type="text"
-                    value={location}
+                <label htmlFor="location">Location:</label>
+                <select
                     id="location"
-                    placeholder="location"
+                    name="location"
                     onChange={(e) => setNewSession({ ...newSession, location: e.target.value })}
-                />
+                >
+                    <option value="Amphitheatre">Amphitheatre</option>
+                    <option value="Almara Beach">Almara beach</option>
+                    <option value="Ballroom">Ballroom</option>
+                    <option value="Board Room">Board Room</option>
+                    <option value="Dome">Dome</option>
+                    <option value="Kiki's Restaurant inside">Kiki's Restaurant inside</option>
+                    <option value="Kiki's Restaurant outside">Kiki's Restaurant outside</option>
+                    <option value="Lighthouse">Lighthouse</option>
+                    <option value="Gym">Outdoor Gym Deck</option>
+                    <option value="Rock Bar">Rock Bar</option>
+                    <option value="Tony's Bar">Tony's Bar</option>
+                </select>
             </div>
             <div className="flex flex-col gap-1 my-2 w-full">
-                <label htmlFor="tags">Organizers</label>
-                <p className="text-xs font-weight: 100">Prefix @ with a name to search. Eg. @Vitalik</p>
-                <div className="flex flex-col relative" ref={wraperRef}>
-                    <div className="flex flex-row gap-4">
-                        <input
-                            id="organizers"
-                            type="text"
-                            className="border border-2 p-1 w-full"
-                            placeholder="add organizer"
-                            value={organizer}
-                            onChange={(e) => setOrganizer(e.target.value)}
-                            onClick={() => setDisplay(true)}
-                        />
+                <label htmlFor="team-members">Team Members:</label>
+                <div className="flex flex-row gap-4">
+                    <input
+                        id="tags"
+                        type="text"
+                        className="border border-2 p-1 w-full"
+                        placeholder="Add team member"
+                        value={teamMember.name}
+                        onChange={(e) => setTeamMember({ ...teamMember, name: e.target.value })}
+                    />
+                    <div>
+                        <label htmlFor="role">Role:</label>
+                        <select
+                            id="role"
+                            name="role"
+                            onChange={(e) => setTeamMember({ ...teamMember, role: e.target.value })}
+                        >
+                            <option value="Speaker">Speaker</option>
+                            <option value="Organizer">Organizer</option>
+                            <option value="Facilitator">Facilitator</option>
+                        </select>
                     </div>
-                    {display && (
-                        <div className="border border-t-transparent bg-white flex flex-col absolute top-[35px] w-full z-10">
-                            {checkIfAnyOtherSuggestion ? (
-                                suggestions
-                                    .filter((item) => !organizers.includes(item.userName))
-                                    .filter(
-                                        ({ userName }) => userName.toLowerCase().indexOf(organizer.toLowerCase()) > -1
-                                    )
-                                    .map((user, index) => (
-                                        <div
-                                            key={index}
-                                            onClick={() => handleAddOrganizer(user.userName)}
-                                            className="flex h-[50px] items-center px-2 uppercase hover:bg-black hover:text-white cursor-pointer transition duration-300 ease-in-out"
-                                        >
-                                            <span>{user.userName}</span>
-                                        </div>
-                                    ))
-                            ) : (
-                                <div className="flex h-[50px] items-center px-2 uppercase hover:bg-black hover:text-white cursor-pointer transition duration-300 ease-in-out">
-                                    <span>No user found</span>
-                                </div>
-                            )}
-                        </div>
-                    )}
-                </div>
 
-                <ul className="flex flex-row items-start">
-                    {organizers.map((item, index) => (
-                        <li key={index} className="relative mx-1 bg-gray-200 p-1 rounded text-sm">
-                            {item}
-                            <button className="absolute top-0" onClick={() => handleRemoveOrganizer(index)}>
-                                x
-                            </button>
-                        </li>
-                    ))}
-                </ul>
+                    <button
+                        className="lex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
+                        onClick={() => handleAddTeamMember()}
+                    >
+                        Add
+                    </button>
+                    <ul className="flex flex-row items-start">
+                        {team_members.map((item, index) => (
+                            <li key={index} className="relative mx-1 bg-gray-200 p-1 rounded text-sm">
+                                {item.role}: {item.name}
+                                <button
+                                    className="absolute top-0 right-0"
+                                    onClick={() => handleRemoveTeamMember(index)}
+                                >
+                                    x
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             </div>
             <div className="flex flex-col gap-1 my-2 w-full">
                 <label htmlFor="tags">Tags</label>
@@ -240,39 +247,6 @@ const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
                         </li>
                     ))}
                 </ul>
-            </div>
-            <div className="flex flex-col my-2">
-                <label htmlFor="">How do you want people to show attendance?</label>
-                <div>
-                    <label htmlFor="ticket">Ticket</label>
-                    <input
-                        type="radio"
-                        id="ticket"
-                        value="ticket"
-                        checked={newSession.hasTicket}
-                        onChange={() => setNewSession({ ...newSession, hasTicket: !newSession.hasTicket })}
-                    />
-                    <label htmlFor="RSVP">RSVP</label>
-                    <input
-                        type="radio"
-                        id="RSVP"
-                        value="RSVP"
-                        checked={!newSession.hasTicket}
-                        onChange={() => setNewSession({ ...newSession, hasTicket: !newSession.hasTicket })}
-                    />
-                </div>
-            </div>
-            <div className="flex flex-col my-2">
-                <label htmlFor="info">Additional Information</label>
-                <textarea
-                    className="border border-2 p-1 w-full"
-                    placeholder="Additional info"
-                    name="info"
-                    id="info"
-                    rows={5}
-                    value={info}
-                    onChange={(e) => setNewSession({ ...newSession, info: e.target.value })}
-                />
             </div>
             <div className="w-full flex flex-col items-center">
                 <button
