@@ -9,10 +9,7 @@ const Header = () => {
             <div className="flex relative overflow-hidden gap-5 items-center">
                 <NextLink href={"/"}>
                     <div className="flex cursor-pointer gap-2 items-center justify-center ">
-                        <NextImage src={"/logo.svg"} objectFit="contain" width="50px" height="50px" />
-                        <h1 className="uppercase tracking-[5px] text-[25px] text-white font-cinzel font-bold">
-                            ZULALU
-                        </h1>
+                        <NextImage src={"/logo.png"} objectFit="contain" width="200px" height="52px" />
                     </div>
                 </NextLink>
                 <button className="bg-zulalu-primary text-white py-[8px] px-[16px] rounded-[8px]">Buy a badge</button>

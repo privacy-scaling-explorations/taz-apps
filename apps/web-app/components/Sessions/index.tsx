@@ -3,7 +3,7 @@ import { useRouter } from "next/router"
 import NextLink from "next/link"
 import axios from "axios"
 import { toast } from "react-toastify"
-import { FavoritedEventsDTO, ParticipantsDTO, SessionsDTO, EventsDTO } from "../../types"
+import { SessionsDTO, EventsDTO } from "../../types"
 
 type Props = {
     event: EventsDTO
@@ -151,14 +151,30 @@ const Sessions = ({ event, sessions }: Props) => {
                         </div>
                         <div className="w-full flex flex-row gap-[32px] justify-between items-center">
                             <div className="flex flex-row items-start gap-[8px]">
-                                {item.organizers.map((organizer, key) => (
+                                {item.team_members.map((organizer, key) => (
                                     <div
                                         className="flex flex-row items-center bg-[#E4EAEA] py-[4px] px-[8px] gap-[8px] text-sm rounded-[4px]"
                                         key={key}
                                     >
-                                        <NextImage src={"/user-icon-6.svg"} alt="user-icon-6" width={24} height={24} />
+                                        {organizer.role === "Speaker" && (
+                                            <NextImage
+                                                src={"/user-icon-6.svg"}
+                                                alt="user-icon-6"
+                                                width={24}
+                                                height={24}
+                                            />
+                                        )}
+                                        {organizer.role === "Organizer" && (
+                                            <NextImage
+                                                src={"/user-icon-4.svg"}
+                                                alt="user-icon-6"
+                                                width={24}
+                                                height={24}
+                                            />
+                                        )}
                                         <p className="text-[#1C2928] font-[400] text-[16px]">
-                                            Organizer: <span className="font-[600] capitalize">{organizer}</span>
+                                            {organizer.role}:{" "}
+                                            <span className="font-[600] capitalize">{organizer.name}</span>
                                         </p>
                                     </div>
                                 ))}
