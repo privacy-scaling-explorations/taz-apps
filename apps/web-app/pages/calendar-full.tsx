@@ -20,9 +20,6 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
 
         const eventsResponse = await fetch(`${url}/api/fetchEvents`)
 
-        const response = await fetch(`${url}/api/fetchEvents/96`)
-
-
         const events: EventsDTO[] = await eventsResponse.json()
 
         const filteredSessions = events
