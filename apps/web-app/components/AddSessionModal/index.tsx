@@ -34,9 +34,10 @@ type Props = {
     isOpen: boolean
     closeModal: (b: boolean) => void
     eventId: string
+    event: any
 }
 
-const AddSessionModal = ({ isOpen, closeModal, eventId }: Props) => {
+const AddSessionModal = ({ isOpen, closeModal, eventId, event }: Props) => {
     const router = useRouter()
     const questionTextRef = useRef(null)
     const [isLoading, setIsLoading] = useState(false)
@@ -70,7 +71,9 @@ const AddSessionModal = ({ isOpen, closeModal, eventId }: Props) => {
         const subEventRes = await axios.post(`/api/pretix-create-subevent`, {
             name: newSession.name,
             startDate: newSession.startDate,
-            endDate: newSession.endDate
+            endDate: newSession.endDate,
+            slug: event.slug,
+            itemId: event.item_id
         })
 
         console.log("Created subEvent response: ", subEventRes.data)
@@ -79,7 +82,9 @@ const AddSessionModal = ({ isOpen, closeModal, eventId }: Props) => {
 
         const quotaCreatedRes = await axios.post(`/api/pretix-create-quota/`, {
             ticketAmount: amountTickets,
-            subEventId: subEventRes.data.id
+            subEventId: subEventRes.data.id,
+            slug: event.slug,
+            itemId: event.item_id
         })
 
         console.log("Quota creatd: ", quotaCreatedRes.data)
