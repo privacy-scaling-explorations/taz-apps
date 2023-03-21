@@ -40,7 +40,7 @@ export interface SessionsDTO {
     endTime: string
     info: string
     organizers: string[]
-    team_members: {name: string, role: string}[]
+    team_members: { name: string; role: string }[]
     event_id: number
     isOpen: boolean
     rsvps: RsvpDTO[]
@@ -54,8 +54,6 @@ export interface SessionsDTO {
     subevent_id: number
     level: any
 }
-
-
 
 export interface RsvpDTO {
     id: number

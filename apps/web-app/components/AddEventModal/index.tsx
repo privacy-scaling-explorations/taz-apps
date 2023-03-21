@@ -192,7 +192,7 @@ const AddEventModal = ({ isOpen, closeModal }: Props) => {
                             leaveFrom="opacity-100 scale-100"
                             leaveTo="opacity-0 scale-95"
                         >
-                            <Dialog.Panel className="flex flex-col w-5/6 h-[100%] overflow-scroll md:overflow-hidden md:h-auto max-w-full transform rounded-lg border-brand-blue border-2 bg-white text-left align-middle shadow-xl transition-all">
+                            <Dialog.Panel className="flex flex-col w-5/6 h-full overflow-y-scroll max-w-full transform rounded-lg border-brand-blue border-2 bg-white text-left align-middle shadow-xl transition-all">
                                 <div className="p-4 bg-brand-beige border-b-2 border-brand-blue">
                                     <button
                                         type="button"
