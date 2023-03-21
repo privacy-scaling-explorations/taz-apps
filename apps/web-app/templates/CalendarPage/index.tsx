@@ -3,7 +3,7 @@ import { useRouter } from "next/router"
 import NextImage from "next/image"
 import Link from "next/link"
 
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@supabase/supabase-js"
 // import { getUserSession } from "../../hooks/getUserSession";
 import { SessionsDTO } from "../../types"
 import BaseTemplate from "../Base"
@@ -11,10 +11,9 @@ import { getUserOnID } from "../../hooks/getUserOnID"
 import AddSessionModal from "../../components/AddSessionModal"
 import CalendarPageSessions from "../../components/Sessions/CalendarPageSessions"
 
-const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co";
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey as string);
-
+const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co"
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY
+const supabase = createClient(supabaseUrl, supabaseKey as string)
 
 type Props = {
     sessions: SessionsDTO[]
@@ -32,17 +31,17 @@ const CalendarPage = ({ sessions }: Props) => {
     const [selectedLocations, setSelectedLocations] = useState<string[]>([])
     const [locationsOptions, setLocationsOptions] = useState<string[]>([])
 
-  const [openFilterOptions, setOpenFilterOptions] = useState(false);
-  const [openLocationFilter, setOpenLocationFilter] = useState(false);
-  const [session, setSession] = useState<any>(null);
+    const [openFilterOptions, setOpenFilterOptions] = useState(false)
+    const [openLocationFilter, setOpenLocationFilter] = useState(false)
+    const [session, setSession] = useState<any>(null)
 
-  useEffect(() => {
-    (async () => {
-      const userSession = await supabase.auth.getUser();
-      console.log("user object", userSession);
-      setSession(userSession);
-    })();
-  }, []);
+    useEffect(() => {
+        ;(async () => {
+            const userSession = await supabase.auth.getUser()
+            console.log("user object", userSession)
+            setSession(userSession)
+        })()
+    }, [])
 
     const filterOptions = [
         {
@@ -132,6 +131,7 @@ const CalendarPage = ({ sessions }: Props) => {
               })
             : filteredSessionsByLocation
 
+    console.log(parentMessageId)
     return (
         <BaseTemplate>
             <div className="flex flex-col border border-black p-5 bg-[#EEEEF0] gap-5 w-full h-full">
@@ -170,7 +170,7 @@ const CalendarPage = ({ sessions }: Props) => {
                     <div className="w-full flex flex-col lg:flex-row justify-between items-start lg:items-center p-[16px] gap-[24px]">
                         <div className="flex flex-col md:flex-row items-start md:items-center justify-center gap-[32px]">
                             <h1 className="text-[40px] text-[#37352F] font-[600]">Week 1 | March 25-31</h1>
-                            {session && session.data.user ? (
+                            {/* {session && session.data.user ? (
                                 <>
                                     <button
                                         className="flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
@@ -182,11 +182,12 @@ const CalendarPage = ({ sessions }: Props) => {
                                         closeModal={setOpenAddSessionModal}
                                         isOpen={openAddSessionModal}
                                         eventId={parentMessageId as string}
+                                        event={sessions}
                                     />
                                 </>
                             ) : (
                                 ""
-                            )}
+                            )} */}
                         </div>
                         <div className="flex flex-col md:flex-row justify-center items-start md:items-start gap-5">
                             <div className="flex flex-col relative w-[150px]" ref={localtionRef}>
