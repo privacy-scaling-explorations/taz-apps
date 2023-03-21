@@ -9,8 +9,7 @@ export default async function handler(req, res) {
         "Content-Type": "application/json"
     }
 
-    const { subEventId } = req.body
-
+    const { subEventId, slug, itemId } = req.body
 
     // Will need user email as input, hard-coded for now
     const body = {
@@ -20,7 +19,7 @@ export default async function handler(req, res) {
         positions: [
             {
                 positionid: 1,
-                item: 318781,
+                item: itemId,
                 variation: null,
                 price: "0",
                 attendee_name_parts: {
@@ -36,7 +35,7 @@ export default async function handler(req, res) {
 
     try {
         const response = await axios.post(
-            "https://pretix.eu/api/v1/organizers/taz-zuzalu/events/event-series/orders/",
+            `https://beta.ticketh.xyz/api/v1/organizers/zuzalu/events/${slug}/orders/`,
             body,
             { headers }
         )

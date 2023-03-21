@@ -10,12 +10,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         "Content-Type": "application/json"
     }
 
-    const { ticketAmount, subEventId } = req.body
+    const { ticketAmount, subEventId, slug, itemId } = req.body
 
     const body = {
         name: `Ticket Quota`,
         size: `${ticketAmount}`,
-        items: [318781],
+        items: [itemId],
         variations: [],
         subevent: subEventId,
         close_when_sold_out: false,
@@ -24,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     try {
         const response = await axios.post(
-            `https://pretix.eu/api/v1/organizers/taz-zuzalu/events/event-series/quotas/`,
+            `https://beta.ticketh.xyz/api/v1/organizers/zuzalu/events/${slug}/quotas/`,
             body,
             { headers }
         )
