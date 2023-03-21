@@ -3,13 +3,14 @@ import NextLink from "next/link";
 import { createClient } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import { usePassportModalContext } from "../../context/PassportModalContext";
+import PassportModal from "../PassportModal";
 
 const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co";
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey as string);
 
 const Header = () => {
-  const { setOpenPassportModal } = usePassportModalContext();
+  const { openPassportModal, setOpenPassportModal } = usePassportModalContext();
   const [session, setSession] = useState<any>(null);
   useEffect(() => {
     (async () => {
@@ -69,6 +70,7 @@ const Header = () => {
             Connect Passport
           </button>
         </li>
+        <PassportModal openPassportModal={openPassportModal} setOpenPassportModal={setOpenPassportModal} />
         {session && session.data.user ? (
           <li>
             <NextLink href="/myprofile">My Profile</NextLink>
