@@ -1,21 +1,14 @@
 import Loading from "../Loading"
 
-type TicketsState = {
-    name: string
-    price: string
-    description: string
-}
-
 type Props = {
     setSteps: (step: number) => void
     newSession: any
-    newTickets: TicketsState[]
     handleSubmit: Function
     isLoading: boolean
     amountTickets: string
 }
 
-const Step3 = ({ setSteps, newSession, newTickets, handleSubmit, isLoading, amountTickets }: Props) => (
+const Step3 = ({ setSteps, newSession, handleSubmit, isLoading, amountTickets }: Props) => (
     <div className="flex flex-col w-full gap-8 bg-white p-8 rounded-lg shadow-md">
         <div className="flex flex-col gap-4">
             <h1 className="text-lg font-bold uppercase ">Session Details:</h1>
@@ -63,26 +56,6 @@ const Step3 = ({ setSteps, newSession, newTickets, handleSubmit, isLoading, amou
                 </h2>
             </div>
         </div>
-        <div className="flex flex-col gap-4">
-            <h1 className="text-lg font-bold uppercase">Tickets Details:</h1>
-            {newTickets.map((item, index) => (
-                <div className="flex flex-col gap-2" key={index}>
-                    <h2 className="font-bold">
-                        Name: <span className="font-normal">{item.name}</span>
-                    </h2>
-                    <h2 className="font-bold">
-                        Price: <span className="font-normal">{item.price}</span>
-                    </h2>
-                    <h2 className="font-bold">
-                        Description: <span className="font-normal">{item.description}</span>
-                    </h2>
-                    <h2 className="font-bold">
-                        Amount: <span className="font-normal">{amountTickets}</span>
-                    </h2>
-                </div>
-            ))}
-        </div>
-
         <div className="w-full flex flex-col md:flex-row gap-5 justify-center items-center mt-5">
             <button
                 type="button"

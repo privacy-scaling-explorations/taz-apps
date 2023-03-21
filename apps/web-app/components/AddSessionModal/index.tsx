@@ -13,6 +13,7 @@ import Step3 from "./Step3"
 type NewSessionState = {
     name: string
     organizers: string[]
+    team_members: { name: string; role: string }[]
     startDate: Date
     endDate: Date
     startTime: string
@@ -20,8 +21,13 @@ type NewSessionState = {
     location: string
     tags: string[]
     info: string
-    eventId: number,
+    eventId: number
     hasTicket: boolean
+    format: string
+    level: string
+    equipment: string
+    track: string
+    type: string
 }
 
 type TicketsState = {
@@ -44,101 +50,52 @@ const AddSessionModal = ({ isOpen, closeModal, eventId }: Props) => {
     const [newSession, setNewSession] = useState<NewSessionState>({
         name: "",
         organizers: [],
+        team_members: [],
         startDate: new Date(),
         endDate: new Date(),
         startTime: "09:00",
         endTime: "18:00",
-        location: "",
+        location: "Amphitheatre",
         tags: [],
         info: "",
         eventId: parseInt(eventId),
-        hasTicket: false
+        hasTicket: false,
+        format: "live",
+        level: "beginner",
+        equipment: "",
+        track: "ZK Week",
+        type: "Workshop"
     })
-
-    const [newTickets, setNewTickets] = useState<TicketsState[]>([])
-
     const [amountTickets, setAmountTickets] = useState("0")
-
-    const [hasVouchers, setHasVouchers] = useState(false)
-    const [voucher, setVoucher] = useState({
-        code: "",
-        amount: 1,
-        price: 0
-    })
 
     const handleSubmit = async () => {
         setIsLoading(true)
 
-        // Step 1 Clone event from template
+        // Step 1 Create SubEvent
 
-        const clonedEventRes = await axios.post("/api/pretix-clone-event", {
-            name: { en: newSession.name },
-            slug: newSession.name.toLowerCase().split(" ").join("-"),
-            live: false,
-            currency: "EUR",
-            date_from: newSession.startDate,
-            date_to: newSession.endDate,
-            date_admission: null,
-            presale_start: null,
-            presale_end: null,
-            location: newSession.location,
-            geo_lat: null,
-            geo_lon: null,
-            seating_plan: null,
-            seat_category_mapping: {},
-            meta_data: {},
-            timezone: "Europe/Berlin",
-            item_meta_properties: {},
-            plugins: ["pretix.plugins.stripe", "pretix.plugins.paypal"],
-            sales_channels: ["web", "pretixpos", "resellers"]
+        const subEventRes = await axios.post(`/api/pretix-create-subevent`, {
+            name: newSession.name,
+            startDate: newSession.startDate,
+            endDate: newSession.endDate
         })
 
-        console.log("Cloned event url and slug: ", clonedEventRes.data.public_url, clonedEventRes.data.slug)
+        console.log("Created subEvent response: ", subEventRes.data)
 
-        // Step 2 Create items (tickets)
+        // // Step 3 Create Quota for the subEvent
 
-        const ticketIds: string[] = []
-        for (let i = 0; i < newTickets.length; i++) {
-            const newTicket = newTickets[i]
-            const ticketCreatedRes = await axios.post(`/api/pretix-create-item/${clonedEventRes.data.slug}`, {
-                newTicket
-            })
-
-            ticketIds.push(ticketCreatedRes.data.id)
-
-            console.log("tickets created: ", ticketCreatedRes.data)
-        }
-
-        // Step 3 Create Quota for the item
-
-        const quotaCreatedRes = await axios.post(`/api/pretix-create-quota/${clonedEventRes.data.slug}`, {
+        const quotaCreatedRes = await axios.post(`/api/pretix-create-quota/`, {
             ticketAmount: amountTickets,
-            ticketId: ticketIds
+            subEventId: subEventRes.data.id
         })
 
         console.log("Quota creatd: ", quotaCreatedRes.data)
 
-        // Step 4 Go Live
-        const patchResponse = await axios.post(`/api/pretix-go-live/${clonedEventRes.data.slug}`, {
-            live: true
-        })
-
-        console.log("Go Live response: ", patchResponse.data)
-
-        // Optional step: Create voucher
-        if (hasVouchers) {
-            const voucherResponse = await axios.post(`/api/pretix-create-voucher/${clonedEventRes.data.slug}`, {
-                voucher,
-                quotaId: quotaCreatedRes.data.id
-            })
-            console.log("Voucher response: ", voucherResponse.data)
-        }
-
         // Step 5 Add to database
         const createEventDB = await axios.post("/api/createSession", {
             ...newSession,
-            publicUrl: clonedEventRes.data.public_url,
-            slug: clonedEventRes.data.slug
+            subEventId: subEventRes.data.id
+            // publicUrl: clonedEventRes.data.public_url,
+            // slug: clonedEventRes.data.slug
         })
 
         console.log("DB response: ", createEventDB)
@@ -153,22 +110,21 @@ const AddSessionModal = ({ isOpen, closeModal, eventId }: Props) => {
         setNewSession({
             name: "",
             organizers: [],
+            team_members: [],
             startDate: new Date(),
             endDate: new Date(),
             startTime: "09:00",
             endTime: "18:00",
-            location: "",
+            location: "Amphitheatre",
             tags: [],
             info: "",
             eventId: parseInt(eventId),
-            hasTicket: false
-        })
-        setNewTickets([])
-        setHasVouchers(false)
-        setVoucher({
-            code: "",
-            amount: 1,
-            price: 0
+            hasTicket: false,
+            track: "ZK Week",
+            equipment: "",
+            format: "Live",
+            type: "Workshop",
+            level: "Beginner"
         })
         closeModal(false)
     }
@@ -241,21 +197,16 @@ const AddSessionModal = ({ isOpen, closeModal, eventId }: Props) => {
                                     {steps === 2 && (
                                         <Step2
                                             setSteps={setSteps}
-                                            newTickets={newTickets}
-                                            setNewTickets={setNewTickets}
-                                            setHasVouchers={setHasVouchers}
-                                            hasVouchers={hasVouchers}
-                                            voucher={voucher}
-                                            setVoucher={setVoucher}
                                             setAmountTickets={setAmountTickets}
                                             amountTickets={amountTickets}
+                                            newSession={newSession}
+                                            setNewSession={setNewSession}
                                         />
                                     )}
                                     {steps === 3 && (
                                         <Step3
                                             setSteps={setSteps}
                                             newSession={newSession}
-                                            newTickets={newTickets}
                                             handleSubmit={handleSubmit}
                                             isLoading={isLoading}
                                             amountTickets={amountTickets}

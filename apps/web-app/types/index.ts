@@ -39,17 +39,17 @@ export interface SessionsDTO {
     endTime: string
     info: string
     organizers: string[]
+    team_members: {name: string, role: string}[]
     event_id: number
     isOpen: boolean
     rsvps: RsvpDTO[]
     hasTicket: boolean
     participants: ParticipantsDTO[]
     favoritedSessions: FavoritedSessionsDTO[]
-    team_members: any
-    format: any
-    type: any
-    level: any
-    track: any
+    format: string
+    track: string
+    type: string
+    equipment: string
 }
 
 

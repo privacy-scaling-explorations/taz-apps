@@ -1,100 +1,109 @@
 import { useState } from "react"
 
-type TicketsState = {
+type NewSessionState = {
     name: string
-    price: string
-    description: string
+    organizers: string[]
+    team_members: { name: string; role: string }[]
+    startDate: Date
+    endDate: Date
+    startTime: string
+    endTime: string
+    location: string
+    tags: string[]
+    info: string
+    eventId: number
+    hasTicket: boolean
+    format: string
+    level: string
+    equipment: string
+    track: string
+    type: string
 }
 
 type Props = {
     setSteps: (step: number) => void
-    newTickets: TicketsState[]
-    setNewTickets: (newTickets: TicketsState[]) => void
-    setHasVouchers: Function
-    hasVouchers: boolean
-    voucher: {
-        code: string
-        amount: number
-        price: number
-    }
-    setVoucher: Function
     amountTickets: string
     setAmountTickets: Function
+    newSession: NewSessionState
+    setNewSession: (newEvent: NewSessionState) => void
 }
 
-const Step2 = ({
-    setSteps,
-    newTickets,
-    setNewTickets,
-    hasVouchers,
-    setHasVouchers,
-    voucher,
-    setVoucher,
-    amountTickets,
-    setAmountTickets
-}: Props) => {
-    const [pretixTicket, setPretixTicket] = useState<TicketsState>({
-        name: "",
-        price: "",
-        description: ""
-    })
-
-    const handleAddTicket = () => {
-        const isValid = pretixTicket.name && pretixTicket.price
-        if (isValid) {
-            setNewTickets([...newTickets, pretixTicket])
-            setPretixTicket({
-                description: "",
-                name: "",
-                price: ""
-            })
-        }
-    }
-
-    const handleRemoveTicket = (index: number) => {
-        let newArr = [...newTickets]
-        newArr.splice(index, 1)
-        setNewTickets(newArr)
-    }
-
+const Step2 = ({ setSteps, amountTickets, setAmountTickets, newSession, setNewSession }: Props) => {
     const handleSubmit = async () => {
         setSteps(3)
     }
     return (
         <div className="flex flex-col w-full overflow-scroll">
-            <div className="flex flex-col gap-1 my-1 w-full">
-                <label htmlFor="name">Ticket Name</label>
-                <input
-                    className="border border-2 p-1"
-                    type="text"
-                    id="name"
-                    placeholder="ticket name"
-                    value={pretixTicket.name}
-                    onChange={(e) => setPretixTicket({ ...pretixTicket, name: e.target.value })}
-                />
+            <div className="flex flex-col gap-1 my-2">
+                <label htmlFor="tags">Track:</label>
+                <select
+                    id="track"
+                    name="track"
+                    onChange={(e) => setNewSession({ ...newSession, track: e.target.value })}
+                >
+                    <option value="Zk Week">ZK Week</option>
+                    <option value="Public Goods">Public Goods</option>
+                    <option value="New Cities & Network States">New Cities & Network States</option>
+                    <option value="Longevity 0-1">Longevity 0-1</option>
+                    <option value="Synthetic Biology">Synthetic Biology</option>
+                </select>
             </div>
-            <div className="flex flex-col gap-1 my-1 w-full">
-                <label htmlFor="price">Ticket Price</label>
-                <input
-                    className="border border-2 p-1"
-                    type="number"
-                    min="0"
-                    id="price"
-                    placeholder="ticket price"
-                    value={pretixTicket.price}
-                    onChange={(e) => setPretixTicket({ ...pretixTicket, price: e.target.value })}
-                />
+            <div className="flex flex-col gap-1 my-2">
+                <label htmlFor="tags">Format:</label>
+                <select
+                    id="format"
+                    name="format"
+                    onChange={(e) => setNewSession({ ...newSession, format: e.target.value })}
+                >
+                    <option value="live">Live</option>
+                    <option value="online">Online</option>
+                    <option value="live-online">Live + Online</option>
+                </select>
             </div>
-            <div className="flex flex-col gap-1 my-1 w-full">
-                <label htmlFor="startTime">Description</label>
-                <input
-                    className="border border-2 p-1"
-                    type="text"
-                    id="description"
-                    placeholder="ticket description"
-                    value={pretixTicket.description}
-                    onChange={(e) => setPretixTicket({ ...pretixTicket, description: e.target.value })}
-                />
+            <div className="flex flex-col gap-1 my-2">
+                <label htmlFor="type">Type:</label>
+                <select
+                    id="type"
+                    name="type"
+                    onChange={(e) => setNewSession({ ...newSession, type: e.target.value })}
+                >
+                    <option value="Workshop">Workshop</option>
+                    <option value="Lecture">Lecture</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div className="flex flex-col gap-1 my-2">
+                <label htmlFor="level">Experience Level:</label>
+                <select
+                    id="level"
+                    name="level"
+                    onChange={(e) => setNewSession({ ...newSession, level: e.target.value })}
+                >
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                </select>
+            </div>
+            <div className="flex flex-col my-2">
+                <label htmlFor="">How do you want people to show attendance?</label>
+                <div>
+                    <label htmlFor="ticket">Ticket</label>
+                    <input
+                        type="radio"
+                        id="ticket"
+                        value="ticket"
+                        checked={newSession.hasTicket}
+                        onChange={() => setNewSession({ ...newSession, hasTicket: !newSession.hasTicket })}
+                    />
+                    <label htmlFor="RSVP">RSVP</label>
+                    <input
+                        type="radio"
+                        id="RSVP"
+                        value="RSVP"
+                        checked={!newSession.hasTicket}
+                        onChange={() => setNewSession({ ...newSession, hasTicket: !newSession.hasTicket })}
+                    />
+                </div>
             </div>
             <div className="flex flex-col gap-1 my-1 w-full">
                 <label htmlFor="amount">Amount of tickets</label>
@@ -108,88 +117,18 @@ const Step2 = ({
                     onChange={(e) => setAmountTickets(e.target.value)}
                 />
             </div>
-            <div className="flex flex-col gap-1 my-1 w-full">
-                <div>
-                    Create vouchers?
-                    <input checked={hasVouchers} type="checkbox" onChange={() => setHasVouchers(!hasVouchers)} />
-                </div>
-                {hasVouchers ? (
-                    <div>
-                        <div className="flex flex-col gap-1 my-1">
-                            <label htmlFor="amount">Voucher code (has to be atleast 5 characters.)</label>
-                            <input
-                                className="border border-2 mx-2"
-                                id="amount"
-                                type="text"
-                                value={voucher.code}
-                                onChange={(e) => setVoucher({ ...voucher, code: e.target.value })}
-                            />
-                        </div>
-                        <div className="flex flex-col gap-1 my-1">
-                            <label htmlFor="amount">Amount of Vouchers</label>
-                            <input
-                                className="border border-2 mx-2"
-                                id="amount"
-                                type="number"
-                                min="0"
-                                max="1000"
-                                value={voucher.amount}
-                                onChange={(e) => setVoucher({ ...voucher, amount: e.target.value })}
-                            />
-                        </div>
-                        <div className="flex flex-col gap-1 my-1">
-                            <label htmlFor="amount">Voucher price</label>
-                            <input
-                                className="border border-2 mx-2"
-                                id="amount"
-                                type="number"
-                                min="0"
-                                max="1000"
-                                value={voucher.price}
-                                onChange={(e) => setVoucher({ ...voucher, price: e.target.value })}
-                            />
-                        </div>
-                    </div>
-                ) : (
-                    ""
-                )}
-            </div>
-            <div className="w-full flex flex-col md:flex-row gap-5 justify-center items-center my-5">
-                <button
-                    type="button"
-                    className="w-[200px] lex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
-                    onClick={handleAddTicket}
-                >
-                    Add Ticket
-                </button>
-            </div>
-            <div className="flex flex-col">
-                <h1>Tickets to be add.</h1>
-                <div className="flex flex-wrap mt-5 gap-2">
-                    {newTickets ? (
-                        newTickets.map((ticket, index) => (
-                            <div
-                                key={index}
-                                className="relative border border-black rounded-md bg-brand-white w-[200px] flex flex-col justify-between"
-                            >
-                                <div className="flex flex-col p-2 justify-between h-full">
-                                    <h1>Name:{ticket.name}</h1>
-                                    <h1>${ticket.price}</h1>
-                                    <h1>Desc:{ticket.description}</h1>
-                                </div>
-                                <div className="w-full bg-zulalu-primary text-white h-[30px] flex items-center">
-                                    <button className="w-full" onClick={() => handleRemoveTicket(index)}>
-                                        delete ticket
-                                    </button>
-                                </div>
-                            </div>
-                        ))
-                    ) : (
-                        <div>
-                            <h1>No tickets to be add.</h1>
-                        </div>
-                    )}
-                </div>
+
+            <div className="flex flex-col my-2">
+                <label htmlFor="info">Additional Information</label>
+                <textarea
+                    className="border border-2 p-1 w-full"
+                    placeholder="Additional info"
+                    name="info"
+                    id="info"
+                    rows={5}
+                    value={newSession.info}
+                    onChange={(e) => setNewSession({ ...newSession, info: e.target.value })}
+                />
             </div>
             <div className="w-full flex flex-col md:flex-row gap-5 justify-center items-center mt-5">
                 <button
