@@ -7,13 +7,11 @@ const supabase = createClient(supabaseUrl, supabaseKey as string)
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
-        const userId = req.query.userId === undefined ? 0 : (req.query.userId as unknown as number)
-
         const response = await supabase
             .from("sessions")
             .select("*, participants (*), favoritedSessions:favorited_sessions (*)")
-            .eq("participants.user_id", userId)
-            .eq("favoritedSessions.user_id", userId)
+            .eq("participants.user_id", req.query.userId)
+            .eq("favoritedSessions.user_id", req.query.userId)
         if (response.error === null) res.status(200).send(response.data)
         else res.status(response.status).send(response.error)
     } catch (err: any) {
