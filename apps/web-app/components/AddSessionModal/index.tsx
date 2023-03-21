@@ -9,6 +9,7 @@ import ModalSteps from "./ModalSteps"
 import Step1 from "./Step1"
 import Step2 from "./Step2"
 import Step3 from "./Step3"
+import { EventsDTO } from "../../types"
 
 type NewSessionState = {
     name: string
@@ -34,7 +35,7 @@ type Props = {
     isOpen: boolean
     closeModal: (b: boolean) => void
     eventId: string
-    event: any
+    event: EventsDTO
 }
 
 const AddSessionModal = ({ isOpen, closeModal, eventId, event }: Props) => {
