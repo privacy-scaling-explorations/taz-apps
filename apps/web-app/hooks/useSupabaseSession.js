@@ -12,6 +12,7 @@ export const useSession = () => {
   useEffect(() => {
     (async () => {
       const session = await supabase.auth.getSession();
+      console.log(session)
       setSessionToken(session);
       console.log(sessionToken);
       const { data: authListener } = supabase.auth.onAuthStateChange(
@@ -25,7 +26,7 @@ export const useSession = () => {
         authListener.unsubscribe();
       };
     })()
-  }, []);
+  }, [sessionToken]);
 
   return sessionToken;
 };

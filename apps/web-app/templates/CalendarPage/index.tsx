@@ -3,12 +3,17 @@ import { useRouter } from "next/router";
 import NextImage from "next/image";
 import Link from "next/link";
 
+import { createClient } from "@supabase/supabase-js";
 import AddSessionModal from "../../components/AddSessionModal";
 import CalendarPageSessions from "../../components/Sessions/CalendarPageSessions";
 
 import { SessionsDTO } from "../../types";
 import BaseTemplate from "../Base";
-import { getUserOnID } from "../../hooks/getUserOnID";
+import { getUserSession } from "../../hooks/getUserSession";
+
+const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co";
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey as string);
 
 type Props = {
   sessions: SessionsDTO[];
@@ -19,7 +24,7 @@ const CalendarPage = ({ sessions }: Props) => {
   const dateRef = useRef(null);
   const localtionRef = useRef(null);
   const { parentMessageId } = router.query;
-  const userObj = getUserOnID();
+  const userObj = getUserSession();
 
   const [openAddSessionModal, setOpenAddSessionModal] = useState(false);
   const [selectedWeeks, setSelectedWeeks] = useState<string[]>([]);
@@ -28,6 +33,15 @@ const CalendarPage = ({ sessions }: Props) => {
 
   const [openFilterOptions, setOpenFilterOptions] = useState(false);
   const [openLocationFilter, setOpenLocationFilter] = useState(false);
+  const [session, setSession] = useState<any>(null);
+
+  useEffect(() => {
+    (async () => {
+      const userSession = await supabase.auth.getUser();
+      console.log("user object", userSession);
+      setSession(userSession);
+    })();
+  }, []);
 
   const filterOptions = [
     {
@@ -167,7 +181,7 @@ const CalendarPage = ({ sessions }: Props) => {
               <h1 className="text-[40px] text-[#37352F] font-[600]">
                 Week 1 | March 25-31
               </h1>
-              {userObj && userObj.data ? (
+              {session && session.data.user.user_metadata.role === "sub-organizer" ? (
                 <>
                   <button
                     className="flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"

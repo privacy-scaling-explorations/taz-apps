@@ -4,12 +4,16 @@ import { useRouter } from "next/router"
 import NextImage from "next/image"
 import moment from "moment"
 import { ToastContainer } from "react-toastify"
+import { createClient } from "@supabase/supabase-js";
 import AddSessionModal from "../../components/AddSessionModal"
 import Sessions from "../../components/Sessions"
-
 import { EventsDTO, SessionsDTO } from "../../types"
 import BaseTemplate from "../Base"
 import "react-toastify/dist/ReactToastify.css"
+
+const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co";
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey as string);
 
 type Props = {
     event: EventsDTO
@@ -25,6 +29,7 @@ const EventPage = ({ event, sessions }: Props) => {
     const [updateEventModal, setUpdateEventModal] = useState(false)
     const [selectedOptions, setSelectedOptions] = useState<string[]>([])
     const [openFilterOptions, setOpenFilterOptions] = useState(false)
+    const [session, setSession] = useState<any>(null);
 
     const startDate = moment(new Date(event.startDate)).add(1, "day")
     const endDate = moment(new Date(event.endDate)).add(1, "day")
@@ -34,6 +39,14 @@ const EventPage = ({ event, sessions }: Props) => {
     const filterAfter = new Date(event.endDate)
 
     const dateOptions = []
+
+    useEffect(() => {
+      (async () => {
+        const userSession = await supabase.auth.getUser();
+        console.log("user object", userSession);
+        setSession(userSession);
+      })();
+    }, []);
 
     for (let date = filterSince; date <= filterAfter; date.setDate(date.getDate() + 1)) {
         const option = moment(new Date(date)).add(1, "day").format("dddd, MMMM Do, YYYY")
