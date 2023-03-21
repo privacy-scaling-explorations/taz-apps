@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { createClient } from '@supabase/supabase-js'
-const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co"
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY
-const supabase = createClient(supabaseUrl, supabaseKey)
+import { createClient } from "@supabase/supabase-js";
+const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co";
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 function SignupPage() {
   const [firstName, setFirstName] = useState("");
@@ -14,8 +14,22 @@ function SignupPage() {
     event.preventDefault();
 
     try {
-      const { data, error } = await supabase.auth.signUp({ email, password });
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            role: "sub-organizer"
+          },
+        },
+      });
       alert("Congrats! You're signed up, now sign in on the main page");
+    } catch (error) {}
+  }
+
+  async function handleLogout() {
+    try {
+      await supabase.auth.signOut();
     } catch (error) {}
   }
 
@@ -59,6 +73,12 @@ function SignupPage() {
             Sign up
           </button>
         </form>
+        <button
+          onClick={handleLogout}
+          className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 mt-4"
+        >
+          Log Out
+        </button>
       </div>
     </div>
   );
