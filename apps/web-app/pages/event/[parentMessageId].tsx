@@ -1,12 +1,11 @@
 import { GetServerSideProps } from "next"
 
-import { EventsDTO, ParticipantsDTO, FavoritedEventsDTO } from "../../types"
+import { EventsDTO, SessionsDTO } from "../../types"
 import EventPage from "../../templates/EventPage"
 
 type Props = {
     event: EventsDTO
-    participants: ParticipantsDTO[]
-    favoritedEvents: FavoritedEventsDTO[]
+    sessions: SessionsDTO[]
 }
 
 export default function Event({ event, sessions }: Props) {
