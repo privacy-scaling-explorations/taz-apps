@@ -1,8 +1,11 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useRef } from "react";
-import {
-  requestZuzaluMembershipProof
-} from "@pcd/passport-interface";
+import { Fragment, useRef, useState } from "react";
+import { requestZuzaluMembershipProof } from "@pcd/passport-interface";
+import { createClient } from "@supabase/supabase-js";
+
+const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co";
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey as string);
 
 // 1. urlToPassportWebsite
 // 2. returnUrl
@@ -15,19 +18,34 @@ type Props = {
 };
 
 const PassportModal = ({ openPassportModal, setOpenPassportModal }: Props) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleEmailChange = (event) => setEmail(event.target.value);
+  const handlePasswordChange = (event) => setPassword(event.target.value);
   const inputRef = useRef(null);
 
   async function zuzaluMembershipProof() {
     const proof = await requestZuzaluMembershipProof(
       "https://pcd-passport.com/",
-      "https://6bf3-2806-107e-13-6229-4d38-aba6-4ef-dec1.ngrok.io/complete-identity-proof/",
+      "https://bed8-2806-107e-13-6229-d584-c0de-219e-7dcd.ngrok.io/complete-identity-proof/",
       "https://api.pcd-passport.com/semaphore/1",
       // eslint-disable-next-line no-return-assign
       (url) => (window.location.href = url)
     );
-    console.log(proof)
-
+    console.log(proof);
   }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      console.error(error);
+    } else {
+      console.log(data);
+    }
+    setOpenPassportModal(false)
+  };
   return (
     <Transition.Root show={openPassportModal} as={Fragment}>
       <Dialog
@@ -73,21 +91,43 @@ const PassportModal = ({ openPassportModal, setOpenPassportModal }: Props) => {
                     prove Zuzalu citizenship without revealing who you are.
                   </h1>
                   <div className="flex flex-col gap-5 mt-10 w-full items-center">
-                    <input
+                    <form onSubmit={handleSubmit}>
+                      <input
+                        className="bg-[#19473F] text-white text-center rounded-[58px] h-[45px] w-5/6 border border-[#ffffff4d] focus:outline-none focus:ring-0"
+                        type="email"
+                        placeholder="email address"
+                        value={email}
+                        onChange={handleEmailChange}
+                      />
+
+                      <input
+                        className="bg-[#19473F] mt-4 text-white text-center rounded-[58px] h-[45px] w-5/6 border border-[#ffffff4d] focus:outline-none focus:ring-0"
+                        type="password"
+                        value={password}
+                        placeholder="password"
+                        onChange={handlePasswordChange}
+                      />
+                      <div className="w-full my-4 h-[0px] border-t border-[#ffffff4d]" />
+                      <button
+                        onClick={handleSubmit}
+                        className="bg-zulalu-yellow text-center rounded-[58px] h-[45px] w-5/6 border border-[#ffffff4d]"
+                      >
+                        Verify Passport
+                      </button>
+                    </form>
+                    {/* <input
                       className="bg-[#19473F] text-white text-center rounded-[58px] h-[45px] w-5/6 border border-[#ffffff4d] focus:outline-none focus:ring-0"
                       placeholder="email address"
                     />
+                    <input
+                      className="bg-[#19473F] text-white text-center rounded-[58px] h-[45px] w-5/6 border border-[#ffffff4d] focus:outline-none focus:ring-0"
+                      placeholder="password"
+                    /> */}
 
-                    <button className="bg-zulalu-yellow text-center rounded-[58px] h-[45px] w-5/6 border border-[#ffffff4d]">
+                    {/* <button className="bg-zulalu-yellow text-center rounded-[58px] h-[45px] w-5/6 border border-[#ffffff4d]">
                       Generate Pass
-                    </button>
-                    <div className="w-full h-[0px] border-t border-[#ffffff4d]" />
-                    <button
-                      onClick={zuzaluMembershipProof}
-                      className="bg-zulalu-yellow text-center rounded-[58px] h-[45px] w-5/6 border border-[#ffffff4d]"
-                    >
-                      Verify Passport
-                    </button>
+                    </button> */}
+
                   </div>
                   <div
                     onClick={() => setOpenPassportModal(false)}

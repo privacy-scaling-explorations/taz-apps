@@ -19,11 +19,11 @@ const CalendarPageSessions = ({ sessions }: Props) => (
                 <div className="w-full flex flex-col items-start gap-[32px] bg-[#FCFFFE]] rounded-[16px] p-[16px]">
                     <div className="w-full flex flex-row justify-between items-center gap-[67px]]">
                         <div className="flex flex-row items-center gap-[16px]">
-                            {/* <NextLink href={`/event/${event.id}/session/${item.id}`}> */}
-                            <h3 className="text-lg text-[#424242] font-[600] text-[24px] border-b border-[#52B5A4] cursor-pointer">
-                                {item.name}
-                            </h3>
-                            {/* </NextLink> */}
+                            <NextLink href={`/event/${item.event_id}/session/${item.id}`}>
+                                <h3 className="text-lg text-[#424242] font-[600] text-[24px] border-b border-[#52B5A4] cursor-pointer">
+                                    {item.name}
+                                </h3>
+                            </NextLink>
                             <NextImage
                                 className="text-[#91A8A7] cursor-pointer"
                                 src={"/vector-bookmark.svg"}
@@ -42,14 +42,20 @@ const CalendarPageSessions = ({ sessions }: Props) => (
                     </div>
                     <div className="w-full flex flex-col md:flex-row gap-[32px] justify-between md:items-center items-start">
                         <div className="flex flex-row items-start gap-[8px]">
-                            {item.organizers.map((organizer, key) => (
+                            {item.team_members.map((organizer, key) => (
                                 <div
                                     className="flex flex-row items-center bg-[#E4EAEA] py-[4px] px-[8px] gap-[8px] text-sm rounded-[4px]"
                                     key={key}
                                 >
-                                    <NextImage src={"/user-icon-6.svg"} alt="user-icon-6" width={24} height={24} />
+                                    {organizer.role === "Speaker" && (
+                                        <NextImage src={"/user-icon-6.svg"} alt="user-icon-6" width={24} height={24} />
+                                    )}
+                                    {organizer.role === "Organizer" && (
+                                        <NextImage src={"/user-icon-4.svg"} alt="user-icon-6" width={24} height={24} />
+                                    )}
                                     <p className="text-[#1C2928] font-[400] text-[16px]">
-                                        Organizer: <span className="font-[600] capitalize">{organizer}</span>
+                                        {organizer.role}:{" "}
+                                        <span className="font-[600] capitalize">{organizer.name}</span>
                                     </p>
                                 </div>
                             ))}
@@ -72,4 +78,5 @@ const CalendarPageSessions = ({ sessions }: Props) => (
         ))}
     </div>
 )
+
 export default CalendarPageSessions

@@ -54,7 +54,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res, query }) => 
         const session = await response.json()
 
         return {
-            props: { session }
+            props: { session: session[0] }
         }
     } catch (error) {
         res.statusCode = 404
