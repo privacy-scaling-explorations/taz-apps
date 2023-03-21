@@ -23,6 +23,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res, query }) => 
         )
         const event = await response.json()
         const sessions = await sessionsResponse.json()
+        console.log("Sessions", sessions)
 
         return {
             props: { event, sessions }
