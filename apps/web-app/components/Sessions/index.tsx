@@ -1,8 +1,10 @@
 import NextImage from "next/image"
 import { useRouter } from "next/router"
+import { useState } from "react"
 import NextLink from "next/link"
 import axios from "axios"
 import { toast } from "react-toastify"
+import BuyTicketModal from "../BuyTicketModal"
 import { SessionsDTO, EventsDTO } from "../../types"
 
 type Props = {
@@ -11,6 +13,8 @@ type Props = {
 }
 
 const Sessions = ({ event, sessions }: Props) => {
+    const [openBuyTicketModal, setOpenBuyTicketModal] = useState(false)
+
     const router = useRouter()
     const LOGGED_IN_USER_ID = 1
 
@@ -93,6 +97,10 @@ const Sessions = ({ event, sessions }: Props) => {
             })
     }
 
+    const closeOpenTicketModal = (close = false) => {
+        if (close) setOpenBuyTicketModal(false)
+    }
+
     return (
         <div className="w-full flex flex-col items-start py-[2px] gap-[16px] rounded-[16px]">
             {sessions.map((item, index) => (
@@ -134,12 +142,19 @@ const Sessions = ({ event, sessions }: Props) => {
                                     SEE YOU THERE!
                                 </button>
                             ) : item.hasTicket ? (
-                                <button
-                                    className="bg-[#35655F] text-white py-[4px] px-[16px] text-[16px] rounded-[6px]"
-                                    onClick={() => handleClickAttend(item.id)}
-                                >
-                                    BUY TICKET
-                                </button>
+                                <>
+                                    <button
+                                        className="bg-[#35655F] text-white py-[4px] px-[16px] text-[16px] rounded-[6px]"
+                                        onClick={() => setOpenBuyTicketModal(true)}
+                                    >
+                                        BUY TICKET
+                                    </button>
+                                    <BuyTicketModal
+                                        closeModal={closeOpenTicketModal}
+                                        isOpen={openBuyTicketModal}
+                                        sessionId={item.id}
+                                    />
+                                </>
                             ) : (
                                 <button
                                     className="bg-[#35655F] text-white py-[4px] px-[16px] text-[16px] rounded-[6px]"
