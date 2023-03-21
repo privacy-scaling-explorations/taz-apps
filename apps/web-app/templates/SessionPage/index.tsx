@@ -13,7 +13,8 @@ const SessionPage = ({ session, createRsvp, deleteRsvp }: Props) => {
     const LOGGED_IN_USER_ID = 1
 
     const { startDate, endTime, location, startTime } = session
-    const [rsvpId, setRsvpId] = useState(session.rsvps[0]?.id ?? 0)
+    // const [rsvpId, setRsvpId] = useState(session.rsvps[0]?.id ?? 0)
+    const [rsvpId, setRsvpId] = useState(0)
 
     const startDateFormatted = new Date(startDate).toLocaleDateString("en-US", { day: "numeric" })
     const startWeekDayFormatted = new Date(startDate).toLocaleDateString("en-US", { weekday: "long" })
@@ -89,18 +90,32 @@ const SessionPage = ({ session, createRsvp, deleteRsvp }: Props) => {
                         </div>
                         <div className="flex flex-row gap-[24px] w-full mt-4">
                             <div className="w-5/6 py-5">{session.info}</div>
-                            <div className="flex flex-wrap gap-[8px] w-3/6 p-5">
-                                {session.organizers &&
-                                    session.organizers.map((item, index) => (
-                                        <div
-                                            key={index}
-                                            className="flex w-auto rounded-[4px] gap-2 px-2 py-1 bg-[#E4EAEA] text-[16px]"
-                                        >
-                                            <NextImage src={"/user-icon-5.svg"} alt="calendar" width={24} height={24} />
-                                            <p>Organizer:</p>
-                                            <p className="font-bold">{item}</p>
-                                        </div>
-                                    ))}
+                            <div className="flex flex-wrap gap-5 w-3/6 p-5">
+                                {session.team_members.map((item, index) => (
+                                    <div
+                                        key={index}
+                                        className="flex w-auto rounded-[4px] gap-2 px-2 py-1 bg-[#E4EAEA] text-[16px]"
+                                    >
+                                        {item.role === "Speaker" && (
+                                            <NextImage
+                                                src={"/user-icon-6.svg"}
+                                                alt="user-icon-6"
+                                                width={24}
+                                                height={24}
+                                            />
+                                        )}
+                                        {item.role === "Organizer" && (
+                                            <NextImage
+                                                src={"/user-icon-4.svg"}
+                                                alt="user-icon-6"
+                                                width={24}
+                                                height={24}
+                                            />
+                                        )}
+                                        <p>{item.role}:</p>
+                                        <p className="font-bold">{item.name}</p>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>
@@ -122,16 +137,16 @@ const SessionPage = ({ session, createRsvp, deleteRsvp }: Props) => {
                         <div className="flex flex-col gap-[8px]">
                             <h4 className="text-xl font-semibold">About</h4>
                             <div className="flex items-center gap-1">
-                                Format: <p className="font-bold">Live</p>
+                                Format: <p className="font-bold">{session.format}</p>
                             </div>
                             <div className="flex items-center gap-1">
-                                Track: <p className="font-bold">ZK</p>
+                                Track: <p className="font-bold">{session.track}</p>
                             </div>
                             <div className="flex items-center gap-1">
-                                Type: <p className="font-bold">Workshop</p>
+                                Type: <p className="font-bold">{session.type}</p>
                             </div>
                             <div className="flex items-center gap-1">
-                                Level: <p className="font-bold">Intermediate</p>
+                                Level: <p className="font-bold">{session.level}</p>
                             </div>
                         </div>
                     </div>
