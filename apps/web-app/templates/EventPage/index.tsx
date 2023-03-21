@@ -126,7 +126,7 @@ const EventPage = ({ event, sessions }: Props) => {
                     </div>
                     <div className="flex flex-col w-full md:w-2/6 pl-5 pr-20">
                         <div className="flex my-5 w-full">
-                            <h1 className="text-black text-[10px] font-[600]">{event.name}</h1>
+                            <h1 className="text-black text-[52px] font-[600]">{`${event.name.substring(0, 30)}...`}</h1>
                         </div>
                         <div className="flex flex-col w-full gap-4">
                             <div className="flex gap-1 items-center justify-start">
