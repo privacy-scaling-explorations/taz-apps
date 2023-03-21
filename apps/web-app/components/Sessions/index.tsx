@@ -58,6 +58,12 @@ const Sessions = ({ event, sessions }: Props) => {
             })
     }
 
+    const handleBuyTicket = async (subEventId: number) => {
+        await axios.post("/api/pretix-create-order", {
+            subEventId: subEventId
+        })
+    }
+
     const handleAddFavorite = async (sessionId: number) => {
         await axios
             .post("/api/addFavoriteSession", {
@@ -136,9 +142,9 @@ const Sessions = ({ event, sessions }: Props) => {
                             ) : item.hasTicket ? (
                                 <button
                                     className="bg-[#35655F] text-white py-[4px] px-[16px] text-[16px] rounded-[6px]"
-                                    onClick={() => handleClickAttend(item.id)}
+                                    onClick={() => handleBuyTicket(item.subevent_id)}
                                 >
-                                    BUY TICKET
+                                    BUY TICKET {item.subevent_id}
                                 </button>
                             ) : (
                                 <button
