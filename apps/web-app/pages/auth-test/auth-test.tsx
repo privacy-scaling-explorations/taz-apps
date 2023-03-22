@@ -9,7 +9,13 @@ type Props = {
 export default function AuthTest({ sessions }: Props) {
     const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co"
     const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY
-    const supabase = createClient(supabaseUrl, supabaseKey as string)
+    const supabase = createClient(supabaseUrl, supabaseKey as string, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+        detectSessionInUrl: false
+      }
+    })
     supabase.auth.signInWithPassword({
         email: "test123@test123.com",
         password: "asdfasdf"

@@ -1,5 +1,6 @@
 import { createBrowserSupabaseClient, createServerSupabaseClient } from "@supabase/auth-helpers-nextjs"
 import { useEffect } from "react"
+import axios from "axios"
 
 export default function Simple() {
     const logStuff = async () => {
@@ -12,10 +13,7 @@ export default function Simple() {
         console.log("supabase.auth.getUser(): ", await supabase.auth.getUser())
 
         const url = process.env.URL_TO_FETCH
-        const response = await fetch(`${url}/api/fetchSessions/1`, {
-            method: "GET",
-            credentials: "same-origin"
-        })
+        const response = await axios.get(`${url}/api/fetchSessions/1`);
         const sessions = await response.json()
 
         console.log("session: ", sessions)

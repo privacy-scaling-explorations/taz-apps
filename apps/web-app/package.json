@@ -19,6 +19,7 @@
         "@semaphore-protocol/identity": "latest",
         "@semaphore-protocol/proof": "latest",
         "@semaphore-protocol/subgraph": "latest",
+        "@supabase/auth-helpers-nextjs": "^0.5.6",
         "@supabase/supabase-js": "^2.10.0",
         "@tailwindcss/line-clamp": "^0.4.2",
         "@testing-library/jest-dom": "^5.14.1",
