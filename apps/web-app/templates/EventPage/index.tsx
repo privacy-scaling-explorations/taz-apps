@@ -4,16 +4,14 @@ import { useRouter } from "next/router"
 import NextImage from "next/image"
 import moment from "moment"
 import { ToastContainer } from "react-toastify"
-import { createClient } from "@supabase/supabase-js"
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs"
 import AddSessionModal from "../../components/AddSessionModal"
 import Sessions from "../../components/Sessions"
 import { EventsDTO, SessionsDTO } from "../../types"
 import BaseTemplate from "../Base"
 import "react-toastify/dist/ReactToastify.css"
 
-const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co"
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY
-const supabase = createClient(supabaseUrl, supabaseKey as string)
+const supabase = createBrowserSupabaseClient()
 
 type Props = {
     event: EventsDTO
@@ -105,13 +103,17 @@ const EventPage = ({ event, sessions }: Props) => {
                                 <p>TICKETS</p>
                             </div>
                         </a>
-                        {session && session.data.user.user_metadata.event === event.name ?                         <button
-                            className="text-[#F8FFFE] bg-[#35655F] rounded-[8px] flex flex-row justify-center items-center py-[8px] px-[16px] flex flex-row gap-[8px]"
-                            onClick={() => setUpdateEventModal(true)}
-                        >
-                            <NextImage src={"/pencil.svg"} width={13} height={12} />
-                            <p>EDIT</p>
-                        </button> : ""}
+                        {session && session.data.user.user_metadata.event === event.name ? (
+                            <button
+                                className="text-[#F8FFFE] bg-[#35655F] rounded-[8px] flex flex-row justify-center items-center py-[8px] px-[16px] flex flex-row gap-[8px]"
+                                onClick={() => setUpdateEventModal(true)}
+                            >
+                                <NextImage src={"/pencil.svg"} width={13} height={12} />
+                                <p>EDIT</p>
+                            </button>
+                        ) : (
+                            ""
+                        )}
                     </div>
                 </div>
                 <div className="flex flex-col md:flex-row w-full justify-start bg-white rounded-[8px] h-[682px]">
