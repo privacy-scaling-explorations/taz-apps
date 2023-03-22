@@ -39,10 +39,9 @@ export interface SessionsDTO {
     tags: string[]
     endTime: string
     info: string
-    organizers: string[]
+    description: string
     team_members: { name: string; role: string }[]
     event_id: number
-    isOpen: boolean
     rsvps: RsvpDTO[]
     hasTicket: boolean
     participants: ParticipantsDTO[]
@@ -85,4 +84,33 @@ export interface FavoritedSessionsDTO {
     id: number
     session_id: number
     user_id: number
+}
+
+export interface TracksDTO {
+    id: number
+    type: string
+}
+
+export interface EventTypeDTO {
+    id: number
+    type: string
+    created_at: Date
+}
+
+export interface FormatDTO {
+    id: number
+    format: string
+    created_at: Date
+}
+
+export interface LevelDTO {
+    id: number
+    level: string
+    created_at: Date
+}
+
+export interface LocationDTO {
+    id: number
+    location: string
+    created_at: Date
 }

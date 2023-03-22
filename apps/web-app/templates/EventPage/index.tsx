@@ -171,7 +171,6 @@ const EventPage = ({ event, sessions }: Props) => {
                             <AddSessionModal
                                 closeModal={setOpenAddSessionModal}
                                 isOpen={openAddSessionModal}
-                                eventId={parentMessageId as string}
                                 event={event}
                             />
                         </div>

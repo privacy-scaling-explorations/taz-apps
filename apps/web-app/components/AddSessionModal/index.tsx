@@ -12,16 +12,12 @@ import Step3 from "./Step3"
 import { EventsDTO } from "../../types"
 
 type NewSessionState = {
-    name: string
-    organizers: string[]
     team_members: { name: string; role: string }[]
-    startDate: Date
-    endDate: Date
-    startTime: string
-    endTime: string
+    date: Date
     location: string
     tags: string[]
     info: string
+    description: string
     eventId: number
     hasTicket: boolean
     format: string
@@ -29,36 +25,33 @@ type NewSessionState = {
     equipment: string
     track: string
     type: string
+    name: string
 }
 
 type Props = {
     isOpen: boolean
     closeModal: (b: boolean) => void
-    eventId: string
     event: EventsDTO
 }
 
-const AddSessionModal = ({ isOpen, closeModal, eventId, event }: Props) => {
+const AddSessionModal = ({ isOpen, closeModal, event }: Props) => {
     const router = useRouter()
     const questionTextRef = useRef(null)
     const [isLoading, setIsLoading] = useState(false)
     const [steps, setSteps] = useState(1)
     const [newSession, setNewSession] = useState<NewSessionState>({
         name: "",
-        organizers: [],
         team_members: [],
-        startDate: new Date(),
-        endDate: new Date(),
-        startTime: "09:00",
-        endTime: "18:00",
+        date: new Date(),
         location: "Amphitheatre",
         tags: [],
         info: "",
-        eventId: parseInt(eventId),
+        eventId: event.id,
         hasTicket: false,
         format: "live",
         level: "beginner",
         equipment: "",
+        description: "",
         track: "ZK Week",
         type: "Workshop"
     })
@@ -71,8 +64,8 @@ const AddSessionModal = ({ isOpen, closeModal, eventId, event }: Props) => {
 
         const subEventRes = await axios.post(`/api/pretix-create-subevent`, {
             name: newSession.name,
-            startDate: newSession.startDate,
-            endDate: newSession.endDate,
+            startDate: newSession.date,
+            endDate: newSession.date,
             slug: event.slug,
             itemId: event.item_id
         })
@@ -109,16 +102,13 @@ const AddSessionModal = ({ isOpen, closeModal, eventId, event }: Props) => {
         setSteps(1)
         setNewSession({
             name: "",
-            organizers: [],
             team_members: [],
-            startDate: new Date(),
-            endDate: new Date(),
-            startTime: "09:00",
-            endTime: "18:00",
+            date: new Date(),
             location: "Amphitheatre",
             tags: [],
             info: "",
-            eventId: parseInt(eventId),
+            eventId: event.id,
+            description: "",
             hasTicket: false,
             track: "ZK Week",
             equipment: "",

@@ -28,15 +28,9 @@ const Header = () => {
                     </div>
                 </NextLink>
 
-                {session && session.data.user ? (
+                {session && session.data.user && (
                     <li className="flex gap-5 items-center text-white">
                         <h1>Passport Connected</h1>
-                    </li>
-                ) : (
-                    <li>
-                        <button className="bg-zulalu-primary text-white py-[8px] px-[16px] rounded-[8px]">
-                            Buy a badge
-                        </button>
                     </li>
                 )}
 

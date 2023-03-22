@@ -4,19 +4,15 @@ import "react-datepicker/dist/react-datepicker.css"
 import { useEffect, useRef, useState } from "react"
 import DatePicker from "react-datepicker"
 import axios from "axios"
-import { UserDTO } from "../../types"
+import { UserDTO, TracksDTO, FormatDTO, LevelDTO, LocationDTO, EventTypeDTO } from "../../types"
 
 type NewSessionState = {
-    name: string
-    organizers: string[]
     team_members: { name: string; role: string }[]
-    startDate: Date
-    endDate: Date
-    startTime: string
-    endTime: string
+    date: Date
     location: string
     tags: string[]
     info: string
+    description: string
     eventId: number
     hasTicket: boolean
     format: string
@@ -24,6 +20,7 @@ type NewSessionState = {
     equipment: string
     track: string
     type: string
+    name: string
 }
 
 type Props = {
@@ -33,13 +30,18 @@ type Props = {
 }
 
 const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
+    const { name, team_members, date, tags, description } = newSession
     const [teamMember, setTeamMember] = useState({ name: "", role: "Speaker" })
     const [tag, setTag] = useState("")
     const [rerender, setRerender] = useState(true)
     const [suggestions, setSuggestions] = useState<UserDTO[]>([])
     const [display, setDisplay] = useState(false)
+    const [tracksOpt, setTracksOpt] = useState<TracksDTO[]>()
+    const [formatsOpt, setFormatsOpt] = useState<FormatDTO[]>()
+    const [levelsOpt, setLevelsOpt] = useState<LevelDTO[]>()
+    const [locationsOpt, setLocationsOpt] = useState<LocationDTO[]>()
+    const [eventTypesOpt, setEventTypesOpt] = useState<EventTypeDTO[]>()
     const wraperRef = useRef(null)
-    const { endDate, endTime, info, location, name, organizers, team_members, startDate, startTime, tags } = newSession
 
     const handleAddTeamMember = () => {
         setNewSession({ ...newSession, team_members: [...newSession.team_members, teamMember] })
@@ -78,8 +80,54 @@ const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
             })
             .catch((err) => console.log(err))
     }
+
+    const fetchTraks = async () => {
+        await axios
+            .get("/api/fetchTracks")
+            .then((res) => {
+                setTracksOpt(res.data)
+            })
+            .catch((err) => console.log(err))
+    }
+
+    const fetchLevels = async () => {
+        await axios
+            .get("/api/fetchLevels")
+            .then((res) => {
+                setLevelsOpt(res.data)
+            })
+            .catch((err) => console.log(err))
+    }
+
+    const fetchEventTypes = async () => {
+        await axios
+            .get("/api/fetchEventTypes")
+            .then((res) => {
+                setEventTypesOpt(res.data)
+            })
+            .catch((err) => console.log(err))
+    }
+
+    const fetchFormats = async () => {
+        await axios
+            .get("/api/fetchFormats")
+            .then((res) => {
+                setFormatsOpt(res.data)
+            })
+            .catch((err) => console.log(err))
+    }
+
+    const fetchLocations = async () => {
+        await axios
+            .get("/api/fetchLocations")
+            .then((res) => {
+                setLocationsOpt(res.data)
+            })
+            .catch((err) => console.log(err))
+    }
+
     useEffect(() => {
-        fetchUsers()
+        Promise.all([fetchUsers(), fetchLevels(), fetchEventTypes(), fetchFormats(), fetchLocations(), fetchTraks()])
     }, [])
 
     useEffect(() => {
@@ -118,9 +166,9 @@ const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
                     className="border-[#C3D0CF] border-2 p-1 rounded-[8px] h-[150px]"
                     id="info"
                     placeholder="What will be covered during the session ?"
-                    value={info}
+                    value={description}
                     maxLength={2000}
-                    onChange={(e) => setNewSession({ ...newSession, info: e.target.value })}
+                    onChange={(e) => setNewSession({ ...newSession, description: e.target.value })}
                 />
                 <div className="flex w-full justify-end">
                     <h1 className="text-[14px] text-[#AAAAAA]">Max 2000 characters</h1>
@@ -130,6 +178,31 @@ const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
                 <label htmlFor="location" className="font-[600]">
                     Location*
                 </label>
+                <select
+                    id="location"
+                    name="location"
+                    className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px] w-full"
+                    onChange={(e) => setNewSession({ ...newSession, location: e.target.value })}
+                >
+                    {locationsOpt &&
+                        locationsOpt.map((item, index) => (
+                            <option key={index} value={item.location}>
+                                {item.location}
+                            </option>
+                        ))}
+                </select>
+            </div>
+            <div className="flex flex-col justify-start my-2">
+                <label className="font-[600]">Start Date*</label>
+                <DatePicker
+                    className="border-[#C3D0CF] border-2 p-1 rounded-[8px] h-[42px] w-full"
+                    selected={date}
+                    onChange={(e) => setNewSession({ ...newSession, date: e as Date })}
+                />
+            </div>
+
+            <div className="flex flex-col justify-start my-2">
+                <label className="font-[600]">Time Slot*</label>
                 <select
                     id="location"
                     name="location"
@@ -148,53 +221,6 @@ const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
                     <option value="Rock Bar">Rock Bar</option>
                     <option value="Tony's Bar">Tony's Bar</option>
                 </select>
-            </div>
-            <div className="flex flex-col md:flex-row justify-start gap-4 my-2">
-                <div className="flex flex-col w-full">
-                    <label className="font-[600]">Event Start*</label>
-                    <DatePicker
-                        className="border-[#C3D0CF] border-2 p-1 rounded-[8px] h-[42px] w-full"
-                        selected={startDate}
-                        onChange={(date) => setNewSession({ ...newSession, startDate: date as Date })}
-                    />
-                </div>
-                <div className="flex flex-col w-full">
-                    <label htmlFor="startTime" className="font-[600]">
-                        Time*
-                    </label>
-                    <input
-                        className="border-[#C3D0CF] border-2 p-1 rounded-[8px] h-[42px]"
-                        type="time"
-                        id="startTime"
-                        name="startTime"
-                        value={startTime}
-                        onChange={(e) => setNewSession({ ...newSession, startTime: e.target.value })}
-                    />
-                </div>
-            </div>
-
-            <div className="flex flex-col md:flex-row justify-start gap-4 my-2">
-                <div className="flex flex-col w-full">
-                    <label className="font-[600]">Event End*</label>
-                    <DatePicker
-                        className="border-[#C3D0CF] border-2 p-1 rounded-[8px] h-[42px] w-full"
-                        selected={endDate}
-                        onChange={(date) => setNewSession({ ...newSession, endDate: date as Date })}
-                    />
-                </div>
-                <div className="flex flex-col w-full">
-                    <label htmlFor="endTime" className="font-[600]">
-                        Time*
-                    </label>
-                    <input
-                        className="border-[#C3D0CF] border-2 p-1 rounded-[8px] h-[42px]"
-                        type="time"
-                        id="endTime"
-                        name="endTime"
-                        value={endTime}
-                        onChange={(e) => setNewSession({ ...newSession, endTime: e.target.value })}
-                    />
-                </div>
             </div>
 
             <div className="flex flex-col gap-4 w-full my-8">
@@ -289,11 +315,12 @@ const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
                     className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px]"
                     onChange={(e) => setNewSession({ ...newSession, track: e.target.value })}
                 >
-                    <option value="Zk Week">ZK Week</option>
-                    <option value="Public Goods">Public Goods</option>
-                    <option value="New Cities & Network States">New Cities & Network States</option>
-                    <option value="Longevity 0-1">Longevity 0-1</option>
-                    <option value="Synthetic Biology">Synthetic Biology</option>
+                    {tracksOpt &&
+                        tracksOpt.map((item, index) => (
+                            <option key={index} value={item.type}>
+                                {item.type}
+                            </option>
+                        ))}
                 </select>
             </div>
             <div className="flex flex-col gap-1 my-2">
@@ -304,9 +331,12 @@ const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
                     className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px]"
                     onChange={(e) => setNewSession({ ...newSession, format: e.target.value })}
                 >
-                    <option value="live">Live</option>
-                    <option value="online">Online</option>
-                    <option value="live-online">Live + Online</option>
+                    {formatsOpt &&
+                        formatsOpt.map((item, index) => (
+                            <option key={index} value={item.format}>
+                                {item.format}
+                            </option>
+                        ))}
                 </select>
             </div>
             <div className="flex flex-col gap-1 my-2">
@@ -317,6 +347,12 @@ const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
                     className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px]"
                     onChange={(e) => setNewSession({ ...newSession, type: e.target.value })}
                 >
+                    {eventTypesOpt &&
+                        eventTypesOpt.map((item, index) => (
+                            <option key={index} value={item.type}>
+                                {item.type}
+                            </option>
+                        ))}
                     <option value="Workshop">Workshop</option>
                     <option value="Lecture">Lecture</option>
                     <option value="Other">Other</option>
@@ -330,9 +366,12 @@ const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
                     className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px]"
                     onChange={(e) => setNewSession({ ...newSession, level: e.target.value })}
                 >
-                    <option value="beginner">Beginner</option>
-                    <option value="intermediate">Intermediate</option>
-                    <option value="advanced">Advanced</option>
+                    {levelsOpt &&
+                        levelsOpt.map((item, index) => (
+                            <option key={index} value={item.level}>
+                                {item.level}
+                            </option>
+                        ))}
                 </select>
             </div>
             <div className="w-full flex flex-col my-10 items-center">
