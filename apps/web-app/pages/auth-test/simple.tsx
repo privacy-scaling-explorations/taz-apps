@@ -13,8 +13,8 @@ export default function Simple() {
         console.log("supabase.auth.getUser(): ", await supabase.auth.getUser())
 
         const url = process.env.URL_TO_FETCH
-        const response = await axios.get(`${url}/api/fetchSessions/1`);
-        const sessions = await response.json()
+        const response = await axios.get(`http://localhost:3000/api/fetchSessions/1`);
+        const sessions = await response.data.json()
 
         console.log("session: ", sessions)
 

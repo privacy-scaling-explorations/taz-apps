@@ -14,11 +14,11 @@ const MyApp = ({ Component, pageProps }) => {
     const [supabaseClient] = useState(() => createBrowserSupabaseClient())
     return (
         <SessionContextProvider supabaseClient={supabaseClient} initialSession={pageProps.initialSession}>
-            {/* <IdentityContextProvider> */}
+            <IdentityContextProvider>
             <PassportModalContextProvider>
                 <Component {...pageProps} />
             </PassportModalContextProvider>
-            {/* </IdentityContextProvider> */}
+            </IdentityContextProvider>
         </SessionContextProvider>
     )
 }

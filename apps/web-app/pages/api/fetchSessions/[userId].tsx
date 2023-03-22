@@ -42,7 +42,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 }
 
-const ProtectedRoute = async (req, res) => {
+const ProtectedRoute = async (req:any, res:any) => {
     // Create authenticated Supabase Client
     const supabase = createServerSupabaseClient({ req, res })
     // Check if we have a session
