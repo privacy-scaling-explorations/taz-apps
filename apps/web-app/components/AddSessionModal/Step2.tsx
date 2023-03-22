@@ -3,20 +3,27 @@ import { useState } from "react"
 import { IoMdArrowBack } from "react-icons/io"
 
 type NewSessionState = {
-    team_members: { name: string; role: string }[]
-    date: Date
-    location: string
-    tags: string[]
-    info: string
     description: string
-    eventId: number
-    hasTicket: boolean
-    format: string
-    level: string
     equipment: string
-    track: string
-    type: string
+    event_id: number
+    event_item_id: string
+    event_slug: string
+    event_type: string
+    format: string
+    hasTicket: boolean
+    info: string
+    level: string
+    location: string
     name: string
+    startDate: Date
+    startTime: string
+    subevent_id: number
+    tags: string[]
+    team_members: {
+        name: string
+        role: string
+    }[]
+    track: string
 }
 
 type Props = {
@@ -60,22 +67,24 @@ const Step2 = ({ setSteps, amountTickets, setAmountTickets, newSession, setNewSe
                     </div>
                 </div>
             </div>
-            {newSession.hasTicket ?
-            <div className="flex flex-col gap-1 my-1 w-full">
-                <label htmlFor="amount" className="font-[600]">
-                    How many tickets?
-                </label>
-                <input
-                    className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px]"
-                    id="amount"
-                    type="number"
-                    min="0"
-                    max="1000"
-                    value={amountTickets}
-                    onChange={(e) => setAmountTickets(e.target.value)}
-                />
-            </div>
-            : ""}
+            {newSession.hasTicket ? (
+                <div className="flex flex-col gap-1 my-1 w-full">
+                    <label htmlFor="amount" className="font-[600]">
+                        How many tickets?
+                    </label>
+                    <input
+                        className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px]"
+                        id="amount"
+                        type="number"
+                        min="0"
+                        max="1000"
+                        value={amountTickets}
+                        onChange={(e) => setAmountTickets(e.target.value)}
+                    />
+                </div>
+            ) : (
+                ""
+            )}
             <div className="flex flex-col my-2">
                 <label htmlFor="equipment" className="font-[600]">
                     Do you need equipment?

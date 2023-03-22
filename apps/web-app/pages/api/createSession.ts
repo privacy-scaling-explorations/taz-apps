@@ -18,40 +18,41 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             organizers,
             tags,
             info,
-            eventId,
+            event_id,
             hasTicket,
-            type,
+            event_type,
             format,
             equipment,
             team_members,
             track,
-            subEventId
+            subevent_id
         } = req.body
 
-        console.log("event_id", eventId)
+        const response = await supabase
+            .from("sessions")
+            .insert({
+                name,
+                startDate,
+                endDate,
+                location,
+                startTime,
+                endTime,
+                organizers,
+                tags,
+                info,
+                event_id,
+                hasTicket,
+                event_type,
+                format,
+                team_members,
+                track,
+                equipment,
+                subevent_id
+            })
+            .select()
 
-        await supabase.from("sessions").insert({
-            name,
-            startDate,
-            endDate,
-            location,
-            startTime,
-            endTime,
-            organizers,
-            tags,
-            info,
-            event_id: eventId,
-            hasTicket,
-            type,
-            format,
-            team_members,
-            track,
-            equipment,
-            subevent_id: subEventId
-        })
-        // console.log("Response: ", response)
-
-        res.status(201).json("Event created")
+        if (response.error === null) res.status(201).send(response.data[0])
+        else res.status(response.status).send(response.error)
     } catch (err: any) {
         console.log("error: ", err)
         res.status(500).json({ statusCode: 500, message: err.message })

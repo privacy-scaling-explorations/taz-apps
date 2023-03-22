@@ -1,36 +1,46 @@
 /* eslint-disable prefer-const */
-import "react-autocomplete-input/dist/bundle.css"
-import "react-datepicker/dist/react-datepicker.css"
+
 import { useEffect, useRef, useState } from "react"
 import DatePicker from "react-datepicker"
 import axios from "axios"
-import { UserDTO, TracksDTO, FormatDTO, LevelDTO, LocationDTO, EventTypeDTO } from "../../types"
+import moment from "moment"
+import { ToastContainer, toast } from "react-toastify"
+
+import { UserDTO, TracksDTO, FormatDTO, LevelDTO, LocationDTO, EventTypeDTO, SessionsDTO } from "../../types"
 
 type NewSessionState = {
-    team_members: { name: string; role: string }[]
-    date: Date
-    location: string
-    tags: string[]
-    info: string
     description: string
-    eventId: number
-    hasTicket: boolean
-    format: string
-    level: string
     equipment: string
-    track: string
-    type: string
+    event_id: number
+    event_item_id: string
+    event_slug: string
+    event_type: string
+    format: string
+    hasTicket: boolean
+    info: string
+    level: string
+    location: string
     name: string
+    startDate: Date
+    startTime: string
+    subevent_id: number
+    tags: string[]
+    team_members: {
+        name: string
+        role: string
+    }[]
+    track: string
 }
 
 type Props = {
     newSession: NewSessionState
     setNewSession: (newEvent: NewSessionState) => void
     setSteps: (steps: number) => void
+    sessions: SessionsDTO[]
 }
 
-const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
-    const { name, team_members, date, tags, description } = newSession
+const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
+    const { name, team_members, startDate, tags, description } = newSession
     const [teamMember, setTeamMember] = useState({ name: "", role: "Speaker" })
     const [tag, setTag] = useState("")
     const [rerender, setRerender] = useState(true)
@@ -41,6 +51,22 @@ const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
     const [levelsOpt, setLevelsOpt] = useState<LevelDTO[]>()
     const [locationsOpt, setLocationsOpt] = useState<LocationDTO[]>()
     const [eventTypesOpt, setEventTypesOpt] = useState<EventTypeDTO[]>()
+
+    const [slotsUnavailable, setSlotsUnavailable] = useState([
+        { time: "09", disabled: false },
+        { time: "10", disabled: false },
+        { time: "11", disabled: false },
+        { time: "12", disabled: false },
+        { time: "13", disabled: false },
+        { time: "14", disabled: false },
+        { time: "15", disabled: false },
+        { time: "16", disabled: false },
+        { time: "17", disabled: false },
+        { time: "18", disabled: false },
+        { time: "19", disabled: false },
+        { time: "20", disabled: false }
+    ])
+
     const wraperRef = useRef(null)
 
     const handleAddTeamMember = () => {
@@ -138,13 +164,71 @@ const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
         }
     }, [])
 
+    useEffect(() => {
+        const selectedLocation = newSession.location.toLocaleLowerCase()
+        const filteredSession = sessions
+            .filter((item) => item.location.toLocaleLowerCase() === selectedLocation)
+            .filter((item) => {
+                const selectedDate = moment(new Date(newSession.startDate)).format("MMM d, yyyy")
+                const newSessionStartDate = moment(new Date(item.startDate)).add(1, "day").format("MMM d, yyyy")
+
+                return selectedDate === newSessionStartDate
+            })
+            .map((item) => item.startTime.split(":")[0])
+
+        const newSlotsUnavailable = slotsUnavailable.map((slot) => {
+            if (filteredSession.includes(slot.time)) {
+                return { ...slot, disabled: true }
+            }
+            return { ...slot, disabled: false }
+        })
+
+        // const slotAvailable = newSlotsUnavailable.find((item) => item.disabled === false)
+
+        setSlotsUnavailable(newSlotsUnavailable)
+    }, [newSession])
+
     // const checkIfAnyOtherSuggestion =
     //     suggestions
     //         .filter((item) => !organizers.includes(item.userName))
     //         .filter(({ userName }) => userName.toLowerCase().indexOf(organizer.toLowerCase()) > -1).length !== 0
 
+    const handleNextStep = () => {
+        if (
+            newSession.name.length === 0 ||
+            newSession.description.length === 0 ||
+            newSession.location === "" ||
+            newSession.team_members.length === 0 ||
+            newSession.startTime === "00"
+        ) {
+            return toast.error("Please fill all inputs required.", {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light"
+            })
+        }
+
+        setSteps(2)
+    }
     return (
         <div className="flex flex-col w-full">
+            <ToastContainer
+                position="top-center"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
             <div className="flex flex-col gap-1 my-1 w-full">
                 <label htmlFor="name" className="font-[600]">
                     Title*
@@ -184,6 +268,7 @@ const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
                     className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px] w-full"
                     onChange={(e) => setNewSession({ ...newSession, location: e.target.value })}
                 >
+                    <option value="Select Location">Select Location</option>
                     {locationsOpt &&
                         locationsOpt.map((item, index) => (
                             <option key={index} value={item.location}>
@@ -196,32 +281,31 @@ const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
                 <label className="font-[600]">Start Date*</label>
                 <DatePicker
                     className="border-[#C3D0CF] border-2 p-1 rounded-[8px] h-[42px] w-full"
-                    selected={date}
-                    onChange={(e) => setNewSession({ ...newSession, date: e as Date })}
+                    selected={startDate}
+                    onChange={(e) => setNewSession({ ...newSession, startDate: e as Date })}
+                    minDate={moment().toDate()}
                 />
             </div>
 
-            <div className="flex flex-col justify-start my-2">
-                <label className="font-[600]">Time Slot*</label>
-                <select
-                    id="location"
-                    name="location"
-                    className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px] w-full"
-                    onChange={(e) => setNewSession({ ...newSession, location: e.target.value })}
-                >
-                    <option value="Amphitheatre">Amphitheatre</option>
-                    <option value="Almara Beach">Almara beach</option>
-                    <option value="Ballroom">Ballroom</option>
-                    <option value="Board Room">Board Room</option>
-                    <option value="Dome">Dome</option>
-                    <option value="Kiki's Restaurant inside">Kiki's Restaurant inside</option>
-                    <option value="Kiki's Restaurant outside">Kiki's Restaurant outside</option>
-                    <option value="Lighthouse">Lighthouse</option>
-                    <option value="Gym">Outdoor Gym Deck</option>
-                    <option value="Rock Bar">Rock Bar</option>
-                    <option value="Tony's Bar">Tony's Bar</option>
-                </select>
-            </div>
+            {newSession.location !== "Select Location" && newSession.location !== "" && (
+                <div className="flex flex-col justify-start my-2">
+                    <label className="font-[600]">Time Slot*</label>
+                    <select
+                        id="location"
+                        name="location"
+                        value={newSession.startTime}
+                        className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px] w-full"
+                        onChange={(e) => setNewSession({ ...newSession, startTime: e.target.value })}
+                    >
+                        <option value="00">Select Slot</option>
+                        {slotsUnavailable.map((slot, index) => (
+                            <option key={index} value={slot.time} disabled={slot.disabled}>{`${slot.time}:00-${
+                                slot.time > "12" ? "PM" : "AM"
+                            }`}</option>
+                        ))}
+                    </select>
+                </div>
+            )}
 
             <div className="flex flex-col gap-4 w-full my-8">
                 <div className="flex flex-col md:flex-row w-full gap-4">
@@ -239,7 +323,9 @@ const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
                         />
                     </div>
                     <div className="flex flex-col w-full md:w-3/6">
-                        <label htmlFor="role">Role:</label>
+                        <label htmlFor="role" className="font-[600]">
+                            Role*
+                        </label>
                         <select
                             id="role"
                             name="role"
@@ -345,7 +431,7 @@ const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
                     id="type"
                     name="type"
                     className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px]"
-                    onChange={(e) => setNewSession({ ...newSession, type: e.target.value })}
+                    onChange={(e) => setNewSession({ ...newSession, event_type: e.target.value })}
                 >
                     {eventTypesOpt &&
                         eventTypesOpt.map((item, index) => (
@@ -374,11 +460,11 @@ const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
                         ))}
                 </select>
             </div>
-            <div className="w-full flex flex-col my-10 items-center">
+            <div className="w-full flex flex-col my-10 items-start">
                 <button
                     type="button"
                     className="w-full lex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
-                    onClick={() => setSteps(2)}
+                    onClick={() => handleNextStep()}
                 >
                     NEXT
                 </button>

@@ -3,20 +3,27 @@ import { IoMdArrowBack } from "react-icons/io"
 import Loading from "../Loading"
 
 type NewSessionState = {
-    team_members: { name: string; role: string }[]
-    date: Date
-    location: string
-    tags: string[]
-    info: string
     description: string
-    eventId: number
-    hasTicket: boolean
-    format: string
-    level: string
     equipment: string
-    track: string
-    type: string
+    event_id: number
+    event_item_id: string
+    event_slug: string
+    event_type: string
+    format: string
+    hasTicket: boolean
+    info: string
+    level: string
+    location: string
     name: string
+    startDate: Date
+    startTime: string
+    subevent_id: number
+    tags: string[]
+    team_members: {
+        name: string
+        role: string
+    }[]
+    track: string
 }
 
 type Props = {
@@ -28,11 +35,17 @@ type Props = {
 }
 
 const Step3 = ({ setSteps, newSession, handleSubmit, isLoading, amountTickets }: Props) => {
-    const day = newSession.date ? new Date(newSession.date).toLocaleDateString("en-US", { day: "numeric" }) : ""
+    const day = newSession.startDate
+        ? new Date(newSession.startDate).toLocaleDateString("en-US", { day: "numeric" })
+        : ""
 
-    const month = newSession.date ? new Date(newSession.date).toLocaleDateString("en-US", { month: "long" }) : ""
+    const month = newSession.startDate
+        ? new Date(newSession.startDate).toLocaleDateString("en-US", { month: "long" })
+        : ""
 
-    const weekday = newSession.date ? new Date(newSession.date).toLocaleDateString("en-US", { weekday: "long" }) : ""
+    const weekday = newSession.startDate
+        ? new Date(newSession.startDate).toLocaleDateString("en-US", { weekday: "long" })
+        : ""
 
     return (
         <div className="flex flex-col w-full gap-8 bg-white rounded-lg">
@@ -47,7 +60,7 @@ const Step3 = ({ setSteps, newSession, handleSubmit, isLoading, amountTickets }:
 
                 <div className="flex items-center gap-2">
                     <NextImage src="/vector-clock.svg" width={20} height={20} />
-                    <h1>13pm</h1>
+                    <h1>{newSession.startTime}</h1>
                 </div>
 
                 <div className="flex items-center gap-2">

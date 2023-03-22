@@ -9,7 +9,6 @@ import { useRouter } from "next/router"
 import { AiOutlineUser, AiOutlineEdit } from "react-icons/ai"
 
 import { ToastContainer, toast } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
 
 import Footer from "../Footer"
 import BackTAZ from "../ArrowNavigators/BackTAZ"
