@@ -33,82 +33,41 @@ const Step2 = ({ setSteps, amountTickets, setAmountTickets, newSession, setNewSe
         setSteps(3)
     }
     return (
-        <div className="flex flex-col w-full overflow-scroll">
-            <div className="flex flex-col gap-1 my-2">
-                <label htmlFor="tags">Track:</label>
-                <select
-                    id="track"
-                    name="track"
-                    onChange={(e) => setNewSession({ ...newSession, track: e.target.value })}
-                >
-                    <option value="Zk Week">ZK Week</option>
-                    <option value="Public Goods">Public Goods</option>
-                    <option value="New Cities & Network States">New Cities & Network States</option>
-                    <option value="Longevity 0-1">Longevity 0-1</option>
-                    <option value="Synthetic Biology">Synthetic Biology</option>
-                </select>
-            </div>
-            <div className="flex flex-col gap-1 my-2">
-                <label htmlFor="tags">Format:</label>
-                <select
-                    id="format"
-                    name="format"
-                    onChange={(e) => setNewSession({ ...newSession, format: e.target.value })}
-                >
-                    <option value="live">Live</option>
-                    <option value="online">Online</option>
-                    <option value="live-online">Live + Online</option>
-                </select>
-            </div>
-            <div className="flex flex-col gap-1 my-2">
-                <label htmlFor="type">Type:</label>
-                <select
-                    id="type"
-                    name="type"
-                    onChange={(e) => setNewSession({ ...newSession, type: e.target.value })}
-                >
-                    <option value="Workshop">Workshop</option>
-                    <option value="Lecture">Lecture</option>
-                    <option value="Other">Other</option>
-                </select>
-            </div>
-            <div className="flex flex-col gap-1 my-2">
-                <label htmlFor="level">Experience Level:</label>
-                <select
-                    id="level"
-                    name="level"
-                    onChange={(e) => setNewSession({ ...newSession, level: e.target.value })}
-                >
-                    <option value="beginner">Beginner</option>
-                    <option value="intermediate">Intermediate</option>
-                    <option value="advanced">Advanced</option>
-                </select>
-            </div>
-            <div className="flex flex-col my-2">
-                <label htmlFor="">How do you want people to show attendance?</label>
-                <div>
-                    <label htmlFor="ticket">Ticket</label>
-                    <input
-                        type="radio"
-                        id="ticket"
-                        value="ticket"
-                        checked={newSession.hasTicket}
-                        onChange={() => setNewSession({ ...newSession, hasTicket: !newSession.hasTicket })}
-                    />
-                    <label htmlFor="RSVP">RSVP</label>
-                    <input
-                        type="radio"
-                        id="RSVP"
-                        value="RSVP"
-                        checked={!newSession.hasTicket}
-                        onChange={() => setNewSession({ ...newSession, hasTicket: !newSession.hasTicket })}
-                    />
+        <div className="flex flex-col w-full gap-5">
+            <div className="flex flex-col my-2 gap-5">
+                <h1 className="text-[18px] font-[600]">How do you want people to show attendance?</h1>
+                <div className="flex flex-col gap-2">
+                    <div className="flex items-center gap-4">
+                        <input
+                            type="radio"
+                            id="ticket"
+                            value="ticket"
+                            className="w-[24px] h-[24px]"
+                            checked={newSession.hasTicket}
+                            onChange={() => setNewSession({ ...newSession, hasTicket: !newSession.hasTicket })}
+                        />
+                        <label htmlFor="ticket">Ticket</label>
+                    </div>
+                    <div className="flex items-center gap-4">
+                        <input
+                            type="radio"
+                            id="RSVP"
+                            value="RSVP"
+                            className="w-[24px] h-[24px]"
+                            checked={!newSession.hasTicket}
+                            onChange={() => setNewSession({ ...newSession, hasTicket: !newSession.hasTicket })}
+                        />
+                        <label htmlFor="RSVP">RSVP</label>
+                    </div>
                 </div>
             </div>
+            {newSession.hasTicket ?
             <div className="flex flex-col gap-1 my-1 w-full">
-                <label htmlFor="amount">Amount of tickets</label>
+                <label htmlFor="amount" className="font-[600]">
+                    How many tickets?
+                </label>
                 <input
-                    className="border border-2 mx-2"
+                    className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px]"
                     id="amount"
                     type="number"
                     min="0"
@@ -117,33 +76,52 @@ const Step2 = ({ setSteps, amountTickets, setAmountTickets, newSession, setNewSe
                     onChange={(e) => setAmountTickets(e.target.value)}
                 />
             </div>
+            : ""}
+            <div className="flex flex-col my-2">
+                <label htmlFor="equipment" className="font-[600]">
+                    Do you need equipment?
+                </label>
+                <input
+                    className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px]"
+                    id="equipment"
+                    type="text"
+                    value={newSession.equipment}
+                    onChange={(e) => setNewSession({ ...newSession, equipment: e.target.value })}
+                />
+            </div>
 
             <div className="flex flex-col my-2">
-                <label htmlFor="info">Additional Information</label>
+                <label htmlFor="info" className="font-[600]">
+                    Is there anything else we need to know?
+                </label>
                 <textarea
-                    className="border border-2 p-1 w-full"
-                    placeholder="Additional info"
+                    className="border-[#C3D0CF] border-2 p-1 rounded-[8px] h-[150px]"
+                    placeholder="Your answers will be shared with Zulalu Organizers"
                     name="info"
                     id="info"
                     rows={5}
+                    maxLength={2000}
                     value={newSession.info}
                     onChange={(e) => setNewSession({ ...newSession, info: e.target.value })}
                 />
+                <div className="flex w-full justify-end">
+                    <h1 className="text-[14px] text-[#AAAAAA]">Max 2000 characters</h1>
+                </div>
             </div>
-            <div className="w-full flex flex-col md:flex-row gap-5 justify-center items-center mt-5">
+            <div className="w-full flex flex-col gap-5 justify-center items-center mt-5">
                 <button
                     type="button"
-                    className="w-[200px] flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
+                    className="w-full flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
                     onClick={() => setSteps(1)}
                 >
-                    Back
+                    BACK
                 </button>
                 <button
                     type="button"
-                    className="w-[200px] flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
+                    className="w-full flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
                     onClick={handleSubmit}
                 >
-                    Next Step
+                    NEXT
                 </button>
             </div>
         </div>

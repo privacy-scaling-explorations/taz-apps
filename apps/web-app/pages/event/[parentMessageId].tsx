@@ -23,11 +23,13 @@ export const getServerSideProps: GetServerSideProps = async ({ res, query }) => 
         )
         const event = await response.json()
         const sessions = await sessionsResponse.json()
+        console.log("Sessions", sessions)
 
         return {
             props: { event, sessions }
         }
-    } catch (error) {
+    } catch (error : any) {
+        console.error('Error fetching sessions:', error.message);
         res.statusCode = 404
         return {
             props: {}

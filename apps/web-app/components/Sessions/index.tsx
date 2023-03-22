@@ -14,6 +14,7 @@ type Props = {
 
 const Sessions = ({ event, sessions }: Props) => {
     const [openBuyTicketModal, setOpenBuyTicketModal] = useState(false)
+    const [currentSubEventId, setCurrentSubEventId] = useState<any>(0)
 
     const router = useRouter()
     const LOGGED_IN_USER_ID = 1
@@ -60,6 +61,14 @@ const Sessions = ({ event, sessions }: Props) => {
                 console.log(err)
                 makeToast(false, "Error")
             })
+    }
+
+    const handleBuyTicket = async (subEventId: number) => {
+        await axios.post("/api/pretix-create-order", {
+            subEventId: subEventId,
+            slug: event.slug,
+            itemId: event.item_id
+        })
     }
 
     const handleAddFavorite = async (sessionId: number) => {
@@ -145,14 +154,18 @@ const Sessions = ({ event, sessions }: Props) => {
                                 <>
                                     <button
                                         className="bg-[#35655F] text-white py-[4px] px-[16px] text-[16px] rounded-[6px]"
-                                        onClick={() => setOpenBuyTicketModal(true)}
+                                        onClick={() => {
+                                            setCurrentSubEventId(item.subevent_id)
+                                            setOpenBuyTicketModal(true)
+                                        }}
                                     >
                                         BUY TICKET
                                     </button>
                                     <BuyTicketModal
                                         closeModal={closeOpenTicketModal}
                                         isOpen={openBuyTicketModal}
-                                        sessionId={item.id}
+                                        subEventId={currentSubEventId}
+                                        handleBuyTicket={handleBuyTicket}
                                     />
                                 </>
                             ) : (
@@ -166,7 +179,7 @@ const Sessions = ({ event, sessions }: Props) => {
                         </div>
                         <div className="w-full flex flex-row gap-[32px] justify-between items-center">
                             <div className="flex flex-row items-start gap-[8px]">
-                                {item.team_members?.map((organizer : any, key : any) => (
+                                {item.team_members?.map((organizer: any, key: any) => (
                                     <div
                                         className="flex flex-row items-center bg-[#E4EAEA] py-[4px] px-[8px] gap-[8px] text-sm rounded-[4px]"
                                         key={key}
