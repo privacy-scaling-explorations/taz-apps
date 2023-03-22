@@ -61,6 +61,7 @@ const Step2 = ({ setSteps, amountTickets, setAmountTickets, newSession, setNewSe
                     </div>
                 </div>
             </div>
+            {newSession.hasTicket ?
             <div className="flex flex-col gap-1 my-1 w-full">
                 <label htmlFor="amount" className="font-[600]">
                     How many tickets?
@@ -75,6 +76,7 @@ const Step2 = ({ setSteps, amountTickets, setAmountTickets, newSession, setNewSe
                     onChange={(e) => setAmountTickets(e.target.value)}
                 />
             </div>
+            : ""}
             <div className="flex flex-col my-2">
                 <label htmlFor="equipment" className="font-[600]">
                     Do you need equipment?

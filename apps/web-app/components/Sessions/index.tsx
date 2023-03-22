@@ -65,7 +65,9 @@ const Sessions = ({ event, sessions }: Props) => {
 
     const handleBuyTicket = async (subEventId: number) => {
         await axios.post("/api/pretix-create-order", {
-            subEventId: subEventId
+            subEventId: subEventId,
+            slug: event.slug,
+            itemId: event.item_id
         })
     }
 

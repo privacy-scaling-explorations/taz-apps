@@ -21,10 +21,6 @@ type Props = {
 }
 
 const EventPage = ({ event, sessions }: Props) => {
-    console.log("Starting Page!")
-    console.log("Event2", event)
-    console.log("Sessions2", sessions)
-
     const router = useRouter()
     const { parentMessageId } = router.query
     const wraperRef = useRef(null)
@@ -109,13 +105,13 @@ const EventPage = ({ event, sessions }: Props) => {
                                 <p>TICKETS</p>
                             </div>
                         </a>
-                        {/* {session && session.data.user.user_metadata.event === event.name ?                         <button
+                        {session && session.data.user.user_metadata.event === event.name ?                         <button
                             className="text-[#F8FFFE] bg-[#35655F] rounded-[8px] flex flex-row justify-center items-center py-[8px] px-[16px] flex flex-row gap-[8px]"
                             onClick={() => setUpdateEventModal(true)}
                         >
                             <NextImage src={"/pencil.svg"} width={13} height={12} />
                             <p>EDIT</p>
-                        </button> : ""} */}
+                        </button> : ""}
                     </div>
                 </div>
                 <div className="flex flex-col md:flex-row w-full justify-start bg-white rounded-[8px] h-[682px]">
@@ -146,7 +142,7 @@ const EventPage = ({ event, sessions }: Props) => {
                             <h1 className="text-black text-[24px]">Speakers</h1>
 
                             <div className="flex flex-wrap">
-                                {event.organizers.map((organizer, idx) => (
+                                {event.organizers?.map((organizer, idx) => (
                                     <div className="flex gap-2 bg-gray-200 rounded-[4px] px-3 py-1" key={idx}>
                                         <img src="/user-icon-4.svg" className="w-[24px] h-[24px]" />
                                         <h1 className="capitalize">{organizer}</h1>
