@@ -1,14 +1,16 @@
 import { useState } from "react"
 
-import { IoMdArrowBack } from "react-icons/io"
-
 type NewSessionState = {
+    name: string
+    organizers: string[]
     team_members: { name: string; role: string }[]
-    date: Date
+    startDate: Date
+    endDate: Date
+    startTime: string
+    endTime: string
     location: string
     tags: string[]
     info: string
-    description: string
     eventId: number
     hasTicket: boolean
     format: string
@@ -16,7 +18,6 @@ type NewSessionState = {
     equipment: string
     track: string
     type: string
-    name: string
 }
 
 type Props = {
@@ -27,9 +28,9 @@ type Props = {
     setNewSession: (newEvent: NewSessionState) => void
 }
 
-const Step2 = ({ setSteps, amountTickets, setAmountTickets, newSession, setNewSession }: Props) => {
+const Step3 = ({ setSteps, amountTickets, setAmountTickets, newSession, setNewSession }: Props) => {
     const handleSubmit = async () => {
-        setSteps(3)
+        setSteps(4)
     }
     return (
         <div className="flex flex-col w-full gap-5">
@@ -107,13 +108,12 @@ const Step2 = ({ setSteps, amountTickets, setAmountTickets, newSession, setNewSe
                     <h1 className="text-[14px] text-[#AAAAAA]">Max 2000 characters</h1>
                 </div>
             </div>
-            <div className="w-full flex flex-col md:flex-row gap-5 justify-center items-center mt-5">
+            <div className="w-full flex flex-col gap-5 justify-center items-center mt-5">
                 <button
                     type="button"
-                    className="w-full flex flex-row border-zulalu-primary border font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-white rounded-[8px] text-black text-[16px]"
-                    onClick={() => setSteps(1)}
+                    className="w-full flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
+                    onClick={() => setSteps(2)}
                 >
-                    <IoMdArrowBack size={20} />
                     BACK
                 </button>
                 <button
@@ -128,4 +128,4 @@ const Step2 = ({ setSteps, amountTickets, setAmountTickets, newSession, setNewSe
     )
 }
 
-export default Step2
+export default Step3

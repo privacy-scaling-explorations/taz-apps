@@ -10,8 +10,8 @@ type Props = {
     favoritedEvents: FavoritedEventsDTO[]
 }
 
-export default function Event({ sessions }: Props) {
-    return <CalendarPage sessions={sessions} />
+export default function Event({ sessions, events }: Props) {
+    return <CalendarPage sessions={sessions} events={events} />
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ res }) => {
@@ -28,7 +28,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
             .flat()
 
         return {
-            props: { sessions: filteredSessions }
+            props: { sessions: filteredSessions, events: events }
         }
     } catch (error) {
         res.statusCode = 404
