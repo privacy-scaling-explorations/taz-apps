@@ -258,7 +258,7 @@ const CalendarPage = ({ sessions, events }: Props) => {
 
                     <div className="border border-black flex flex-col"></div>
 
-                    <CalendarPageSessions sessions={filteredSessionsByDate} />
+                    <CalendarPageSessions sessions={filteredSessionsByDate} events={events} />
                 </div>
                 {/* <ToastContainer
                     position="top-center"
