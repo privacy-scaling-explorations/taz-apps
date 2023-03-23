@@ -26,7 +26,6 @@ type NewSessionState = {
     name: string
     startDate: Date
     startTime: string
-    subevent_id: number
     tags: string[]
     team_members: {
         name: string
@@ -67,7 +66,6 @@ const CalendarSessionModal = ({ isOpen, closeModal, events, sessions }: Props) =
         event_type: "Workshop",
         event_slug: "CoordiNations",
         event_item_id: 111,
-        subevent_id: 0
     })
 
     console.log("selected params", newSession.event_id, newSession.event_slug, newSession.event_item_id)
@@ -104,7 +102,8 @@ const CalendarSessionModal = ({ isOpen, closeModal, events, sessions }: Props) =
                 const createEventDB = await axios.post("/api/createSession", {
                     ...newSession,
                     subEventId: subEventRes.data.id,
-                    startTime: formattedTime
+                    startTime: formattedTime,
+                    quota_id: quotaCreatedRes.data.id
                 })
                 console.log("DB response: ", createEventDB)
             } else {
@@ -152,7 +151,6 @@ const CalendarSessionModal = ({ isOpen, closeModal, events, sessions }: Props) =
             event_type: "Workshop",
             event_slug: "CoordiNations",
             event_item_id: 111,
-            subevent_id: 0
         })
         closeModal(false)
     }
