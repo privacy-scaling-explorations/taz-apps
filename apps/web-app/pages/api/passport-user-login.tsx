@@ -3,62 +3,60 @@ import { createClient } from "@supabase/supabase-js";
 import { useSemaphorePassportProof } from "@pcd/passport-interface";
 import { sha256 } from "js-sha256";
 
-const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co";
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey as string, {
-  auth: {
-    autoRefreshToken: false,
-    persistSession: false,
-    detectSessionInUrl: false
-  }
-});
+import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs"
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   console.log("request body", req.body);
-  const signInWithSemaphoreProof = async (proof: any) => {
+  const supabase = createServerSupabaseClient({ req, res })
+  const signInWithSemaphoreProof = async (identity: any) => {
     // IMPORTANT!!!! User Email must be changed
     // Validate Proof of user before interacting with DB
-    const email = "anothertest3@test.com";
-    const password = "123456";
+    const {
+      uuid,
+      commitment,
+      email,
+      name,
+      role,
+      residence,
+      order_id,
+    } = identity;
+    const password: any = process.env.SINGLE_KEY_LOGIN;
     try {
-      const findUser = await supabase
-        .from("users")
-        .select("id")
-        .eq("email", email);
+      const signIn = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-      if (findUser!.data!.length !== 0) {
-        const signIn = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
-        console.log("Signed in:", signIn);
-        res.status(200).json(findUser);
+      if (signIn.data.user) {
+        res.status(200).json("User signed in!");
       }
 
-      if (findUser!.data!.length === 0) {
-        const createUser = await supabase.from("users").insert({
-          email,
-          userName: "Test name",
-          password,
-          uuid: 123,
-        });
-
+      if (signIn.error) {
         const signUpResponse = await supabase.auth.signUp({
           email,
           password,
+          options: {
+            data: {
+              uuid,
+              commitment,
+              email,
+              name,
+              role,
+              residence,
+              order_id,
+            },
+          },
         });
+        console.log("sign up", signUpResponse)
+        if (signUpResponse.data.user) {
+          res.status(200).json("User signed up!");
+        } else {
+          res.status(400).json("Error with sign up");
+        }
 
-        const findUserAfterCreate = await supabase
-        .from("users")
-        .select("id")
-        .eq("email", email);
-
-
-        console.log(createUser);
-        res.status(200).json(findUserAfterCreate);
       }
     } catch (error) {
       console.log(error);
