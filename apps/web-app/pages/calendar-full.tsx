@@ -28,7 +28,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
             .flat()
 
         return {
-            props: { sessions: filteredSessions, events: events }
+            props: { sessions: filteredSessions, events }
         }
     } catch (error) {
         res.statusCode = 404

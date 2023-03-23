@@ -1,20 +1,19 @@
 // import type { AppProps } from "next/app"
+import { PassportModalContextProvider } from "../context/PassportModalContext"
+import { UserIdentityProvider } from "../context/UserIdentityContext"
 
-import { IdentityContextProvider } from "../context/IdentityContextProvider"
-import {  PassportModalContextProvider} from "../context/PassportModalContext"
 import "../styles/globals.css"
 import "../styles/drawingComponent.css"
 import "react-toastify/dist/ReactToastify.css"
 import "react-autocomplete-input/dist/bundle.css"
 import "react-datepicker/dist/react-datepicker.css"
 
-
 const MyApp = ({ Component, pageProps }) => (
-    <IdentityContextProvider>
+    <UserIdentityProvider>
         <PassportModalContextProvider>
             <Component {...pageProps} />
         </PassportModalContextProvider>
-    </IdentityContextProvider>
+    </UserIdentityProvider>
 )
 
 export default MyApp
