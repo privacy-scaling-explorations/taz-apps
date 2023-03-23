@@ -55,8 +55,14 @@ export interface SessionsDTO {
         role: string
     }[]
     track: string
-    endTime: any
-    type: any
+    quota_id: number
+}
+
+export interface RsvpDTO {
+    id: number
+    created_at: Date
+    session_id: number
+    user_id: number
 }
 
 export interface ParticipantsDTO {

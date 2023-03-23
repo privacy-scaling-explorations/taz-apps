@@ -21,7 +21,7 @@ const withPWA = require("next-pwa")({
       // Add a new rule for TypeScript files
       config.module.rules.push({
         test: /\.(ts|tsx)$/,
-        exclude: /node_modules\/(?!(@pcd\/passport-interface|@pcd\/semaphore-signature-pcd))/,
+        exclude: /node_modules\/(?!(@pcd\/passport-interface|@pcd\/semaphore-signature-pcd|@pcd\/pcd-types|@pcd\/semaphore-group-pcd|@pcd\/semaphore-identity-pcd|@pcd\/semaphore-group-pcd))/,
         use: {
           loader: "ts-loader",
           options: {
