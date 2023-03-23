@@ -1,14 +1,43 @@
+import Image from "next/image"
+import { requestSignedZuzaluUUIDUrl, useFetchParticipant, useSemaphoreSignatureProof } from "@pcd/passport-interface"
 import { usePassportModalContext } from "../../context/PassportModalContext"
 import PassportModal from "../PassportModal"
+import { getUserOnID } from "../../hooks/getUserOnID"
 
 const MainSection = () => {
-    const { openPassportModal, setOpenPassportModal } = usePassportModalContext()
+    const userObj = getUserOnID()
+    console.log("user object", userObj)
+
+    const PASSPORT_URL = "https://zupass.eth.limo/"
+
+    function requestProofFromPassport(proofUrl: string) {
+        const popupUrl = `/popup?proofUrl=${encodeURIComponent(proofUrl)}`
+        window.open(popupUrl, "_blank", "width=360,height=480,top=100,popup")
+    }
+
+    function requestSignedZuID() {
+        const proofUrl = requestSignedZuzaluUUIDUrl(PASSPORT_URL, `${window.location.origin}/popup`)
+        requestProofFromPassport(proofUrl)
+    }
     return (
         <div className="flex min-h-[90vh] h-full w-full relative">
-            <PassportModal openPassportModal={openPassportModal} setOpenPassportModal={setOpenPassportModal} />
+            <button onClick={requestSignedZuID}> Passport </button>
             <div className="z-[10] bg-gradient-linear absolute top-0 h-full w-full bg-opacity-80 transform scale-x-[-1]" />
-            <div className="bg-mountains absolute top-0 w-full h-full bg-no-repeat bg-cover bg-center" />
-            <div className="absolute bottom-0 right-0 w-[600px] h-[660px] z-[11] bg-zulaluVector bg-contain bg-no-repeat" />
+            <Image
+                src="/mountains.png"
+                layout="fill"
+                objectFit="cover"
+                className="absolute top-0 w-full h-full bg-no-repeat"
+            />
+            <div className="absolute bottom-0 right-0 w-[600px] h-[660px]">
+                <Image
+                    src="/zulalu-vector.png"
+                    layout="fill"
+                    objectFit="contain"
+                    objectPosition="bottom right"
+                    className="w-full h-full z-[11] bg-no-repeat"
+                />
+            </div>
             <div className="z-[11] flex w-full px-[72px] py-[180px]">
                 <div className="flex w-[700px] flex-col gap-5">
                     <h1 className="text-[18px] md:text-[24px] text-blue md:mb-5 md:text-gray-900 ">

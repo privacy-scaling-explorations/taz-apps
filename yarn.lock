@@ -1604,7 +1604,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.20.1, @babel/runtime@npm:^7.20.13, @babel/runtime@npm:^7.5.5":
+"@babel/runtime@npm:^7.20.1, @babel/runtime@npm:^7.5.5":
   version: 7.21.0
   resolution: "@babel/runtime@npm:7.21.0"
   dependencies:
@@ -5569,13 +5569,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@panva/hkdf@npm:^1.0.2":
-  version: 1.0.4
-  resolution: "@panva/hkdf@npm:1.0.4"
-  checksum: d93b511eba76f5f1f1525834c3effb86e236e6a7d08d0abc067075694c6814909e172b7bed94b9eaeceb074306a6edd7981eb6a2a46922dd36b2f3d30ee9764e
-  languageName: node
-  linkType: hard
-
 "@pcd/eslint-config-custom@*, @pcd/eslint-config-custom@workspace:apps/pcd-main/packages/eslint-config-custom":
   version: 0.0.0-use.local
   resolution: "@pcd/eslint-config-custom@workspace:apps/pcd-main/packages/eslint-config-custom"
@@ -5611,7 +5604,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@pcd/passport-interface@*, @pcd/passport-interface@workspace:^, @pcd/passport-interface@workspace:apps/pcd-main/packages/passport-interface":
+"@pcd/passport-crypto@npm:*":
+  version: 0.0.2
+  resolution: "@pcd/passport-crypto@npm:0.0.2"
+  dependencies:
+    libsodium-wrappers: ^0.7.11
+  checksum: 653ac1c59abdc776f595de2d615d1bc0ee749a0ee43700736b7189f6e861c6ed736a64670d8e92cbef77752bf91d603ccbffa8909407e0af391dadf101e7b0c6
+  languageName: node
+  linkType: hard
+
+"@pcd/passport-interface@*, @pcd/passport-interface@workspace:apps/pcd-main/packages/passport-interface":
   version: 0.0.0-use.local
   resolution: "@pcd/passport-interface@workspace:apps/pcd-main/packages/passport-interface"
   dependencies:
@@ -5633,6 +5635,22 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@pcd/passport-interface@npm:0.0.8":
+  version: 0.0.8
+  resolution: "@pcd/passport-interface@npm:0.0.8"
+  dependencies:
+    "@pcd/passport-crypto": "*"
+    "@pcd/pcd-types": "*"
+    "@pcd/semaphore-group-pcd": "*"
+    "@pcd/semaphore-signature-pcd": "*"
+    "@semaphore-protocol/group": ^3.1.0
+    "@semaphore-protocol/identity": ^3.1.0
+    "@semaphore-protocol/proof": ^3.1.0
+    react: ^18.2.0
+  checksum: 776f95040e94e38cdc482eb55ad86215ba4d79283ff318ae0c1850a67e26412c92f6b8b5961e5a0a090bc866ea5c4d45790de9f179eaea57a6f44381e44d4563
+  languageName: node
+  linkType: hard
+
 "@pcd/pcd-collection@*, @pcd/pcd-collection@workspace:apps/pcd-main/packages/pcd-collection":
   version: 0.0.0-use.local
   resolution: "@pcd/pcd-collection@workspace:apps/pcd-main/packages/pcd-collection"
@@ -5645,7 +5663,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@pcd/pcd-types@*, @pcd/pcd-types@workspace:^, @pcd/pcd-types@workspace:apps/pcd-main/packages/pcd-types":
+"@pcd/pcd-types@*, @pcd/pcd-types@workspace:apps/pcd-main/packages/pcd-types":
   version: 0.0.0-use.local
   resolution: "@pcd/pcd-types@workspace:apps/pcd-main/packages/pcd-types"
   dependencies:
@@ -5656,7 +5674,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@pcd/semaphore-group-pcd@*, @pcd/semaphore-group-pcd@workspace:^, @pcd/semaphore-group-pcd@workspace:apps/pcd-main/packages/semaphore-group-pcd":
+"@pcd/semaphore-group-pcd@*, @pcd/semaphore-group-pcd@workspace:apps/pcd-main/packages/semaphore-group-pcd":
   version: 0.0.0-use.local
   resolution: "@pcd/semaphore-group-pcd@workspace:apps/pcd-main/packages/semaphore-group-pcd"
   dependencies:
@@ -5700,6 +5718,20 @@ __metadata:
     uuid: ^9.0.0
   languageName: unknown
   linkType: soft
+
+"@pcd/semaphore-signature-pcd@npm:*":
+  version: 0.0.4
+  resolution: "@pcd/semaphore-signature-pcd@npm:0.0.4"
+  dependencies:
+    "@pcd/pcd-types": "*"
+    "@semaphore-protocol/group": ^3.1.0
+    "@semaphore-protocol/identity": ^3.1.0
+    "@semaphore-protocol/proof": ^3.1.0
+    js-sha256: ^0.9.0
+    json-bigint: ^1.0.0
+  checksum: ca5ca2508367cb358dfb31f566e86e589a82ebe97b4306fa91863585afc3a4d21d083e63b56e1383315b0a0856d7760502f85349b87ec1147adc130a84767a87
+  languageName: node
+  linkType: hard
 
 "@pcd/tsconfig@*, @pcd/tsconfig@workspace:apps/pcd-main/packages/tsconfig":
   version: 0.0.0-use.local
@@ -11832,7 +11864,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cookie@npm:0.5.0, cookie@npm:^0.5.0":
+"cookie@npm:0.5.0":
   version: 0.5.0
   resolution: "cookie@npm:0.5.0"
   checksum: 1f4bd2ca5765f8c9689a7e8954183f5332139eb72b6ff783d8947032ec1fdf43109852c178e21a953a30c0dd42257828185be01b49d1eb1a67fd054ca588a180
@@ -16661,7 +16693,7 @@ __metadata:
     yargs-parser: ^16.1.0
   bin:
     gluegun: bin/gluegun
-  checksum: 3a56ef9251babe25e3ccb9626cda857b8d46c359dd7dc2c8ce8bb7f28faa5d6cae3191e0f7218e5f322d5d71d56d67714822cc2140d3ede0c08636607d9d7884
+  checksum: 7a45a5a606a1e651c891467a693552b5237f8e90410f9c9daad4621ff0693d1c92b69aa35fc30eccf7c3b92ee724f15fc297e054086cfb312717ef01f48d2290
   languageName: node
   linkType: hard
 
@@ -19792,13 +19824,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jose@npm:^4.10.0, jose@npm:^4.11.4":
-  version: 4.13.1
-  resolution: "jose@npm:4.13.1"
-  checksum: 89be959573beee69bd443493887d78799fd42340b45afa2c6681beda30314bcdfa5575f6977203c199e4c3e0ec2fc18d3c94745e7f0d59db51dedfae0efee63d
-  languageName: node
-  linkType: hard
-
 "js-sdsl@npm:^4.1.4":
   version: 4.1.4
   resolution: "js-sdsl@npm:4.1.4"
@@ -20405,6 +20430,22 @@ __metadata:
     tweetnacl: ^1.0.0
     ursa-optional: ~0.10.0
   checksum: 8623cc90e59605c12c3a6b93ca83afc2940dd7b8195552ba9b75504ad858e32d5d77de7f5a9805c6302f09d174b63e681d89e333d2f18a1689c167f54e83d61f
+  languageName: node
+  linkType: hard
+
+"libsodium-wrappers@npm:^0.7.11":
+  version: 0.7.11
+  resolution: "libsodium-wrappers@npm:0.7.11"
+  dependencies:
+    libsodium: ^0.7.11
+  checksum: 6a6ef47b2213e3fb4687196c28fee4c9885f70d89547d845e62d96014d3d5ad9f59cb05fadc601debc0031a3cfd0b9b416d7efbeb5bf66db6aa0ed69f55a6293
+  languageName: node
+  linkType: hard
+
+"libsodium@npm:^0.7.11":
+  version: 0.7.11
+  resolution: "libsodium@npm:0.7.11"
+  checksum: 0a3493ac1829d1e346178b6984c4eb449dc77157c906876441386c0c653142e3fa56f623ce980bb50e580196578689298c9cd406ce6d514904090e370c6bc0f7
   languageName: node
   linkType: hard
 
@@ -22022,31 +22063,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next-auth@npm:^4.20.1":
-  version: 4.20.1
-  resolution: "next-auth@npm:4.20.1"
-  dependencies:
-    "@babel/runtime": ^7.20.13
-    "@panva/hkdf": ^1.0.2
-    cookie: ^0.5.0
-    jose: ^4.11.4
-    oauth: ^0.9.15
-    openid-client: ^5.4.0
-    preact: ^10.6.3
-    preact-render-to-string: ^5.1.19
-    uuid: ^8.3.2
-  peerDependencies:
-    next: ^12.2.5 || ^13
-    nodemailer: ^6.6.5
-    react: ^17.0.2 || ^18
-    react-dom: ^17.0.2 || ^18
-  peerDependenciesMeta:
-    nodemailer:
-      optional: true
-  checksum: f3414533716e7cc4f80bf070e4eec95e4dced331694e6dd446704b73145804585962be6e107946bdedab05d392b20dad7a7b62ac6cd0bfade0482a0a9d741c0b
-  languageName: node
-  linkType: hard
-
 "next-pwa@npm:^5.6.0":
   version: 5.6.0
   resolution: "next-pwa@npm:5.6.0"
@@ -22537,13 +22553,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"oauth@npm:^0.9.15":
-  version: 0.9.15
-  resolution: "oauth@npm:0.9.15"
-  checksum: 957c0d8d85300398dcb0e293953650c0fc3facc795bee8228238414f19f59cef5fd4ee8d17a972c142924c10c5f6ec50ef80f77f4a6cc6e3c98f9d22c027801c
-  languageName: node
-  linkType: hard
-
 "object-assign@npm:^2.0.0":
   version: 2.1.1
   resolution: "object-assign@npm:2.1.1"
@@ -22555,13 +22564,6 @@ __metadata:
   version: 4.1.1
   resolution: "object-assign@npm:4.1.1"
   checksum: fcc6e4ea8c7fe48abfbb552578b1c53e0d194086e2e6bbbf59e0a536381a292f39943c6e9628af05b5528aa5e3318bb30d6b2e53cadaf5b8fe9e12c4b69af23f
-  languageName: node
-  linkType: hard
-
-"object-hash@npm:^2.0.1":
-  version: 2.2.0
-  resolution: "object-hash@npm:2.2.0"
-  checksum: 55ba841e3adce9c4f1b9b46b41983eda40f854e0d01af2802d3ae18a7085a17168d6b81731d43fdf1d6bcbb3c9f9c56d22c8fea992203ad90a38d7d919bc28f1
   languageName: node
   linkType: hard
 
@@ -22760,13 +22762,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"oidc-token-hash@npm:^5.0.1":
-  version: 5.0.1
-  resolution: "oidc-token-hash@npm:5.0.1"
-  checksum: d62aa8c665f1a0133a3694785e4cd75f471364e6a2f4fbf7997e193a49ccf8f8de15596f475c7fdf8510d021c3b72f7ff6ab8bc5b07bff4cf21d490177f164a5
-  languageName: node
-  linkType: hard
-
 "on-finished@npm:2.4.1":
   version: 2.4.1
   resolution: "on-finished@npm:2.4.1"
@@ -22836,18 +22831,6 @@ __metadata:
   bin:
     opencollective-postinstall: index.js
   checksum: 4b6f333f1c863ef141abef16998daf45f891baf63765684f14b97884ca069fb0055decb59ade7800153190c099b559918c2adeb99f3db70bb0fd616220e8cc17
-  languageName: node
-  linkType: hard
-
-"openid-client@npm:^5.4.0":
-  version: 5.4.0
-  resolution: "openid-client@npm:5.4.0"
-  dependencies:
-    jose: ^4.10.0
-    lru-cache: ^6.0.0
-    object-hash: ^2.0.1
-    oidc-token-hash: ^5.0.1
-  checksum: d198dbcaf0aa1d8b9f0f1d99ae30e90ec594eaf9ae668b5d61f2ee9af94a4460968d8dea7e53bd18903a1fb9c445e05aefca965bb88be3688a4bac273d1634d9
   languageName: node
   linkType: hard
 
@@ -24674,24 +24657,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"preact-render-to-string@npm:^5.1.19":
-  version: 5.2.6
-  resolution: "preact-render-to-string@npm:5.2.6"
-  dependencies:
-    pretty-format: ^3.8.0
-  peerDependencies:
-    preact: ">=10"
-  checksum: be8d5d8fb502d422c503e68af7bcccb6facd942f3ae9a4d093ebe3f1d4f0b15c540624bdac434d53a2a8e8fb7afa4606383414e937c40933ca43445470a026ff
-  languageName: node
-  linkType: hard
-
-"preact@npm:^10.6.3":
-  version: 10.13.1
-  resolution: "preact@npm:10.13.1"
-  checksum: a10555d18f60a42e29b4ef5bf42f7a6ce4097a2e772c047fab53226e3edef4cfceb6d709452485a41017479750aa6834ab02b6a8269ceb06d489d7c3495b3d04
-  languageName: node
-  linkType: hard
-
 "preferred-pm@npm:^3.0.0":
   version: 3.0.3
   resolution: "preferred-pm@npm:3.0.3"
@@ -24862,13 +24827,6 @@ __metadata:
     ansi-styles: ^5.0.0
     react-is: ^18.0.0
   checksum: 4065356b558e6db25b4d41a01efb386935a6c06a0c9c104ef5ce59f2f476b8210edb8b3949b386e60ada0a6dc5ebcb2e6ccddc8c64dfd1a9943c3c3a9e7eaf89
-  languageName: node
-  linkType: hard
-
-"pretty-format@npm:^3.8.0":
-  version: 3.8.0
-  resolution: "pretty-format@npm:3.8.0"
-  checksum: 21a114d43ef06978f8f7f6212be4649b0b094f05d9b30e14e37550bf35c8ca24d8adbca9e5adc4cc15d9eaf7a1e7a30478a4dc37b30982bfdf0292a5b385484c
   languageName: node
   linkType: hard
 
@@ -28724,7 +28682,6 @@ __metadata:
     eslint-config-prettier: ^8.3.0
     eslint-plugin-import: ^2.25.2
     nanoid: ^4.0.0
-    next-auth: ^4.20.1
     prettier: ^2.5.1
     ts-node: ^10.8.1
     typescript: ^4.7.3
@@ -30354,9 +30311,10 @@ __metadata:
     "@ethersproject/keccak256": ^5.7.0
     "@ethersproject/strings": ^5.7.0
     "@headlessui/react": ^1.7.2
-    "@pcd/passport-interface": "workspace:^"
-    "@pcd/pcd-types": "workspace:^"
-    "@pcd/semaphore-group-pcd": "workspace:^"
+    "@pcd/passport-interface": 0.0.8
+    "@pcd/pcd-types": "*"
+    "@pcd/semaphore-group-pcd": "*"
+    "@pcd/semaphore-identity-pcd": "*"
     "@react-google-maps/api": ^2.18.1
     "@rocketseat/eslint-config": ^1.1.3
     "@semaphore-protocol/cli": latest
