@@ -1,13 +1,9 @@
-import {
-    requestSignedZuzaluUUIDUrl,
-    useFetchParticipant,
-    useSemaphoreSignatureProof,
-  } from "@pcd/passport-interface";
-import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs"
-import { usePassportModalContext } from "../../context/PassportModalContext"
-import PassportModal from "../PassportModal"
-import  getUserSession  from "../../hooks/getUserSession"
 import Image from "next/image"
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs"
+import { requestSignedZuzaluUUIDUrl, useFetchParticipant, useSemaphoreSignatureProof } from "@pcd/passport-interface"
+import { usePassportModalContext } from "../../context/PassportModalContext"
+import getUserSession from "../../hooks/getUserSession"
+import { getUserOnID } from "../../hooks/getUserOnID"
 
 const supabase = createBrowserSupabaseClient()
 
@@ -16,21 +12,17 @@ const MainSection = () => {
     const userObj = getUserSession()
     console.log("user object new", userObj)
 
-    const PASSPORT_URL = "https://zupass.eth.limo/";
-
+    const PASSPORT_URL = "https://zupass.eth.limo/"
 
     function requestProofFromPassport(proofUrl: string) {
-        const popupUrl = `/popup?proofUrl=${encodeURIComponent(proofUrl)}`;
-        window.open(popupUrl, "_blank", "width=360,height=480,top=100,popup");
-      }
+        const popupUrl = `/popup?proofUrl=${encodeURIComponent(proofUrl)}`
+        window.open(popupUrl, "_blank", "width=360,height=480,top=100,popup")
+    }
 
     function requestSignedZuID() {
-        const proofUrl = requestSignedZuzaluUUIDUrl(
-          PASSPORT_URL,
-          `${window.location.origin  }/popup`
-        );
-        requestProofFromPassport(proofUrl);
-      }
+        const proofUrl = requestSignedZuzaluUUIDUrl(PASSPORT_URL, `${window.location.origin}/popup`)
+        requestProofFromPassport(proofUrl)
+    }
     return (
         <div className="flex min-h-[90vh] h-full w-full relative">
             <button onClick={requestSignedZuID}> Passport </button>

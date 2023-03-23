@@ -11,11 +11,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         data: { session }
     } = await supabase.auth.getSession()
 
-    if (!session)
+    if (!session) {
         return res.status(401).json({
             error: "not_authenticated",
             description: "The user does not have an active session or is not authenticated"
         })
+    }
 
     if (session) {
         try {
@@ -38,8 +39,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 track,
                 subEventId
             } = req.body
-
-            console.log("event_id", eventId)
 
             await supabase.from("sessions").insert({
                 name,
