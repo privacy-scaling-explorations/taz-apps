@@ -55,18 +55,17 @@ const Header = () => {
     // Finally, once we have the UUID, fetch the participant data from Passport.
     const { participant, error, loading } = useFetchParticipant(PASSPORT_SERVER_URL, uuid)
 
-    const loginProof = async () => {
+    const loginProof = async (participant1: any) => {
         try {
-            console.log("log my proof", participant)
+            console.log("log my proof", participant1)
             const response = await axios({
                 method: "post",
-                url: "https://6926-2806-107e-13-7a7d-ecfe-ae4f-9f24-c3d8.ngrok.io/api/passport-user-login/",
-                data: participant,
+                url: "https://ed49-200-68-173-150.ngrok.io/api/passport-user-login/",
+                data: participant1,
                 headers: {
                     "Content-Type": "application/json"
                 }
             })
-
             console.log("req response", response)
             // eslint-disable-next-line @typescript-eslint/no-unused-expressions
             window.location.reload
@@ -76,14 +75,23 @@ const Header = () => {
     }
 
     useEffect(() => {
+        console.log("pp", participant)
         if (participant) {
             console.log("PARTICIPANT", participant)
             setParticipentData(participant)
             // TODO: Login Flow
-            loginProof()
+
+            loginProof(participant)
         }
+    }, [participant])
+
+    useEffect(() => {
+        ;(async () => {
+            const userSession = await supabase.auth.getUser()
+            console.log("user object", userSession)
+            setSession(userSession)
+        })()
     }, [])
-    // Finally, once we have the UUID, fetch the participant data from Passport.
 
     return (
         <div className="flex p-5 justify-between w-full m-auto z-10 bg-zulalu-darkBase items-center">
@@ -101,10 +109,12 @@ const Header = () => {
                 )}
             </div>
             <ul className="flex gap-5 items-center text-white">
+                {/* <li>About</li> */}
                 <NextLink href={"/events"}>
                     <li className="cursor-pointer">Schedule</li>
                 </NextLink>
-                {session && session.user ? (
+                {/* <li>FAQ</li> */}
+                {session && session.data.user ? (
                     <li>
                         <NextLink href="/myprofile">My Profile</NextLink>
                     </li>

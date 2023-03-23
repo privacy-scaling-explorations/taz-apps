@@ -1,9 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import { createClient } from "@supabase/supabase-js"
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs"
 
-const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co"
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY
-const supabase = createClient(supabaseUrl, supabaseKey as string)
+const supabase = createBrowserSupabaseClient()
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
