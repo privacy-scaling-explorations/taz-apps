@@ -8,7 +8,7 @@ export default async function handler(req, res) {
         Authorization: `Token ${auth}`,
         "Content-Type": "application/json"
     }
-    const { name, startDate, endDate, slug, itemId } = req.body
+    const { name, startDate, slug, itemId } = req.body
     console.log("Create subevent triggered", req.body)
 
     const body = {

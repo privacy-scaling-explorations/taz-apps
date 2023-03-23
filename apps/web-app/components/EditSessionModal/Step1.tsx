@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker"
 import axios from "axios"
 import moment from "moment"
 import { ToastContainer, toast } from "react-toastify"
+import NextImage from "next/image"
 
 import { UserDTO, TracksDTO, FormatDTO, LevelDTO, LocationDTO, EventTypeDTO, SessionsDTO } from "../../types"
 
@@ -23,12 +24,14 @@ type NewSessionState = {
     name: string
     startDate: Date
     startTime: string
+    subevent_id: number
     tags: string[]
     team_members: {
         name: string
         role: string
     }[]
     track: string
+    quota_id: number
 }
 
 type Props = {
@@ -39,7 +42,8 @@ type Props = {
 }
 
 const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
-    const { name, team_members, startDate, tags, description } = newSession
+    const { name, team_members, startDate, event_type, level, format, startTime, location, tags, description } =
+        newSession
     const [teamMember, setTeamMember] = useState({ name: "", role: "Speaker" })
     const [tag, setTag] = useState("")
     const [rerender, setRerender] = useState(true)
@@ -264,6 +268,7 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                 <select
                     id="location"
                     name="location"
+                    value={location}
                     className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px] w-full"
                     onChange={(e) => setNewSession({ ...newSession, location: e.target.value })}
                 >
@@ -280,7 +285,7 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                 <label className="font-[600]">Start Date*</label>
                 <DatePicker
                     className="border-[#C3D0CF] border-2 p-1 rounded-[8px] h-[42px] w-full"
-                    selected={startDate}
+                    selected={new Date(startDate)}
                     onChange={(e) => setNewSession({ ...newSession, startDate: e as Date })}
                     minDate={moment().toDate()}
                 />
@@ -290,17 +295,15 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                 <div className="flex flex-col justify-start my-2">
                     <label className="font-[600]">Time Slot*</label>
                     <select
-                        id="location"
-                        name="location"
-                        value={newSession.startTime}
+                        id="starTime"
+                        name="startTime"
+                        value={startTime}
                         className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px] w-full"
-                        onChange={(e) => setNewSession({ ...newSession, startTime: e.target.value })}
+                        onChange={(e) => setNewSession({ ...newSession, startTime: `${e.target.value}:00` })}
                     >
                         <option value="00">Select Slot</option>
                         {slotsUnavailable.map((slot, index) => (
-                            <option key={index} value={slot.time} disabled={slot.disabled}>{`${slot.time}:00-${
-                                slot.time > "12" ? "PM" : "AM"
-                            }`}</option>
+                            <option key={index} value={slot.time} disabled={slot.disabled}>{`${slot.time}:00`}</option>
                         ))}
                     </select>
                 </div>
@@ -346,15 +349,20 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                     </button>
                     <ul className="flex flex-row items-center">
                         {team_members.map((item, index) => (
-                            <li key={index} className="relative mx-1 bg-gray-200 p-1 rounded text-sm">
-                                {item.role}: {item.name}
-                                <button
-                                    className="absolute top-0 right-0"
-                                    onClick={() => handleRemoveTeamMember(index)}
-                                >
-                                    x
-                                </button>
-                            </li>
+                            <div
+                                className="flex flex-row items-center bg-[#E4EAEA] py-[4px] px-[8px] gap-[8px] text-sm rounded-[4px]"
+                                key={index}
+                            >
+                                {item.role === "Speaker" && (
+                                    <NextImage src={"/user-icon-6.svg"} alt="user-icon-6" width={24} height={24} />
+                                )}
+                                {item.role === "Organizer" && (
+                                    <NextImage src={"/user-icon-4.svg"} alt="user-icon-6" width={24} height={24} />
+                                )}
+                                <p className="text-[#1C2928] font-[400] text-[16px]">
+                                    {item.role}: <span className="font-[600] capitalize">{item.name}</span>
+                                </p>
+                            </div>
                         ))}
                     </ul>
                 </div>
@@ -413,6 +421,7 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                 <select
                     id="format"
                     name="format"
+                    value={format}
                     className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px]"
                     onChange={(e) => setNewSession({ ...newSession, format: e.target.value })}
                 >
@@ -429,6 +438,7 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                 <select
                     id="type"
                     name="type"
+                    value={event_type}
                     className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px]"
                     onChange={(e) => setNewSession({ ...newSession, event_type: e.target.value })}
                 >
@@ -448,6 +458,7 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                 <select
                     id="level"
                     name="level"
+                    value={level}
                     className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px]"
                     onChange={(e) => setNewSession({ ...newSession, level: e.target.value })}
                 >

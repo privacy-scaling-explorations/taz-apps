@@ -23,7 +23,6 @@ type NewSessionState = {
     name: string
     startDate: Date
     startTime: string
-    subevent_id: number
     tags: string[]
     team_members: {
         name: string
@@ -59,7 +58,6 @@ const AddSessionModal = ({ isOpen, closeModal, event, sessions }: Props) => {
         format: "Live",
         level: "Beginner",
         equipment: "",
-        subevent_id: 0,
         description: "",
         track: "ZK Week",
         event_type: "Workshop",
@@ -100,7 +98,8 @@ const AddSessionModal = ({ isOpen, closeModal, event, sessions }: Props) => {
                 const createEventDB = await axios.post("/api/createSession", {
                     ...newSession,
                     subEventId: subEventRes.data.id,
-                    startTime: formattedTime
+                    startTime: formattedTime,
+                    quota_id: quotaCreatedRes.data.id
                 })
                 console.log("DB response: ", createEventDB)
             } else {
@@ -139,9 +138,8 @@ const AddSessionModal = ({ isOpen, closeModal, event, sessions }: Props) => {
             tags: [],
             info: "",
             event_id: event.id,
-            event_item_id: 0,
-            event_slug: "",
-            subevent_id: 0,
+            event_item_id: event.item_id,
+            event_slug: event.slug,
             description: "",
             hasTicket: false,
             track: "ZK Week",
