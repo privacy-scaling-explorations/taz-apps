@@ -1,6 +1,5 @@
-import "react-autocomplete-input/dist/bundle.css"
-import "react-datepicker/dist/react-datepicker.css"
 import { Dialog, Transition } from "@headlessui/react"
+import { ToastContainer, toast } from "react-toastify"
 import { useRouter } from "next/router"
 import { Fragment, useRef, useState } from "react"
 import axios from "axios"
@@ -9,98 +8,119 @@ import ModalSteps from "./ModalSteps"
 import Step1 from "./Step1"
 import Step2 from "./Step2"
 import Step3 from "./Step3"
-import { EventsDTO } from "../../types"
+import { EventsDTO, SessionsDTO } from "../../types"
 
 type NewSessionState = {
-    name: string
-    organizers: string[]
-    team_members: { name: string; role: string }[]
-    startDate: Date
-    endDate: Date
-    startTime: string
-    endTime: string
-    location: string
-    tags: string[]
-    info: string
-    eventId: number
-    hasTicket: boolean
-    format: string
-    level: string
+    description: string
     equipment: string
+    event_id: number
+    event_item_id: string
+    event_slug: string
+    event_type: string
+    format: string
+    hasTicket: boolean
+    info: string
+    level: string
+    location: string
+    name: string
+    startDate: Date
+    startTime: string
+    subevent_id: number
+    tags: string[]
+    team_members: {
+        name: string
+        role: string
+    }[]
     track: string
-    type: string
 }
 
 type Props = {
     isOpen: boolean
     closeModal: (b: boolean) => void
-    eventId: string
     event: EventsDTO
+    sessions: SessionsDTO[]
 }
 
-const AddSessionModal = ({ isOpen, closeModal, eventId, event }: Props) => {
+const AddSessionModal = ({ isOpen, closeModal, event, sessions }: Props) => {
     const router = useRouter()
     const questionTextRef = useRef(null)
     const [isLoading, setIsLoading] = useState(false)
     const [steps, setSteps] = useState(1)
     const [newSession, setNewSession] = useState<NewSessionState>({
         name: "",
-        organizers: [],
         team_members: [],
         startDate: new Date(),
-        endDate: new Date(),
-        startTime: "09:00",
-        endTime: "18:00",
-        location: "Amphitheatre",
+        startTime: "00",
+        location: "",
         tags: [],
         info: "",
-        eventId: parseInt(eventId),
+        event_id: event.id,
         hasTicket: false,
-        format: "live",
-        level: "beginner",
+        format: "Live",
+        level: "Beginner",
         equipment: "",
+        event_item_id: "",
+        event_slug: "",
+        subevent_id: 0,
+        description: "",
         track: "ZK Week",
-        type: "Workshop"
+        event_type: "Workshop"
     })
     const [amountTickets, setAmountTickets] = useState("0")
 
     const handleSubmit = async () => {
         setIsLoading(true)
+        const formattedTime = `${newSession.startTime}:00`
 
-        if (newSession.hasTicket) {
-            // Step 1 Create SubEvent
+        try {
+            if (newSession.hasTicket) {
+                // Step 1 Create SubEvent
 
-            const subEventRes = await axios.post(`/api/pretix-create-subevent`, {
-                name: newSession.name,
-                startDate: newSession.startDate,
-                endDate: newSession.endDate,
-                slug: event.slug,
-                itemId: event.item_id
+                const subEventRes = await axios.post(`/api/pretix-create-subevent`, {
+                    name: newSession.name,
+                    startDate: newSession.startDate,
+                    endDate: newSession.startDate,
+                    slug: event.slug,
+                    itemId: event.item_id
+                })
+
+                console.log("Created subEvent response: ", subEventRes.data)
+
+                // // Step 3 Create Quota for the subEvent
+
+                const quotaCreatedRes = await axios.post(`/api/pretix-create-quota/`, {
+                    ticketAmount: amountTickets,
+                    subEventId: subEventRes.data.id,
+                    slug: event.slug,
+                    itemId: event.item_id
+                })
+
+                console.log("Quota creatd: ", quotaCreatedRes.data)
+                // Step 5 Add to database
+                const createEventDB = await axios.post("/api/createSession", {
+                    ...newSession,
+                    subevent_id: subEventRes.data.id,
+                    startTime: formattedTime
+                })
+                console.log("DB response: ", createEventDB)
+            } else {
+                const createEventDB = await axios.post("/api/createSession", {
+                    ...newSession,
+                    startTime: formattedTime
+                })
+                console.log("DB response: ", createEventDB)
+            }
+        } catch (error) {
+            toast.error("Failed to create an event", {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light"
             })
-
-            console.log("Created subEvent response: ", subEventRes.data)
-
-            // // Step 3 Create Quota for the subEvent
-
-            const quotaCreatedRes = await axios.post(`/api/pretix-create-quota/`, {
-                ticketAmount: amountTickets,
-                subEventId: subEventRes.data.id,
-                slug: event.slug,
-                itemId: event.item_id
-            })
-
-            console.log("Quota creatd: ", quotaCreatedRes.data)
-            // Step 5 Add to database
-            const createEventDB = await axios.post("/api/createSession", {
-                ...newSession,
-                subEventId: subEventRes.data.id
-            })
-            console.log("DB response: ", createEventDB)
-        } else {
-            const createEventDB = await axios.post("/api/createSession", {
-                ...newSession
-            })
-            console.log("DB response: ", createEventDB)
         }
 
         // refresh to see new event created
@@ -112,21 +132,22 @@ const AddSessionModal = ({ isOpen, closeModal, eventId, event }: Props) => {
         setSteps(1)
         setNewSession({
             name: "",
-            organizers: [],
             team_members: [],
             startDate: new Date(),
-            endDate: new Date(),
-            startTime: "09:00",
-            endTime: "18:00",
-            location: "Amphitheatre",
+            location: "",
+            startTime: "00",
             tags: [],
             info: "",
-            eventId: parseInt(eventId),
+            event_id: event.id,
+            event_item_id: "",
+            event_slug: "",
+            subevent_id: 0,
+            description: "",
             hasTicket: false,
             track: "ZK Week",
             equipment: "",
             format: "Live",
-            type: "Workshop",
+            event_type: "Workshop",
             level: "Beginner"
         })
         closeModal(false)
@@ -175,6 +196,7 @@ const AddSessionModal = ({ isOpen, closeModal, eventId, event }: Props) => {
                                             newSession={newSession}
                                             setNewSession={setNewSession}
                                             setSteps={setSteps}
+                                            sessions={sessions}
                                         />
                                     )}
 
