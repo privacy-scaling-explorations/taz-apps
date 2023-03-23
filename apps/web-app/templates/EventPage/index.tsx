@@ -15,10 +15,9 @@ const supabase = createBrowserSupabaseClient()
 type Props = {
     event: EventsDTO
     sessions: SessionsDTO[]
-    sessionsByEventId: SessionsDTO[]
 }
 
-const EventPage = ({ event, sessions, sessionsByEventId }: Props) => {
+const EventPage = ({ event, sessions }: Props) => {
     const wraperRef = useRef(null)
 
     const [openAddSessionModal, setOpenAddSessionModal] = useState(false)
@@ -50,12 +49,12 @@ const EventPage = ({ event, sessions, sessionsByEventId }: Props) => {
 
     const filteredSessions =
         selectedOptions.length !== 0
-            ? sessionsByEventId.filter((item) => {
+            ? sessions.filter((item) => {
                   const sessionDate = moment(new Date(item.startDate)).add(1, "day").format("dddd, MMMM Do, YYYY")
 
                   return selectedOptions.includes(sessionDate)
               })
-            : sessionsByEventId
+            : sessions
 
     const handleClickOutside = (e: MouseEvent) => {
         const { current: wrap } = wraperRef as { current: HTMLElement | null }

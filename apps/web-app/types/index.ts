@@ -58,13 +58,6 @@ export interface SessionsDTO {
     type: any
 }
 
-export interface RsvpDTO {
-    id: number
-    created_at: Date
-    session_id: number
-    user_id: number
-}
-
 export interface ParticipantsDTO {
     created_at: Date
     event_id: number

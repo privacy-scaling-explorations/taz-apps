@@ -1,40 +1,22 @@
 import { useState } from "react"
 import NextImage from "next/image"
-import { SessionsDTO, RsvpDTO } from "../../types"
+import { SessionsDTO, EventsDTO } from "../../types"
 import BaseTemplate from "../Base"
+import ParticipateButton from "../../components/ParticipateButton"
 
 type Props = {
     session: SessionsDTO
-    createRsvp: (user_id: number, session_id: number) => Promise<RsvpDTO | null>
-    deleteRsvp: (id: number) => Promise<boolean>
+    event: EventsDTO
 }
 
-const SessionPage = ({ session, createRsvp, deleteRsvp }: Props) => {
+const SessionPage = ({ session, event }: Props) => {
     const LOGGED_IN_USER_ID = 1
 
     const { startDate, endTime, location, startTime } = session
-    // const [rsvpId, setRsvpId] = useState(session.rsvps[0]?.id ?? 0)
-    const [rsvpId, setRsvpId] = useState(0)
 
     const startDateFormatted = new Date(startDate).toLocaleDateString("en-US", { day: "numeric" })
     const startWeekDayFormatted = new Date(startDate).toLocaleDateString("en-US", { weekday: "long" })
     const eventMonthFormatted = new Date(startDate).toLocaleDateString("en-US", { month: "long" })
-
-    const onCreateRvsp = async () => {
-        const newRsvp = await createRsvp(LOGGED_IN_USER_ID, session.id)
-        if (newRsvp !== null) {
-            console.log("Rsvp created: ", newRsvp)
-            setRsvpId(newRsvp.id)
-        }
-    }
-
-    const onDeleteRsvp = async () => {
-        const isDeleted = await deleteRsvp(rsvpId)
-        if (isDeleted) {
-            console.log("Rsvp deleted")
-            setRsvpId(0)
-        }
-    }
 
     return (
         <BaseTemplate>
@@ -50,23 +32,7 @@ const SessionPage = ({ session, createRsvp, deleteRsvp }: Props) => {
                             <NextImage src={"/vector-bookmark.svg"} width={12} height={16} />
                             BOOKMARK
                         </button>
-                        {rsvpId === 0 && (
-                            <button
-                                onClick={onCreateRvsp}
-                                className="bg-zulalu-primary text-white py-[8px] px-[16px] rounded-[8px] gap-[8px] flex flex-row items-center justify-center"
-                            >
-                                RSVP
-                            </button>
-                        )}
-                        {rsvpId !== 0 && (
-                            <button
-                                onClick={() => onDeleteRsvp()}
-                                className="flex gap-2 items-center bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]"
-                            >
-                                <NextImage src={"/vector-circle-check.svg"} width={16} height={16} />
-                                SEE YOU THERE!
-                            </button>
-                        )}
+                        <ParticipateButton event={event} session={session} isTallButton={true} />
                     </div>
                 </div>
                 <div className="w-full flex flex-col md:flex-row gap-[8px] h-full">
@@ -91,7 +57,7 @@ const SessionPage = ({ session, createRsvp, deleteRsvp }: Props) => {
                         <div className="flex flex-row gap-[24px] w-full mt-4">
                             <div className="w-5/6 py-5">{session.info}</div>
                             <div className="flex flex-wrap gap-5 w-3/6 p-5">
-                                {session.team_members.map((item : any, index : any) => (
+                                {session.team_members.map((item: any, index: any) => (
                                     <div
                                         key={index}
                                         className="flex w-auto rounded-[4px] gap-2 px-2 py-1 bg-[#E4EAEA] text-[16px]"
