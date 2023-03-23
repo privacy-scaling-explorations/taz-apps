@@ -16,7 +16,7 @@ export default async function handler(req, res) {
         active: false,
         is_public: true,
         date_from: `${startDate}`,
-        date_to: `${endDate}`,
+        date_to: null,
         date_admission: null,
         presale_start: null,
         presale_end: null,

@@ -33,7 +33,7 @@ export interface SessionsDTO {
     description: string
     equipment: string
     event_id: number
-    event_item_id: string
+    event_item_id: number
     event_slug: string
     event_type: string
     favoritedSessions: FavoritedSessionsDTO[]

@@ -14,7 +14,7 @@ type Props = {
 
 const Sessions = ({ event, sessions }: Props) => {
     const [openBuyTicketModal, setOpenBuyTicketModal] = useState(false)
-    const [currentSubEventId, setCurrentSubEventId] = useState<any>(0)
+    const [currentSubEventId, setCurrentSubEventId] = useState<number>(0)
 
     const router = useRouter()
     const LOGGED_IN_USER_ID = 1
@@ -63,9 +63,9 @@ const Sessions = ({ event, sessions }: Props) => {
             })
     }
 
-    const handleBuyTicket = async (subEventId: number) => {
+    const handleBuyTicket = async () => {
         await axios.post("/api/pretix-create-order", {
-            subEventId,
+            subEventId: currentSubEventId,
             slug: event.slug,
             itemId: event.item_id
         })
@@ -159,12 +159,11 @@ const Sessions = ({ event, sessions }: Props) => {
                                             setOpenBuyTicketModal(true)
                                         }}
                                     >
-                                        BUY TICKET
+                                        GET TICKET
                                     </button>
                                     <BuyTicketModal
                                         closeModal={closeOpenTicketModal}
                                         isOpen={openBuyTicketModal}
-                                        subEventId={currentSubEventId}
                                         handleBuyTicket={handleBuyTicket}
                                     />
                                 </>
@@ -211,7 +210,7 @@ const Sessions = ({ event, sessions }: Props) => {
                                 <div className="flex flex-row items-center gap-[8px]">
                                     <NextImage src={"/vector-clock.svg"} alt="vector-clock" width={16} height={16} />
                                     <p className="text-[#708E8C] text-[18px]">
-                                        {/* {item.startTime.slice(0, -3)}-{item.endTime.slice(0, -3)} */}
+                                        {item.startTime.slice(0, -3)}
                                     </p>
                                 </div>
                                 <div className="flex flex-row items-center gap-[8px] border-b border-[#708E8C] text-[#708E8C]">
