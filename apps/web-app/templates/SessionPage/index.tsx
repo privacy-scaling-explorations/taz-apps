@@ -16,7 +16,8 @@ type Props = {
 const SessionPage = ({ session, event }: Props) => {
     const router = useRouter()
     const LOGGED_IN_USER_ID = 1
-    const is_favorited = session.favorited_sessions.some(favorited => favorited.user_id === LOGGED_IN_USER_ID);
+    console.log(session)
+    const is_favorited = session.favorited_sessions.some(favorited => favorited.user_id === LOGGED_IN_USER_ID && favorited.session_id === session.id);
 
     const { startDate, endTime, location, startTime } = session
 
