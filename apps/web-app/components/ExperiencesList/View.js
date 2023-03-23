@@ -8,11 +8,9 @@ import SelectorArrow from "../ArrowNavigators/SelectorArrow";
 import Footer from "../Footer";
 import SignInModal from "../SigInModal";
 import getUserSession from "../../hooks/getUserSession";
-import { createClient } from "@supabase/supabase-js";
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs"
 
-const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co";
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
+const supabase = createBrowserSupabaseClient()
 
 function ExperiencesListComponent({
   clearIdentity,

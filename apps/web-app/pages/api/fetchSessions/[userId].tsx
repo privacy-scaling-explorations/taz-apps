@@ -1,18 +1,17 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import { createClient } from "@supabase/supabase-js"
-
-const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co"
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY
-const supabase = createClient(supabaseUrl, supabaseKey as string)
+import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     console.log("USER ID", req.query.userId)
+    const supabase = createServerSupabaseClient({ req, res })
     try {
         const response = await supabase
             .from("sessions")
             .select("*, participants (*), favoritedSessions:favorited_sessions (*)")
             .eq("participants.user_id", req.query.userId)
             .eq("favoritedSessions.user_id", req.query.userId)
+
+        console.log(response)
         if (response.error === null) res.status(200).send(response.data)
         else res.status(response.status).send(response.error)
     } catch (err: any) {

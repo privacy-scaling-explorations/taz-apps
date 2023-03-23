@@ -14,7 +14,7 @@ type Props = {
 const BuyTicketModal = ({ isOpen, closeModal, handleBuyTicket }: Props) => {
     const [step, setStep] = useState(1)
 
-    const resetAndClose = (close = false) => {
+    const resetAndClose = (close: boolean) => {
         setStep(1)
         closeModal(close)
     }

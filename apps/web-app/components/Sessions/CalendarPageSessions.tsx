@@ -4,14 +4,17 @@ import { useState } from "react"
 import { useRouter } from "next/router"
 import axios from "axios"
 import { toast } from "react-toastify"
+import moment from "moment"
 import { SessionsDTO, EventsDTO } from "../../types"
+
 import BuyTicketModal from "../BuyTicketModal"
 
 type Props = {
     sessions: SessionsDTO[]
+    showStartDate?: boolean
 }
 
-const CalendarPageSessions = ({ sessions}: Props) => {
+const CalendarPageSessions = ({ sessions, showStartDate = false }: Props) => {
     const [openBuyTicketModal, setOpenBuyTicketModal] = useState(false)
     const [currentSubEventParams, setCurrentSubEventParams] = useState<any>({
         id: 0,
@@ -22,8 +25,6 @@ const CalendarPageSessions = ({ sessions}: Props) => {
 
     const router = useRouter()
     const LOGGED_IN_USER_ID = 1
-
-    console.log(sessions)
 
     const makeToast = (isSuccess: boolean, message: string) => {
         if (isSuccess) {
@@ -122,7 +123,13 @@ const CalendarPageSessions = ({ sessions}: Props) => {
             {sessions.map((item, index) => (
                 <div className="w-full" key={index}>
                     <div className="bg-[#1C2928] w-full flex flex-row items-center rounded-[8px]">
-                        <p className="text-white py-[8px] px-[16px]">{item.startTime.slice(0, -3)}</p>
+                        {showStartDate ? (
+                            <p className="text-white py-[8px] px-[16px] uppercase">
+                                {moment(item.startDate).format("MMMM DD")}
+                            </p>
+                        ) : (
+                            <p className="text-white py-[8px] px-[16px]">{item.startTime.slice(0, -3)}</p>
+                        )}
                     </div>
 
                     <div className="w-full flex flex-col items-start gap-[32px] bg-[#FCFFFE]] rounded-[16px] p-[16px]">
@@ -152,44 +159,41 @@ const CalendarPageSessions = ({ sessions}: Props) => {
                                     }}
                                 />
                             </div>
-                            {
-                                item.participants.length > 0 ? (
-                                    <button className="flex gap-2 items-center bg-white border border-primary text-zulalu-primary font-[600] py-[4px] px-[16px] rounded-[8px] cursor-default">
-                                        <NextImage src={"/vector-circle-check.svg"} width={16} height={16} />
-                                        SEE YOU THERE!
-                                    </button>
-                                ) :
-                                item.hasTicket ? (
-                                    <>
-                                        <button
-                                            className="bg-[#35655F] text-white py-[4px] px-[16px] text-[16px] rounded-[6px]"
-                                            onClick={() => {
-                                                setCurrentSubEventParams({
-                                                    id: item.id,
-                                                    subEventId: item.subevent_id,
-                                                    eventSlug: item.event_slug,
-                                                    eventItemId: item.event_item_id
-                                                })
-                                                setOpenBuyTicketModal(true)
-                                            }}
-                                        >
-                                            GET TICKET
-                                        </button>
-                                        <BuyTicketModal
-                                            closeModal={closeOpenTicketModal}
-                                            isOpen={openBuyTicketModal}
-                                            handleBuyTicket={handleBuyTicket}
-                                        />
-                                    </>
-                                ) : (
+                            {item.participants.length > 0 ? (
+                                <button className="flex gap-2 items-center bg-white border border-primary text-zulalu-primary font-[600] py-[4px] px-[16px] rounded-[8px] cursor-default">
+                                    <NextImage src={"/vector-circle-check.svg"} width={16} height={16} />
+                                    SEE YOU THERE!
+                                </button>
+                            ) : item.hasTicket ? (
+                                <>
                                     <button
                                         className="bg-[#35655F] text-white py-[4px] px-[16px] text-[16px] rounded-[6px]"
-                                        onClick={() => handleClickAttend(item.id)}
+                                        onClick={() => {
+                                            setCurrentSubEventParams({
+                                                id: item.id,
+                                                subEventId: item.subevent_id,
+                                                eventSlug: item.event_slug,
+                                                eventItemId: item.event_item_id
+                                            })
+                                            setOpenBuyTicketModal(true)
+                                        }}
                                     >
-                                        RSVP
+                                        GET TICKET
                                     </button>
-                                )
-                            }
+                                    <BuyTicketModal
+                                        closeModal={closeOpenTicketModal}
+                                        isOpen={openBuyTicketModal}
+                                        handleBuyTicket={handleBuyTicket}
+                                    />
+                                </>
+                            ) : (
+                                <button
+                                    className="bg-[#35655F] text-white py-[4px] px-[16px] text-[16px] rounded-[6px]"
+                                    onClick={() => handleClickAttend(item.id)}
+                                >
+                                    RSVP
+                                </button>
+                            )}
                         </div>
                         <div className="w-full flex flex-col md:flex-row gap-[32px] justify-between md:items-center items-start">
                             <div className="flex flex-row items-start gap-[8px]">
@@ -224,9 +228,7 @@ const CalendarPageSessions = ({ sessions}: Props) => {
                             <div className="flex flex-row w-full md:w-auto justify-between items-end gap-[32px] text-sm">
                                 <div className="flex flex-row items-center gap-[8px]">
                                     <NextImage src={"/vector-clock.svg"} alt="vector-clock" width={16} height={16} />
-                                    <p className="text-[#708E8C] text-[18px]">
-                                        {item.startTime.slice(0, -3)}
-                                    </p>
+                                    <p className="text-[#708E8C] text-[18px]">{item.startTime.slice(0, -3)}</p>
                                 </div>
                                 <div className="flex flex-row items-center gap-[8px] border-b border-[#708E8C] text-[#708E8C]">
                                     <NextImage src={"/vector-location.svg"} alt="location" width={15} height={15} />

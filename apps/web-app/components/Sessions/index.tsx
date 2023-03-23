@@ -1,10 +1,8 @@
 import NextImage from "next/image"
 import { useRouter } from "next/router"
-import { useState } from "react"
 import NextLink from "next/link"
 import axios from "axios"
 import { toast } from "react-toastify"
-import BuyTicketModal from "../BuyTicketModal"
 import ParticipateButton from "../ParticipateButton"
 import { SessionsDTO, EventsDTO } from "../../types"
 

@@ -1,14 +1,18 @@
+
+import Image from "next/image"
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs"
 import { requestSignedZuzaluUUIDUrl, useFetchParticipant, useSemaphoreSignatureProof } from "@pcd/passport-interface"
 import { usePassportModalContext } from "../../context/PassportModalContext"
-import PassportModal from "../PassportModal"
+import getUserSession from "../../hooks/getUserSession"
 import { getUserOnID } from "../../hooks/getUserOnID"
-import Image from "next/image"
-import WhiteGlobeVector from "./WhiteGlobeVector"
+import WhiteGlobeVector from "./WhiteGlobeVector"    
+
+const supabase = createBrowserSupabaseClient()
 
 const MainSection = () => {
     const { openPassportModal, setOpenPassportModal } = usePassportModalContext()
-    const userObj = getUserOnID()
-    console.log("user object", userObj)
+    const userObj = getUserSession()
+    console.log("user object new", userObj)
 
     const PASSPORT_URL = "https://zupass.eth.limo/"
 
