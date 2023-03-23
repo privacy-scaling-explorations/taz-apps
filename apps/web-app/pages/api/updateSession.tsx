@@ -7,50 +7,43 @@ const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY
 const supabase = createClient(supabaseUrl, supabaseKey as string)
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    console.log(req.body)
     try {
         const {
+            id,
             name,
             startDate,
             location,
             startTime,
             tags,
             info,
-            event_id,
             hasTicket,
             event_type,
             format,
             equipment,
             team_members,
-            track,
-            subEventId,
-            event_slug,
-            event_item_id,
-            quota_id
+            track
         } = req.body
 
-        const response = await supabase.from("sessions").insert({
-            name,
-            startDate,
-            location,
-            startTime,
-            tags,
-            info,
-            event_id: event_id,
-            hasTicket,
-            event_type: event_type,
-            format,
-            team_members,
-            track,
-            equipment,
-            subevent_id: subEventId,
-            event_slug,
-            event_item_id,
-            quota_id
-        })
+        const response = await supabase
+            .from("sessions")
+            .update({
+                name,
+                startDate,
+                location,
+                startTime,
+                tags,
+                info,
+                hasTicket,
+                event_type,
+                format,
+                team_members,
+                track,
+                equipment
+            })
+            .eq("id", id)
         console.log("Response: ", response)
 
-        res.status(201).json("Event created")
+        res.status(201).json("Event Updated")
     } catch (err: any) {
         console.log("error: ", err)
         res.status(500).json({ statusCode: 500, message: err.message })
