@@ -1,3 +1,8 @@
+import {
+    requestSignedZuzaluUUIDUrl,
+    useFetchParticipant,
+    useSemaphoreSignatureProof,
+  } from "@pcd/passport-interface";
 import { usePassportModalContext } from "../../context/PassportModalContext"
 import PassportModal from "../PassportModal"
 import { getUserOnID } from "../../hooks/getUserOnID"
@@ -7,9 +12,25 @@ const MainSection = () => {
     const { openPassportModal, setOpenPassportModal } = usePassportModalContext()
     const userObj = getUserOnID()
     console.log("user object", userObj)
+
+    const PASSPORT_URL = "https://zupass.eth.limo/";
+
+
+    function requestProofFromPassport(proofUrl: string) {
+        const popupUrl = `/popup?proofUrl=${encodeURIComponent(proofUrl)}`;
+        window.open(popupUrl, "_blank", "width=360,height=480,top=100,popup");
+      }
+
+    function requestSignedZuID() {
+        const proofUrl = requestSignedZuzaluUUIDUrl(
+          PASSPORT_URL,
+          `${window.location.origin  }/popup`
+        );
+        requestProofFromPassport(proofUrl);
+      }
     return (
         <div className="flex min-h-[90vh] h-full w-full relative">
-            <PassportModal openPassportModal={openPassportModal} setOpenPassportModal={setOpenPassportModal} />
+            <button onClick={requestSignedZuID}> Passport </button>
             <div className="z-[10] bg-gradient-linear absolute top-0 h-full w-full bg-opacity-80 transform scale-x-[-1]" />
             <Image
                 src="/mountains.png"
