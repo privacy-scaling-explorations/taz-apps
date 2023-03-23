@@ -1,9 +1,14 @@
 import { Dialog, Transition } from "@headlessui/react"
 import { Fragment, useRef, useState } from "react"
-import { requestZuzaluMembershipProof } from "@pcd/passport-interface"
+import {
+    requestSignedZuzaluUUIDUrl,
+    useFetchParticipant,
+    useSemaphoreSignatureProof,
+  } from "@pcd/passport-interface";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs"
 
 const supabase = createBrowserSupabaseClient()
+
 
 // 1. urlToPassportWebsite
 // 2. returnUrl
@@ -23,17 +28,32 @@ const PassportModal = ({ openPassportModal, setOpenPassportModal }: Props) => {
     const handlePasswordChange = (event: any) => setPassword(event.target.value)
     const inputRef = useRef(null)
 
-    async function zuzaluMembershipProof() {
-        const proof = await requestZuzaluMembershipProof(
-            "https://pcd-passport.com/",
-            "https://bed8-2806-107e-13-6229-d584-c0de-219e-7dcd.ngrok.io/complete-identity-proof/",
-            "https://api.pcd-passport.com/semaphore/1",
-            // eslint-disable-next-line no-return-assign
-            (url) => (window.location.href = url)
-        )
-        console.log(proof)
-    }
 
+    // async function zuzaluMembershipProof() {
+    //     const proof = await requestZuzaluMembershipProof(
+    //         "https://pcd-passport.com/",
+    //         "https://bed8-2806-107e-13-6229-d584-c0de-219e-7dcd.ngrok.io/complete-identity-proof/",
+    //         "https://api.pcd-passport.com/semaphore/1",
+    //         // eslint-disable-next-line no-return-assign
+    //         (url) => (window.location.href = url)
+    //     )
+    //     console.log(proof)
+    // }
+
+    const PASSPORT_URL = "https://zupass.eth.limo/";
+
+    function requestProofFromPassport(proofUrl: string) {
+        const popupUrl = `/popup?proofUrl=${encodeURIComponent(proofUrl)}`;
+        window.open(popupUrl, "_blank", "width=360,height=480,top=100,popup");
+      }
+
+    function requestSignedZuID() {
+        const proofUrl = requestSignedZuzaluUUIDUrl(
+          PASSPORT_URL,
+          "https://zupass.eth.limo/popup"
+        );
+        requestProofFromPassport(proofUrl);
+      }
     const handleSubmit = async (event: any) => {
         event.preventDefault()
         const { data, error } = await supabase.auth.signInWithPassword({ email, password })
@@ -107,6 +127,10 @@ const PassportModal = ({ openPassportModal, setOpenPassportModal }: Props) => {
                                                 className="bg-zulalu-yellow text-center rounded-[58px] h-[45px] w-5/6 border border-[#ffffff4d]"
                                             >
                                                 Verify Passport
+                                            </button>
+
+                                            <button onClick={requestSignedZuID}>
+                                                Test Passport Request
                                             </button>
                                         </form>
                                         {/* <input
