@@ -54,6 +54,8 @@ export interface SessionsDTO {
         role: string
     }[]
     track: string
+    endTime: any
+    type: any
 }
 
 export interface RsvpDTO {
