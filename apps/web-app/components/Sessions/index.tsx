@@ -63,9 +63,9 @@ const Sessions = ({ event, sessions }: Props) => {
             })
     }
 
-    const handleBuyTicket = async (subEventId: number) => {
+    const handleBuyTicket = async () => {
         await axios.post("/api/pretix-create-order", {
-            subEventId: subEventId,
+            subEventId: currentSubEventId,
             slug: event.slug,
             itemId: event.item_id
         })
@@ -159,12 +159,11 @@ const Sessions = ({ event, sessions }: Props) => {
                                             setOpenBuyTicketModal(true)
                                         }}
                                     >
-                                        BUY TICKET
+                                        GET TICKET
                                     </button>
                                     <BuyTicketModal
                                         closeModal={closeOpenTicketModal}
                                         isOpen={openBuyTicketModal}
-                                        subEventId={currentSubEventId}
                                         handleBuyTicket={handleBuyTicket}
                                     />
                                 </>

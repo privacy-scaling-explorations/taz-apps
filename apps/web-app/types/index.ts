@@ -53,6 +53,8 @@ export interface SessionsDTO {
     equipment: string
     subevent_id: number
     level: any
+    event_slug: string
+    event_item_id: number
 }
 
 export interface RsvpDTO {

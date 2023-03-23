@@ -19,6 +19,8 @@ type NewSessionState = {
     equipment: string
     track: string
     type: string
+    event_slug: string
+    event_item_id: number
 }
 
 type Props = {

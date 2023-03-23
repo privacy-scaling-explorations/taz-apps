@@ -30,6 +30,8 @@ type NewSessionState = {
     equipment: string
     track: string
     type: string
+    event_slug: string
+    event_item_id: number
 }
 
 type Props = {
@@ -60,7 +62,9 @@ const CalendarSessionModal = ({ isOpen, closeModal, events }: Props) => {
         level: "beginner",
         equipment: "",
         track: "ZK Week",
-        type: "Workshop"
+        type: "Workshop",
+        event_slug: "ZK",
+        event_item_id: 113
     })
     const [selectedEventParams, setSelectedEventParams] = useState({  
         eventId: 92, slug: "ZK", itemId: 113
@@ -130,7 +134,9 @@ const CalendarSessionModal = ({ isOpen, closeModal, events }: Props) => {
             equipment: "",
             format: "Live",
             type: "Workshop",
-            level: "Beginner"
+            level: "Beginner",
+            event_slug: "ZK",
+            event_item_id: 113
         })
         closeModal(false)
     }

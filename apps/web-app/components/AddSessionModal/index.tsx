@@ -29,6 +29,8 @@ type NewSessionState = {
     equipment: string
     track: string
     type: string
+    event_slug: string
+    event_item_id: number
 }
 
 type Props = {
@@ -60,7 +62,10 @@ const AddSessionModal = ({ isOpen, closeModal, eventId, event }: Props) => {
         level: "beginner",
         equipment: "",
         track: "ZK Week",
-        type: "Workshop"
+        type: "Workshop",
+        event_slug: event.slug,
+        event_item_id: event.item_id
+
     })
     const [amountTickets, setAmountTickets] = useState("0")
 
@@ -127,7 +132,9 @@ const AddSessionModal = ({ isOpen, closeModal, eventId, event }: Props) => {
             equipment: "",
             format: "Live",
             type: "Workshop",
-            level: "Beginner"
+            level: "Beginner",
+            event_slug: event.slug,
+            event_item_id: event.item_id
         })
         closeModal(false)
     }
