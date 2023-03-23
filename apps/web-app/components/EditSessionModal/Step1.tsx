@@ -282,13 +282,13 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                 </select>
             </div>
             <div className="flex flex-col justify-start my-2">
-                {/* <label className="font-[600]">Start Date*</label>
+                <label className="font-[600]">Start Date*</label>
                 <DatePicker
                     className="border-[#C3D0CF] border-2 p-1 rounded-[8px] h-[42px] w-full"
-                    selected={startDate}
+                    selected={new Date(startDate)}
                     onChange={(e) => setNewSession({ ...newSession, startDate: e as Date })}
                     minDate={moment().toDate()}
-                /> */}
+                />
             </div>
 
             {newSession.location !== "Select Location" && newSession.location !== "" && (

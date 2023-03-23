@@ -1,64 +1,36 @@
+
 import { GetServerSideProps } from "next"
 import axios from "axios"
 import SessionPage from "../../../../templates/SessionPage"
-
-import { SessionsDTO, EventsDTO, RsvpDTO } from "../../../../types"
+import { SessionsDTO} from "../../../../types"
 
 type Props = {
     session: SessionsDTO
     sessions: SessionsDTO[]
 }
 
-const LOGGED_IN_USER_ID = 1
 
-const Session = ({ session, sessions }: Props) => {
-    const createRsvp = async (userId: number, sessionId: number) => {
-        let newRsvp: RsvpDTO | null = null
-        try {
-            const response = await fetch(`/api/createRsvp`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ userId, sessionId })
-            })
-            newRsvp = await response.json()
-        } catch (error) {
-            console.log(error)
-        }
-        return newRsvp
-    }
-
-    const deleteRsvp = async (id: number) => {
-        const url = process.env.URL_TO_FETCH
-        try {
-            await fetch(`/api/deleteRsvp/${id}`, {
-                method: "DELETE"
-            })
-        } catch (error) {
-            console.log(error)
-            return false
-        }
-        return true
-    }
-
-    return <SessionPage session={session} sessions={sessions} createRsvp={createRsvp} deleteRsvp={deleteRsvp} />
-}
+const Session = ({ session, sessions}: Props) => <SessionPage session={session} sessions={sessions} />
 
 export default Session
 
 export const getServerSideProps: GetServerSideProps = async ({ res, query }) => {
+    const LOGGED_IN_USER_ID = 2
     try {
         const url = process.env.URL_TO_FETCH
 
-        const sessionResponse = await fetch(`${url}/api/fetchSession/${query.sessionId}?userId=${LOGGED_IN_USER_ID}`)
-        const session = await sessionResponse.json()
+        const response = await axios.get(`${url}/api/fetchSession/${query.sessionId}/${LOGGED_IN_USER_ID}`)
+        const session = await response.data
+        console.log("fetch session: ", session)
 
-        const sessionsResponse = await fetch(`${url}/api/fetchSessions/`)
-        const sessions = await sessionsResponse.json()
+        console.log("URL to fetch", `${url}/api/fetchSession/${query.sessionId}`)
+        const sessionsResponse = await axios.get(`${url}/api/fetchSessions/${LOGGED_IN_USER_ID}`)
+        const sessions = sessionsResponse.data
+
+        console.log(sessions)
 
         return {
-            props: { session: session[0], sessions }
+            props: { session, sessions}
         }
     } catch (error) {
         res.statusCode = 404
