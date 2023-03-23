@@ -15,7 +15,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             location,
             startTime,
             endTime,
-            organizers,
             tags,
             info,
             eventId,
@@ -25,31 +24,34 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             equipment,
             team_members,
             track,
-            subEventId
+            subEventId,
+            event_slug,
+            event_item_id
         } = req.body
 
         console.log("event_id", eventId)
 
-        await supabase.from("sessions").insert({
+        const response = await supabase.from("sessions").insert({
             name,
             startDate,
             endDate,
             location,
             startTime,
             endTime,
-            organizers,
             tags,
             info,
             event_id: eventId,
             hasTicket,
-            type,
+            event_type: type,
             format,
             team_members,
             track,
             equipment,
-            subevent_id: subEventId
+            subevent_id: subEventId,
+            event_slug,
+            event_item_id
         })
-        // console.log("Response: ", response)
+        console.log("Response: ", response)
 
         res.status(201).json("Event created")
     } catch (err: any) {
