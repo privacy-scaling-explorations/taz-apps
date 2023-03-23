@@ -10,7 +10,7 @@ type Props = {
 }
 
 export default function Event({ event, sessions, sessionsByEventId }: Props) {
-    return <EventPage event={event} sessions={sessions} sessionsByEventId={sessionsByEventId} />
+    return <EventPage event={event} sessions={sessions} />
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ res, query }) => {
