@@ -1,16 +1,12 @@
 import React, { useEffect, useRef, useState } from "react"
 
-import { useRouter } from "next/router"
 import NextImage from "next/image"
 import moment from "moment"
 import { ToastContainer } from "react-toastify"
-import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs"
 import AddSessionModal from "../../components/AddSessionModal"
 import Sessions from "../../components/Sessions"
 import { EventsDTO, SessionsDTO } from "../../types"
 import BaseTemplate from "../Base"
-
-const supabase = createBrowserSupabaseClient()
 
 type Props = {
     event: EventsDTO

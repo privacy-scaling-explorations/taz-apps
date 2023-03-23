@@ -42,10 +42,13 @@ export function UserIdentityProvider({ children }: UserIdentityProviderProps) {
     const fetchEvents = async () => {
         if (userInfo) {
             await axios
-                .get(`/api/fetchFavoritedByUserId/${userInfo.id}`)
+                .get(`/api/fetchSessions/${userInfo.id}`)
                 .then((res) => {
                     // setUserInfo(findUser)
-                    console.log(res)
+                    console.log(
+                        "res",
+                        res.data.map((item) => item.favoritedSessions)
+                    )
                 })
                 .catch((err) => console.log(err))
         }
@@ -53,8 +56,11 @@ export function UserIdentityProvider({ children }: UserIdentityProviderProps) {
 
     useEffect(() => {
         authUser()
-        fetchEvents()
     }, [])
+
+    useEffect(() => {
+        fetchEvents()
+    }, [userInfo])
 
     return (
         <UserIdentityContext.Provider value={{ setUserInfo, userInfo, isAuthenticated }}>
