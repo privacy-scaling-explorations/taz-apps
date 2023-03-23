@@ -4,11 +4,9 @@ import NextImage from "next/image"
 import Link from "next/link"
 
 import { createClient } from "@supabase/supabase-js"
-// import { getUserSession } from "../../hooks/getUserSession";
 import { SessionsDTO, EventsDTO } from "../../types"
 import BaseTemplate from "../Base"
 import { getUserOnID } from "../../hooks/getUserOnID"
-import AddSessionModal from "../../components/AddSessionModal"
 import CalendarPageSessions from "../../components/Sessions/CalendarPageSessions"
 import CalendarSessionModal from "../../components/CalendarSessionModal"
 

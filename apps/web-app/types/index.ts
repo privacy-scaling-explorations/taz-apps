@@ -56,6 +56,7 @@ export interface SessionsDTO {
     track: string
     endTime: any
     type: any
+    events: EventsDTO
 }
 
 export interface ParticipantsDTO {

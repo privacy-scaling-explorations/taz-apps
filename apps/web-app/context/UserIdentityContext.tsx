@@ -1,12 +1,14 @@
 import { createContext, ReactNode, useState, useContext, useEffect, useMemo } from "react"
 import axios from "axios"
 
-import { EventsDTO, FavoritedEventsDTO, ParticipantsDTO, SessionsDTO, UserDTO } from "../types"
+import { SessionsDTO, UserDTO } from "../types"
 
 type UserIdentityContextData = {
     userInfo: UserDTO | undefined
     setUserInfo: (userInfo: UserDTO) => void
     isAuthenticated: boolean
+    userSessions: SessionsDTO[]
+    userParticipatingSessions: SessionsDTO[]
 }
 
 type UserIdentityProviderProps = {
@@ -17,38 +19,41 @@ export const UserIdentityContext = createContext({} as UserIdentityContextData)
 
 export function UserIdentityProvider({ children }: UserIdentityProviderProps) {
     const [userInfo, setUserInfo] = useState<UserDTO>()
-    const [userEvents, setUserEvents] = useState<EventsDTO[]>()
-    const [userSessions, setUserSessions] = useState<SessionsDTO[]>()
-    const [userRSVP, setUserRSVP] = useState<ParticipantsDTO[]>()
-    const [userBookmarks, setUserBookmarks] = useState<FavoritedEventsDTO[]>()
+    const [userSessions, setUserSessions] = useState<SessionsDTO[]>([])
+    const [userParticipatingSessions, setUserParticipatingSessions] = useState<SessionsDTO[]>([])
 
     const isAuthenticated = useMemo(() => Boolean(userInfo), [userInfo])
 
     const authUser = async () => {
-        const userLocalStorageSession = localStorage.getItem("sb-polcxtixgqxfuvrqgthn-auth-token") as string
-        const userUuid = JSON.parse(userLocalStorageSession).user.id
+        try {
+            const userLocalStorageSession = localStorage.getItem("sb-polcxtixgqxfuvrqgthn-auth-token") as string
+            const userUuid = JSON.parse(userLocalStorageSession)
 
-        if (userUuid) {
-            await axios
-                .get("/api/fetchUsers")
-                .then((res) => {
-                    const findUser = res.data.find((item: any) => item.uui_auth === userUuid)
-                    setUserInfo(findUser)
-                })
-                .catch((err) => console.log(err))
+            if (userLocalStorageSession && userUuid) {
+                await axios
+                    .get("/api/fetchUsers")
+                    .then((res) => {
+                        const findUser = res.data.find((item: any) => item.uui_auth === userUuid.user.id)
+                        setUserInfo(findUser)
+                    })
+                    .catch((err) => console.log(err))
+            }
+        } catch (error) {
+            console.log(error)
         }
     }
 
     const fetchEvents = async () => {
         if (userInfo) {
             await axios
-                .get(`/api/fetchSessions/${userInfo.id}`)
+                .get(`/api/fetchSessionsByUserId/${userInfo.id}`)
                 .then((res) => {
-                    // setUserInfo(findUser)
-                    console.log(
-                        "res",
-                        res.data.map((item) => item.favoritedSessions)
-                    )
+                    const sessionsParticipanting = res.data.filter((item: any) => item.participants.length > 0)
+                    const sessionsFavorited = res.data.filter((item: any) => item.favoritedSessions.length > 0)
+                    const sessionsFilteredByUserId: SessionsDTO[] = [...sessionsFavorited, ...sessionsParticipanting]
+
+                    setUserParticipatingSessions(sessionsParticipanting)
+                    setUserSessions(sessionsFilteredByUserId)
                 })
                 .catch((err) => console.log(err))
         }
@@ -63,7 +68,9 @@ export function UserIdentityProvider({ children }: UserIdentityProviderProps) {
     }, [userInfo])
 
     return (
-        <UserIdentityContext.Provider value={{ setUserInfo, userInfo, isAuthenticated }}>
+        <UserIdentityContext.Provider
+            value={{ setUserInfo, userInfo, isAuthenticated, userSessions, userParticipatingSessions }}
+        >
             {children}
         </UserIdentityContext.Provider>
     )
