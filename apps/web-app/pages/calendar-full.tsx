@@ -22,13 +22,12 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
 
         const events: EventsDTO[] = await eventsResponse.json()
 
-        const filteredSessions = events
-            .filter((item) => item.sessions.length > 0)
-            .map((item) => item.sessions)
-            .flat()
+        const sessionsResponse = await fetch(`${url}/api/fetchSessions`)
+
+        const sessions: SessionsDTO[] = await sessionsResponse.json()
 
         return {
-            props: { sessions: filteredSessions, events: events }
+            props: { sessions: sessions, events: events }
         }
     } catch (error) {
         res.statusCode = 404

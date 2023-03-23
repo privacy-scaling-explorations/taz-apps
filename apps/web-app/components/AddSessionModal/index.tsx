@@ -99,7 +99,7 @@ const AddSessionModal = ({ isOpen, closeModal, event, sessions }: Props) => {
                 // Step 5 Add to database
                 const createEventDB = await axios.post("/api/createSession", {
                     ...newSession,
-                    subevent_id: subEventRes.data.id,
+                    subEventId: subEventRes.data.id,
                     startTime: formattedTime
                 })
                 console.log("DB response: ", createEventDB)

@@ -9,10 +9,9 @@ import BuyTicketModal from "../BuyTicketModal"
 
 type Props = {
     sessions: SessionsDTO[]
-    events: EventsDTO[]
 }
 
-const CalendarPageSessions = ({ sessions, events }: Props) => {
+const CalendarPageSessions = ({ sessions}: Props) => {
     const [openBuyTicketModal, setOpenBuyTicketModal] = useState(false)
     const [currentSubEventParams, setCurrentSubEventParams] = useState<any>({
         subEventId: 0,
@@ -73,7 +72,7 @@ const CalendarPageSessions = ({ sessions, events }: Props) => {
         await axios.post("/api/pretix-create-order", {
             subEventId: currentSubEventParams.subEventId,
             slug: currentSubEventParams.eventSlug,
-            itemId: currentSubEventParams.itemId
+            itemId: currentSubEventParams.eventItemId
         })
     }
 
@@ -142,19 +141,19 @@ const CalendarPageSessions = ({ sessions, events }: Props) => {
                                 />
                             </div>
                             {
-                                // item.participants.length > 0 ? (
-                                //     <button className="flex gap-2 items-center bg-white border border-primary text-zulalu-primary font-[600] py-[4px] px-[16px] rounded-[8px] cursor-default">
-                                //         <NextImage src={"/vector-circle-check.svg"} width={16} height={16} />
-                                //         SEE YOU THERE!
-                                //     </button>
-                                // ) :
+                                item.participants.length > 0 ? (
+                                    <button className="flex gap-2 items-center bg-white border border-primary text-zulalu-primary font-[600] py-[4px] px-[16px] rounded-[8px] cursor-default">
+                                        <NextImage src={"/vector-circle-check.svg"} width={16} height={16} />
+                                        SEE YOU THERE!
+                                    </button>
+                                ) :
                                 item.hasTicket ? (
                                     <>
                                         <button
                                             className="bg-[#35655F] text-white py-[4px] px-[16px] text-[16px] rounded-[6px]"
                                             onClick={() => {
                                                 setCurrentSubEventParams({
-                                                    subEventId: item.id,
+                                                    subEventId: item.subevent_id,
                                                     eventSlug: item.event_slug,
                                                     eventItemId: item.event_item_id
                                                 })
@@ -213,7 +212,7 @@ const CalendarPageSessions = ({ sessions, events }: Props) => {
                                 <div className="flex flex-row items-center gap-[8px]">
                                     <NextImage src={"/vector-clock.svg"} alt="vector-clock" width={16} height={16} />
                                     <p className="text-[#708E8C] text-[18px]">
-                                        {item.startTime.slice(0, -3)}-{item.endTime.slice(0, -3)}
+                                        {item.startTime.slice(0, -3)}
                                     </p>
                                 </div>
                                 <div className="flex flex-row items-center gap-[8px] border-b border-[#708E8C] text-[#708E8C]">

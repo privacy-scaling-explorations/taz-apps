@@ -14,7 +14,7 @@ type Props = {
 
 const Sessions = ({ event, sessions }: Props) => {
     const [openBuyTicketModal, setOpenBuyTicketModal] = useState(false)
-    const [currentSubEventId, setCurrentSubEventId] = useState<any>(0)
+    const [currentSubEventId, setCurrentSubEventId] = useState<number>(0)
 
     const router = useRouter()
     const LOGGED_IN_USER_ID = 1

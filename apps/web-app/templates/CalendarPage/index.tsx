@@ -183,6 +183,7 @@ const CalendarPage = ({ sessions, events }: Props) => {
                                         closeModal={setOpenAddSessionModal}
                                         isOpen={openAddSessionModal}
                                         events={events}
+                                        sessions={sessions}
                                     />
                                 </>
                             ) : (
@@ -257,7 +258,7 @@ const CalendarPage = ({ sessions, events }: Props) => {
 
                     <div className="border border-black flex flex-col"></div>
 
-                    <CalendarPageSessions sessions={filteredSessionsByDate} events={events} />
+                    <CalendarPageSessions sessions={filteredSessionsByDate} />
                 </div>
                 {/* <ToastContainer
                     position="top-center"
