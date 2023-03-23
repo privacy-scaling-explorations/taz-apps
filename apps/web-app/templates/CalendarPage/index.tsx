@@ -5,6 +5,7 @@ import Link from "next/link"
 
 import { createClient } from "@supabase/supabase-js"
 // import { getUserSession } from "../../hooks/getUserSession";
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs"
 import { SessionsDTO, EventsDTO } from "../../types"
 import BaseTemplate from "../Base"
 import { getUserOnID } from "../../hooks/getUserOnID"
@@ -12,9 +13,8 @@ import AddSessionModal from "../../components/AddSessionModal"
 import CalendarPageSessions from "../../components/Sessions/CalendarPageSessions"
 import CalendarSessionModal from "../../components/CalendarSessionModal"
 
-const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co"
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY
-const supabase = createClient(supabaseUrl, supabaseKey as string)
+
+const supabase = createBrowserSupabaseClient()
 
 type Props = {
     sessions: SessionsDTO[]

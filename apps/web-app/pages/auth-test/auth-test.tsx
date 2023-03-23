@@ -1,21 +1,16 @@
 import { GetServerSideProps } from "next"
 import { createClient } from "@supabase/supabase-js"
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs"
 import { SessionsDTO } from "../../types"
+
+const supabase = createBrowserSupabaseClient()
 
 type Props = {
     sessions: SessionsDTO[]
 }
 
 export default function AuthTest({ sessions }: Props) {
-    const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co"
-    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY
-    const supabase = createClient(supabaseUrl, supabaseKey as string, {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false,
-        detectSessionInUrl: false
-      }
-    })
+
     supabase.auth.signInWithPassword({
         email: "test123@test123.com",
         password: "asdfasdf"
@@ -38,7 +33,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
 
     const url = process.env.URL_TO_FETCH
 
-    const response = await fetch(`${url}/api/fetchSessions/1`)
+    const response = await fetch(`${window.location.origin}/api/fetchSessions/1`)
     const sessions = await response.json()
     return {
         props: { sessions }
