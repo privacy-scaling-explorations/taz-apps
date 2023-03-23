@@ -32,10 +32,11 @@ export interface SessionsDTO {
     description: string
     equipment: string
     event_id: number
-    event_item_id: string
+    event_item_id: number
     event_slug: string
     event_type: string
     favoritedSessions: FavoritedSessionsDTO[]
+    favorited_sessions: any
     format: string
     hasTicket: boolean
     id: number
@@ -53,13 +54,8 @@ export interface SessionsDTO {
         role: string
     }[]
     track: string
-}
-
-export interface RsvpDTO {
-    id: number
-    created_at: Date
-    session_id: number
-    user_id: number
+    endTime: any
+    type: any
 }
 
 export interface ParticipantsDTO {

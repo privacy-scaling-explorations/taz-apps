@@ -21,6 +21,8 @@ const PassportModal = ({ openPassportModal, setOpenPassportModal }: Props) => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
+    const handleEmailChange = (event: any) => setEmail(event.target.value)
+    const handlePasswordChange = (event: any) => setPassword(event.target.value)
     const inputRef = useRef(null)
 
     async function zuzaluMembershipProof() {

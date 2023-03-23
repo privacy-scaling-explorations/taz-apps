@@ -15,6 +15,7 @@ export default function Event({ sessions, events }: Props) {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ res }) => {
+    const LOGGED_IN_USER_ID = 1
     try {
         const url = process.env.URL_TO_FETCH
 
@@ -22,13 +23,12 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
 
         const events: EventsDTO[] = await eventsResponse.json()
 
-        const filteredSessions = events
-            .filter((item) => item.sessions.length > 0)
-            .map((item) => item.sessions)
-            .flat()
+        const sessionsResponse = await fetch(`${url}/api/fetchSessions/${LOGGED_IN_USER_ID}`)
+
+        const sessions: SessionsDTO[] = await sessionsResponse.json()
 
         return {
-            props: { sessions: filteredSessions, events }
+            props: { sessions, events }
         }
     } catch (error) {
         res.statusCode = 404

@@ -8,25 +8,24 @@ import { Fragment, useRef, useState } from "react"
 type Props = {
     isOpen: boolean
     closeModal: (b: boolean) => void
-    subEventId: number
     handleBuyTicket: Function
 }
 
-const BuyTicketModal = ({ isOpen, closeModal, subEventId, handleBuyTicket }: Props) => {
+const BuyTicketModal = ({ isOpen, closeModal, handleBuyTicket }: Props) => {
     const [step, setStep] = useState(1)
-    
+
     const resetAndClose = (close = false) => {
         setStep(1)
         closeModal(close)
     }
-    
-    const handleYesClick = () => {
+
+    const handleYesClick = async () => {
         setStep(2)
-        handleBuyTicket(subEventId)
+        await handleBuyTicket()
 
         setTimeout(() => {
             setStep(3)
-        }, 5000)
+        }, 2000)
     }
     return (
         <Transition appear show={isOpen} as={Fragment}>

@@ -1,19 +1,45 @@
 /* eslint-disable prefer-const */
 import { EventsDTO } from "../../types"
 
+type NewSessionState = {
+    description: string
+    equipment: string
+    event_id: number
+    event_type: string
+    format: string
+    hasTicket: boolean
+    info: string
+    level: string
+    location: string
+    name: string
+    startDate: Date
+    startTime: string
+    subevent_id: number
+    tags: string[]
+    team_members: {
+        name: string
+        role: string
+    }[]
+    track: string
+    event_slug: string
+    event_item_id: number
+}
+
 type Props = {
     setSteps: (steps: number) => void
     events: EventsDTO[]
-    setSelectedEventParams: Function
+    newSession: NewSessionState
+    setNewSession: Function
 }
 
-const Step1 = ({ events, setSteps, setSelectedEventParams }: Props) => {
+const Step1 = ({ events, setSteps, newSession, setNewSession }: Props) => {
     const handleSelect = (index: number) => {
         const selectedEvent = events[index]
-        setSelectedEventParams({
-            eventId: selectedEvent.id,
-            slug: selectedEvent.slug,
-            itemId: selectedEvent.item_id
+        setNewSession({
+            ...newSession,
+            event_id: selectedEvent.id,
+            event_slug: selectedEvent.slug,
+            event_item_id: selectedEvent.item_id
         })
     }
 

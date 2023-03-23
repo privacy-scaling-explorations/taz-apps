@@ -183,6 +183,7 @@ const CalendarPage = ({ sessions, events }: Props) => {
                                         closeModal={setOpenAddSessionModal}
                                         isOpen={openAddSessionModal}
                                         events={events}
+                                        sessions={sessions}
                                     />
                                 </>
                             ) : (
