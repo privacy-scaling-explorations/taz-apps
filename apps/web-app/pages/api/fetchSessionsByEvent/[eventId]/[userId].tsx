@@ -10,9 +10,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const response = await supabase
             .from("sessions")
             .select("*, participants (*), favoritedSessions:favorited_sessions (*)")
-            .eq("event_id", req.query.eventId)
             .eq("participants.user_id", req.query.userId)
             .eq("favoritedSessions.user_id", req.query.userId)
+            .eq("event_id", req.query.eventId)
         if (response.error === null) res.status(200).send(response.data)
         else res.status(response.status).send(response.error)
     } catch (err: any) {

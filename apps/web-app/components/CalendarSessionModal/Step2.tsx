@@ -39,7 +39,7 @@ type Props = {
     sessions: SessionsDTO[]
 }
 
-const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
+const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
     const { name, team_members, startDate, tags, description } = newSession
     const [teamMember, setTeamMember] = useState({ name: "", role: "Speaker" })
     const [tag, setTag] = useState("")
@@ -213,7 +213,7 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
             })
         }
 
-        setSteps(2)
+        setSteps(3)
     }
     return (
         <div className="flex flex-col w-full">
@@ -473,4 +473,4 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
     )
 }
 
-export default Step1
+export default Step2

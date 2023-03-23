@@ -34,7 +34,7 @@ type Props = {
     amountTickets: string
 }
 
-const Step3 = ({ setSteps, newSession, handleSubmit, isLoading, amountTickets }: Props) => {
+const Step4 = ({ setSteps, newSession, handleSubmit, isLoading, amountTickets }: Props) => {
     const day = newSession.startDate
         ? new Date(newSession.startDate).toLocaleDateString("en-US", { day: "numeric" })
         : ""
@@ -72,7 +72,7 @@ const Step3 = ({ setSteps, newSession, handleSubmit, isLoading, amountTickets }:
                 <button
                     type="button"
                     className="w-full flex flex-row border-zulalu-primary border font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-white rounded-[8px] text-black text-[16px]"
-                    onClick={() => setSteps(1)}
+                    onClick={() => setSteps(2)}
                 >
                     <IoMdArrowBack size={20} />
                     BACK
@@ -90,4 +90,4 @@ const Step3 = ({ setSteps, newSession, handleSubmit, isLoading, amountTickets }:
     )
 }
 
-export default Step3
+export default Step4

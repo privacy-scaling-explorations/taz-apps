@@ -34,9 +34,9 @@ type Props = {
     setNewSession: (newEvent: NewSessionState) => void
 }
 
-const Step2 = ({ setSteps, amountTickets, setAmountTickets, newSession, setNewSession }: Props) => {
+const Step3 = ({ setSteps, amountTickets, setAmountTickets, newSession, setNewSession }: Props) => {
     const handleSubmit = async () => {
-        setSteps(3)
+        setSteps(4)
     }
     return (
         <div className="flex flex-col w-full gap-5">
@@ -120,7 +120,7 @@ const Step2 = ({ setSteps, amountTickets, setAmountTickets, newSession, setNewSe
                 <button
                     type="button"
                     className="w-full flex flex-row border-zulalu-primary border font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-white rounded-[8px] text-black text-[16px]"
-                    onClick={() => setSteps(1)}
+                    onClick={() => setSteps(2)}
                 >
                     <IoMdArrowBack size={20} />
                     BACK
@@ -137,4 +137,4 @@ const Step2 = ({ setSteps, amountTickets, setAmountTickets, newSession, setNewSe
     )
 }
 
-export default Step2
+export default Step3

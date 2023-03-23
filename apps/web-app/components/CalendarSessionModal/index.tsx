@@ -1,3 +1,5 @@
+import "react-autocomplete-input/dist/bundle.css"
+import "react-datepicker/dist/react-datepicker.css"
 import { Dialog, Transition } from "@headlessui/react"
 import { ToastContainer, toast } from "react-toastify"
 import { useRouter } from "next/router"
@@ -8,6 +10,7 @@ import ModalSteps from "./ModalSteps"
 import Step1 from "./Step1"
 import Step2 from "./Step2"
 import Step3 from "./Step3"
+import Step4 from "./Step4"
 import { EventsDTO, SessionsDTO } from "../../types"
 
 type NewSessionState = {
@@ -37,35 +40,37 @@ type NewSessionState = {
 type Props = {
     isOpen: boolean
     closeModal: (b: boolean) => void
-    event: EventsDTO
+    events: EventsDTO[]
     sessions: SessionsDTO[]
 }
 
-const AddSessionModal = ({ isOpen, closeModal, event, sessions }: Props) => {
+const CalendarSessionModal = ({ isOpen, closeModal, events, sessions }: Props) => {
     const router = useRouter()
     const questionTextRef = useRef(null)
     const [isLoading, setIsLoading] = useState(false)
     const [steps, setSteps] = useState(1)
     const [newSession, setNewSession] = useState<NewSessionState>({
+        description: "",
         name: "",
         team_members: [],
         startDate: new Date(),
         startTime: "00",
-        location: "",
+        location: "Amphitheater",
         tags: [],
         info: "",
-        event_id: event.id,
+        event_id: 97,
         hasTicket: false,
         format: "Live",
         level: "Beginner",
         equipment: "",
-        subevent_id: 0,
-        description: "",
         track: "ZK Week",
         event_type: "Workshop",
-        event_slug: event.slug,
-        event_item_id: event.item_id
+        event_slug: "CoordiNations",
+        event_item_id: 111,
+        subevent_id: 0
     })
+
+    console.log("selected params", newSession.event_id, newSession.event_slug, newSession.event_item_id)
     const [amountTickets, setAmountTickets] = useState("0")
 
     const handleSubmit = async () => {
@@ -79,9 +84,8 @@ const AddSessionModal = ({ isOpen, closeModal, event, sessions }: Props) => {
                 const subEventRes = await axios.post(`/api/pretix-create-subevent`, {
                     name: newSession.name,
                     startDate: newSession.startDate,
-                    endDate: newSession.startDate,
-                    slug: event.slug,
-                    itemId: event.item_id
+                    slug: newSession.event_slug,
+                    itemId: newSession.event_item_id
                 })
 
                 console.log("Created subEvent response: ", subEventRes.data)
@@ -91,8 +95,8 @@ const AddSessionModal = ({ isOpen, closeModal, event, sessions }: Props) => {
                 const quotaCreatedRes = await axios.post(`/api/pretix-create-quota/`, {
                     ticketAmount: amountTickets,
                     subEventId: subEventRes.data.id,
-                    slug: event.slug,
-                    itemId: event.item_id
+                    slug: newSession.event_slug,
+                    itemId: newSession.event_item_id
                 })
 
                 console.log("Quota creatd: ", quotaCreatedRes.data)
@@ -131,24 +135,24 @@ const AddSessionModal = ({ isOpen, closeModal, event, sessions }: Props) => {
         setIsLoading(false)
         setSteps(1)
         setNewSession({
+            description: "",
             name: "",
             team_members: [],
             startDate: new Date(),
-            location: "",
             startTime: "00",
+            location: "Amphitheater",
             tags: [],
             info: "",
-            event_id: event.id,
-            event_item_id: 0,
-            event_slug: "",
-            subevent_id: 0,
-            description: "",
+            event_id: 97,
             hasTicket: false,
-            track: "ZK Week",
-            equipment: "",
             format: "Live",
+            level: "Beginner",
+            equipment: "",
+            track: "ZK Week",
             event_type: "Workshop",
-            level: "Beginner"
+            event_slug: "CoordiNations",
+            event_item_id: 111,
+            subevent_id: 0
         })
         closeModal(false)
     }
@@ -193,20 +197,19 @@ const AddSessionModal = ({ isOpen, closeModal, event, sessions }: Props) => {
                                     <ModalSteps steps={steps} />
                                     {steps === 1 && (
                                         <Step1
+                                            events={events}
+                                            setSteps={setSteps}
                                             newSession={newSession}
                                             setNewSession={setNewSession}
-                                            setSteps={setSteps}
-                                            sessions={sessions}
                                         />
                                     )}
 
                                     {steps === 2 && (
                                         <Step2
                                             setSteps={setSteps}
-                                            setAmountTickets={setAmountTickets}
-                                            amountTickets={amountTickets}
                                             newSession={newSession}
                                             setNewSession={setNewSession}
+                                            sessions={sessions}
                                         />
                                     )}
 
@@ -214,8 +217,18 @@ const AddSessionModal = ({ isOpen, closeModal, event, sessions }: Props) => {
                                         <Step3
                                             setSteps={setSteps}
                                             newSession={newSession}
-                                            handleSubmit={handleSubmit}
+                                            setNewSession={setNewSession}
+                                            setAmountTickets={setAmountTickets}
+                                            amountTickets={amountTickets}
+                                        />
+                                    )}
+
+                                    {steps === 4 && (
+                                        <Step4
+                                            setSteps={setSteps}
+                                            newSession={newSession}
                                             isLoading={isLoading}
+                                            handleSubmit={handleSubmit}
                                             amountTickets={amountTickets}
                                         />
                                     )}
@@ -229,4 +242,4 @@ const AddSessionModal = ({ isOpen, closeModal, event, sessions }: Props) => {
     )
 }
 
-export default AddSessionModal
+export default CalendarSessionModal

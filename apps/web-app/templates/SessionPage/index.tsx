@@ -1,39 +1,92 @@
 import { useState } from "react"
 import NextImage from "next/image"
-import { SessionsDTO, RsvpDTO } from "../../types"
+import axios from "axios"
+import { toast } from "react-toastify"
+import { useRouter } from "next/router"
+import { SessionsDTO, EventsDTO } from "../../types"
 import BaseTemplate from "../Base"
+import ParticipateButton from "../../components/ParticipateButton"
+
 
 type Props = {
     session: SessionsDTO
-    createRsvp: (user_id: number, session_id: number) => Promise<RsvpDTO | null>
-    deleteRsvp: (id: number) => Promise<boolean>
+    event: EventsDTO
 }
 
-const SessionPage = ({ session, createRsvp, deleteRsvp }: Props) => {
+const SessionPage = ({ session, event }: Props) => {
+    const router = useRouter()
     const LOGGED_IN_USER_ID = 1
+    console.log(session)
+    const is_favorited = session.favorited_sessions.some((favorited: any) => favorited.user_id === LOGGED_IN_USER_ID && favorited.session_id === session.id);
 
     const { startDate, endTime, location, startTime } = session
-    // const [rsvpId, setRsvpId] = useState(session.rsvps[0]?.id ?? 0)
-    const [rsvpId, setRsvpId] = useState(0)
 
     const startDateFormatted = new Date(startDate).toLocaleDateString("en-US", { day: "numeric" })
     const startWeekDayFormatted = new Date(startDate).toLocaleDateString("en-US", { weekday: "long" })
     const eventMonthFormatted = new Date(startDate).toLocaleDateString("en-US", { month: "long" })
 
-    const onCreateRvsp = async () => {
-        const newRsvp = await createRsvp(LOGGED_IN_USER_ID, session.id)
-        if (newRsvp !== null) {
-            console.log("Rsvp created: ", newRsvp)
-            setRsvpId(newRsvp.id)
+
+    const makeToast = (isSuccess: boolean, message: string) => {
+        if (isSuccess) {
+            toast.success(message, {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light"
+            })
+        } else {
+            toast.error(message, {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light"
+            })
         }
     }
 
-    const onDeleteRsvp = async () => {
-        const isDeleted = await deleteRsvp(rsvpId)
-        if (isDeleted) {
-            console.log("Rsvp deleted")
-            setRsvpId(0)
-        }
+
+    const handleAddFavorite = async (sessionId: number) => {
+        await axios
+            .post("/api/addFavoriteSession", {
+                session_id: sessionId,
+                user_id: LOGGED_IN_USER_ID
+            })
+            .then((res) => {
+                if (res.data === "Session favorited") {
+                    makeToast(true, "This session is now bookmarked.")
+                    router.push(router.asPath)
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+                makeToast(false, "Error")
+            })
+    }
+
+    const handleRemoveFavorite = async (favoritedSessionId: number) => {
+        console.log("remove bookmark")
+        await axios
+            .post("/api/removeFavoriteSession", {
+                id: favoritedSessionId
+            })
+            .then((res) => {
+                if (res.status === 200) {
+                    makeToast(true, "This session is no longer bookmarked.")
+                    router.push(router.asPath)
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+                makeToast(false, "Error")
+            })
     }
 
     return (
@@ -46,27 +99,26 @@ const SessionPage = ({ session, createRsvp, deleteRsvp }: Props) => {
                         <h1 className={`text-black font-[600]`}>ZK Week</h1>
                     </div>
                     <div className="flex flex-row gap-[8px] items-center">
-                        <button className="flex gap-2 items-center bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]">
-                            <NextImage src={"/vector-bookmark.svg"} width={12} height={16} />
-                            BOOKMARK
+                        <button className="flex gap-2 items-center bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]"
+                                    onClick={() => {
+                                        if (is_favorited > 0) {
+                                            handleRemoveFavorite(session.id)
+                                        } else {
+                                            handleAddFavorite(session.id)
+                                        }
+                                    }}>
+                            <NextImage src={
+                                        is_favorited > 0
+                                            ? "/vector-bookmark2.svg"
+                                            : "/vector-bookmark.svg"
+                                    } width={12} height={16} />
+                            {
+                                        is_favorited > 0
+                                            ? "BOOKMARKED"
+                                            : "BOOKMARK"
+                                    }
                         </button>
-                        {rsvpId === 0 && (
-                            <button
-                                onClick={onCreateRvsp}
-                                className="bg-zulalu-primary text-white py-[8px] px-[16px] rounded-[8px] gap-[8px] flex flex-row items-center justify-center"
-                            >
-                                RSVP
-                            </button>
-                        )}
-                        {rsvpId !== 0 && (
-                            <button
-                                onClick={() => onDeleteRsvp()}
-                                className="flex gap-2 items-center bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]"
-                            >
-                                <NextImage src={"/vector-circle-check.svg"} width={16} height={16} />
-                                SEE YOU THERE!
-                            </button>
-                        )}
+                        <ParticipateButton event={event} session={session} isTallButton={true} />
                     </div>
                 </div>
                 <div className="w-full flex flex-col md:flex-row gap-[8px] h-full">
@@ -91,7 +143,7 @@ const SessionPage = ({ session, createRsvp, deleteRsvp }: Props) => {
                         <div className="flex flex-row gap-[24px] w-full mt-4">
                             <div className="w-5/6 py-5">{session.info}</div>
                             <div className="flex flex-wrap gap-5 w-3/6 p-5">
-                                {session.team_members.map((item : any, index : any) => (
+                                {session.team_members.map((item: any, index: any) => (
                                     <div
                                         key={index}
                                         className="flex w-auto rounded-[4px] gap-2 px-2 py-1 bg-[#E4EAEA] text-[16px]"
@@ -157,3 +209,4 @@ const SessionPage = ({ session, createRsvp, deleteRsvp }: Props) => {
 }
 
 export default SessionPage
+

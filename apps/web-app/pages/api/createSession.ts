@@ -1,31 +1,28 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
-import { createClient } from "@supabase/supabase-js";
 // import fetch from "node-fetch"
-
-const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co";
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
-
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  try {
-    const supabase = createServerSupabaseClient({ req, res });
+  // Create authenticated Supabase Client
+  const supabase = createServerSupabaseClient({ req, res });
 
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
+  // Check if we have a session
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
-    if (!session)
-      return res.status(401).json({
-        error: "not_authenticated",
-        description:
-          "The user does not have an active session or is not authenticated",
-      });
+  if (!session)
+    return res.status(401).json({
+      error: "not_authenticated",
+      description:
+        "The user does not have an active session or is not authenticated",
+    });
 
-    if (session) {
+  if (session) {
+    try {
       const {
         name,
         startDate,
@@ -70,9 +67,9 @@ export default async function handler(
       // console.log("Response: ", response)
 
       res.status(201).json("Event created");
+    } catch (error) {
+      console.log("error: ", error);
+      res.status(500).json({ statusCode: 500, message: error });
     }
-  } catch (err) {
-    console.log("error: ", err);
-    res.status(500).json({ statusCode: 500, message: err });
   }
 }

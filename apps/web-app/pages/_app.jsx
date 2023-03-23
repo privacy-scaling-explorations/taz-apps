@@ -1,15 +1,14 @@
 // import type { AppProps } from "next/app"
 
-import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs"
-import { SessionContextProvider, Session } from "@supabase/auth-helpers-react"
-import { useState } from "react"
-
 import { IdentityContextProvider } from "../context/IdentityContextProvider"
 import { PassportModalContextProvider } from "../context/PassportModalContext"
-
 import "../styles/globals.css"
 import "../styles/drawingComponent.css"
+import "react-toastify/dist/ReactToastify.css"
+import "react-autocomplete-input/dist/bundle.css"
+import "react-datepicker/dist/react-datepicker.css"
 
+<<<<<<< HEAD
 const MyApp = ({ Component, pageProps }) => {
     const [supabaseClient] = useState(() => createBrowserSupabaseClient())
     return (
@@ -22,5 +21,15 @@ const MyApp = ({ Component, pageProps }) => {
         </SessionContextProvider>
     )
 }
+=======
+
+const MyApp = ({ Component, pageProps }) => (
+    <IdentityContextProvider>
+        <PassportModalContextProvider>
+            <Component {...pageProps} />
+        </PassportModalContextProvider>
+    </IdentityContextProvider>
+)
+>>>>>>> acaaf056ea0574acf648c785ff8478ab1018ffaf
 
 export default MyApp
