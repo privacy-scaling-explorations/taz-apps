@@ -54,6 +54,7 @@ export interface SessionsDTO {
         role: string
     }[]
     track: string
+    quota_id: number
 }
 
 export interface RsvpDTO {

@@ -6,11 +6,12 @@ import { SessionsDTO, RsvpDTO } from "../../../../types"
 
 type Props = {
     session: SessionsDTO
+    sessions: SessionsDTO[]
 }
 
 const LOGGED_IN_USER_ID = 1
 
-const Session = ({ session }: Props) => {
+const Session = ({ session, sessions }: Props) => {
     const createRsvp = async (userId: number, sessionId: number) => {
         let newRsvp: RsvpDTO | null = null
         try {
@@ -41,7 +42,7 @@ const Session = ({ session }: Props) => {
         return true
     }
 
-    return <SessionPage session={session} createRsvp={createRsvp} deleteRsvp={deleteRsvp} />
+    return <SessionPage session={session} sessions={sessions} createRsvp={createRsvp} deleteRsvp={deleteRsvp} />
 }
 
 export default Session
@@ -50,11 +51,14 @@ export const getServerSideProps: GetServerSideProps = async ({ res, query }) => 
     try {
         const url = process.env.URL_TO_FETCH
 
-        const response = await fetch(`${url}/api/fetchSession/${query.sessionId}?userId=${LOGGED_IN_USER_ID}`)
-        const session = await response.json()
+        const sessionResponse = await fetch(`${url}/api/fetchSession/${query.sessionId}?userId=${LOGGED_IN_USER_ID}`)
+        const session = await sessionResponse.json()
+
+        const sessionsResponse = await fetch(`${url}/api/fetchSessions/`)
+        const sessions = await sessionsResponse.json()
 
         return {
-            props: { session: session[0] }
+            props: { session: session[0], sessions }
         }
     } catch (error) {
         res.statusCode = 404

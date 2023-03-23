@@ -2,19 +2,27 @@ import { useState } from "react"
 import NextImage from "next/image"
 import { SessionsDTO, RsvpDTO } from "../../types"
 import BaseTemplate from "../Base"
+import axios from "axios"
+import DeleteSessionModal from "../../components/DeleteSessionModal"
+import EditSessionModal from "../../components/EditSessionModal"
+import { useRouter } from "next/router"
 
 type Props = {
     session: SessionsDTO
+    sessions: SessionsDTO[]
     createRsvp: (user_id: number, session_id: number) => Promise<RsvpDTO | null>
     deleteRsvp: (id: number) => Promise<boolean>
 }
 
-const SessionPage = ({ session, createRsvp, deleteRsvp }: Props) => {
+const SessionPage = ({ session, sessions, createRsvp, deleteRsvp }: Props) => {
     const LOGGED_IN_USER_ID = 1
+    const router = useRouter()
 
-    const { startDate, endTime, location, startTime } = session
+    const { startDate, location, startTime } = session
     // const [rsvpId, setRsvpId] = useState(session.rsvps[0]?.id ?? 0)
     const [rsvpId, setRsvpId] = useState(0)
+    const [openDeleteSessionModal, setOpenDeleteSessionModal] = useState(false)
+    const [openEditSessionModal, setOpenEditSessionModal] = useState(false)
 
     const startDateFormatted = new Date(startDate).toLocaleDateString("en-US", { day: "numeric" })
     const startWeekDayFormatted = new Date(startDate).toLocaleDateString("en-US", { weekday: "long" })
@@ -34,6 +42,24 @@ const SessionPage = ({ session, createRsvp, deleteRsvp }: Props) => {
             console.log("Rsvp deleted")
             setRsvpId(0)
         }
+    }
+
+    const deleteSession = async () => {
+        await axios.post("/api/deleteSession", { id: session.id })
+        try {
+            await axios.post("/api/pretix-delete-subevent", {
+                slug: session.event_slug,
+                subEventId: session.subevent_id
+            })
+        } catch (error) {
+            console.log(error)
+            await axios.post("/api/pretix-deactivate-subevent", {
+                slug: session.event_slug,
+                subEventId: session.subevent_id
+            })
+        }
+
+        router.push("/calendar-full")
     }
 
     return (
@@ -67,6 +93,31 @@ const SessionPage = ({ session, createRsvp, deleteRsvp }: Props) => {
                                 SEE YOU THERE!
                             </button>
                         )}
+                        <button
+                            className="flex gap-2 items-center bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]"
+                            onClick={() => setOpenEditSessionModal(true)}
+                        >
+                            <NextImage src={"/vector-bookmark.svg"} width={12} height={16} />
+                            EDIT SESSION
+                        </button>
+                        <EditSessionModal
+                            isOpen={openEditSessionModal}
+                            closeModal={setOpenEditSessionModal}
+                            session={session}
+                            sessions={sessions}
+                        />
+                        <button
+                            className="flex gap-2 items-center bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]"
+                            onClick={() => setOpenDeleteSessionModal(true)}
+                        >
+                            <NextImage src={"/vector-bookmark.svg"} width={12} height={16} />
+                            DELETE SESSION
+                        </button>
+                        <DeleteSessionModal
+                            isOpen={openDeleteSessionModal}
+                            closeModal={setOpenDeleteSessionModal}
+                            deleteSession={deleteSession}
+                        />
                     </div>
                 </div>
                 <div className="w-full flex flex-col md:flex-row gap-[8px] h-full">
@@ -81,7 +132,7 @@ const SessionPage = ({ session, createRsvp, deleteRsvp }: Props) => {
                             </div>
                             <div className="flex gap-1 items-center justify-start mt-4">
                                 <NextImage src={"/vector-clock.svg"} alt="calendar" width={15} height={15} />
-                                <h1 className="text-zulalu-secondary">{`${startTime} - ${endTime}`}</h1>
+                                <h1 className="text-zulalu-secondary">{`${startTime}`}</h1>
                             </div>
                             <div className="flex gap-1 items-center justify-start mt-4">
                                 <NextImage src={"/vector-location.svg"} alt="calendar" width={15} height={15} />
@@ -91,7 +142,7 @@ const SessionPage = ({ session, createRsvp, deleteRsvp }: Props) => {
                         <div className="flex flex-row gap-[24px] w-full mt-4">
                             <div className="w-5/6 py-5">{session.info}</div>
                             <div className="flex flex-wrap gap-5 w-3/6 p-5">
-                                {session.team_members.map((item : any, index : any) => (
+                                {session.team_members.map((item: any, index: any) => (
                                     <div
                                         key={index}
                                         className="flex w-auto rounded-[4px] gap-2 px-2 py-1 bg-[#E4EAEA] text-[16px]"
@@ -143,7 +194,7 @@ const SessionPage = ({ session, createRsvp, deleteRsvp }: Props) => {
                                 Track: <p className="font-bold">{session.track}</p>
                             </div>
                             <div className="flex items-center gap-1">
-                                Type: <p className="font-bold">{session.type}</p>
+                                Type: <p className="font-bold">{session.event_type}</p>
                             </div>
                             <div className="flex items-center gap-1">
                                 Level: <p className="font-bold">{session.level}</p>
