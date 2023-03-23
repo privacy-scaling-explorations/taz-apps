@@ -16,8 +16,8 @@ export default function getUserSession() {
   }
 
   useEffect(() => {
-    sbUserSession()
-  },[session])
+    sbUserSession();
+  }, []);
 
   if (loading === false) {
     return session

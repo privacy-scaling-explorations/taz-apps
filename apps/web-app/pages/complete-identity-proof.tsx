@@ -16,7 +16,7 @@ async function setAuthStatus(proof: any) {
       console.log("log my proof", proof)
       const response = await axios({
         method: 'post',
-        url: 'https://bed8-2806-107e-13-6229-d584-c0de-219e-7dcd.ngrok.io/api/passport-user-login/',
+        url: 'https://6926-2806-107e-13-7a7d-ecfe-ae4f-9f24-c3d8.ngrok.io/api/passport-user-login/',
         data: proof,
         headers: {
           'Content-Type': 'application/json'

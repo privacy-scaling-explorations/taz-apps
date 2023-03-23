@@ -40,7 +40,7 @@ const CalendarPage = ({ sessions, events }: Props) => {
     useEffect(() => {
         ;(async () => {
             const userSession = await supabase.auth.getUser()
-            console.log("user object", userSession)
+            console.log("user object 1", userSession)
             setSession(userSession)
         })()
     }, [])

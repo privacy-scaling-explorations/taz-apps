@@ -8,12 +8,13 @@ import {
   useSemaphoreSignatureProof,
 } from "@pcd/passport-interface";
 import axios from "axios";
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs"
 import { usePassportModalContext } from "../../context/PassportModalContext";
 import PassportModal from "../PassportModal";
+import getUserSession from "../../hooks/getUserSession";
 
-const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co";
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey as string);
+const supabase = createBrowserSupabaseClient()
+
 
 const Header = () => {
   const { openPassportModal, setOpenPassportModal } = usePassportModalContext();
@@ -21,6 +22,7 @@ const Header = () => {
   const [uuid, setUuid] = useState<string | undefined>();
   const [pcdStr, setPcdStr] = useState("");
   const [participentData, setParticipentData] = useState<any>();
+  const userObj = getUserSession()
 
   const PASSPORT_URL = "https://zupass.eth.limo/";
   const PASSPORT_SERVER_URL = "https://api.pcd-passport.com/";
@@ -78,7 +80,7 @@ const Header = () => {
           console.log("log my proof", participant);
           const response = await axios({
             method: "post",
-            url: "https://2840-2806-107e-13-7a7d-78d5-513c-3b6d-30df.ngrok.io/api/passport-user-login/",
+            url: "https://6926-2806-107e-13-7a7d-ecfe-ae4f-9f24-c3d8.ngrok.io/api/passport-user-login/",
             data: participant,
             headers: {
               "Content-Type": "application/json",
@@ -97,9 +99,9 @@ const Header = () => {
 
   useEffect(() => {
     (async () => {
-      const userSession = await supabase.auth.getUser();
-      console.log("user object", userSession);
-      setSession(userSession);
+      const res = await supabase.auth.getSession()
+      console.log("res", res)
+      setSession(res.data.session);
     })();
   }, []);
   return (
@@ -116,7 +118,7 @@ const Header = () => {
           </div>
         </NextLink>
 
-        {session && session.data.user && (
+        {session && session.user && (
           <li className="flex gap-5 items-center text-white">
             <h1>Passport Connected</h1>
           </li>
@@ -128,7 +130,7 @@ const Header = () => {
           <li className="cursor-pointer">Schedule</li>
         </NextLink>
         {/* <li>FAQ</li> */}
-        {session && session.data.user ? (
+        {session && session.user ? (
           <li>
             <NextLink href="/myprofile">My Profile</NextLink>
           </li>
