@@ -72,6 +72,7 @@ const Header = () => {
         console.log("PARTICIPANT", participant);
         setParticipentData(participant);
         // TODO: Login Flow
+        
         }
       }, [participant]);
 
