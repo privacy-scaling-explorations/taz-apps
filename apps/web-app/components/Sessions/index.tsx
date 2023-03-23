@@ -5,17 +5,14 @@ import NextLink from "next/link"
 import axios from "axios"
 import { toast } from "react-toastify"
 import BuyTicketModal from "../BuyTicketModal"
+import ParticipateButton from "../ParticipateButton"
 import { SessionsDTO, EventsDTO } from "../../types"
 
 type Props = {
     event: EventsDTO
     sessions: SessionsDTO[]
 }
-
 const Sessions = ({ event, sessions }: Props) => {
-    const [openBuyTicketModal, setOpenBuyTicketModal] = useState(false)
-    const [currentSubEventId, setCurrentSubEventId] = useState<number>(0)
-
     const router = useRouter()
     const LOGGED_IN_USER_ID = 1
 
@@ -43,32 +40,6 @@ const Sessions = ({ event, sessions }: Props) => {
                 theme: "light"
             })
         }
-    }
-
-    const handleClickAttend = async (sessionId: number) => {
-        await axios
-            .post("/api/addParticipant", {
-                session_id: sessionId,
-                user_id: LOGGED_IN_USER_ID
-            })
-            .then((res) => {
-                if (res.data === "Participant added") {
-                    makeToast(true, "You are now attending this event.")
-                    router.push(router.asPath)
-                }
-            })
-            .catch((err) => {
-                console.log(err)
-                makeToast(false, "Error")
-            })
-    }
-
-    const handleBuyTicket = async () => {
-        await axios.post("/api/pretix-create-order", {
-            subEventId: currentSubEventId,
-            slug: event.slug,
-            itemId: event.item_id
-        })
     }
 
     const handleAddFavorite = async (sessionId: number) => {
@@ -106,10 +77,6 @@ const Sessions = ({ event, sessions }: Props) => {
             })
     }
 
-    const closeOpenTicketModal = (close = false) => {
-        if (close) setOpenBuyTicketModal(false)
-    }
-
     return (
         <div className="w-full flex flex-col items-start py-[2px] gap-[16px] rounded-[16px]">
             {sessions.map((item, index) => (
@@ -145,36 +112,7 @@ const Sessions = ({ event, sessions }: Props) => {
                                     }}
                                 />
                             </div>
-                            {item.participants.length > 0 ? (
-                                <button className="flex gap-2 items-center bg-white border border-primary text-zulalu-primary font-[600] py-[4px] px-[16px] rounded-[8px] cursor-default">
-                                    <NextImage src={"/vector-circle-check.svg"} width={16} height={16} />
-                                    SEE YOU THERE!
-                                </button>
-                            ) : item.hasTicket ? (
-                                <>
-                                    <button
-                                        className="bg-[#35655F] text-white py-[4px] px-[16px] text-[16px] rounded-[6px]"
-                                        onClick={() => {
-                                            setCurrentSubEventId(item.subevent_id)
-                                            setOpenBuyTicketModal(true)
-                                        }}
-                                    >
-                                        GET TICKET
-                                    </button>
-                                    <BuyTicketModal
-                                        closeModal={closeOpenTicketModal}
-                                        isOpen={openBuyTicketModal}
-                                        handleBuyTicket={handleBuyTicket}
-                                    />
-                                </>
-                            ) : (
-                                <button
-                                    className="bg-[#35655F] text-white py-[4px] px-[16px] text-[16px] rounded-[6px]"
-                                    onClick={() => handleClickAttend(item.id)}
-                                >
-                                    RSVP
-                                </button>
-                            )}
+                            <ParticipateButton event={event} session={item} isTallButton={false} />
                         </div>
                         <div className="w-full flex flex-row gap-[32px] justify-between items-center">
                             <div className="flex flex-row items-start gap-[8px]">
@@ -210,6 +148,7 @@ const Sessions = ({ event, sessions }: Props) => {
                                 <div className="flex flex-row items-center gap-[8px]">
                                     <NextImage src={"/vector-clock.svg"} alt="vector-clock" width={16} height={16} />
                                     <p className="text-[#708E8C] text-[18px]">
+                                        {/* {item.startTime.slice(0, -3)}-{item.endTime.slice(0, -3)} */}
                                         {item.startTime.slice(0, -3)}
                                     </p>
                                 </div>

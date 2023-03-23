@@ -4,23 +4,20 @@ import { useRouter } from "next/router"
 import NextImage from "next/image"
 import moment from "moment"
 import { ToastContainer } from "react-toastify"
-import { createClient } from "@supabase/supabase-js"
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs"
 import AddSessionModal from "../../components/AddSessionModal"
 import Sessions from "../../components/Sessions"
 import { EventsDTO, SessionsDTO } from "../../types"
 import BaseTemplate from "../Base"
 
-const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co"
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY
-const supabase = createClient(supabaseUrl, supabaseKey as string)
+const supabase = createBrowserSupabaseClient()
 
 type Props = {
     event: EventsDTO
     sessions: SessionsDTO[]
-    sessionsByEventId: SessionsDTO[]
 }
 
-const EventPage = ({ event, sessions, sessionsByEventId }: Props) => {
+const EventPage = ({ event, sessions }: Props) => {
     const wraperRef = useRef(null)
 
     const [openAddSessionModal, setOpenAddSessionModal] = useState(false)
@@ -52,12 +49,12 @@ const EventPage = ({ event, sessions, sessionsByEventId }: Props) => {
 
     const filteredSessions =
         selectedOptions.length !== 0
-            ? sessionsByEventId.filter((item) => {
+            ? sessions.filter((item) => {
                   const sessionDate = moment(new Date(item.startDate)).add(1, "day").format("dddd, MMMM Do, YYYY")
 
                   return selectedOptions.includes(sessionDate)
               })
-            : sessionsByEventId
+            : sessions
 
     const handleClickOutside = (e: MouseEvent) => {
         const { current: wrap } = wraperRef as { current: HTMLElement | null }
