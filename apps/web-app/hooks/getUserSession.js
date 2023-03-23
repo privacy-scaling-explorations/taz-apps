@@ -1,20 +1,26 @@
 import { useState, useEffect } from "react";
-import { createClient } from "@supabase/supabase-js";
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs"
 
-const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co";
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
+const supabase = createBrowserSupabaseClient()
 
 export default function getUserSession() {
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  (async function sbUserSession() {
+  async function sbUserSession() {
+    setLoading(true)
     const currentSession = await supabase.auth.getSession();
     console.log("current session", currentSession);
     setSession(currentSession);
+    setLoading(false)
+  }
 
-  })()
+  useEffect(() => {
+    sbUserSession();
+  }, []);
 
-  return session
+  if (loading === false) {
+    return session
+  }
+
 }

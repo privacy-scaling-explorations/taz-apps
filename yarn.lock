@@ -5674,6 +5674,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@pcd/pcd-types@npm:^0.0.8":
+  version: 0.0.8
+  resolution: "@pcd/pcd-types@npm:0.0.8"
+  checksum: 144c4fc56677098436f40b2c8ef5251c03fd0e2c33df1dc0dcaae13285f0c22a8292f22a18372c722e954a52faf0cc3480ec49d6bef765016ed273306c63c544
+  languageName: node
+  linkType: hard
+
 "@pcd/semaphore-group-pcd@*, @pcd/semaphore-group-pcd@workspace:apps/pcd-main/packages/semaphore-group-pcd":
   version: 0.0.0-use.local
   resolution: "@pcd/semaphore-group-pcd@workspace:apps/pcd-main/packages/semaphore-group-pcd"
@@ -5697,6 +5704,21 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@pcd/semaphore-group-pcd@npm:0.0.8":
+  version: 0.0.8
+  resolution: "@pcd/semaphore-group-pcd@npm:0.0.8"
+  dependencies:
+    "@pcd/pcd-types": "*"
+    "@pcd/semaphore-identity-pcd": "*"
+    "@semaphore-protocol/group": ^3.1.0
+    "@semaphore-protocol/identity": ^3.1.0
+    "@semaphore-protocol/proof": ^3.1.0
+    json-bigint: ^1.0.0
+    uuid: ^9.0.0
+  checksum: 126183276892593a38c5a32dd6310c19e1aae15ffc0e3d51259dc78e3af56db3419ae83ecbb26c0af10fe815899b22e8b3f0951ab98c7c1c07f4da0235dc46af
+  languageName: node
+  linkType: hard
+
 "@pcd/semaphore-identity-pcd@*, @pcd/semaphore-identity-pcd@workspace:apps/pcd-main/packages/semaphore-identity-pcd":
   version: 0.0.0-use.local
   resolution: "@pcd/semaphore-identity-pcd@workspace:apps/pcd-main/packages/semaphore-identity-pcd"
@@ -5718,6 +5740,20 @@ __metadata:
     uuid: ^9.0.0
   languageName: unknown
   linkType: soft
+
+"@pcd/semaphore-identity-pcd@npm:0.0.8":
+  version: 0.0.8
+  resolution: "@pcd/semaphore-identity-pcd@npm:0.0.8"
+  dependencies:
+    "@pcd/pcd-types": "*"
+    "@semaphore-protocol/group": ^3.1.0
+    "@semaphore-protocol/identity": ^3.1.0
+    "@semaphore-protocol/proof": ^3.1.0
+    json-bigint: ^1.0.0
+    uuid: ^9.0.0
+  checksum: 8e36a19ac28324c3350ace6fc362c0f63faf6b19f76d361f2a280ef8e7c2344ae72f97b3f0c06383a2a90642e593a088b73cdafaf5c8cc0d3522f974b0da8d8f
+  languageName: node
+  linkType: hard
 
 "@pcd/semaphore-signature-pcd@npm:*":
   version: 0.0.4
@@ -30312,9 +30348,9 @@ __metadata:
     "@ethersproject/strings": ^5.7.0
     "@headlessui/react": ^1.7.2
     "@pcd/passport-interface": 0.0.8
-    "@pcd/pcd-types": "*"
-    "@pcd/semaphore-group-pcd": "*"
-    "@pcd/semaphore-identity-pcd": "*"
+    "@pcd/pcd-types": ^0.0.8
+    "@pcd/semaphore-group-pcd": 0.0.8
+    "@pcd/semaphore-identity-pcd": 0.0.8
     "@react-google-maps/api": ^2.18.1
     "@rocketseat/eslint-config": ^1.1.3
     "@semaphore-protocol/cli": latest
@@ -30322,6 +30358,7 @@ __metadata:
     "@semaphore-protocol/identity": latest
     "@semaphore-protocol/proof": latest
     "@semaphore-protocol/subgraph": latest
+    "@supabase/auth-helpers-nextjs": ^0.5.6
     "@supabase/supabase-js": ^2.10.0
     "@tailwindcss/line-clamp": ^0.4.2
     "@testing-library/jest-dom": ^5.14.1

@@ -17,6 +17,7 @@ function SignupPage() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
+
     async function handleSubmit(event) {
         event.preventDefault()
 
@@ -36,7 +37,11 @@ function SignupPage() {
     }
 
     async function handleLogout() {
-        try {
+      const { data, error } = await supabase.auth.admin.deleteUser(
+        '679c86a3-ae21-4fe8-a7bc-968f52fd21fd'
+      )
+      console.log(data, error)
+      try {
             await supabase.auth.signOut()
         } catch (error) {}
     }

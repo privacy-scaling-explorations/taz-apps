@@ -1,12 +1,16 @@
 import React, { useEffect, useRef, useState } from "react"
 
+import { useRouter } from "next/router"
 import NextImage from "next/image"
 import moment from "moment"
 import { ToastContainer } from "react-toastify"
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs"
 import AddSessionModal from "../../components/AddSessionModal"
 import Sessions from "../../components/Sessions"
 import { EventsDTO, SessionsDTO } from "../../types"
 import BaseTemplate from "../Base"
+
+const supabase = createBrowserSupabaseClient()
 
 type Props = {
     event: EventsDTO
@@ -14,6 +18,7 @@ type Props = {
 }
 
 const EventPage = ({ event, sessions }: Props) => {
+    const [session, setSession] = useState()
     const wraperRef = useRef(null)
 
     const [openAddSessionModal, setOpenAddSessionModal] = useState(false)
@@ -29,6 +34,14 @@ const EventPage = ({ event, sessions }: Props) => {
     const filterAfter = new Date(event.endDate)
 
     const dateOptions = []
+
+    useEffect(() => {
+        ;(async () => {
+            const userSession = await supabase.auth.getUser()
+            console.log("user object 1", userSession)
+            setSession(userSession)
+        })()
+    }, [])
 
     for (let date = filterSince; date <= filterAfter; date.setDate(date.getDate() + 1)) {
         const option = moment(new Date(date)).add(1, "day").format("dddd, MMMM Do, YYYY")
@@ -142,18 +155,24 @@ const EventPage = ({ event, sessions }: Props) => {
                     <div className="w-full flex flex-col md:flex-row justify-between items-center p-[16px] gap-[24px]">
                         <div className="flex flex-col md:flex-row items-center justify-center gap-[32px] mb-5 md:mb-0">
                             <h1 className="text-[40px] text-[#37352F] font-[600]">Sessions</h1>
-                            <button
-                                className="flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
-                                onClick={() => setOpenAddSessionModal(true)}
-                            >
-                                CREATE SESSION
-                            </button>
-                            <AddSessionModal
-                                closeModal={setOpenAddSessionModal}
-                                isOpen={openAddSessionModal}
-                                event={event}
-                                sessions={sessions}
-                            />
+                            {session && session.data.user.user_metadata === "organizer" ? (
+                                <>
+                                    <button
+                                        className="flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
+                                        onClick={() => setOpenAddSessionModal(true)}
+                                    >
+                                        CREATE SESSION
+                                    </button>
+                                    <AddSessionModal
+                                        closeModal={setOpenAddSessionModal}
+                                        isOpen={openAddSessionModal}
+                                        event={event}
+                                        sessions={sessions}
+                                    />
+                                </>
+                            ) : (
+                                ""
+                            )}
                         </div>
                         <div className="flex flex-col md:flex-row justify-center items-center gap-5">
                             <button

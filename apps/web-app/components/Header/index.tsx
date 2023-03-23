@@ -2,15 +2,20 @@ import NextImage from "next/image"
 import NextLink from "next/link"
 import { useEffect, useState } from "react"
 import { requestSignedZuzaluUUIDUrl, useFetchParticipant, useSemaphoreSignatureProof } from "@pcd/passport-interface"
+import axios from "axios"
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs"
 import { usePassportModalContext } from "../../context/PassportModalContext"
-import { useUserIdentityContext } from "../../context/UserIdentityContext"
+import getUserSession from "../../hooks/getUserSession"
+
+const supabase = createBrowserSupabaseClient()
 
 const Header = () => {
-    const { isAuthenticated } = useUserIdentityContext()
-
+    const { openPassportModal, setOpenPassportModal } = usePassportModalContext()
+    const [session, setSession] = useState<any>(null)
     const [uuid, setUuid] = useState<string | undefined>()
     const [pcdStr, setPcdStr] = useState("")
     const [participentData, setParticipentData] = useState<any>()
+    const userObj = getUserSession()
 
     const PASSPORT_URL = "https://zupass.eth.limo/"
     const PASSPORT_SERVER_URL = "https://api.pcd-passport.com/"
@@ -27,7 +32,7 @@ const Header = () => {
 
     // Listen for PCDs coming back from the Passport popup
     useEffect(() => {
-        function receiveMessage(ev: MessageEvent<any>) {
+        async function receiveMessage(ev: MessageEvent<any>) {
             if (!ev.data.encodedPcd) return
             console.log("Received message", ev.data)
             setPcdStr(ev.data.encodedPcd)
@@ -50,13 +55,35 @@ const Header = () => {
     // Finally, once we have the UUID, fetch the participant data from Passport.
     const { participant, error, loading } = useFetchParticipant(PASSPORT_SERVER_URL, uuid)
 
+    const loginProof = async () => {
+        try {
+            console.log("log my proof", participant)
+            const response = await axios({
+                method: "post",
+                url: "https://6926-2806-107e-13-7a7d-ecfe-ae4f-9f24-c3d8.ngrok.io/api/passport-user-login/",
+                data: participant,
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+
+            console.log("req response", response)
+            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+            window.location.reload
+        } catch (error1) {
+            console.error(error1)
+        }
+    }
+
     useEffect(() => {
         if (participant) {
             console.log("PARTICIPANT", participant)
             setParticipentData(participant)
             // TODO: Login Flow
+            loginProof()
         }
-    }, [participant])
+    }, [])
+    // Finally, once we have the UUID, fetch the participant data from Passport.
 
     return (
         <div className="flex p-5 justify-between w-full m-auto z-10 bg-zulalu-darkBase items-center">
@@ -67,18 +94,17 @@ const Header = () => {
                     </div>
                 </NextLink>
 
-                {isAuthenticated && (
-                    <div className="flex items-center gap-2">
-                        <div className="w-[8px] h-[8px] bg-[#B1F9CA] rounded-full" />
-                        <h1 className="font-[18px] text-[#B1F9CA]">Passport connected</h1>
-                    </div>
+                {session && session.user && (
+                    <li className="flex gap-5 items-center text-white">
+                        <h1>Passport Connected</h1>
+                    </li>
                 )}
             </div>
             <ul className="flex gap-5 items-center text-white">
                 <NextLink href={"/events"}>
                     <li className="cursor-pointer">Schedule</li>
                 </NextLink>
-                {isAuthenticated ? (
+                {session && session.user ? (
                     <li>
                         <NextLink href="/myprofile">My Profile</NextLink>
                     </li>

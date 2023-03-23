@@ -18,51 +18,53 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         })
     }
 
-    try {
-        const {
-            name,
-            startDate,
-            location,
-            startTime,
-            tags,
-            info,
-            event_id,
-            hasTicket,
-            event_type,
-            format,
-            equipment,
-            team_members,
-            track,
-            subEventId,
-            event_slug,
-            event_item_id,
-            quota_id
-        } = req.body
+    if (session) {
+        try {
+            const {
+                name,
+                startDate,
+                endDate,
+                location,
+                startTime,
+                endTime,
+                organizers,
+                tags,
+                info,
+                eventId,
+                hasTicket,
+                type,
+                format,
+                equipment,
+                team_members,
+                track,
+                subEventId
+            } = req.body
 
-        const response = await supabase.from("sessions").insert({
-            name,
-            startDate,
-            location,
-            startTime,
-            tags,
-            info,
-            event_id,
-            hasTicket,
-            event_type,
-            format,
-            team_members,
-            track,
-            equipment,
-            subevent_id: subEventId,
-            event_slug,
-            event_item_id,
-            quota_id
-        })
-        console.log("Response: ", response)
+            await supabase.from("sessions").insert({
+                name,
+                startDate,
+                endDate,
+                location,
+                startTime,
+                endTime,
+                organizers,
+                tags,
+                info,
+                event_id: eventId,
+                hasTicket,
+                type,
+                format,
+                team_members,
+                track,
+                equipment,
+                subevent_id: subEventId
+            })
+            // console.log("Response: ", response)
 
-        res.status(201).json("Event created")
-    } catch (err: any) {
-        console.log("error: ", err)
-        res.status(500).json({ statusCode: 500, message: err.message })
+            res.status(201).json("Event created")
+        } catch (error) {
+            console.log("error: ", error)
+            res.status(500).json({ statusCode: 500, message: error })
+        }
     }
 }
