@@ -57,6 +57,14 @@ export interface SessionsDTO {
     endTime: any
     type: any
     events: EventsDTO
+    quota_id: number
+}
+
+export interface RsvpDTO {
+    id: number
+    created_at: Date
+    session_id: number
+    user_id: number
 }
 
 export interface ParticipantsDTO {
