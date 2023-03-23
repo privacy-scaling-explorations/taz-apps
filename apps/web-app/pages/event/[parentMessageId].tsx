@@ -10,15 +10,18 @@ type Props = {
 }
 
 export default function Event({ event, sessions, sessionsByEventId }: Props) {
-    return <EventPage event={event} sessions={sessions} sessionsByEventId={sessionsByEventId} />
+    return <EventPage event={event} sessions={sessions} />
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ res, query }) => {
     try {
         const url = process.env.URL_TO_FETCH
+        const LOGGED_IN_USER_ID = 1
 
         const eventResponse = await fetch(`${url}/api/fetchEvents/${query.parentMessageId}`)
-        const sessionsResponse = await fetch(`${url}/api/fetchSessions`)
+        const sessionsResponse = await fetch(
+            `${url}/api/fetchSessionsByEvent/${query.parentMessageId}/${LOGGED_IN_USER_ID}`
+        )
 
         const event = await eventResponse.json()
         const sessions: SessionsDTO[] = await sessionsResponse.json()

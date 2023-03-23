@@ -1,10 +1,10 @@
 import NextImage from "next/image"
 import NextLink from "next/link"
-import { SessionsDTO, EventsDTO } from "../../types"
 import { useState } from "react"
 import { useRouter } from "next/router"
 import axios from "axios"
 import { toast } from "react-toastify"
+import { SessionsDTO, EventsDTO } from "../../types"
 import BuyTicketModal from "../BuyTicketModal"
 
 type Props = {
@@ -135,11 +135,21 @@ const CalendarPageSessions = ({ sessions}: Props) => {
                                 </NextLink>
                                 <NextImage
                                     className="text-[#91A8A7] cursor-pointer"
-                                    src={"/vector-bookmark.svg"}
+                                    src={
+                                        item.favoritedSessions.length > 0
+                                            ? "/vector-bookmark2.svg"
+                                            : "/vector-bookmark.svg"
+                                    }
                                     alt="vector-bookmark"
                                     width={24}
                                     height={24}
-                                    onClick={() => handleAddFavorite(item.id)}
+                                    onClick={() => {
+                                        if (item.favoritedSessions.length > 0) {
+                                            handleRemoveFavorite(item.favoritedSessions[0].id)
+                                        } else {
+                                            handleAddFavorite(item.id)
+                                        }
+                                    }}
                                 />
                             </div>
                             {

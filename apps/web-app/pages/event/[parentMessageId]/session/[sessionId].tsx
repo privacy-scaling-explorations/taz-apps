@@ -1,8 +1,8 @@
 import { GetServerSideProps } from "next"
-
+import axios from "axios"
 import SessionPage from "../../../../templates/SessionPage"
 
-import { SessionsDTO, RsvpDTO } from "../../../../types"
+import { SessionsDTO, EventsDTO, RsvpDTO } from "../../../../types"
 
 type Props = {
     session: SessionsDTO

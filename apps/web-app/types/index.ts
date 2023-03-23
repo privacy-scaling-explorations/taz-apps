@@ -37,6 +37,7 @@ export interface SessionsDTO {
     event_slug: string
     event_type: string
     favoritedSessions: FavoritedSessionsDTO[]
+    favorited_sessions: any
     format: string
     hasTicket: boolean
     id: number
