@@ -1,7 +1,5 @@
 import Image from "next/image"
-import { requestSignedZuzaluUUIDUrl, useFetchParticipant, useSemaphoreSignatureProof } from "@pcd/passport-interface"
-import { usePassportModalContext } from "../../context/PassportModalContext"
-import PassportModal from "../PassportModal"
+import { requestSignedZuzaluUUIDUrl } from "@pcd/passport-interface"
 import { getUserOnID } from "../../hooks/getUserOnID"
 
 const MainSection = () => {
