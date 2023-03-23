@@ -4,16 +4,15 @@ import { useRouter } from "next/router"
 import NextLink from "next/link"
 import { toast } from "react-toastify"
 import axios from "axios"
-import { SessionsDTO, EventsDTO } from "../../types"
+import { SessionsDTO } from "../../types"
 import BuyTicketModal from "../BuyTicketModal"
 
 type Props = {
-    event: EventsDTO
     session: SessionsDTO
     isTallButton: boolean
 }
 
-const ParticipateButton = ({ event, session, isTallButton }: Props) => {
+const ParticipateButton = ({ session, isTallButton }: Props) => {
     const [openBuyTicketModal, setOpenBuyTicketModal] = useState(false)
 
     const router = useRouter()
@@ -48,8 +47,8 @@ const ParticipateButton = ({ event, session, isTallButton }: Props) => {
     const handleBuyTicket = async () => {
         await axios.post("/api/pretix-create-order", {
             subEventId: session.subevent_id,
-            slug: event.slug,
-            itemId: event.item_id
+            slug: session.event_slug,
+            itemId: session.event_item_id
         })
     }
 
