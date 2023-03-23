@@ -8,11 +8,10 @@ import { Fragment, useRef, useState } from "react"
 type Props = {
     isOpen: boolean
     closeModal: (b: boolean) => void
-    subEventId: number
     handleBuyTicket: Function
 }
 
-const BuyTicketModal = ({ isOpen, closeModal, subEventId, handleBuyTicket }: Props) => {
+const BuyTicketModal = ({ isOpen, closeModal, handleBuyTicket }: Props) => {
     const [step, setStep] = useState(1)
     
     const resetAndClose = (close = false) => {
@@ -22,7 +21,7 @@ const BuyTicketModal = ({ isOpen, closeModal, subEventId, handleBuyTicket }: Pro
     
     const handleYesClick = () => {
         setStep(2)
-        handleBuyTicket(subEventId)
+        handleBuyTicket()
 
         setTimeout(() => {
             setStep(3)

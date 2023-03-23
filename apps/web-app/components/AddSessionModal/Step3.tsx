@@ -1,24 +1,29 @@
 import NextImage from "next/image"
+import { IoMdArrowBack } from "react-icons/io"
 import Loading from "../Loading"
 
 type NewSessionState = {
-    name: string
-    organizers: string[]
-    team_members: { name: string; role: string }[]
-    startDate: Date
-    endDate: Date
-    startTime: string
-    endTime: string
-    location: string
-    tags: string[]
-    info: string
-    eventId: number
-    hasTicket: boolean
-    format: string
-    level: string
+    description: string
     equipment: string
+    event_id: number
+    event_item_id: number
+    event_slug: string
+    event_type: string
+    format: string
+    hasTicket: boolean
+    info: string
+    level: string
+    location: string
+    name: string
+    startDate: Date
+    startTime: string
+    subevent_id: number
+    tags: string[]
+    team_members: {
+        name: string
+        role: string
+    }[]
     track: string
-    type: string
 }
 
 type Props = {
@@ -63,12 +68,13 @@ const Step3 = ({ setSteps, newSession, handleSubmit, isLoading, amountTickets }:
                     <h1>{newSession.location}</h1>
                 </div>
             </div>
-            <div className="w-full flex flex-col gap-5 justify-center items-center mt-5">
+            <div className="w-full flex flex-col md:flex-row gap-5 justify-center items-center mt-5">
                 <button
                     type="button"
-                    className="w-full flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
-                    onClick={() => setSteps(2)}
+                    className="w-full flex flex-row border-zulalu-primary border font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-white rounded-[8px] text-black text-[16px]"
+                    onClick={() => setSteps(1)}
                 >
+                    <IoMdArrowBack size={20} />
                     BACK
                 </button>
                 <button
