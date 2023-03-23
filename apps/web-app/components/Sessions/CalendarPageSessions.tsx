@@ -14,6 +14,7 @@ type Props = {
 const CalendarPageSessions = ({ sessions}: Props) => {
     const [openBuyTicketModal, setOpenBuyTicketModal] = useState(false)
     const [currentSubEventParams, setCurrentSubEventParams] = useState<any>({
+        id: 0,
         subEventId: 0,
         eventSlug: "",
         eventItemId: 0
@@ -74,6 +75,7 @@ const CalendarPageSessions = ({ sessions}: Props) => {
             slug: currentSubEventParams.eventSlug,
             itemId: currentSubEventParams.eventItemId
         })
+        handleClickAttend(currentSubEventParams.id)
     }
 
     const handleAddFavorite = async (sessionId: number) => {
@@ -153,6 +155,7 @@ const CalendarPageSessions = ({ sessions}: Props) => {
                                             className="bg-[#35655F] text-white py-[4px] px-[16px] text-[16px] rounded-[6px]"
                                             onClick={() => {
                                                 setCurrentSubEventParams({
+                                                    id: item.id,
                                                     subEventId: item.subevent_id,
                                                     eventSlug: item.event_slug,
                                                     eventItemId: item.event_item_id
