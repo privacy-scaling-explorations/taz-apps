@@ -17,9 +17,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             endTime,
             tags,
             info,
-            eventId,
+            event_id,
             hasTicket,
-            type,
+            event_type,
             format,
             equipment,
             team_members,
@@ -28,8 +28,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             event_slug,
             event_item_id
         } = req.body
-
-        console.log("event_id", eventId)
 
         const response = await supabase.from("sessions").insert({
             name,
@@ -40,9 +38,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             endTime,
             tags,
             info,
-            event_id: eventId,
+            event_id: event_id,
             hasTicket,
-            event_type: type,
+            event_type: event_type,
             format,
             team_members,
             track,

@@ -133,7 +133,6 @@ const CalendarPage = ({ sessions, events }: Props) => {
               })
             : filteredSessionsByLocation
 
-    console.log(parentMessageId)
     return (
         <BaseTemplate>
             <div className="flex flex-col border border-black p-5 bg-[#EEEEF0] gap-5 w-full h-full">

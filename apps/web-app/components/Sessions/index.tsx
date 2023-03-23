@@ -210,7 +210,7 @@ const Sessions = ({ event, sessions }: Props) => {
                                 <div className="flex flex-row items-center gap-[8px]">
                                     <NextImage src={"/vector-clock.svg"} alt="vector-clock" width={16} height={16} />
                                     <p className="text-[#708E8C] text-[18px]">
-                                        {item.startTime.slice(0, -3)}-{item.endTime.slice(0, -3)}
+                                        {item.startTime.slice(0, -3)}
                                     </p>
                                 </div>
                                 <div className="flex flex-row items-center gap-[8px] border-b border-[#708E8C] text-[#708E8C]">

@@ -29,32 +29,31 @@ export interface EventsDTO {
 }
 
 export interface SessionsDTO {
-    id: number
     created_at: Date
-    name: string
-    location: string
-    startDate: Date
-    endDate: Date
-    startTime: string
-    tags: string[]
-    endTime: string
-    info: string
-    organizers: string[]
-    team_members: { name: string; role: string }[]
+    description: string
+    equipment: string
     event_id: number
-    isOpen: boolean
-    rsvps: RsvpDTO[]
-    hasTicket: boolean
-    participants: ParticipantsDTO[]
+    event_item_id: number
+    event_slug: string
+    event_type: string
     favoritedSessions: FavoritedSessionsDTO[]
     format: string
-    track: string
-    type: string
-    equipment: string
+    hasTicket: boolean
+    id: number
+    info: string
+    level: string
+    location: string
+    name: string
+    participants: ParticipantsDTO[]
+    startDate: Date
+    startTime: string
     subevent_id: number
-    level: any
-    event_slug: string
-    event_item_id: number
+    tags: string[]
+    team_members: {
+        name: string
+        role: string
+    }[]
+    track: string
 }
 
 export interface RsvpDTO {
@@ -87,4 +86,33 @@ export interface FavoritedSessionsDTO {
     id: number
     session_id: number
     user_id: number
+}
+
+export interface TracksDTO {
+    id: number
+    type: string
+}
+
+export interface EventTypeDTO {
+    id: number
+    type: string
+    created_at: Date
+}
+
+export interface FormatDTO {
+    id: number
+    format: string
+    created_at: Date
+}
+
+export interface LevelDTO {
+    id: number
+    level: string
+    created_at: Date
+}
+
+export interface LocationDTO {
+    id: number
+    location: string
+    created_at: Date
 }

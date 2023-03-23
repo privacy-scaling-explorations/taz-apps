@@ -1,47 +1,73 @@
 /* eslint-disable prefer-const */
-import "react-autocomplete-input/dist/bundle.css"
-import "react-datepicker/dist/react-datepicker.css"
+
 import { useEffect, useRef, useState } from "react"
 import DatePicker from "react-datepicker"
 import axios from "axios"
-import { UserDTO } from "../../types"
+import moment from "moment"
+import { ToastContainer, toast } from "react-toastify"
+
+import { UserDTO, TracksDTO, FormatDTO, LevelDTO, LocationDTO, EventTypeDTO, SessionsDTO } from "../../types"
 
 type NewSessionState = {
-    name: string
-    organizers: string[]
-    team_members: { name: string; role: string }[]
-    startDate: Date
-    endDate: Date
-    startTime: string
-    endTime: string
-    location: string
-    tags: string[]
-    info: string
-    eventId: number
-    hasTicket: boolean
-    format: string
-    level: string
+    description: string
     equipment: string
-    track: string
-    type: string
-    event_slug: string
+    event_id: number
     event_item_id: number
+    event_slug: string
+    event_type: string
+    format: string
+    hasTicket: boolean
+    info: string
+    level: string
+    location: string
+    name: string
+    startDate: Date
+    startTime: string
+    subevent_id: number
+    tags: string[]
+    team_members: {
+        name: string
+        role: string
+    }[]
+    track: string
 }
 
 type Props = {
     newSession: NewSessionState
     setNewSession: (newEvent: NewSessionState) => void
     setSteps: (steps: number) => void
+    sessions: SessionsDTO[]
 }
 
-const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
+const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
+    const { name, team_members, startDate, tags, description } = newSession
     const [teamMember, setTeamMember] = useState({ name: "", role: "Speaker" })
     const [tag, setTag] = useState("")
     const [rerender, setRerender] = useState(true)
     const [suggestions, setSuggestions] = useState<UserDTO[]>([])
     const [display, setDisplay] = useState(false)
+    const [tracksOpt, setTracksOpt] = useState<TracksDTO[]>()
+    const [formatsOpt, setFormatsOpt] = useState<FormatDTO[]>()
+    const [levelsOpt, setLevelsOpt] = useState<LevelDTO[]>()
+    const [locationsOpt, setLocationsOpt] = useState<LocationDTO[]>()
+    const [eventTypesOpt, setEventTypesOpt] = useState<EventTypeDTO[]>()
+
+    const [slotsUnavailable, setSlotsUnavailable] = useState([
+        { time: "09", disabled: false },
+        { time: "10", disabled: false },
+        { time: "11", disabled: false },
+        { time: "12", disabled: false },
+        { time: "13", disabled: false },
+        { time: "14", disabled: false },
+        { time: "15", disabled: false },
+        { time: "16", disabled: false },
+        { time: "17", disabled: false },
+        { time: "18", disabled: false },
+        { time: "19", disabled: false },
+        { time: "20", disabled: false }
+    ])
+
     const wraperRef = useRef(null)
-    const { endDate, endTime, info, location, name, organizers, team_members, startDate, startTime, tags } = newSession
 
     const handleAddTeamMember = () => {
         setNewSession({ ...newSession, team_members: [...newSession.team_members, teamMember] })
@@ -80,8 +106,54 @@ const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
             })
             .catch((err) => console.log(err))
     }
+
+    const fetchTraks = async () => {
+        await axios
+            .get("/api/fetchTracks")
+            .then((res) => {
+                setTracksOpt(res.data)
+            })
+            .catch((err) => console.log(err))
+    }
+
+    const fetchLevels = async () => {
+        await axios
+            .get("/api/fetchLevels")
+            .then((res) => {
+                setLevelsOpt(res.data)
+            })
+            .catch((err) => console.log(err))
+    }
+
+    const fetchEventTypes = async () => {
+        await axios
+            .get("/api/fetchEventTypes")
+            .then((res) => {
+                setEventTypesOpt(res.data)
+            })
+            .catch((err) => console.log(err))
+    }
+
+    const fetchFormats = async () => {
+        await axios
+            .get("/api/fetchFormats")
+            .then((res) => {
+                setFormatsOpt(res.data)
+            })
+            .catch((err) => console.log(err))
+    }
+
+    const fetchLocations = async () => {
+        await axios
+            .get("/api/fetchLocations")
+            .then((res) => {
+                setLocationsOpt(res.data)
+            })
+            .catch((err) => console.log(err))
+    }
+
     useEffect(() => {
-        fetchUsers()
+        Promise.all([fetchUsers(), fetchLevels(), fetchEventTypes(), fetchFormats(), fetchLocations(), fetchTraks()])
     }, [])
 
     useEffect(() => {
@@ -92,13 +164,71 @@ const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
         }
     }, [])
 
+    useEffect(() => {
+        const selectedLocation = newSession.location.toLocaleLowerCase()
+        const filteredSession = sessions
+            .filter((item) => item.location.toLocaleLowerCase() === selectedLocation)
+            .filter((item) => {
+                const selectedDate = moment(new Date(newSession.startDate)).format("MMM d, yyyy")
+                const newSessionStartDate = moment(new Date(item.startDate)).add(1, "day").format("MMM d, yyyy")
+
+                return selectedDate === newSessionStartDate
+            })
+            .map((item) => item.startTime.split(":")[0])
+
+        const newSlotsUnavailable = slotsUnavailable.map((slot) => {
+            if (filteredSession.includes(slot.time)) {
+                return { ...slot, disabled: true }
+            }
+            return { ...slot, disabled: false }
+        })
+
+        // const slotAvailable = newSlotsUnavailable.find((item) => item.disabled === false)
+
+        setSlotsUnavailable(newSlotsUnavailable)
+    }, [newSession])
+
     // const checkIfAnyOtherSuggestion =
     //     suggestions
     //         .filter((item) => !organizers.includes(item.userName))
     //         .filter(({ userName }) => userName.toLowerCase().indexOf(organizer.toLowerCase()) > -1).length !== 0
 
+    const handleNextStep = () => {
+        if (
+            newSession.name.length === 0 ||
+            newSession.description.length === 0 ||
+            newSession.location === "" ||
+            newSession.team_members.length === 0 ||
+            newSession.startTime === "00"
+        ) {
+            return toast.error("Please fill all inputs required.", {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light"
+            })
+        }
+
+        setSteps(2)
+    }
     return (
         <div className="flex flex-col w-full">
+            <ToastContainer
+                position="top-center"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
             <div className="flex flex-col gap-1 my-1 w-full">
                 <label htmlFor="name" className="font-[600]">
                     Title*
@@ -120,9 +250,9 @@ const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
                     className="border-[#C3D0CF] border-2 p-1 rounded-[8px] h-[150px]"
                     id="info"
                     placeholder="What will be covered during the session ?"
-                    value={info}
+                    value={description}
                     maxLength={2000}
-                    onChange={(e) => setNewSession({ ...newSession, info: e.target.value })}
+                    onChange={(e) => setNewSession({ ...newSession, description: e.target.value })}
                 />
                 <div className="flex w-full justify-end">
                     <h1 className="text-[14px] text-[#AAAAAA]">Max 2000 characters</h1>
@@ -138,66 +268,44 @@ const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
                     className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px] w-full"
                     onChange={(e) => setNewSession({ ...newSession, location: e.target.value })}
                 >
-                    <option value="Amphitheatre">Amphitheatre</option>
-                    <option value="Almara Beach">Almara beach</option>
-                    <option value="Ballroom">Ballroom</option>
-                    <option value="Board Room">Board Room</option>
-                    <option value="Dome">Dome</option>
-                    <option value="Kiki's Restaurant inside">Kiki's Restaurant inside</option>
-                    <option value="Kiki's Restaurant outside">Kiki's Restaurant outside</option>
-                    <option value="Lighthouse">Lighthouse</option>
-                    <option value="Gym">Outdoor Gym Deck</option>
-                    <option value="Rock Bar">Rock Bar</option>
-                    <option value="Tony's Bar">Tony's Bar</option>
+                    <option value="Select Location">Select Location</option>
+                    {locationsOpt &&
+                        locationsOpt.map((item, index) => (
+                            <option key={index} value={item.location}>
+                                {item.location}
+                            </option>
+                        ))}
                 </select>
             </div>
-            <div className="flex flex-col md:flex-row justify-start gap-4 my-2">
-                <div className="flex flex-col w-full">
-                    <label className="font-[600]">Event Start*</label>
-                    <DatePicker
-                        className="border-[#C3D0CF] border-2 p-1 rounded-[8px] h-[42px] w-full"
-                        selected={startDate}
-                        onChange={(date) => setNewSession({ ...newSession, startDate: date as Date })}
-                    />
-                </div>
-                <div className="flex flex-col w-full">
-                    <label htmlFor="startTime" className="font-[600]">
-                        Time*
-                    </label>
-                    <input
-                        className="border-[#C3D0CF] border-2 p-1 rounded-[8px] h-[42px]"
-                        type="time"
-                        id="startTime"
-                        name="startTime"
-                        value={startTime}
-                        onChange={(e) => setNewSession({ ...newSession, startTime: e.target.value })}
-                    />
-                </div>
+            <div className="flex flex-col justify-start my-2">
+                <label className="font-[600]">Start Date*</label>
+                <DatePicker
+                    className="border-[#C3D0CF] border-2 p-1 rounded-[8px] h-[42px] w-full"
+                    selected={startDate}
+                    onChange={(e) => setNewSession({ ...newSession, startDate: e as Date })}
+                    minDate={moment().toDate()}
+                />
             </div>
 
-            <div className="flex flex-col md:flex-row justify-start gap-4 my-2">
-                <div className="flex flex-col w-full">
-                    <label className="font-[600]">Event End*</label>
-                    <DatePicker
-                        className="border-[#C3D0CF] border-2 p-1 rounded-[8px] h-[42px] w-full"
-                        selected={endDate}
-                        onChange={(date) => setNewSession({ ...newSession, endDate: date as Date })}
-                    />
+            {newSession.location !== "Select Location" && newSession.location !== "" && (
+                <div className="flex flex-col justify-start my-2">
+                    <label className="font-[600]">Time Slot*</label>
+                    <select
+                        id="location"
+                        name="location"
+                        value={newSession.startTime}
+                        className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px] w-full"
+                        onChange={(e) => setNewSession({ ...newSession, startTime: e.target.value })}
+                    >
+                        <option value="00">Select Slot</option>
+                        {slotsUnavailable.map((slot, index) => (
+                            <option key={index} value={slot.time} disabled={slot.disabled}>{`${slot.time}:00-${
+                                slot.time > "12" ? "PM" : "AM"
+                            }`}</option>
+                        ))}
+                    </select>
                 </div>
-                <div className="flex flex-col w-full">
-                    <label htmlFor="endTime" className="font-[600]">
-                        Time*
-                    </label>
-                    <input
-                        className="border-[#C3D0CF] border-2 p-1 rounded-[8px] h-[42px]"
-                        type="time"
-                        id="endTime"
-                        name="endTime"
-                        value={endTime}
-                        onChange={(e) => setNewSession({ ...newSession, endTime: e.target.value })}
-                    />
-                </div>
-            </div>
+            )}
 
             <div className="flex flex-col gap-4 w-full my-8">
                 <div className="flex flex-col md:flex-row w-full gap-4">
@@ -215,7 +323,9 @@ const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
                         />
                     </div>
                     <div className="flex flex-col w-full md:w-3/6">
-                        <label htmlFor="role">Role:</label>
+                        <label htmlFor="role" className="font-[600]">
+                            Role*
+                        </label>
                         <select
                             id="role"
                             name="role"
@@ -291,11 +401,12 @@ const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
                     className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px]"
                     onChange={(e) => setNewSession({ ...newSession, track: e.target.value })}
                 >
-                    <option value="Zk Week">ZK Week</option>
-                    <option value="Public Goods">Public Goods</option>
-                    <option value="New Cities & Network States">New Cities & Network States</option>
-                    <option value="Longevity 0-1">Longevity 0-1</option>
-                    <option value="Synthetic Biology">Synthetic Biology</option>
+                    {tracksOpt &&
+                        tracksOpt.map((item, index) => (
+                            <option key={index} value={item.type}>
+                                {item.type}
+                            </option>
+                        ))}
                 </select>
             </div>
             <div className="flex flex-col gap-1 my-2">
@@ -306,9 +417,12 @@ const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
                     className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px]"
                     onChange={(e) => setNewSession({ ...newSession, format: e.target.value })}
                 >
-                    <option value="live">Live</option>
-                    <option value="online">Online</option>
-                    <option value="live-online">Live + Online</option>
+                    {formatsOpt &&
+                        formatsOpt.map((item, index) => (
+                            <option key={index} value={item.format}>
+                                {item.format}
+                            </option>
+                        ))}
                 </select>
             </div>
             <div className="flex flex-col gap-1 my-2">
@@ -317,8 +431,14 @@ const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
                     id="type"
                     name="type"
                     className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px]"
-                    onChange={(e) => setNewSession({ ...newSession, type: e.target.value })}
+                    onChange={(e) => setNewSession({ ...newSession, event_type: e.target.value })}
                 >
+                    {eventTypesOpt &&
+                        eventTypesOpt.map((item, index) => (
+                            <option key={index} value={item.type}>
+                                {item.type}
+                            </option>
+                        ))}
                     <option value="Workshop">Workshop</option>
                     <option value="Lecture">Lecture</option>
                     <option value="Other">Other</option>
@@ -332,16 +452,19 @@ const Step1 = ({ newSession, setNewSession, setSteps }: Props) => {
                     className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px]"
                     onChange={(e) => setNewSession({ ...newSession, level: e.target.value })}
                 >
-                    <option value="beginner">Beginner</option>
-                    <option value="intermediate">Intermediate</option>
-                    <option value="advanced">Advanced</option>
+                    {levelsOpt &&
+                        levelsOpt.map((item, index) => (
+                            <option key={index} value={item.level}>
+                                {item.level}
+                            </option>
+                        ))}
                 </select>
             </div>
-            <div className="w-full flex flex-col my-10 items-center">
+            <div className="w-full flex flex-col my-10 items-start">
                 <button
                     type="button"
                     className="w-full lex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
-                    onClick={() => setSteps(2)}
+                    onClick={() => handleNextStep()}
                 >
                     NEXT
                 </button>

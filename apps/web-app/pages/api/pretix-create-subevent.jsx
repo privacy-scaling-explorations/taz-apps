@@ -43,8 +43,10 @@ export default async function handler(req, res) {
             { headers }
         )
 
+        console.log(response)
+
         console.log("Pretix api response: ", response.request.data)
-        if (response.status == 201) {
+        if (response.status === 201) {
             res.status(200).json(response.data)
         } else {
             throw new Error(`HTTP error! status: ${response.error}`)
