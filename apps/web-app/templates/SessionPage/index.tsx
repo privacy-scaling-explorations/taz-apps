@@ -1,8 +1,12 @@
 import { useState } from "react"
 import NextImage from "next/image"
+import axios from "axios"
+import { toast } from "react-toastify"
+import { useRouter } from "next/router"
 import { SessionsDTO, EventsDTO } from "../../types"
 import BaseTemplate from "../Base"
 import ParticipateButton from "../../components/ParticipateButton"
+
 
 type Props = {
     session: SessionsDTO
@@ -10,13 +14,79 @@ type Props = {
 }
 
 const SessionPage = ({ session, event }: Props) => {
+    const router = useRouter()
     const LOGGED_IN_USER_ID = 1
+    const is_favorited = session.favorited_sessions.some(favorited => favorited.user_id === LOGGED_IN_USER_ID);
 
     const { startDate, endTime, location, startTime } = session
 
     const startDateFormatted = new Date(startDate).toLocaleDateString("en-US", { day: "numeric" })
     const startWeekDayFormatted = new Date(startDate).toLocaleDateString("en-US", { weekday: "long" })
     const eventMonthFormatted = new Date(startDate).toLocaleDateString("en-US", { month: "long" })
+
+
+    const makeToast = (isSuccess: boolean, message: string) => {
+        if (isSuccess) {
+            toast.success(message, {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light"
+            })
+        } else {
+            toast.error(message, {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light"
+            })
+        }
+    }
+
+
+    const handleAddFavorite = async (sessionId: number) => {
+        await axios
+            .post("/api/addFavoriteSession", {
+                session_id: sessionId,
+                user_id: LOGGED_IN_USER_ID
+            })
+            .then((res) => {
+                if (res.data === "Session favorited") {
+                    makeToast(true, "This session is now bookmarked.")
+                    router.push(router.asPath)
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+                makeToast(false, "Error")
+            })
+    }
+
+    const handleRemoveFavorite = async (favoritedSessionId: number) => {
+        console.log("remove bookmark")
+        await axios
+            .post("/api/removeFavoriteSession", {
+                id: favoritedSessionId
+            })
+            .then((res) => {
+                if (res.status === 200) {
+                    makeToast(true, "This session is no longer bookmarked.")
+                    router.push(router.asPath)
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+                makeToast(false, "Error")
+            })
+    }
 
     return (
         <BaseTemplate>
@@ -28,9 +98,24 @@ const SessionPage = ({ session, event }: Props) => {
                         <h1 className={`text-black font-[600]`}>ZK Week</h1>
                     </div>
                     <div className="flex flex-row gap-[8px] items-center">
-                        <button className="flex gap-2 items-center bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]">
-                            <NextImage src={"/vector-bookmark.svg"} width={12} height={16} />
-                            BOOKMARK
+                        <button className="flex gap-2 items-center bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]"
+                                    onClick={() => {
+                                        if (is_favorited > 0) {
+                                            handleRemoveFavorite(session.id)
+                                        } else {
+                                            handleAddFavorite(session.id)
+                                        }
+                                    }}>
+                            <NextImage src={
+                                        is_favorited > 0
+                                            ? "/vector-bookmark2.svg"
+                                            : "/vector-bookmark.svg"
+                                    } width={12} height={16} />
+                            {
+                                        is_favorited > 0
+                                            ? "BOOKMARKED"
+                                            : "BOOKMARK"
+                                    }
                         </button>
                         <ParticipateButton event={event} session={session} isTallButton={true} />
                     </div>
@@ -123,3 +208,4 @@ const SessionPage = ({ session, event }: Props) => {
 }
 
 export default SessionPage
+
