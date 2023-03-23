@@ -15,16 +15,13 @@ type Props = {
 }
 
 const SessionPage = ({ session, sessions }: Props) => {
-    const LOGGED_IN_USER_ID = 1
     const router = useRouter()
+    const LOGGED_IN_USER_ID = 1
+    const is_favorited = session.favorited_sessions.some((favorited: any) => favorited.user_id === LOGGED_IN_USER_ID && favorited.session_id === session.id);
 
     const { startDate, location, startTime } = session
     const [openDeleteSessionModal, setOpenDeleteSessionModal] = useState(false)
     const [openEditSessionModal, setOpenEditSessionModal] = useState(false)
-
-    const is_favorited = session.favorited_sessions.some(
-        (favorited: any) => favorited.user_id === LOGGED_IN_USER_ID && favorited.session_id === session.id
-    )
 
     const startDateFormatted = new Date(startDate).toLocaleDateString("en-US", { day: "numeric" })
     const startWeekDayFormatted = new Date(startDate).toLocaleDateString("en-US", { weekday: "long" })
