@@ -9,7 +9,8 @@ const HomeTemplate = () => (
             <title>Home</title>
             <meta property="og:title" content="My new title" key="title" />
         </Head>
-        <div className="flex flex-col w-full">
+
+        <div className="flex flex-col w-full z-10">
             <MainSection />
         </div>
     </BaseTemplate>
