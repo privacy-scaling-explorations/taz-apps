@@ -20,11 +20,8 @@ type Props = {
 }
 
 const CalendarPage = ({ sessions, events }: Props) => {
-    const router = useRouter()
     const dateRef = useRef(null)
     const localtionRef = useRef(null)
-    const { parentMessageId } = router.query
-    const userObj = getUserOnID()
 
     const [openAddSessionModal, setOpenAddSessionModal] = useState(false)
     const [selectedWeeks, setSelectedWeeks] = useState<string[]>([])
