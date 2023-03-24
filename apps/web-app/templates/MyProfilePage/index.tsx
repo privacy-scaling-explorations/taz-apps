@@ -12,11 +12,13 @@ type Props = {
 }
 
 const MyProfilePage = ({ events, sessions }: Props) => {
-    const { userInfo, userSessions, userParticipatingSessions } = useUserAuthenticationContext()
+    const { userInfo, userSessions, userParticipatingSessions, userRole } = useUserAuthenticationContext()
 
     const [eventsOpt, setEventsOpt] = useState<string[]>([])
     const [selectedOpt, setSelectedOpt] = useState<string[]>([])
     const [openAddSessionModal, setOpenAddSessionModal] = useState(false)
+
+    const isOrganizer = userRole === "resident"
 
     useEffect(() => {
         if (userSessions.length > 0) {
@@ -78,12 +80,14 @@ const MyProfilePage = ({ events, sessions }: Props) => {
                         <div className="flex justify-between w-full">
                             <div className="flex items-center gap-10">
                                 <h1 className="font-semibold text-[40px]">My Sessions</h1>
-                                <button
-                                    onClick={() => setOpenAddSessionModal(true)}
-                                    className="flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px] h-[40px]"
-                                >
-                                    CREATE SESSION
-                                </button>
+                                {isOrganizer && (
+                                    <button
+                                        onClick={() => setOpenAddSessionModal(true)}
+                                        className="flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px] h-[40px]"
+                                    >
+                                        CREATE SESSION
+                                    </button>
+                                )}
                             </div>
                             {/* <div className="flex items-center">
                                 <button className="bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] gap-[8px] text-[16px] rounded-[8px] flex flex-row justify-center items-center">
