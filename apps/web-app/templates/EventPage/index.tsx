@@ -1,17 +1,14 @@
 import React, { useEffect, useRef, useState } from "react"
 
-import { useRouter } from "next/router"
 import NextImage from "next/image"
 import moment from "moment"
 import { ToastContainer } from "react-toastify"
-import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs"
-import Link from 'next/link';
+import Link from "next/link"
 import AddSessionModal from "../../components/AddSessionModal"
 import Sessions from "../../components/Sessions"
 import { EventsDTO, SessionsDTO } from "../../types"
 import BaseTemplate from "../Base"
-
-const supabase = createBrowserSupabaseClient()
+import { useUserAuthenticationContext } from "../../context/UserAuthenticationContext"
 
 type Props = {
     event: EventsDTO
@@ -19,13 +16,14 @@ type Props = {
 }
 
 const EventPage = ({ event, sessions }: Props) => {
-    const [session, setSession] = useState<any>()
     const wraperRef = useRef(null)
-
+    const { isAuth, userRole } = useUserAuthenticationContext()
     const [openAddSessionModal, setOpenAddSessionModal] = useState(false)
     // const [updateEventModal, setUpdateEventModal] = useState(false)
     const [selectedOptions, setSelectedOptions] = useState<string[]>([])
     const [openFilterOptions, setOpenFilterOptions] = useState(false)
+
+    const isOrganizer = userRole === "resident"
 
     const startDate = moment(new Date(event.startDate)).add(1, "day")
     const endDate = moment(new Date(event.endDate)).add(1, "day")
@@ -35,14 +33,6 @@ const EventPage = ({ event, sessions }: Props) => {
     const filterAfter = new Date(event.endDate)
 
     const dateOptions = []
-
-    useEffect(() => {
-        ;(async () => {
-            const userSession = await supabase.auth.getUser()
-            console.log("user object 1", userSession)
-            setSession(userSession)
-        })()
-    }, [])
 
     for (let date = filterSince; date <= filterAfter; date.setDate(date.getDate() + 1)) {
         const option = moment(new Date(date)).add(1, "day").format("dddd, MMMM Do, YYYY")
@@ -82,12 +72,16 @@ const EventPage = ({ event, sessions }: Props) => {
         }
     }, [])
 
+    console.log(event.image_url)
+
     return (
         <BaseTemplate>
             <div className="flex flex-col border border-black p-5 bg-[#EEEEF0] gap-5 w-full h-full">
                 <div className="flex flex-col md:flex-row justify-between p-5 bg-white rounded-[8px]">
                     <div className="flex items-center gap-2 mb-5 md:mb-0">
-                        <Link href="/events"><a className={`text-[#1C292899]`}>Events</a></Link>
+                        <Link href="/events">
+                            <a className={`text-[#1C292899]`}>Events</a>
+                        </Link>
                         <h1 className={`text-[#1C292899]`}>/</h1>
                         <h1 className={`text-black font-[600]`}>{`${event.name.substring(0, 30)}...`}</h1>
                     </div>
@@ -114,17 +108,17 @@ const EventPage = ({ event, sessions }: Props) => {
                         )} */}
                     </div>
                 </div>
-                <div className="flex flex-col md:flex-row w-full justify-start bg-white rounded-[8px] h-[682px]">
+                <div className="flex flex-col lg:flex-row w-full justify-start bg-white rounded-[8px] h-full">
                     <div className="flex h-full max-w-[1014px] w-full rounded-[8px]">
                         <NextImage
-                            src="/event-image.png"
+                            src={event.image_url}
                             objectFit="cover"
                             alt="event-image"
                             width="1014px"
                             height="682px"
                         />
                     </div>
-                    <div className="flex flex-col w-full md:w-2/6 pl-5 pr-20">
+                    <div className="flex flex-col w-full lg:w-2/6 pl-5 pr-20 md:mb-0 mb-10">
                         <div className="flex my-5 w-full">
                             <h1 className="text-black text-[52px] font-[600]">{`${event.name.substring(0, 30)}...`}</h1>
                         </div>
@@ -156,20 +150,20 @@ const EventPage = ({ event, sessions }: Props) => {
                     <div className="w-full flex flex-col md:flex-row justify-between items-center p-[16px] gap-[24px]">
                         <div className="flex flex-col md:flex-row items-center justify-center gap-[32px] mb-5 md:mb-0">
                             <h1 className="text-[40px] text-[#37352F] font-[600]">Sessions</h1>
-                                <>
-                                    <button
-                                        className="flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
-                                        onClick={() => setOpenAddSessionModal(true)}
-                                    >
-                                        CREATE SESSION
-                                    </button>
-                                    <AddSessionModal
-                                        closeModal={setOpenAddSessionModal}
-                                        isOpen={openAddSessionModal}
-                                        event={event}
-                                        sessions={sessions}
-                                    />
-                                </>
+                            {isAuth && isOrganizer && (
+                                <button
+                                    className="flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
+                                    onClick={() => setOpenAddSessionModal(true)}
+                                >
+                                    CREATE SESSION
+                                </button>
+                            )}
+                            <AddSessionModal
+                                closeModal={setOpenAddSessionModal}
+                                isOpen={openAddSessionModal}
+                                event={event}
+                                sessions={sessions}
+                            />
                         </div>
                         <div className="flex flex-col md:flex-row justify-center items-center gap-5">
                             <button
