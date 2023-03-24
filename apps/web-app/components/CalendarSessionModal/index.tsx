@@ -65,7 +65,7 @@ const CalendarSessionModal = ({ isOpen, closeModal, events, sessions }: Props) =
         track: "ZK Week",
         event_type: "Workshop",
         event_slug: "CoordiNations",
-        event_item_id: 111,
+        event_item_id: 111
     })
 
     console.log("selected params", newSession.event_id, newSession.event_slug, newSession.event_item_id)
@@ -150,7 +150,7 @@ const CalendarSessionModal = ({ isOpen, closeModal, events, sessions }: Props) =
             track: "ZK Week",
             event_type: "Workshop",
             event_slug: "CoordiNations",
-            event_item_id: 111,
+            event_item_id: 111
         })
         closeModal(false)
     }
@@ -187,7 +187,7 @@ const CalendarSessionModal = ({ isOpen, closeModal, events, sessions }: Props) =
                                         <h1 className="text-[24px] font-[600]">Session Info (for the public)</h1>
                                         <div
                                             onClick={() => closeModal(false)}
-                                            className="cursor-pointer flex items-center border-2 border-black justify-center w-[25px] h-[25px] rounded-full"
+                                            className="cursor-pointer flex p-4 items-center border-2 border-black justify-center w-[25px] h-[25px] rounded-full"
                                         >
                                             X
                                         </div>
