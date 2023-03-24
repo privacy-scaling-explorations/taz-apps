@@ -8,6 +8,7 @@ import AddSessionModal from "../../components/AddSessionModal"
 import Sessions from "../../components/Sessions"
 import { EventsDTO, SessionsDTO } from "../../types"
 import BaseTemplate from "../Base"
+import { useUserAuthenticationContext } from "../../context/UserAuthenticationContext"
 
 type Props = {
     event: EventsDTO
@@ -16,11 +17,13 @@ type Props = {
 
 const EventPage = ({ event, sessions }: Props) => {
     const wraperRef = useRef(null)
-
+    const { isAuth, userRole } = useUserAuthenticationContext()
     const [openAddSessionModal, setOpenAddSessionModal] = useState(false)
     // const [updateEventModal, setUpdateEventModal] = useState(false)
     const [selectedOptions, setSelectedOptions] = useState<string[]>([])
     const [openFilterOptions, setOpenFilterOptions] = useState(false)
+
+    const isOrganizer = userRole === "resident"
 
     const startDate = moment(new Date(event.startDate)).add(1, "day")
     const endDate = moment(new Date(event.endDate)).add(1, "day")
@@ -147,20 +150,20 @@ const EventPage = ({ event, sessions }: Props) => {
                     <div className="w-full flex flex-col md:flex-row justify-between items-center p-[16px] gap-[24px]">
                         <div className="flex flex-col md:flex-row items-center justify-center gap-[32px] mb-5 md:mb-0">
                             <h1 className="text-[40px] text-[#37352F] font-[600]">Sessions</h1>
-                            <>
+                            {isAuth && isOrganizer && (
                                 <button
                                     className="flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
                                     onClick={() => setOpenAddSessionModal(true)}
                                 >
                                     CREATE SESSION
                                 </button>
-                                <AddSessionModal
-                                    closeModal={setOpenAddSessionModal}
-                                    isOpen={openAddSessionModal}
-                                    event={event}
-                                    sessions={sessions}
-                                />
-                            </>
+                            )}
+                            <AddSessionModal
+                                closeModal={setOpenAddSessionModal}
+                                isOpen={openAddSessionModal}
+                                event={event}
+                                sessions={sessions}
+                            />
                         </div>
                         <div className="flex flex-col md:flex-row justify-center items-center gap-5">
                             <button

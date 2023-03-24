@@ -56,7 +56,7 @@ const Header = () => {
             console.log("log my proof", participant1)
             const response = await axios({
                 method: "post",
-                url: "https://1567-201-42-126-83.sa.ngrok.io/api/passport-user-login/",
+                url: "https://taz-zulalu-web-app.vercel.app/api/passport-user-login/",
                 data: participant1,
                 headers: {
                     "Content-Type": "application/json"
