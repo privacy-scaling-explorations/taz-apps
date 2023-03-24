@@ -10,9 +10,10 @@ import { useUserAuthenticationContext } from "../../context/UserAuthenticationCo
 type Props = {
     session: SessionsDTO
     isTallButton: boolean
+    userId: number
 }
 
-const ParticipateButton = ({ session, isTallButton }: Props) => {
+const ParticipateButton = ({ session, isTallButton, userId }: Props) => {
     const [openBuyTicketModal, setOpenBuyTicketModal] = useState(false)
 
     const { userInfo, isAuth } = useUserAuthenticationContext()
@@ -70,6 +71,7 @@ const ParticipateButton = ({ session, isTallButton }: Props) => {
                     makeToast(false, "Error")
                 })
         }
+
     }
 
     const closeTicketModal = (close = false) => {

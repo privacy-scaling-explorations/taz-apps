@@ -5,7 +5,7 @@ import axios from "axios"
 import { toast } from "react-toastify"
 import moment from "moment"
 import FavoriteButton from "../../components/FavoriteButton"
-import { SessionsDTO } from "../../types"
+
 
 import { useUserAuthenticationContext } from "../../context/UserAuthenticationContext"
 import ParticipateButton from "../ParticipateButton"
@@ -108,9 +108,11 @@ const CalendarPageSessions = ({ sessions, showStartDate = false }: Props) => {
                                         {item.name}
                                     </h3>
                                 </NextLink>
+
                                 <FavoriteButton session={item} isMiniButton={true} />
                             </div>
                             <ParticipateButton session={item} isTallButton={false} />
+
                             {/* {item.participants.length > 0 ? (
                                 <button className="flex gap-2 items-center bg-white border border-primary text-zulalu-primary font-[600] py-[4px] px-[16px] rounded-[8px] cursor-default">
                                     <NextImage src={"/vector-circle-check.svg"} width={16} height={16} />
