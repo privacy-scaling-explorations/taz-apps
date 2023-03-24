@@ -12,17 +12,27 @@ const Session = ({ session, sessions }: Props) => <SessionPage session={session}
 
 export default Session
 
-export const getServerSideProps: GetServerSideProps = async ({ res, query }) => {
-    const LOGGED_IN_USER_ID = 1
+export const getServerSideProps: GetServerSideProps = async ({ req, res, query }) => {
     try {
         const url = process.env.URL_TO_FETCH
 
-        const response = await axios.get(`${url}/api/fetchSession/${query.sessionId}/${LOGGED_IN_USER_ID}`)
-        const session = await response.data
+        const responseSession = await axios.get(`${url}/api/fetchSession/${query.sessionId}`, {
+            headers: {
+                Cookie: req.headers.cookie || "" // Pass cookies from the incoming request
+            }
+        })
 
-        console.log("URL to fetch", `${url}/api/fetchSession/${query.sessionId}/${LOGGED_IN_USER_ID}`)
-        const sessionsResponse = await axios.get(`${url}/api/fetchSessions/${LOGGED_IN_USER_ID}`)
-        const sessions = sessionsResponse.data
+        const session = await responseSession.data
+
+        console.log("URL to fetch", `${url}/api/fetchSession/${query.sessionId}`)
+
+        const responseSessions = await axios.get(`${url}/api/fetchSessions`, {
+            headers: {
+                Cookie: req.headers.cookie || "" // Pass cookies from the incoming request
+            }
+        })
+
+        const sessions = await responseSessions.data
 
         return {
             props: { session, sessions }

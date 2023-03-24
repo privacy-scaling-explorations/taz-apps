@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import NextImage from "next/image"
 import { toast } from "react-toastify"
 import axios from "axios"
+import { useUserAuthenticationContext } from "../../context/UserAuthenticationContext"
 import { SessionsDTO } from "../../types"
 
 type Props = {
@@ -10,11 +11,10 @@ type Props = {
 }
 
 const FavoriteButton = ({ session, isMiniButton }: Props) => {
+    const { userInfo, isAuth } = useUserAuthenticationContext()
     const [latestFavoritedSessionId, setLatestFavoritedSessionId] = useState<number | null>(
         session.favoritedSessions.length > 0 ? session.favoritedSessions[0].id : null
     )
-
-    const LOGGED_IN_USER_ID = 1
 
     useEffect(() => {
         console.log("session", session)
@@ -48,21 +48,23 @@ const FavoriteButton = ({ session, isMiniButton }: Props) => {
     }
 
     const handleAddFavorite = async () => {
-        await axios
-            .post("/api/addFavoriteSession", {
-                session_id: session.id,
-                user_id: LOGGED_IN_USER_ID
-            })
-            .then((res) => {
-                if (res.status === 201) {
-                    setLatestFavoritedSessionId(res.data.favoritedSession.id)
-                    makeToast(true, "This session is now bookmarked.")
-                }
-            })
-            .catch((err) => {
-                console.log(err)
-                makeToast(false, "Error")
-            })
+        if (userInfo) {
+            await axios
+                .post("/api/addFavoriteSession", {
+                    session_id: session.id,
+                    user_id: userInfo.id
+                })
+                .then((res) => {
+                    if (res.status === 201) {
+                        setLatestFavoritedSessionId(res.data.favoritedSession.id)
+                        makeToast(true, "This session is now bookmarked.")
+                    }
+                })
+                .catch((err) => {
+                    console.log(err)
+                    makeToast(false, "Error")
+                })
+        }
     }
 
     const handleRemoveFavorite = async () => {
@@ -84,40 +86,41 @@ const FavoriteButton = ({ session, isMiniButton }: Props) => {
 
     return (
         <>
-            {isMiniButton ? (
-                <NextImage
-                    className="text-[#91A8A7] cursor-pointer"
-                    src={latestFavoritedSessionId !== null ? "/vector-bookmark2.svg" : "/vector-bookmark.svg"}
-                    alt="vector-bookmark"
-                    width={24}
-                    height={24}
-                    onClick={() => {
-                        if (latestFavoritedSessionId !== null) {
-                            handleRemoveFavorite()
-                        } else {
-                            handleAddFavorite()
-                        }
-                    }}
-                />
-            ) : (
-                <button
-                    className="flex gap-2 items-center bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]"
-                    onClick={() => {
-                        if (latestFavoritedSessionId !== null) {
-                            handleRemoveFavorite()
-                        } else {
-                            handleAddFavorite()
-                        }
-                    }}
-                >
+            {userInfo &&
+                (isMiniButton ? (
                     <NextImage
+                        className="text-[#91A8A7] cursor-pointer"
                         src={latestFavoritedSessionId !== null ? "/vector-bookmark2.svg" : "/vector-bookmark.svg"}
-                        width={12}
-                        height={16}
+                        alt="vector-bookmark"
+                        width={24}
+                        height={24}
+                        onClick={() => {
+                            if (latestFavoritedSessionId !== null) {
+                                handleRemoveFavorite()
+                            } else {
+                                handleAddFavorite()
+                            }
+                        }}
                     />
-                    {latestFavoritedSessionId !== null ? "BOOKMARKED" : "BOOKMARK"}
-                </button>
-            )}
+                ) : (
+                    <button
+                        className="flex gap-2 items-center bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]"
+                        onClick={() => {
+                            if (latestFavoritedSessionId !== null) {
+                                handleRemoveFavorite()
+                            } else {
+                                handleAddFavorite()
+                            }
+                        }}
+                    >
+                        <NextImage
+                            src={latestFavoritedSessionId !== null ? "/vector-bookmark2.svg" : "/vector-bookmark.svg"}
+                            width={12}
+                            height={16}
+                        />
+                        {latestFavoritedSessionId !== null ? "BOOKMARKED" : "BOOKMARK"}
+                    </button>
+                ))}
         </>
     )
 }

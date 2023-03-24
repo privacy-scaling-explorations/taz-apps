@@ -3,6 +3,7 @@ import NextImage from "next/image"
 import axios from "axios"
 import { toast } from "react-toastify"
 import { useRouter } from "next/router"
+import Link from "next/link"
 import { SessionsDTO } from "../../types"
 import BaseTemplate from "../Base"
 import DeleteSessionModal from "../../components/DeleteSessionModal"
@@ -17,7 +18,6 @@ type Props = {
 
 const SessionPage = ({ session, sessions }: Props) => {
     const router = useRouter()
-    const LOGGED_IN_USER_ID = 1
 
     const { startDate, location, startTime } = session
     const [openDeleteSessionModal, setOpenDeleteSessionModal] = useState(false)
@@ -77,9 +77,11 @@ const SessionPage = ({ session, sessions }: Props) => {
             <div className="flex flex-col items-center bg-[#EEEEF0] h-[100vh] px-4 md:px-[24px] py-4 md:py-[24px] gap-4 md:gap-[16px]">
                 <div className="flex flex-col md:flex-row justify-between p-5 bg-white w-full rounded-[8px]">
                     <div className="flex items-center gap-2 mb-4 md:mb-0">
-                        <h1 className={`text-[#1C292899]`}>Program</h1>
+                        <Link href={router.asPath.split("/").slice(0, 3).join("/")}>
+                            <a className={`text-[#1C292899]`}>{session.track}</a>
+                        </Link>
                         <h1 className={`text-[#1C292899]`}>/</h1>
-                        <h1 className={`text-black font-[600]`}>ZK Week</h1>
+                        <h1 className={`text-black font-[600]`}>{session.name}</h1>
                     </div>
                     <div className="flex flex-row gap-[8px] items-center">
                         <FavoriteButton session={session} isMiniButton={false} />

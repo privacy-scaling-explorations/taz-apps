@@ -2,6 +2,7 @@ import React from "react"
 
 import { GetServerSideProps } from "next"
 
+import axios from "axios"
 import MyProfilePage from "../templates/MyProfilePage"
 
 import { EventsDTO, SessionsDTO } from "../types"
@@ -15,8 +16,7 @@ export default function MyProfile({ events, sessions }: Props) {
     return <MyProfilePage events={events} sessions={sessions} />
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ res }) => {
-    const LOGGED_IN_USER_ID = 1
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     try {
         const url = process.env.URL_TO_FETCH
 
@@ -24,12 +24,20 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
 
         const events: EventsDTO[] = await eventsResponse.json()
 
-        const sessionsResponse = await fetch(`${url}/api/fetchSessions/${LOGGED_IN_USER_ID}`)
+        let sessionsRes: SessionsDTO[] = []
 
-        const sessions: SessionsDTO[] = await sessionsResponse.json()
+        await axios
+            .get(`${url}/api/fetchSessions`, {
+                headers: {
+                    Cookie: req.headers.cookie || "" // Pass cookies from the incoming request
+                }
+            })
+            .then((response: any) => {
+                sessionsRes = response.data
+            })
 
         return {
-            props: { sessions, events }
+            props: { sessions: sessionsRes, events }
         }
     } catch (error) {
         res.statusCode = 404
