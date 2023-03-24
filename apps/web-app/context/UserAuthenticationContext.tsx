@@ -8,6 +8,7 @@ type UserAuthenticationContextData = {
     userInfo: UserDTO | undefined
     setUserInfo: (b: UserDTO) => void
     isAuth: boolean
+    userRole: string
     userSessions: SessionsDTO[]
     userParticipatingSessions: SessionsDTO[]
 }
@@ -21,6 +22,7 @@ export const UserAuthenticationContext = createContext({} as UserAuthenticationC
 export function UserAuthenticationProvider({ children }: UserAuthenticationProviderProps) {
     const [userInfo, setUserInfo] = useState<UserDTO>()
     const [userSessions, setUserSessions] = useState<SessionsDTO[]>([])
+    const [userRole, setUserRole] = useState("")
     const [userParticipatingSessions, setUserParticipatingSessions] = useState<SessionsDTO[]>([])
 
     const isAuth = useMemo(() => Boolean(userInfo), [userInfo])
@@ -39,6 +41,7 @@ export function UserAuthenticationProvider({ children }: UserAuthenticationProvi
         await axios
             .get(`/api/fetchUser/${session.user.id}`)
             .then((res) => {
+                setUserRole(session.user.user_metadata.role)
                 setUserInfo(res.data)
             })
             .catch((error) => {
@@ -72,7 +75,7 @@ export function UserAuthenticationProvider({ children }: UserAuthenticationProvi
 
     return (
         <UserAuthenticationContext.Provider
-            value={{ userInfo, isAuth, setUserInfo, userParticipatingSessions, userSessions }}
+            value={{ userInfo, isAuth, setUserInfo, userParticipatingSessions, userRole, userSessions }}
         >
             {children}
         </UserAuthenticationContext.Provider>
