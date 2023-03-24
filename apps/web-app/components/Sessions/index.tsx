@@ -1,10 +1,8 @@
 import NextImage from "next/image"
 import { useRouter } from "next/router"
-import { useState } from "react"
 import NextLink from "next/link"
 import axios from "axios"
 import { toast } from "react-toastify"
-import BuyTicketModal from "../BuyTicketModal"
 import ParticipateButton from "../ParticipateButton"
 import { SessionsDTO, EventsDTO } from "../../types"
 
@@ -112,7 +110,7 @@ const Sessions = ({ event, sessions }: Props) => {
                                     }}
                                 />
                             </div>
-                            <ParticipateButton event={event} session={item} isTallButton={false} />
+                            <ParticipateButton session={item} isTallButton={false} />
                         </div>
                         <div className="w-full flex flex-row gap-[32px] justify-between items-center">
                             <div className="flex flex-row items-start gap-[8px]">

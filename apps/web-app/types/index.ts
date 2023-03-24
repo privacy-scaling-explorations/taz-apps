@@ -5,8 +5,7 @@ export interface UserDTO {
     id: number
     semaphoreId: string
     userName: string
-    url: string
-    publicUrl: string
+    uuid_auth: string
 }
 
 export interface EventsDTO {
@@ -55,6 +54,9 @@ export interface SessionsDTO {
         role: string
     }[]
     track: string
+    endTime: any
+    type: any
+    events: EventsDTO
     quota_id: number
 }
 

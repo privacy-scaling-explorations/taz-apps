@@ -14,6 +14,7 @@ export default async function handler(
   const signInWithSemaphoreProof = async (identity: any) => {
     // IMPORTANT!!!! User Email must be changed
     // Validate Proof of user before interacting with DB
+    console.log("Login identity", identity)
     const {
       uuid,
       commitment,
@@ -23,7 +24,10 @@ export default async function handler(
       residence,
       order_id,
     } = identity;
+
+    console.log("Login email", email)
     const password: any = process.env.SINGLE_KEY_LOGIN;
+    console.log("Login password", password)
     try {
       const signIn = await supabase.auth.signInWithPassword({
         email,
@@ -35,6 +39,8 @@ export default async function handler(
       }
 
       if (signIn.error) {
+        console.log("Sign in error", signIn.error)
+        console.log("sign up error Email and Password", email, password)
         const signUpResponse = await supabase.auth.signUp({
           email,
           password,

@@ -6,8 +6,6 @@ import CalendarPage from "../templates/CalendarPage"
 type Props = {
     events: EventsDTO[]
     sessions: SessionsDTO[]
-    participants: ParticipantsDTO[]
-    favoritedEvents: FavoritedEventsDTO[]
 }
 
 export default function Event({ sessions, events }: Props) {
