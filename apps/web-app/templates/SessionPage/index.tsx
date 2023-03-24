@@ -160,7 +160,7 @@ const SessionPage = ({ session, sessions }: Props) => {
                         </button>
                         <EditSessionModal
                             isOpen={openEditSessionModal}
-                            closeModal={closeDeleteSessionModal}
+                            closeModal={setOpenEditSessionModal}
                             session={session}
                             sessions={sessions}
                         />
@@ -172,7 +172,7 @@ const SessionPage = ({ session, sessions }: Props) => {
                         </button>
                         <DeleteSessionModal
                             isOpen={openDeleteSessionModal}
-                            closeModal={setOpenDeleteSessionModal}
+                            closeModal={closeDeleteSessionModal}
                             deleteSession={deleteSession}
                         />
                     </div>
