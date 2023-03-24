@@ -221,6 +221,14 @@ const SessionPage = ({ session, sessions }: Props) => {
                                                 height={24}
                                             />
                                         )}
+                                        {item.role === "Facilitator" && (
+                                            <NextImage
+                                                src={"/user-icon-5.svg"}
+                                                alt="user-icon-6"
+                                                width={24}
+                                                height={24}
+                                            />
+                                        )}
                                         <p>{item.role}:</p>
                                         <p className="font-bold">{item.name}</p>
                                     </div>

@@ -191,8 +191,8 @@ const CalendarSessionModal = ({ isOpen, closeModal, events, sessions }: Props) =
                                                 : steps == 2
                                                 ? "Session info (for the public)"
                                                 : steps == 3
-                                                ? "Session info (shared with the Zuzalu team)"
-                                                : "Confirmation"}
+                                                ? "Session Logistics (for organizers)"
+                                                : "Review Session"}
                                         </h1>
                                         <div
                                             onClick={() => closeModal(false)}
