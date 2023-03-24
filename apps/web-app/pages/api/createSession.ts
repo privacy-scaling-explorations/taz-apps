@@ -19,8 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         })
     }
 
-    if (session) 
-    {
+    if (session) {
         try {
             const {
                 name,
