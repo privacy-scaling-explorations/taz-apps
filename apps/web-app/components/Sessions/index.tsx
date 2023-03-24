@@ -17,7 +17,7 @@ const Sessions = ({ event, sessions }: Props) => {
             {sessions.map((item, index) => (
                 <div className="w-full" key={index}>
                     <div className="bg-[#1C2928] w-full flex flex-row items-center rounded-[8px]">
-                        <p className="text-white py-[8px] px-[16px]">{item.startTime.slice(0, -3)}</p>
+                        <p className="text-white py-[8px] px-[16px]">{item.startTime}</p>
                     </div>
 
                     <div className="w-full flex flex-col items-start gap-[32px] bg-[#FCFFFE]] rounded-[16px] p-[16px]">
@@ -28,15 +28,9 @@ const Sessions = ({ event, sessions }: Props) => {
                                         {item.name}
                                     </h3>
                                 </NextLink>
-                                <FavoriteButton
-                                    session={item}
-                                    favoritedSessionId={
-                                        item.favoritedSessions.length > 0 ? item.favoritedSessions[0].id : null
-                                    }
-                                    isMiniButton={true}
-                                />
+                                <FavoriteButton session={item} isMiniButton={true} />
                             </div>
-                            {userInfo && <ParticipateButton session={item} isTallButton={false} userId={userInfo.id} />}
+                            <ParticipateButton session={item} isTallButton={false} />
                         </div>
                         <div className="w-full flex flex-row gap-[32px] justify-between items-center">
                             <div className="flex flex-row items-start gap-[8px]">
@@ -61,6 +55,14 @@ const Sessions = ({ event, sessions }: Props) => {
                                                 height={24}
                                             />
                                         )}
+                                        {organizer.role === "Facilitator" && (
+                                            <NextImage
+                                                src={"/user-icon-5.svg"}
+                                                alt="user-icon-5"
+                                                width={24}
+                                                height={24}
+                                            />
+                                        )}
                                         <p className="text-[#1C2928] font-[400] text-[16px]">
                                             {organizer.role}:{" "}
                                             <span className="font-[600] capitalize">{organizer.name}</span>
@@ -72,8 +74,7 @@ const Sessions = ({ event, sessions }: Props) => {
                                 <div className="flex flex-row items-center gap-[8px]">
                                     <NextImage src={"/vector-clock.svg"} alt="vector-clock" width={16} height={16} />
                                     <p className="text-[#708E8C] text-[18px]">
-                                        {/* {item.startTime.slice(0, -3)}-{item.endTime.slice(0, -3)} */}
-                                        {item.startTime.slice(0, -3)}
+                                        {item.startTime}
                                     </p>
                                 </div>
                                 <div className="flex flex-row items-center gap-[8px] border-b border-[#708E8C] text-[#708E8C]">

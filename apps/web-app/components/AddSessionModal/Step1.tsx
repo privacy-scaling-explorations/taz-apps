@@ -359,6 +359,9 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                                 {item.role === "Organizer" && (
                                     <NextImage src={"/user-icon-4.svg"} alt="user-icon-6" width={24} height={24} />
                                 )}
+                                {item.role === "Facilitator" && (
+                                    <NextImage src={"/user-icon-5.svg"} alt="user-icon-6" width={24} height={24} />
+                                )}
                                 <p className="text-[#1C2928] font-[400] text-[16px]">
                                     {item.role}: <span className="font-[600] capitalize">{item.name}</span>
                                 </p>
@@ -395,23 +398,6 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                         </div>
                     ))}
                 </ul>
-            </div>
-
-            <div className="flex flex-col gap-1 my-2">
-                <label htmlFor="tags">Track:</label>
-                <select
-                    id="track"
-                    name="track"
-                    className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px]"
-                    onChange={(e) => setNewSession({ ...newSession, track: e.target.value })}
-                >
-                    {tracksOpt &&
-                        tracksOpt.map((item, index) => (
-                            <option key={index} value={item.type}>
-                                {item.type}
-                            </option>
-                        ))}
-                </select>
             </div>
             <div className="flex flex-col gap-1 my-2">
                 <label htmlFor="tags">Format:</label>

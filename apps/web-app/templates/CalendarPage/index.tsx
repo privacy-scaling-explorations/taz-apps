@@ -16,7 +16,6 @@ type Props = {
 const CalendarPage = ({ sessions, events }: Props) => {
     const dateRef = useRef(null)
     const localtionRef = useRef(null)
-
     const { isAuth, userRole } = useUserAuthenticationContext()
 
     const [openAddSessionModal, setOpenAddSessionModal] = useState(false)
@@ -26,8 +25,8 @@ const CalendarPage = ({ sessions, events }: Props) => {
 
     const [openFilterOptions, setOpenFilterOptions] = useState(false)
     const [openLocationFilter, setOpenLocationFilter] = useState(false)
-
     const isOrganizer = userRole === "resident"
+
 
     const filterOptions = [
         {
@@ -157,6 +156,7 @@ const CalendarPage = ({ sessions, events }: Props) => {
                     <div className="w-full flex flex-col lg:flex-row justify-between items-start lg:items-center p-[16px] gap-[24px]">
                         <div className="flex flex-col md:flex-row items-start md:items-center justify-center gap-[32px]">
                             <h1 className="text-[40px] text-[#37352F] font-[600]">Week 1 | March 25-31</h1>
+
                             {isAuth && isOrganizer ? (
                                 <>
                                     <button

@@ -9,6 +9,7 @@ import BaseTemplate from "../Base"
 import DeleteSessionModal from "../../components/DeleteSessionModal"
 import EditSessionModal from "../../components/EditSessionModal"
 import ParticipateButton from "../../components/ParticipateButton"
+import FavoriteButton from "../../components/FavoriteButton"
 import { useUserAuthenticationContext } from "../../context/UserAuthenticationContext"
 
 type Props = {
@@ -19,12 +20,6 @@ type Props = {
 const SessionPage = ({ session, sessions }: Props) => {
     const { userInfo, isAuth } = useUserAuthenticationContext()
     const router = useRouter()
-    const is_favorited =
-        userInfo &&
-        session.favorited_sessions.some(
-            (favorited: any) => favorited.user_id === userInfo.id && favorited.session_id === session.id
-        )
-
     const { startDate, location, startTime } = session
     const [openDeleteSessionModal, setOpenDeleteSessionModal] = useState(false)
     const [openEditSessionModal, setOpenEditSessionModal] = useState(false)
@@ -59,42 +54,6 @@ const SessionPage = ({ session, sessions }: Props) => {
         }
     }
 
-    const handleAddFavorite = async (sessionId: number, userId: number) => {
-        await axios
-            .post("/api/addFavoriteSession", {
-                session_id: sessionId,
-                user_id: userId
-            })
-            .then((res) => {
-                if (res.status === 201) {
-                    makeToast(true, "This session is now bookmarked.")
-                    router.push(router.asPath)
-                }
-            })
-            .catch((err) => {
-                console.log(err)
-                makeToast(false, "Error")
-            })
-    }
-
-    const handleRemoveFavorite = async (favoritedSessionId: number) => {
-        console.log("remove bookmark")
-        await axios
-            .post("/api/removeFavoriteSession", {
-                id: favoritedSessionId
-            })
-            .then((res) => {
-                if (res.status === 200) {
-                    makeToast(true, "This session is no longer bookmarked.")
-                    router.push(router.asPath)
-                }
-            })
-            .catch((err) => {
-                console.log(err)
-                makeToast(false, "Error")
-            })
-    }
-
     const deleteSession = async () => {
         await axios.post("/api/deleteSession", { id: session.id })
         if (session.hasTicket) {
@@ -109,9 +68,14 @@ const SessionPage = ({ session, sessions }: Props) => {
                     slug: session.event_slug,
                     subEventId: session.subevent_id
                 })
+                router.push("/calendar-full")
             }
         }
         router.push("/calendar-full")
+    }
+
+    const closeDeleteSessionModal = (close = false) => {
+        if (close) setOpenDeleteSessionModal(false)
     }
 
     return (
@@ -126,26 +90,9 @@ const SessionPage = ({ session, sessions }: Props) => {
                         <h1 className={`text-black font-[600]`}>{session.name}</h1>
                     </div>
                     <div className="flex flex-row gap-[8px] items-center">
-                        {userInfo && (
-                            <button
-                                className="flex gap-2 items-center bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]"
-                                onClick={() => {
-                                    if (is_favorited > 0) {
-                                        handleRemoveFavorite(session.id)
-                                    } else {
-                                        handleAddFavorite(session.id, userInfo.id)
-                                    }
-                                }}
-                            >
-                                <NextImage
-                                    src={is_favorited > 0 ? "/vector-bookmark2.svg" : "/vector-bookmark.svg"}
-                                    width={12}
-                                    height={16}
-                                />
-                                {is_favorited > 0 ? "BOOKMARKED" : "BOOKMARK"}
-                            </button>
-                        )}
-                        {userInfo && <ParticipateButton session={session} isTallButton={true} userId={userInfo.id} />}
+                        <FavoriteButton session={session} isMiniButton={false} />
+                        <ParticipateButton session={session} isTallButton={true} />
+
                         <button
                             className="flex gap-2 items-center bg-zulalu-primary border border-primary text-white font-[600] py-[8px] px-[16px] rounded-[8px]"
                             onClick={() => setOpenEditSessionModal(true)}
@@ -167,7 +114,7 @@ const SessionPage = ({ session, sessions }: Props) => {
                         </button>
                         <DeleteSessionModal
                             isOpen={openDeleteSessionModal}
-                            closeModal={setOpenDeleteSessionModal}
+                            closeModal={closeDeleteSessionModal}
                             deleteSession={deleteSession}
                         />
                     </div>
@@ -211,6 +158,14 @@ const SessionPage = ({ session, sessions }: Props) => {
                                         {item.role === "Organizer" && (
                                             <NextImage
                                                 src={"/user-icon-4.svg"}
+                                                alt="user-icon-6"
+                                                width={24}
+                                                height={24}
+                                            />
+                                        )}
+                                        {item.role === "Facilitator" && (
+                                            <NextImage
+                                                src={"/user-icon-5.svg"}
                                                 alt="user-icon-6"
                                                 width={24}
                                                 height={24}

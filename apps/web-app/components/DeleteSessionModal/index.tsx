@@ -4,6 +4,7 @@ import NextImage from "next/image"
 import { Dialog, Transition } from "@headlessui/react"
 import { useRouter } from "next/router"
 import { Fragment, useRef, useState } from "react"
+import Loading from "../Loading"
 
 type Props = {
     isOpen: boolean
@@ -13,12 +14,12 @@ type Props = {
 
 const DeleteSessionModal = ({ isOpen, closeModal, deleteSession }: Props) => {
     const [step, setStep] = useState(1)
-    
+
     const resetAndClose = (close = false) => {
         setStep(1)
         closeModal(close)
     }
-    
+
     const handleYesClick = () => {
         setStep(2)
         deleteSession()
@@ -84,13 +85,7 @@ const DeleteSessionModal = ({ isOpen, closeModal, deleteSession }: Props) => {
                                 {/*  Step 2 */}
                                 {step === 2 && (
                                     <div className="flex flex-col gap-4 items-center justify-center p-20">
-                                        <NextImage
-                                            src={"/logo.svg"}
-                                            objectFit="contain"
-                                            width="250px"
-                                            height="250px"
-                                            className="animate-spin"
-                                        />
+                                        <Loading size="lg" />
                                     </div>
                                 )}
 

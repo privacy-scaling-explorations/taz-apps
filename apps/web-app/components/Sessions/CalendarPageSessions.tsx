@@ -5,6 +5,7 @@ import axios from "axios"
 import { toast } from "react-toastify"
 import moment from "moment"
 import { SessionsDTO } from "../../types"
+import FavoriteButton from "../FavoriteButton"
 
 import { useUserAuthenticationContext } from "../../context/UserAuthenticationContext"
 import ParticipateButton from "../ParticipateButton"
@@ -81,43 +82,6 @@ const CalendarPageSessions = ({ sessions, showStartDate = false }: Props) => {
     //     handleClickAttend(currentSubEventParams.id)
     // }
 
-    const handleAddFavorite = async (sessionId: number) => {
-        if (userInfo) {
-            await axios
-                .post("/api/addFavoriteSession", {
-                    session_id: sessionId,
-                    user_id: userInfo.id
-                })
-                .then((res) => {
-                    if (res.data === "Session favorited") {
-                        makeToast(true, "This session is now bookmarked.")
-                        router.push(router.asPath)
-                    }
-                })
-                .catch((err) => {
-                    console.log(err)
-                    makeToast(false, "Error")
-                })
-        }
-    }
-
-    const handleRemoveFavorite = async (favoritedSessionId: number) => {
-        await axios
-            .post("/api/removeFavoriteSession", {
-                id: favoritedSessionId
-            })
-            .then((res) => {
-                if (res.status === 200) {
-                    makeToast(true, "This session is no longer bookmarked.")
-                    router.push(router.asPath)
-                }
-            })
-            .catch((err) => {
-                console.log(err)
-                makeToast(false, "Error")
-            })
-    }
-
     // const closeOpenTicketModal = (close = false) => {
     //     if (close) setOpenBuyTicketModal(false)
     // }
@@ -132,7 +96,7 @@ const CalendarPageSessions = ({ sessions, showStartDate = false }: Props) => {
                                 {moment(item.startDate).format("MMMM DD")}
                             </p>
                         ) : (
-                            <p className="text-white py-[8px] px-[16px]">{item.startTime.slice(0, -3)}</p>
+                            <p className="text-white py-[8px] px-[16px]">{item.startTime}</p>
                         )}
                     </div>
 
@@ -144,28 +108,12 @@ const CalendarPageSessions = ({ sessions, showStartDate = false }: Props) => {
                                         {item.name}
                                     </h3>
                                 </NextLink>
-                                {isAuth && (
-                                    <NextImage
-                                        className="text-[#91A8A7] cursor-pointer"
-                                        src={
-                                            item.favoritedSessions.length > 0
-                                                ? "/vector-bookmark2.svg"
-                                                : "/vector-bookmark.svg"
-                                        }
-                                        alt="vector-bookmark"
-                                        width={24}
-                                        height={24}
-                                        onClick={() => {
-                                            if (item.favoritedSessions.length > 0) {
-                                                handleRemoveFavorite(item.favoritedSessions[0].id)
-                                            } else {
-                                                handleAddFavorite(item.id)
-                                            }
-                                        }}
-                                    />
-                                )}
+
+                                <FavoriteButton session={item} isMiniButton={true} />
+
                             </div>
-                            {userInfo && <ParticipateButton session={item} isTallButton={false} userId={userInfo.id} />}
+                            <ParticipateButton session={item} isTallButton={false} />
+
                             {/* {item.participants.length > 0 ? (
                                 <button className="flex gap-2 items-center bg-white border border-primary text-zulalu-primary font-[600] py-[4px] px-[16px] rounded-[8px] cursor-default">
                                     <NextImage src={"/vector-circle-check.svg"} width={16} height={16} />
@@ -225,6 +173,14 @@ const CalendarPageSessions = ({ sessions, showStartDate = false }: Props) => {
                                                 height={24}
                                             />
                                         )}
+                                        {organizer.role === "Facilitator" && (
+                                            <NextImage
+                                                src={"/user-icon-5.svg"}
+                                                alt="user-icon-5"
+                                                width={24}
+                                                height={24}
+                                            />
+                                        )}
                                         <p className="text-[#1C2928] font-[400] text-[16px]">
                                             {organizer.role}:{" "}
                                             <span className="font-[600] capitalize">{organizer.name}</span>
@@ -235,7 +191,7 @@ const CalendarPageSessions = ({ sessions, showStartDate = false }: Props) => {
                             <div className="flex flex-row w-full md:w-auto justify-between items-end gap-[32px] text-sm">
                                 <div className="flex flex-row items-center gap-[8px]">
                                     <NextImage src={"/vector-clock.svg"} alt="vector-clock" width={16} height={16} />
-                                    <p className="text-[#708E8C] text-[18px]">{item.startTime.slice(0, -3)}</p>
+                                    <p className="text-[#708E8C] text-[18px]">{item.startTime}</p>
                                 </div>
                                 <div className="flex flex-row items-center gap-[8px] border-b border-[#708E8C] text-[#708E8C]">
                                     <NextImage src={"/vector-location.svg"} alt="location" width={15} height={15} />
