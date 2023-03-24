@@ -4,6 +4,10 @@ module.exports = {
     content: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}", "./templates/**/*.{js,ts,jsx,tsx}"],
     theme: {
         extend: {
+            backgroundColor: {
+                eventbg1: "rgba(212, 249, 232, 0.9)",
+                eventbg2: "rgba(247, 222, 55, 0.9)"
+            },
             fontWeight: {
                 semibold: "600"
             },
@@ -54,6 +58,12 @@ module.exports = {
                     gradient1: "#D2F8E8CC",
                     gradient2: "#FFF250CC",
                     yellow: "#FCD270"
+                }
+            },
+            filter: {
+                filter: {
+                    none: "none",
+                    "blur-150": "blur(150px)"
                 }
             },
             borderColor: {
