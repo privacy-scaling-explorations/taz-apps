@@ -49,7 +49,7 @@ const Step4 = ({ setSteps, newSession, handleSubmit, isLoading, amountTickets }:
     return (
         <div className="flex flex-col w-full gap-8 bg-white rounded-lg">
             <div className="flex flex-col gap-4">
-                <h1 className="text-[18px] font-bold uppercase ">{newSession.name}</h1>
+                <h1 className="text-[24px] font-[600]">{newSession.name}</h1>
                 <h1 className="text-[18px]">{newSession.description}</h1>
 
                 <div className="flex items-center gap-2">
@@ -59,12 +59,46 @@ const Step4 = ({ setSteps, newSession, handleSubmit, isLoading, amountTickets }:
 
                 <div className="flex items-center gap-2">
                     <NextImage src="/vector-clock.svg" width={20} height={20} />
-                    <h1>{newSession.startTime}</h1>
+                    <h1 className="text-[18px]">{newSession.startTime}</h1>
                 </div>
 
                 <div className="flex items-center gap-2">
                     <NextImage src="/vector-location.svg" width={20} height={20} />
-                    <h1>{newSession.location}</h1>
+                    <h1 className="text-[18px]">{newSession.location}</h1>
+                </div>
+                <div className="flex flex-col gap-[12px]">
+                    <div className="flex flex-row gap-[8px]">
+                        <p className="w-[103px] font-[700] text-[#1C2928] text-[18px]">Organizers</p>
+                        <div className="flex flex-row items-center">
+                            {newSession.team_members.filter((item) => item.role == "Organizer").map((item, index) => (
+                                <p key={index} className="font-[400] text-[18px]">{ (index ? ', ' : '') + item.name }</p>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="flex flex-row gap-[8px]">
+                        <p className="w-[103px] font-[700] text-[#1C2928] text-[18px]">Speakers</p>
+                        <div className="flex flex-row items-center">
+                            {newSession.team_members.filter((item) => item.role == "Speaker").map((item, index) => (
+                                <p key={index} className="font-[400] text-[18px]">{ (index ? ', ' : '') + item.name }</p>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="flex flex-row gap-[8px]">
+                        <p className="w-[103px] font-[700] text-[#1C2928] text-[18px]">Format</p>
+                        <p className="flex flex-row items-center font-[400] text-[18px]">{newSession.format}</p>
+                    </div>
+                    <div className="flex flex-row gap-[8px]">
+                        <p className="w-[103px] font-[700] text-[#1C2928] text-[18px]">Level</p>
+                        <p className="flex flex-row items-center font-[400] text-[18px]">{newSession.level}</p>
+                    </div>
+                    <div className="flex flex-row gap-[8px]">
+                        <p className="w-[103px] font-[700] text-[#1C2928] text-[18px]">Tags</p>
+                        <div className="flex flex-row items-center">
+                            {newSession.tags.map((item, index) => (
+                                <p key={index} className="font-[400] text-[18px]">{ (index ? ', ' : '') + item }</p>
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </div>
             <div className="w-full flex flex-col md:flex-row gap-5 justify-center items-center mt-5">

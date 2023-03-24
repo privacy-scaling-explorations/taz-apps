@@ -68,9 +68,14 @@ const SessionPage = ({ session, sessions }: Props) => {
                     slug: session.event_slug,
                     subEventId: session.subevent_id
                 })
+                router.push("/calendar-full")
             }
         }
         router.push("/calendar-full")
+    }
+
+    const closeDeleteSessionModal = (close = false) => {
+        if (close) setOpenDeleteSessionModal(false)
     }
 
     return (
@@ -109,7 +114,7 @@ const SessionPage = ({ session, sessions }: Props) => {
                         </button>
                         <DeleteSessionModal
                             isOpen={openDeleteSessionModal}
-                            closeModal={setOpenDeleteSessionModal}
+                            closeModal={closeDeleteSessionModal}
                             deleteSession={deleteSession}
                         />
                     </div>
@@ -153,6 +158,14 @@ const SessionPage = ({ session, sessions }: Props) => {
                                         {item.role === "Organizer" && (
                                             <NextImage
                                                 src={"/user-icon-4.svg"}
+                                                alt="user-icon-6"
+                                                width={24}
+                                                height={24}
+                                            />
+                                        )}
+                                        {item.role === "Facilitator" && (
+                                            <NextImage
+                                                src={"/user-icon-5.svg"}
                                                 alt="user-icon-6"
                                                 width={24}
                                                 height={24}
