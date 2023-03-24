@@ -1,22 +1,18 @@
+
 import NextImage from "next/image"
 import NextLink from "next/link"
+import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { requestSignedZuzaluUUIDUrl, useFetchParticipant, useSemaphoreSignatureProof } from "@pcd/passport-interface"
 import axios from "axios"
-import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs"
-import { usePassportModalContext } from "../../context/PassportModalContext"
-import getUserSession from "../../hooks/getUserSession"
-
-const supabase = createBrowserSupabaseClient()
+import { useUserAuthenticationContext } from "../../context/UserAuthenticationContext"
 
 const Header = () => {
-    const { openPassportModal, setOpenPassportModal } = usePassportModalContext()
-    const [session, setSession] = useState<any>(null)
+    const { isAuth } = useUserAuthenticationContext()
     const [uuid, setUuid] = useState<string | undefined>()
     const [pcdStr, setPcdStr] = useState("")
     const [participentData, setParticipentData] = useState<any>()
-    const userObj = getUserSession()
-    const [navbar, setNavbar] = useState(false)
+    const router = useRouter()
 
     const PASSPORT_URL = "https://zupass.eth.limo/"
     const PASSPORT_SERVER_URL = "https://api.pcd-passport.com/"
@@ -61,7 +57,6 @@ const Header = () => {
             console.log("log my proof", participant1)
             const response = await axios({
                 method: "post",
-
                 url: "https://taz-zulalu-web-app.vercel.app/api/passport-user-login/",
                 data: participant1,
                 headers: {
@@ -70,7 +65,7 @@ const Header = () => {
             })
             console.log("req response", response)
             // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-            window.location.reload
+            router.push("/")
         } catch (error1) {
             console.error(error1)
         }
@@ -87,108 +82,41 @@ const Header = () => {
         }
     }, [participant])
 
-    useEffect(() => {
-        ;(async () => {
-            const userSession = await supabase.auth.getUser()
-            console.log("user object", userSession)
-            setSession(userSession)
-        })()
-    }, [])
-
     return (
-        <div className="relative flex p-5 justify-between w-full m-auto z-10 bg-zulalu-darkBase items-center">
+        <div className="flex px-[72px] flex flex-row h-[112px] justify-between w-full m-auto z-10 bg-zulalu-darkBase items-center">
             <div className="flex relative overflow-hidden gap-5 items-center">
                 <NextLink href={"/"}>
-                    <div className="flex cursor-pointer gap-2 items-center justify-center">
-                        <NextImage src={"/logo.svg"} objectFit="contain" width="50px" height="50px" />
-                        <h1 className="hidden md:block uppercase tracking-[5px] text-[25px] text-white font-cinzel font-bold">
-                            ZULALU
-                        </h1>
-                        {session && session.data.user ? (
-                            <li>
-                                <NextLink href="/myprofile">
-                                    <a className="font-openSans text-zulalu-lightBase text-lg leading-7 uppercase">
-                                        My Profile
-                                    </a>
-                                </NextLink>
-                            </li>
-                        ) : (
-                            <li className="md:hidden">
-                                <button
-                                    className="bg-zulalu-primary text-white py-[8px] px-[16px] rounded-[8px] font-openSans text-lg leading-7 uppercase"
-                                    onClick={requestSignedZuID}
-                                >
-                                    Connect Passport
-                                </button>
-                            </li>
-                        )}
+                    <div className="flex cursor-pointer gap-2 items-center justify-center ">
+                        <NextImage src={"/logo.png"} objectFit="contain" width="200px" height="50px" />
                     </div>
                 </NextLink>
 
-                {session && session.user && (
-                    <li className="flex gap-5 items-center text-white">
-                        <h1>Passport Connected</h1>
+                {isAuth && (
+                    <div className="flex gap-2 text-[#B1F9CA] justify-center items-center text-white text-[18px]">
+                        <div className="w-[8px] h-[8px] bg-[#B1F9CA] rounded-full" />
+                        <h1 className="text-[#B1F9CA] text-[18px] font-[400]">Passport Connected</h1>
+                    </div>
+                )}
+            </div>
+            <ul className="flex gap-5 items-center text-white">
+                <NextLink href={"/events"}>
+                    <li className="cursor-pointer font-[400] text-[18px] text-[#F8FFFE]">Program</li>
+                </NextLink>
+                {isAuth ? (
+                    <li className="font-[400] text-[18px] text-[#F8FFFE]">
+                        <NextLink href="/myprofile">My Profile</NextLink>
+                    </li>
+                ) : (
+                    <li>
+                        <button
+                            className="bg-zulalu-primary text-white py-[8px] px-[16px] rounded-[8px]"
+                            onClick={requestSignedZuID}
+                        >
+                            Connect Passport
+                        </button>
                     </li>
                 )}
-            </div>
-            {/* Add the burger menu button */}
-            <div className="md:hidden">
-                <button
-                    className="p-2 text-white rounded-md outline-none focus:border-gray-400 focus:border"
-                    onClick={() => setNavbar(!navbar)}
-                >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-6 h-6 text-white"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                    >
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </button>
-            </div>
-            {/* Add the responsive dropdown menu */}
-            <div
-                className={`${
-                    navbar ? "block" : "hidden"
-                } md:hidden absolute left-0 top-full mt-0 bg-zulalu-darkBase p-4 w-full flex flex-row items-start px-4 py-8 space-x-2`}
-            >
-                <ul className="list-none flex flex-col gap-4 text-f8fffe text-lg uppercase font-normal">
-                    <NextLink href={"/events"}>
-                        <li className="cursor-pointer" style={{ width: "51px", height: "25px", color: "#F8FFFE" }}>
-                            Program
-                        </li>
-                    </NextLink>
-                </ul>
-            </div>
-
-            {/* desktop menu */}
-            <div className="hidden md:flex space-x-8 items-center">
-                <NextLink href="/events">
-                    <a
-                        className="font-openSans font-normal text-[18px] leading-[25px] cursor-pointer mr-4"
-                        style={{ width: "51px", height: "25px", color: "#F8FFFE" }}
-                    >
-                        Program
-                    </a>
-                </NextLink>
-                {session && session.data.user ? (
-                    <NextLink href="/myprofile">
-                        <a className="font-openSans text-zulalu-lightBase text-lg leading-7 uppercase cursor-pointer">
-                            My Profile
-                        </a>
-                    </NextLink>
-                ) : (
-                    <button
-                        className="bg-zulalu-primary text-white py-[8px] px-[16px] rounded-[8px] font-openSans text-lg leading-7 uppercase"
-                        onClick={requestSignedZuID}
-                    >
-                        Connect Passport
-                    </button>
-                )}
-            </div>
+            </ul>
         </div>
     )
 }
