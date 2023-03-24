@@ -1,8 +1,4 @@
 import Image from "next/image"
-import { requestSignedZuzaluUUIDUrl, useFetchParticipant, useSemaphoreSignatureProof } from "@pcd/passport-interface"
-import getUserSession from "../../hooks/getUserSession"
-import { getUserOnID } from "../../hooks/getUserOnID"
-import WhiteGlobeVector from "./WhiteGlobeVector"
 
 const MainSection = () => (
     <div className="flex flex-col min-h-[100vh] bg-[#EEEEF0] p-5 gap-10">
