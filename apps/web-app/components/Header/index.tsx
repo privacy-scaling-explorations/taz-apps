@@ -158,7 +158,7 @@ const Header = () => {
                 <ul className="list-none flex flex-col gap-4 text-f8fffe text-lg uppercase font-normal">
                     <NextLink href={"/events"}>
                         <li className="cursor-pointer" style={{ width: "51px", height: "25px", color: "#F8FFFE" }}>
-                            Program
+                            Schedule
                         </li>
                     </NextLink>
                 </ul>
@@ -171,7 +171,7 @@ const Header = () => {
                         className="font-openSans font-normal text-[18px] leading-[25px] cursor-pointer mr-4"
                         style={{ width: "51px", height: "25px", color: "#F8FFFE" }}
                     >
-                        Program
+                        Schedule
                     </a>
                 </NextLink>
                 {session && session.data.user ? (
