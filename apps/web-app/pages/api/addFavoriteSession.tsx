@@ -26,6 +26,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.status(200).send("Session favorited")
     } catch (err: any) {
         console.log("error: ", err)
-        res.status(500).json({ statusCode: 500, message: err.message })
+        res.status(500).json({ statusCode: 500, message: err })
     }
 }

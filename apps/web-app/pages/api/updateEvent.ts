@@ -51,6 +51,6 @@ export default async function handler(
     res.status(200).send(response.data);
   } catch (err) {
     console.log("error: ", err);
-    res.status(500).json({ statusCode: 500, message: err.message });
+    res.status(500).json({ statusCode: 500, message: err });
   }
 }
