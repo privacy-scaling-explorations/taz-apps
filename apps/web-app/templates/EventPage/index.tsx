@@ -1,18 +1,14 @@
 import React, { useEffect, useRef, useState } from "react"
 
-import { useRouter } from "next/router"
 import NextImage from "next/image"
 import moment from "moment"
 import { ToastContainer } from "react-toastify"
-import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs"
 import Link from "next/link"
 import AddSessionModal from "../../components/AddSessionModal"
 import Sessions from "../../components/Sessions"
 import { EventsDTO, SessionsDTO } from "../../types"
 import BaseTemplate from "../Base"
 import { useUserAuthenticationContext } from "../../context/UserAuthenticationContext"
-
-const supabase = createBrowserSupabaseClient()
 
 type Props = {
     event: EventsDTO
@@ -76,6 +72,8 @@ const EventPage = ({ event, sessions }: Props) => {
         }
     }, [])
 
+    console.log(event.image_url)
+
     return (
         <BaseTemplate>
             <div className="flex flex-col border border-black p-5 bg-[#EEEEF0] gap-5 w-full h-full">
@@ -110,17 +108,17 @@ const EventPage = ({ event, sessions }: Props) => {
                         )} */}
                     </div>
                 </div>
-                <div className="flex flex-col md:flex-row w-full justify-start bg-white rounded-[8px] h-[682px]">
+                <div className="flex flex-col lg:flex-row w-full justify-start bg-white rounded-[8px] h-full">
                     <div className="flex h-full max-w-[1014px] w-full rounded-[8px]">
                         <NextImage
-                            src="/event-image.png"
+                            src={event.image_url}
                             objectFit="cover"
                             alt="event-image"
                             width="1014px"
                             height="682px"
                         />
                     </div>
-                    <div className="flex flex-col w-full md:w-2/6 pl-5 pr-20">
+                    <div className="flex flex-col w-full lg:w-2/6 pl-5 pr-20 md:mb-0 mb-10">
                         <div className="flex my-5 w-full">
                             <h1 className="text-black text-[52px] font-[600]">{`${event.name.substring(0, 30)}...`}</h1>
                         </div>
