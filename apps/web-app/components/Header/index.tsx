@@ -57,9 +57,7 @@ const Header = () => {
             console.log("log my proof", participant1)
             const response = await axios({
                 method: "post",
-
                 url: "https://zuzalu.city/api/passport-user-login/",
-
                 data: participant1,
                 headers: {
                     "Content-Type": "application/json"
@@ -128,11 +126,7 @@ const Header = () => {
             >
                 <ul className="flex flex-col pt-[16px] pb-[32px] w-full gap-[32px] text-f8fffe text-lg uppercase">
                     <NextLink href={"/events"}>
-
-                        <li className="cursor-pointer" style={{ width: "51px", height: "25px", color: "#F8FFFE" }}>
-                            Schedule
-                        </li>
-
+                        <li className="cursor-pointer text-[#F8FFFE] text-[18px] font-[400]">Program</li>
                     </NextLink>
                     <NextLink href={"/myprofile"}>
                         <li className="cursor-pointer text-[#F8FFFE] text-[18px] font-[400]">My Profile</li>
@@ -146,18 +140,9 @@ const Header = () => {
                 </a>)}
                 </ul>
             </div>
-
-
-            {/* desktop menu */}
-            <div className="hidden md:flex space-x-8 items-center">
-                <NextLink href="/events">
-                    <a
-                        className="font-openSans font-normal text-[18px] leading-[25px] cursor-pointer mr-4"
-                        style={{ width: "51px", height: "25px", color: "#F8FFFE" }}
-                    >
-                        Schedule
-                    </a>
-
+            <ul className="hidden md:flex flex-row gap-5 items-center text-white">
+                <NextLink href={"/events"}>
+                    <li className="cursor-pointer font-[400] text-[18px] text-[#F8FFFE]">Program</li>
                 </NextLink>
                 {!isAuth && (<a 
                         href="https://airtable.com/shrRZrZbozPE2g6HH"
