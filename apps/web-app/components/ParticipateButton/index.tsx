@@ -10,7 +10,6 @@ import { useUserAuthenticationContext } from "../../context/UserAuthenticationCo
 type Props = {
     session: SessionsDTO
     isTallButton: boolean
-    userId: number
 }
 
 const ParticipateButton = ({ session, isTallButton, userId }: Props) => {
@@ -71,7 +70,6 @@ const ParticipateButton = ({ session, isTallButton, userId }: Props) => {
                     makeToast(false, "Error")
                 })
         }
-
     }
 
     const closeTicketModal = (close = false) => {
