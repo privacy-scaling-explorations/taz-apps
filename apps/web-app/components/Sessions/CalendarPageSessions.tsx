@@ -132,7 +132,7 @@ const CalendarPageSessions = ({ sessions, showStartDate = false }: Props) => {
                                 {moment(item.startDate).format("MMMM DD")}
                             </p>
                         ) : (
-                            <p className="text-white py-[8px] px-[16px]">{item.startTime.slice(0, -3)}</p>
+                            <p className="text-white py-[8px] px-[16px]">{item.startTime}</p>
                         )}
                     </div>
 
@@ -235,7 +235,7 @@ const CalendarPageSessions = ({ sessions, showStartDate = false }: Props) => {
                             <div className="flex flex-row w-full md:w-auto justify-between items-end gap-[32px] text-sm">
                                 <div className="flex flex-row items-center gap-[8px]">
                                     <NextImage src={"/vector-clock.svg"} alt="vector-clock" width={16} height={16} />
-                                    <p className="text-[#708E8C] text-[18px]">{item.startTime.slice(0, -3)}</p>
+                                    <p className="text-[#708E8C] text-[18px]">{item.startTime}</p>
                                 </div>
                                 <div className="flex flex-row items-center gap-[8px] border-b border-[#708E8C] text-[#708E8C]">
                                     <NextImage src={"/vector-location.svg"} alt="location" width={15} height={15} />

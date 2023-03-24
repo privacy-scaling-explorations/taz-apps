@@ -17,7 +17,7 @@ const Sessions = ({ event, sessions }: Props) => {
             {sessions.map((item, index) => (
                 <div className="w-full" key={index}>
                     <div className="bg-[#1C2928] w-full flex flex-row items-center rounded-[8px]">
-                        <p className="text-white py-[8px] px-[16px]">{item.startTime.slice(0, -3)}</p>
+                        <p className="text-white py-[8px] px-[16px]">{item.startTime}</p>
                     </div>
 
                     <div className="w-full flex flex-col items-start gap-[32px] bg-[#FCFFFE]] rounded-[16px] p-[16px]">
@@ -72,8 +72,7 @@ const Sessions = ({ event, sessions }: Props) => {
                                 <div className="flex flex-row items-center gap-[8px]">
                                     <NextImage src={"/vector-clock.svg"} alt="vector-clock" width={16} height={16} />
                                     <p className="text-[#708E8C] text-[18px]">
-                                        {/* {item.startTime.slice(0, -3)}-{item.endTime.slice(0, -3)} */}
-                                        {item.startTime.slice(0, -3)}
+                                        {item.startTime}
                                     </p>
                                 </div>
                                 <div className="flex flex-row items-center gap-[8px] border-b border-[#708E8C] text-[#708E8C]">
