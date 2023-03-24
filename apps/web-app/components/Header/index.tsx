@@ -65,7 +65,9 @@ const Header = () => {
             })
             console.log("req response", response)
             // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-            router.push("/")
+            router.push("/").then(() => {
+                router.reload();
+            });
         } catch (error1) {
             console.error(error1)
         }
