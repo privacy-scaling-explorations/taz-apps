@@ -31,7 +31,7 @@ export default async function handler(
 
     res.revalidate("/myprofile");
     res.status(200).send(response.data);
-  } catch (err) {
+  } catch (err : any) {
     console.log("error: ", err);
     res.status(500).json({ statusCode: 500, message: err.message });
   }

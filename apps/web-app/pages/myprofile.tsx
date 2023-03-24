@@ -4,52 +4,32 @@ import { GetServerSideProps } from "next"
 
 import MyProfilePage from "../templates/MyProfilePage"
 
-import { FavoritedEventsDTO, ParticipantsDTO, UserDTO } from "../types"
+import { EventsDTO, SessionsDTO } from "../types"
 
 type Props = {
-    pastEvents: ParticipantsDTO[]
-    attendingEvents: ParticipantsDTO[]
-    userEventsFavorited: FavoritedEventsDTO[]
-    userInfo: UserDTO | undefined
+    events: EventsDTO[]
+    sessions: SessionsDTO[]
 }
 
-export default function MyProfile({ pastEvents, attendingEvents, userEventsFavorited, userInfo }: Props) {
-    return <MyProfilePage />
+export default function MyProfile({ events, sessions }: Props) {
+    return <MyProfilePage events={events} sessions={sessions} />
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ res }) => {
+    const LOGGED_IN_USER_ID = 1
     try {
         const url = process.env.URL_TO_FETCH
-        const usersResult = await fetch(`${url}/api/fetchUsers`)
-        const participantsResult = await fetch(`${url}/api/fetchParticipants`)
-        const usersFavoriteEventsResult = await fetch(`${url}/api/fetchFavoritedEvents`)
 
-        const usersData: UserDTO[] = await usersResult.json()
-        const participantsData: ParticipantsDTO[] = await participantsResult.json()
-        const usersFavoriteData: FavoritedEventsDTO[] = await usersFavoriteEventsResult.json()
+        const eventsResponse = await fetch(`${url}/api/fetchEvents`)
 
-        // mocked user for now (fetching user 1 from db)
-        // since we implement user authentication in the server side, we need to fetch user dinamically
-        const userEvents = participantsData.filter((item) => item.user_id === 1)
-        const userEventsFavorited = usersFavoriteData.filter((item) => item.user_id === 1)
-        const pastEvents = userEvents.filter((item) => {
-            const todayDate = new Date().getTime()
-            const eventDate = new Date(item.events.endDate).getTime()
-            if (todayDate > eventDate) {
-                return item
-            }
-        })
-        const attendingEvents = userEvents.filter((item) => {
-            const todayDate = new Date().getTime()
-            const eventDate = new Date(item.events.endDate).getTime()
-            if (todayDate < eventDate) {
-                return item
-            }
-        })
-        const userInfo = usersData.find((item) => item.id === 1)
+        const events: EventsDTO[] = await eventsResponse.json()
+
+        const sessionsResponse = await fetch(`${url}/api/fetchSessions/${LOGGED_IN_USER_ID}`)
+
+        const sessions: SessionsDTO[] = await sessionsResponse.json()
 
         return {
-            props: { pastEvents, attendingEvents, userEventsFavorited, userInfo }
+            props: { sessions, events }
         }
     } catch (error) {
         res.statusCode = 404

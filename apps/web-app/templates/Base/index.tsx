@@ -3,9 +3,11 @@ import Footer from "../../components/Footer"
 
 const BaseTemplate = ({ children }: any) => (
     <div className="flex flex-col">
-        <header>
-            <Header />
-        </header>
+        <div className="z-20">
+            <header>
+                <Header />
+            </header>
+        </div>
         <main>{children}</main>
         <footer>
             <Footer />

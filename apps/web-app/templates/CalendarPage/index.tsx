@@ -9,10 +9,8 @@ import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs"
 import { SessionsDTO, EventsDTO } from "../../types"
 import BaseTemplate from "../Base"
 import { getUserOnID } from "../../hooks/getUserOnID"
-import AddSessionModal from "../../components/AddSessionModal"
 import CalendarPageSessions from "../../components/Sessions/CalendarPageSessions"
 import CalendarSessionModal from "../../components/CalendarSessionModal"
-
 
 const supabase = createBrowserSupabaseClient()
 

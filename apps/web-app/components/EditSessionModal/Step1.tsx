@@ -56,18 +56,18 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
     const [eventTypesOpt, setEventTypesOpt] = useState<EventTypeDTO[]>()
 
     const [slotsUnavailable, setSlotsUnavailable] = useState([
-        { time: "09", disabled: false },
-        { time: "10", disabled: false },
-        { time: "11", disabled: false },
-        { time: "12", disabled: false },
-        { time: "13", disabled: false },
-        { time: "14", disabled: false },
-        { time: "15", disabled: false },
-        { time: "16", disabled: false },
-        { time: "17", disabled: false },
-        { time: "18", disabled: false },
-        { time: "19", disabled: false },
-        { time: "20", disabled: false }
+        { time: "09:00", disabled: false },
+        { time: "10:00", disabled: false },
+        { time: "11:00", disabled: false },
+        { time: "12:00", disabled: false },
+        { time: "13:00", disabled: false },
+        { time: "14:00", disabled: false },
+        { time: "15:00", disabled: false },
+        { time: "16:00", disabled: false },
+        { time: "17:00", disabled: false },
+        { time: "18:00", disabled: false },
+        { time: "19:00", disabled: false },
+        { time: "20:00", disabled: false }
     ])
 
     const wraperRef = useRef(null)
@@ -88,7 +88,8 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
         setTag("")
     }
 
-    const handleRemoveTag = (index: number) => {
+    const handleRemoveTag = (e: any, index: number) => {
+        e.preventDefault()
         tags.splice(index, 1)
         setRerender(!rerender)
     }
@@ -299,11 +300,11 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                         name="startTime"
                         value={startTime}
                         className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px] w-full"
-                        onChange={(e) => setNewSession({ ...newSession, startTime: `${e.target.value}:00` })}
+                        onChange={(e) => setNewSession({ ...newSession, startTime: `${e.target.value}` })}
                     >
-                        <option value="00">Select Slot</option>
+                        <option value="00" >Select Slot</option>
                         {slotsUnavailable.map((slot, index) => (
-                            <option key={index} value={slot.time} disabled={slot.disabled}>{`${slot.time}:00`}</option>
+                            <option key={index} value={slot.time} disabled={slot.disabled}>{`${slot.time}`}</option>
                         ))}
                     </select>
                 </div>
@@ -350,8 +351,9 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                     <ul className="flex flex-row items-center">
                         {team_members.map((item, index) => (
                             <div
-                                className="flex flex-row items-center bg-[#E4EAEA] py-[4px] px-[8px] gap-[8px] text-sm rounded-[4px]"
+                                className="flex flex-row items-center bg-[#E4EAEA] py-[4px] px-[8px] gap-[8px] text-sm rounded-[4px] mr-[8px] cursor-pointer"
                                 key={index}
+                                onClick={() => handleRemoveTeamMember(index)}
                             >
                                 {item.role === "Speaker" && (
                                     <NextImage src={"/user-icon-6.svg"} alt="user-icon-6" width={24} height={24} />
@@ -388,14 +390,11 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                         ADD
                     </button>
                 </div>
-                <ul className="flex flex-row items-start">
+                <ul className="flex flex-row items-center">
                     {newSession.tags.map((item, index) => (
-                        <li key={index} className="relative mx-1 bg-gray-200 p-1 rounded text-sm">
+                        <div key={index} className="bg-[#E4EAEA] py-[4px] px-[8px] text-sm rounded-[4px] cursor-pointe mr-[8px] cursor-pointer" onClick={(e) => handleRemoveTag(e, index)}>
                             {item}
-                            <button className="absolute top-0" onClick={() => handleRemoveTag(index)}>
-                                X
-                            </button>
-                        </li>
+                        </div>
                     ))}
                 </ul>
             </div>
