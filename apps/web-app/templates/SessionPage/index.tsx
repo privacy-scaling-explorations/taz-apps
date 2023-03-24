@@ -114,6 +114,10 @@ const SessionPage = ({ session, sessions }: Props) => {
         router.push("/calendar-full")
     }
 
+    const closeDeleteSessionModal = (close = false) => {
+        if (close) setOpenDeleteSessionModal(false)
+    }
+
     return (
         <BaseTemplate>
             <div className="flex flex-col items-center bg-[#EEEEF0] h-[100vh] px-4 md:px-[24px] py-4 md:py-[24px] gap-4 md:gap-[16px]">
@@ -155,7 +159,7 @@ const SessionPage = ({ session, sessions }: Props) => {
                         </button>
                         <EditSessionModal
                             isOpen={openEditSessionModal}
-                            closeModal={setOpenEditSessionModal}
+                            closeModal={closeDeleteSessionModal}
                             session={session}
                             sessions={sessions}
                         />
