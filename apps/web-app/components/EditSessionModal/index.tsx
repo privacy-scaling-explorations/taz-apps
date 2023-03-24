@@ -51,7 +51,7 @@ const EditSessionModal = ({ isOpen, closeModal, session, sessions }: Props) => {
     const [newSession, setNewSession] = useState<NewSessionState>({
         name: session.name,
         team_members: session.team_members,
-        startDate: session.startDate,
+        startDate: new Date(`${session.startDate}T00:00:00Z`),
         startTime: session.startTime,
         location: session.location,
         tags: session.tags,
@@ -76,6 +76,7 @@ const EditSessionModal = ({ isOpen, closeModal, session, sessions }: Props) => {
 
         try {
             if (newSession.hasTicket) {
+                console.log("has ticket and subevent id")
                 // Step 1 Update SubEvent
 
                 const subEventRes = await axios.post(`/api/pretix-update-subevent`, {
@@ -87,23 +88,26 @@ const EditSessionModal = ({ isOpen, closeModal, session, sessions }: Props) => {
 
                 console.log("Updated subEvent response: ", subEventRes.data)
 
-                // // Step 3 Update Quota for the subEvent
+                // Step 2 Update Quota for the subEvent
 
                 const quotaUpdatedRes = await axios.post(`/api/pretix-update-quota/`, {
                     ticketAmount: amountTickets,
                     slug: session.event_slug,
                     quotaId: session.quota_id
                 })
-
                 console.log("Quota updated: ", quotaUpdatedRes.data)
-                // Step 5 Update database
+
+                // Step 3 Update database
                 const updateSessionDB = await axios.post("/api/updateSession", {
-                    ...newSession, id: session.id
+                    ...newSession,
+                    id: session.id
                 })
                 console.log("DB response: ", updateSessionDB)
             } else {
+                console.log("only DB update")
                 const updateSessionDB = await axios.post("/api/updateSession", {
-                    ...newSession, id: session.id
+                    ...newSession,
+                    id: session.id
                 })
                 console.log("DB response: ", updateSessionDB)
             }
