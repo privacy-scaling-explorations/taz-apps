@@ -5,6 +5,7 @@ import axios from "axios"
 import { toast } from "react-toastify"
 import moment from "moment"
 import { SessionsDTO } from "../../types"
+import FavoriteButton from "../FavoriteButton"
 
 import { useUserAuthenticationContext } from "../../context/UserAuthenticationContext"
 import ParticipateButton from "../ParticipateButton"
@@ -81,43 +82,6 @@ const CalendarPageSessions = ({ sessions, showStartDate = false }: Props) => {
     //     handleClickAttend(currentSubEventParams.id)
     // }
 
-    const handleAddFavorite = async (sessionId: number) => {
-        if (userInfo) {
-            await axios
-                .post("/api/addFavoriteSession", {
-                    session_id: sessionId,
-                    user_id: userInfo.id
-                })
-                .then((res) => {
-                    if (res.data === "Session favorited") {
-                        makeToast(true, "This session is now bookmarked.")
-                        router.push(router.asPath)
-                    }
-                })
-                .catch((err) => {
-                    console.log(err)
-                    makeToast(false, "Error")
-                })
-        }
-    }
-
-    const handleRemoveFavorite = async (favoritedSessionId: number) => {
-        await axios
-            .post("/api/removeFavoriteSession", {
-                id: favoritedSessionId
-            })
-            .then((res) => {
-                if (res.status === 200) {
-                    makeToast(true, "This session is no longer bookmarked.")
-                    router.push(router.asPath)
-                }
-            })
-            .catch((err) => {
-                console.log(err)
-                makeToast(false, "Error")
-            })
-    }
-
     // const closeOpenTicketModal = (close = false) => {
     //     if (close) setOpenBuyTicketModal(false)
     // }
@@ -145,23 +109,12 @@ const CalendarPageSessions = ({ sessions, showStartDate = false }: Props) => {
                                     </h3>
                                 </NextLink>
                                 {isAuth && (
-                                    <NextImage
-                                        className="text-[#91A8A7] cursor-pointer"
-                                        src={
-                                            item.favoritedSessions.length > 0
-                                                ? "/vector-bookmark2.svg"
-                                                : "/vector-bookmark.svg"
+                                    <FavoriteButton
+                                        session={item}
+                                        favoritedSessionId={
+                                            item.favoritedSessions.length > 0 ? item.favoritedSessions[0].id : null
                                         }
-                                        alt="vector-bookmark"
-                                        width={24}
-                                        height={24}
-                                        onClick={() => {
-                                            if (item.favoritedSessions.length > 0) {
-                                                handleRemoveFavorite(item.favoritedSessions[0].id)
-                                            } else {
-                                                handleAddFavorite(item.id)
-                                            }
-                                        }}
+                                        isMiniButton={true}
                                     />
                                 )}
                             </div>
