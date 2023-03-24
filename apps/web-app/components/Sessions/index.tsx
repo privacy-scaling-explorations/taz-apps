@@ -110,7 +110,7 @@ const Sessions = ({ event, sessions }: Props) => {
                                     }}
                                 />
                             </div>
-                            <ParticipateButton event={event} session={item} isTallButton={false} />
+                            <ParticipateButton session={item} isTallButton={false} />
                         </div>
                         <div className="w-full flex flex-row gap-[32px] justify-between items-center">
                             <div className="flex flex-row items-start gap-[8px]">
