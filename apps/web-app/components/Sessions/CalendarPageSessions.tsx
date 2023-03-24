@@ -1,13 +1,13 @@
 import NextImage from "next/image"
 import NextLink from "next/link"
-import { useState } from "react"
 import { useRouter } from "next/router"
 import axios from "axios"
 import { toast } from "react-toastify"
 import moment from "moment"
-import { SessionsDTO, EventsDTO } from "../../types"
+import { SessionsDTO } from "../../types"
 
-import BuyTicketModal from "../BuyTicketModal"
+import { useUserAuthenticationContext } from "../../context/UserAuthenticationContext"
+import ParticipateButton from "../ParticipateButton"
 
 type Props = {
     sessions: SessionsDTO[]
@@ -15,16 +15,16 @@ type Props = {
 }
 
 const CalendarPageSessions = ({ sessions, showStartDate = false }: Props) => {
-    const [openBuyTicketModal, setOpenBuyTicketModal] = useState(false)
-    const [currentSubEventParams, setCurrentSubEventParams] = useState<any>({
-        id: 0,
-        subEventId: 0,
-        eventSlug: "",
-        eventItemId: 0
-    })
+    const { userInfo, isAuth } = useUserAuthenticationContext()
+    // const [openBuyTicketModal, setOpenBuyTicketModal] = useState(false)
+    // const [currentSubEventParams, setCurrentSubEventParams] = useState<any>({
+    //     id: 0,
+    //     subEventId: 0,
+    //     eventSlug: "",
+    //     eventItemId: 0
+    // })
 
     const router = useRouter()
-    const LOGGED_IN_USER_ID = 1
 
     const makeToast = (isSuccess: boolean, message: string) => {
         if (isSuccess) {
@@ -52,49 +52,53 @@ const CalendarPageSessions = ({ sessions, showStartDate = false }: Props) => {
         }
     }
 
-    const handleClickAttend = async (sessionId: number) => {
-        await axios
-            .post("/api/addParticipant", {
-                session_id: sessionId,
-                user_id: LOGGED_IN_USER_ID
-            })
-            .then((res) => {
-                if (res.data === "Participant added") {
-                    makeToast(true, "You are now attending this event.")
-                    router.push(router.asPath)
-                }
-            })
-            .catch((err) => {
-                console.log(err)
-                makeToast(false, "Error")
-            })
-    }
+    // const handleClickAttend = async (sessionId: number) => {
+    //     if (userInfo) {
+    //         await axios
+    //             .post("/api/addParticipant", {
+    //                 session_id: sessionId,
+    //                 user_id: userInfo.id
+    //             })
+    //             .then((res) => {
+    //                 if (res.data === "Participant added") {
+    //                     makeToast(true, "You are now attending this event.")
+    //                     router.push(router.asPath)
+    //                 }
+    //             })
+    //             .catch((err) => {
+    //                 console.log(err)
+    //                 makeToast(false, "Error")
+    //             })
+    //     }
+    // }
 
-    const handleBuyTicket = async () => {
-        await axios.post("/api/pretix-create-order", {
-            subEventId: currentSubEventParams.subEventId,
-            slug: currentSubEventParams.eventSlug,
-            itemId: currentSubEventParams.eventItemId
-        })
-        handleClickAttend(currentSubEventParams.id)
-    }
+    // const handleBuyTicket = async () => {
+    //     await axios.post("/api/pretix-create-order", {
+    //         subEventId: currentSubEventParams.subEventId,
+    //         slug: currentSubEventParams.eventSlug,
+    //         itemId: currentSubEventParams.eventItemId
+    //     })
+    //     handleClickAttend(currentSubEventParams.id)
+    // }
 
     const handleAddFavorite = async (sessionId: number) => {
-        await axios
-            .post("/api/addFavoriteSession", {
-                session_id: sessionId,
-                user_id: LOGGED_IN_USER_ID
-            })
-            .then((res) => {
-                if (res.status === 201) {
-                    makeToast(true, "This session is now bookmarked.")
-                    router.push(router.asPath)
-                }
-            })
-            .catch((err) => {
-                console.log(err)
-                makeToast(false, "Error")
-            })
+        if (userInfo) {
+            await axios
+                .post("/api/addFavoriteSession", {
+                    session_id: sessionId,
+                    user_id: userInfo.id
+                })
+                .then((res) => {
+                    if (res.data === "Session favorited") {
+                        makeToast(true, "This session is now bookmarked.")
+                        router.push(router.asPath)
+                    }
+                })
+                .catch((err) => {
+                    console.log(err)
+                    makeToast(false, "Error")
+                })
+        }
     }
 
     const handleRemoveFavorite = async (favoritedSessionId: number) => {
@@ -114,9 +118,9 @@ const CalendarPageSessions = ({ sessions, showStartDate = false }: Props) => {
             })
     }
 
-    const closeOpenTicketModal = (close = false) => {
-        if (close) setOpenBuyTicketModal(false)
-    }
+    // const closeOpenTicketModal = (close = false) => {
+    //     if (close) setOpenBuyTicketModal(false)
+    // }
 
     return (
         <div className="w-full flex flex-col items-start py-[2px] gap-[16px] rounded-[16px]">
@@ -140,26 +144,29 @@ const CalendarPageSessions = ({ sessions, showStartDate = false }: Props) => {
                                         {item.name}
                                     </h3>
                                 </NextLink>
-                                <NextImage
-                                    className="text-[#91A8A7] cursor-pointer"
-                                    src={
-                                        item.favoritedSessions.length > 0
-                                            ? "/vector-bookmark2.svg"
-                                            : "/vector-bookmark.svg"
-                                    }
-                                    alt="vector-bookmark"
-                                    width={24}
-                                    height={24}
-                                    onClick={() => {
-                                        if (item.favoritedSessions.length > 0) {
-                                            handleRemoveFavorite(item.favoritedSessions[0].id)
-                                        } else {
-                                            handleAddFavorite(item.id)
+                                {isAuth && (
+                                    <NextImage
+                                        className="text-[#91A8A7] cursor-pointer"
+                                        src={
+                                            item.favoritedSessions.length > 0
+                                                ? "/vector-bookmark2.svg"
+                                                : "/vector-bookmark.svg"
                                         }
-                                    }}
-                                />
+                                        alt="vector-bookmark"
+                                        width={24}
+                                        height={24}
+                                        onClick={() => {
+                                            if (item.favoritedSessions.length > 0) {
+                                                handleRemoveFavorite(item.favoritedSessions[0].id)
+                                            } else {
+                                                handleAddFavorite(item.id)
+                                            }
+                                        }}
+                                    />
+                                )}
                             </div>
-                            {item.participants.length > 0 ? (
+                            {userInfo && <ParticipateButton session={item} isTallButton={false} userId={userInfo.id} />}
+                            {/* {item.participants.length > 0 ? (
                                 <button className="flex gap-2 items-center bg-white border border-primary text-zulalu-primary font-[600] py-[4px] px-[16px] rounded-[8px] cursor-default">
                                     <NextImage src={"/vector-circle-check.svg"} width={16} height={16} />
                                     SEE YOU THERE!
@@ -193,7 +200,7 @@ const CalendarPageSessions = ({ sessions, showStartDate = false }: Props) => {
                                 >
                                     RSVP
                                 </button>
-                            )}
+                            )} */}
                         </div>
                         <div className="w-full flex flex-col md:flex-row gap-[32px] justify-between md:items-center items-start">
                             <div className="flex flex-row items-start gap-[8px]">

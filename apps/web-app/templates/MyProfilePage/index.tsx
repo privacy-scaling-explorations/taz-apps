@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import NextImage from "next/image"
 import BaseTemplate from "../Base"
 import Sessions from "../../components/Sessions/CalendarPageSessions"
-import { useUserIdentityContext } from "../../context/UserIdentityContext"
+import { useUserAuthenticationContext } from "../../context/UserAuthenticationContext"
 import CalendarSessionModal from "../../components/CalendarSessionModal"
 import { EventsDTO, SessionsDTO } from "../../types"
 
@@ -12,14 +12,14 @@ type Props = {
 }
 
 const MyProfilePage = ({ events, sessions }: Props) => {
-    const { userInfo, userSessions, userParticipatingSessions } = useUserIdentityContext()
+    const { userInfo, userSessions, userParticipatingSessions } = useUserAuthenticationContext()
 
     const [eventsOpt, setEventsOpt] = useState<string[]>([])
     const [selectedOpt, setSelectedOpt] = useState<string[]>([])
     const [openAddSessionModal, setOpenAddSessionModal] = useState(false)
 
     useEffect(() => {
-        if (userSessions) {
+        if (userSessions.length > 0) {
             const eventsName = userSessions.map((item) => item.events).map((event) => event.name.replace("\n", ""))
             const uniqueValues = eventsName.filter((value, index, self) => self.indexOf(value) === index)
 
