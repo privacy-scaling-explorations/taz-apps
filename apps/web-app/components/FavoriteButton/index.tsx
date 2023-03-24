@@ -1,22 +1,25 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import NextImage from "next/image"
-import { useRouter } from "next/router"
-import NextLink from "next/link"
 import { toast } from "react-toastify"
 import axios from "axios"
 import { SessionsDTO } from "../../types"
 
 type Props = {
     session: SessionsDTO
-    favoritedSessionId: number | null
     isMiniButton: boolean
 }
 
-const ParticipateButton = ({ session, favoritedSessionId, isMiniButton }: Props) => {
-    const [latestFavoritedSessionId, setLatestFavoritedSessionId] = useState<number | null>(favoritedSessionId)
+const FavoriteButton = ({ session, isMiniButton }: Props) => {
+    const [latestFavoritedSessionId, setLatestFavoritedSessionId] = useState<number | null>(
+        session.favoritedSessions.length > 0 ? session.favoritedSessions[0].id : null
+    )
 
-    const router = useRouter()
     const LOGGED_IN_USER_ID = 1
+
+    useEffect(() => {
+        console.log("session", session)
+        console.log("latestFavoritedSessionId", latestFavoritedSessionId)
+    }, [])
 
     const makeToast = (isSuccess: boolean, message: string) => {
         if (isSuccess) {
@@ -81,21 +84,41 @@ const ParticipateButton = ({ session, favoritedSessionId, isMiniButton }: Props)
 
     return (
         <>
-            <NextImage
-                className="text-[#91A8A7] cursor-pointer"
-                src={latestFavoritedSessionId !== null ? "/vector-bookmark2.svg" : "/vector-bookmark.svg"}
-                alt="vector-bookmark"
-                width={24}
-                height={24}
-                onClick={() => {
-                    if (latestFavoritedSessionId !== null) {
-                        handleRemoveFavorite()
-                    } else {
-                        handleAddFavorite()
-                    }
-                }}
-            />
+            {isMiniButton ? (
+                <NextImage
+                    className="text-[#91A8A7] cursor-pointer"
+                    src={latestFavoritedSessionId !== null ? "/vector-bookmark2.svg" : "/vector-bookmark.svg"}
+                    alt="vector-bookmark"
+                    width={24}
+                    height={24}
+                    onClick={() => {
+                        if (latestFavoritedSessionId !== null) {
+                            handleRemoveFavorite()
+                        } else {
+                            handleAddFavorite()
+                        }
+                    }}
+                />
+            ) : (
+                <button
+                    className="flex gap-2 items-center bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]"
+                    onClick={() => {
+                        if (latestFavoritedSessionId !== null) {
+                            handleRemoveFavorite()
+                        } else {
+                            handleAddFavorite()
+                        }
+                    }}
+                >
+                    <NextImage
+                        src={latestFavoritedSessionId !== null ? "/vector-bookmark2.svg" : "/vector-bookmark.svg"}
+                        width={12}
+                        height={16}
+                    />
+                    {latestFavoritedSessionId !== null ? "BOOKMARKED" : "BOOKMARK"}
+                </button>
+            )}
         </>
     )
 }
-export default ParticipateButton
+export default FavoriteButton

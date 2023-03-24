@@ -2,11 +2,11 @@ import { NextApiRequest, NextApiResponse } from "next"
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const supabase = createServerSupabaseClient({ req, res })
-  try {
+    const supabase = createServerSupabaseClient({ req, res })
+    try {
         const response = await supabase
             .from("sessions")
-            .select("*, participants (*), favorited_sessions (*)")
+            .select("*, participants (*), favoritedSessions:favorited_sessions (*)")
             .eq("id", req.query.sessionId)
             .eq("participants.user_id", req.query.userId)
             .eq("favorited_sessions.user_id", req.query.userId)
