@@ -64,7 +64,7 @@ const Header = () => {
             })
             console.log("req response", response)
             // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-            router.push("/")
+            // router.push("/")
         } catch (error1) {
             console.error(error1)
         }
@@ -75,9 +75,8 @@ const Header = () => {
         if (participant) {
             console.log("PARTICIPANT", participant)
             setParticipentData(participant)
-            // TODO: Login Flow
-
             loginProof(participant)
+            router.push("/")
         }
     }, [participant])
 
