@@ -11,6 +11,7 @@ const Header = () => {
     const [uuid, setUuid] = useState<string | undefined>()
     const [pcdStr, setPcdStr] = useState("")
     const [participentData, setParticipentData] = useState<any>()
+    const [navbar, setNavbar] = useState(false)
     const router = useRouter()
 
     const PASSPORT_URL = "https://zupass.eth.limo/"
@@ -56,7 +57,7 @@ const Header = () => {
             console.log("log my proof", participant1)
             const response = await axios({
                 method: "post",
-                url: "https://taz-zulalu-web-app.vercel.app/api/passport-user-login/",
+                url: "https://911d-183-88-82-230.ap.ngrok.io/api/passport-user-login/",
                 data: participant1,
                 headers: {
                     "Content-Type": "application/json"
@@ -82,39 +83,76 @@ const Header = () => {
             loginProof(participant)
         }
     }, [participant])
+    console.log(isAuth)
 
     return (
-        <div className="flex p-5 justify-between w-full m-auto z-10 bg-zulalu-darkBase items-center">
+        <div className="relative px-[24px] flex flex-row h-[112px] justify-between w-full z-10 bg-zulalu-darkBase items-center">
             <div className="flex relative overflow-hidden gap-5 items-center">
                 <NextLink href={"/"}>
-                    <div className="flex cursor-pointer gap-2 items-center justify-center ">
+                    <div className="hidden md:flex cursor-pointer gap-2 items-center justify-center ">
                         <NextImage src={"/logo.png"} objectFit="contain" width="200px" height="50px" />
+                    </div>
+                </NextLink>
+                <NextLink href={"/"}>
+                    <div className="md:hidden flex cursor-pointer gap-2 items-center justify-center ">
+                        <NextImage src={"/logo-small.png"} objectFit="contain" width="50px" height="50px" />
                     </div>
                 </NextLink>
 
                 {isAuth && (
-                    <div className="flex gap-2 text-[#B1F9CA] justify-center items-center text-white text-[18px]">
+                    <div className="flex gap-2 text-[#B1F9CA] justify-center items-center text-white text-[18px] text-center">
                         <div className="w-[8px] h-[8px] bg-[#B1F9CA] rounded-full" />
-                        <h1>Passport Connected</h1>
+                        <h1 className="text-[#B1F9CA] text-[18px] font-[400]">Passport Connected</h1>
                     </div>
                 )}
             </div>
-            <ul className="flex gap-5 items-center text-white">
-
-                <NextLink href={"/events"}>
-                    <li className="cursor-pointer">Schedule</li>
-                </NextLink>
-                {!isAuth && (
-                    <a
+            <div className="md:hidden">
+                <button
+                    className="p-2 text-white rounded-md outline-none focus:border-gray-400 focus:border"
+                    onClick={() => setNavbar(!navbar)}
+                >
+                    {navbar ? (
+                        <NextImage src={"/close.png"} width={32} height={32} />
+                    ) : (
+                        <NextImage src={"/hamburger.png"} width={22} height={18} />
+                    )}
+                </button>
+            </div>
+            {/* Add the responsive dropdown menu */}
+            <div
+                className={`${
+                    navbar ? "block" : "hidden"
+                } md:hidden absolute left-0 top-full mt-0 bg-zulalu-darkBase w-full flex flex-row items-start pt-[16px] pb-[32px] gap-[8px] px-[32px] space-x-2`}
+            >
+                <ul className="flex flex-col pt-[16px] pb-[32px] w-full gap-[32px] text-f8fffe text-lg uppercase">
+                    <NextLink href={"/events"}>
+                        <li className="cursor-pointer text-[#F8FFFE] text-[18px] font-[400]">Program</li>
+                    </NextLink>
+                    <NextLink href={"/myprofile"}>
+                        <li className="cursor-pointer text-[#F8FFFE] text-[18px] font-[400]">My Profile</li>
+                    </NextLink>
+                    {!isAuth && (<a 
                         href="https://airtable.com/shrRZrZbozPE2g6HH"
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        <li className="cursor-pointer">Apply now</li>
-                    </a>
-                    )}
+                    <li className="cursor-pointer font-[400] text-[18px] text-[#F8FFFE]">Apply Now</li>
+                </a>)}
+                </ul>
+            </div>
+            <ul className="hidden md:flex flex-row gap-5 items-center text-white">
+                <NextLink href={"/events"}>
+                    <li className="cursor-pointer font-[400] text-[18px] text-[#F8FFFE]">Program</li>
+                </NextLink>
+                {!isAuth && (<a 
+                        href="https://airtable.com/shrRZrZbozPE2g6HH"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                    <li className="cursor-pointer font-[400] text-[18px] text-[#F8FFFE]">Apply Now</li>
+                </a>)}
                 {isAuth ? (
-                    <li>
+                    <li className="font-[400] text-[18px] text-[#F8FFFE]">
                         <NextLink href="/myprofile">My Profile</NextLink>
                     </li>
                 ) : (
