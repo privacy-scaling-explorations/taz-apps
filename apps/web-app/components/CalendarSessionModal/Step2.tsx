@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker"
 import axios from "axios"
 import moment from "moment"
 import { ToastContainer, toast } from "react-toastify"
+import NextImage from "next/image"
 
 import { UserDTO, TracksDTO, FormatDTO, LevelDTO, LocationDTO, EventTypeDTO, SessionsDTO } from "../../types"
 
@@ -84,7 +85,8 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
         setTag("")
     }
 
-    const handleRemoveTag = (index: number) => {
+    const handleRemoveTag = (e:any, index: number) => {
+        e.preventDefault()
         tags.splice(index, 1)
         setRerender(!rerender)
     }
@@ -346,15 +348,21 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                     </button>
                     <ul className="flex flex-row items-center">
                         {team_members.map((item, index) => (
-                            <li key={index} className="relative mx-1 bg-gray-200 p-1 rounded text-sm">
-                                {item.role}: {item.name}
-                                <button
-                                    className="absolute top-0 right-0"
-                                    onClick={() => handleRemoveTeamMember(index)}
-                                >
-                                    x
-                                </button>
-                            </li>
+                            <div
+                                className="flex flex-row items-center bg-[#E4EAEA] py-[4px] px-[8px] gap-[8px] text-sm rounded-[4px] mr-[8px] cursor-pointer"
+                                key={index}
+                                onClick={() => handleRemoveTeamMember(index)}
+                            >
+                                {item.role === "Speaker" && (
+                                    <NextImage src={"/user-icon-6.svg"} alt="user-icon-6" width={24} height={24} />
+                                )}
+                                {item.role === "Organizer" && (
+                                    <NextImage src={"/user-icon-4.svg"} alt="user-icon-6" width={24} height={24} />
+                                )}
+                                <p className="text-[#1C2928] font-[400] text-[16px]">
+                                    {item.role}: <span className="font-[600] capitalize">{item.name}</span>
+                                </p>
+                            </div>
                         ))}
                     </ul>
                 </div>
@@ -380,14 +388,11 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                         ADD
                     </button>
                 </div>
-                <ul className="flex flex-row items-start">
+                <ul className="flex flex-row items-center">
                     {newSession.tags.map((item, index) => (
-                        <li key={index} className="relative mx-1 bg-gray-200 p-1 rounded text-sm">
+                        <div key={index} className="bg-[#E4EAEA] py-[4px] px-[8px] text-sm rounded-[4px] cursor-pointe mr-[8px] cursor-pointer" onClick={(e) => handleRemoveTag(e, index)}>
                             {item}
-                            <button className="absolute top-0" onClick={() => handleRemoveTag(index)}>
-                                X
-                            </button>
-                        </li>
+                        </div>
                     ))}
                 </ul>
             </div>
