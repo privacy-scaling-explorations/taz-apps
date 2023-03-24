@@ -21,31 +21,34 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 res.status(200).json("User signed in!")
             }
             if (signIn.error) {
-                const signUpResponse = await supabase.auth.signUp({
-                    email,
-                    password,
-                    options: {
-                        data: {
-                            uuid,
-                            commitment,
-                            email,
-                            name,
-                            role,
-                            residence,
-                            order_id
-                        }
-                    }
-                })
+                res.status(400).json(`Error with sign in: ${signIn.error.message}`)
 
-                console.log("sign up", signUpResponse)
-                if (signUpResponse.data.user) {
-                    res.status(200).json("User signed up!")
-                } else {
-                    res.status(400).json("Error with sign up")
-                }
+                // const signUpResponse = await supabase.auth.signUp({
+                //     email,
+                //     password,
+                //     options: {
+                //         data: {
+                //             uuid,
+                //             commitment,
+                //             email,
+                //             name,
+                //             role,
+                //             residence,
+                //             order_id
+                //         }
+                //     }
+                // })
+
+                // console.log("sign up", signUpResponse)
+                // if (signUpResponse.data.user) {
+                //     res.status(200).json("User signed up!")
+                // } else {
+                //     res.status(400).json("Error with sign up")
+                // }
             }
         } catch (error) {
-            console.log(error)
+            // console.log(error)
+            res.status(500).json(`General error: ${error}`)
         }
     }
     signInWithSemaphoreProof(req.body)
