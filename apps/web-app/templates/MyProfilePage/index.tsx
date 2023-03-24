@@ -12,8 +12,8 @@ type Props = {
 }
 
 const MyProfilePage = ({ events, sessions }: Props) => {
-    const { userInfo, userSessions, userParticipatingSessions, userRole } = useUserAuthenticationContext()
 
+    const { userInfo, userSessions, userParticipatingSessions, userRole } = useUserAuthenticationContext()
     const [eventsOpt, setEventsOpt] = useState<string[]>([])
     const [selectedOpt, setSelectedOpt] = useState<string[]>([])
     const [openAddSessionModal, setOpenAddSessionModal] = useState(false)

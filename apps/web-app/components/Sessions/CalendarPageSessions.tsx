@@ -108,17 +108,12 @@ const CalendarPageSessions = ({ sessions, showStartDate = false }: Props) => {
                                         {item.name}
                                     </h3>
                                 </NextLink>
-                                {isAuth && (
-                                    <FavoriteButton
-                                        session={item}
-                                        favoritedSessionId={
-                                            item.favoritedSessions.length > 0 ? item.favoritedSessions[0].id : null
-                                        }
-                                        isMiniButton={true}
-                                    />
-                                )}
+
+                                <FavoriteButton session={item} isMiniButton={true} />
+
                             </div>
-                            {userInfo && <ParticipateButton session={item} isTallButton={false} userId={userInfo.id} />}
+                            <ParticipateButton session={item} isTallButton={false} />
+
                             {/* {item.participants.length > 0 ? (
                                 <button className="flex gap-2 items-center bg-white border border-primary text-zulalu-primary font-[600] py-[4px] px-[16px] rounded-[8px] cursor-default">
                                     <NextImage src={"/vector-circle-check.svg"} width={16} height={16} />

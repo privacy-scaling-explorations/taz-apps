@@ -30,8 +30,10 @@ const EventsPage = ({ events }: Props) => (
     
                         <div className="top-0 absolute z-[20] w-full h-full bg-contain bg-center bg-no-repeat bg-[url('/vector.png')]" />
                         <div className="top-0 absolute z-[21] w-full h-full bg-contain bg-center bg-no-repeat bg-[url('/49.png')]" />
+
                     </div>
                 </div>
+
                 <div className="flex flex-col bg-white p-5 rounded-[8px] gap-10">
                     <div className="flex flex-col md:flex-row md:gap-0 gap-5  w-full justify-between items-start md:items-center">
                         <div className="flex">
