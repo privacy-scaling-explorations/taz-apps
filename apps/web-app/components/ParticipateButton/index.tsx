@@ -1,7 +1,6 @@
 import { useState } from "react"
 import NextImage from "next/image"
 import { useRouter } from "next/router"
-import NextLink from "next/link"
 import { toast } from "react-toastify"
 import axios from "axios"
 import { SessionsDTO } from "../../types"
@@ -10,13 +9,13 @@ import BuyTicketModal from "../BuyTicketModal"
 type Props = {
     session: SessionsDTO
     isTallButton: boolean
+    userId: number
 }
 
-const ParticipateButton = ({ session, isTallButton }: Props) => {
+const ParticipateButton = ({ session, isTallButton, userId }: Props) => {
     const [openBuyTicketModal, setOpenBuyTicketModal] = useState(false)
 
     const router = useRouter()
-    const LOGGED_IN_USER_ID = 1
 
     const makeToast = (isSuccess: boolean, message: string) => {
         if (isSuccess) {
@@ -56,7 +55,7 @@ const ParticipateButton = ({ session, isTallButton }: Props) => {
         await axios
             .post("/api/addParticipant", {
                 session_id: sessionId,
-                user_id: LOGGED_IN_USER_ID
+                user_id: userId
             })
             .then((res) => {
                 if (res.data === "Participant added") {

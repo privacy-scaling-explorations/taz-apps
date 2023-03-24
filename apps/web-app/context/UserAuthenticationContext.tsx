@@ -1,46 +1,49 @@
 import { createContext, ReactNode, useState, useContext, useEffect, useMemo } from "react"
 import axios from "axios"
 
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs"
 import { SessionsDTO, UserDTO } from "../types"
 
-type UserIdentityContextData = {
+type UserAuthenticationContextData = {
     userInfo: UserDTO | undefined
-    setUserInfo: (userInfo: UserDTO) => void
-    isAuthenticated: boolean
+    setUserInfo: (b: UserDTO) => void
+    isAuth: boolean
     userSessions: SessionsDTO[]
     userParticipatingSessions: SessionsDTO[]
 }
 
-type UserIdentityProviderProps = {
+type UserAuthenticationProviderProps = {
     children: ReactNode
 }
 
-export const UserIdentityContext = createContext({} as UserIdentityContextData)
+export const UserAuthenticationContext = createContext({} as UserAuthenticationContextData)
 
-export function UserIdentityProvider({ children }: UserIdentityProviderProps) {
+export function UserAuthenticationProvider({ children }: UserAuthenticationProviderProps) {
     const [userInfo, setUserInfo] = useState<UserDTO>()
     const [userSessions, setUserSessions] = useState<SessionsDTO[]>([])
     const [userParticipatingSessions, setUserParticipatingSessions] = useState<SessionsDTO[]>([])
 
-    const isAuthenticated = useMemo(() => Boolean(userInfo), [userInfo])
+    const isAuth = useMemo(() => Boolean(userInfo), [userInfo])
 
-    const authUser = async () => {
-        try {
-            const userLocalStorageSession = localStorage.getItem("sb-polcxtixgqxfuvrqgthn-auth-token") as string
-            const userUuid = JSON.parse(userLocalStorageSession)
+    const supabase = createBrowserSupabaseClient()
 
-            if (userLocalStorageSession && userUuid) {
-                await axios
-                    .get("/api/fetchUsers")
-                    .then((res) => {
-                        const findUser = res.data.find((item: any) => item.uui_auth === userUuid.user.id)
-                        setUserInfo(findUser)
-                    })
-                    .catch((err) => console.log(err))
-            }
-        } catch (error) {
-            console.log(error)
+    const fetchUser = async () => {
+        const {
+            data: { session }
+        } = await supabase.auth.getSession()
+
+        if (!session) {
+            return setUserInfo(undefined)
         }
+
+        await axios
+            .get(`/api/fetchUser/${session.user.id}`)
+            .then((res) => {
+                setUserInfo(res.data)
+            })
+            .catch((error) => {
+                console.log("USER AUTH CONTEXT FAILED TO FETCH USER ID", error)
+            })
     }
 
     const fetchEvents = async () => {
@@ -60,7 +63,7 @@ export function UserIdentityProvider({ children }: UserIdentityProviderProps) {
     }
 
     useEffect(() => {
-        authUser()
+        fetchUser()
     }, [])
 
     useEffect(() => {
@@ -68,12 +71,12 @@ export function UserIdentityProvider({ children }: UserIdentityProviderProps) {
     }, [userInfo])
 
     return (
-        <UserIdentityContext.Provider
-            value={{ setUserInfo, userInfo, isAuthenticated, userSessions, userParticipatingSessions }}
+        <UserAuthenticationContext.Provider
+            value={{ userInfo, isAuth, setUserInfo, userParticipatingSessions, userSessions }}
         >
             {children}
-        </UserIdentityContext.Provider>
+        </UserAuthenticationContext.Provider>
     )
 }
 
-export const useUserIdentityContext = () => useContext(UserIdentityContext)
+export const useUserAuthenticationContext = () => useContext(UserAuthenticationContext)
