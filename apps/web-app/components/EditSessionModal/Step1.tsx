@@ -351,7 +351,7 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                     <ul className="flex flex-row items-center">
                         {team_members.map((item, index) => (
                             <div
-                                className="flex flex-row items-center bg-[#E4EAEA] py-[4px] px-[8px] gap-[8px] text-sm rounded-[4px] cursor-pointer"
+                                className="flex flex-row items-center bg-[#E4EAEA] py-[4px] px-[8px] gap-[8px] text-sm rounded-[4px] mr-[8px] cursor-pointer"
                                 key={index}
                                 onClick={() => handleRemoveTeamMember(index)}
                             >
