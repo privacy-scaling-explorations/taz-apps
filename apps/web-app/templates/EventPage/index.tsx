@@ -18,7 +18,7 @@ type Props = {
 }
 
 const EventPage = ({ event, sessions }: Props) => {
-    const [session, setSession] = useState()
+    const [session, setSession] = useState<any>()
     const wraperRef = useRef(null)
 
     const [openAddSessionModal, setOpenAddSessionModal] = useState(false)
