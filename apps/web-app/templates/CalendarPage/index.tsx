@@ -12,6 +12,7 @@ import { getUserOnID } from "../../hooks/getUserOnID"
 import CalendarPageSessions from "../../components/Sessions/CalendarPageSessions"
 import CalendarSessionModal from "../../components/CalendarSessionModal"
 
+
 const supabase = createBrowserSupabaseClient()
 
 type Props = {
@@ -136,9 +137,9 @@ const CalendarPage = ({ sessions, events }: Props) => {
             <div className="flex flex-col border border-black p-5 bg-[#EEEEF0] gap-5 w-full h-full">
                 <div className="flex gap-5 md:gap-0 flex-col md:flex-row justify-between p-5 bg-white rounded-[16px]">
                     <div className="flex items-center gap-2">
-                        <h1 className={`text-[#1C292899]`}>Program</h1>
+                        <Link href="/events"><a className={`text-[#1C292899]`}>Events</a></Link>
                         <h1 className={`text-[#1C292899]`}>/</h1>
-                        <h1 className={`text-black font-[600]`}>ZK Week</h1>
+                        <h1 className={`text-black font-[600]`}>Week 1</h1>
                     </div>
                     <div className="flex flex-row gap-[8px] justify-between items-center">
                         <button className="flex md:hidden bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]">
