@@ -31,7 +31,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             format,
             equipment,
             team_members,
-            track
+            track,
+            subEventId,
+            quota_id
         } = req.body
 
         const response = await supabase
@@ -49,7 +51,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 format,
                 team_members,
                 track,
-                equipment
+                equipment,
+                subevent_id: subEventId,
+                quota_id: quota_id
             })
             .eq("id", id)
         console.log("Response: ", response)
