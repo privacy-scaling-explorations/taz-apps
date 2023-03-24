@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from "react"
 
 import NextImage from "next/image"
-import moment from "moment"
-import { ToastContainer } from "react-toastify"
 import Link from "next/link"
 
+import moment from "moment"
 import AddSessionModal from "../../components/AddSessionModal"
 import Sessions from "../../components/Sessions"
 import { EventsDTO, SessionsDTO } from "../../types"
@@ -203,18 +202,6 @@ const EventPage = ({ event, sessions }: Props) => {
                     </div>
                     <Sessions event={event} sessions={filteredSessions} />
                 </div>
-                <ToastContainer
-                    position="top-center"
-                    autoClose={3000}
-                    hideProgressBar={false}
-                    newestOnTop={false}
-                    closeOnClick
-                    rtl={false}
-                    pauseOnFocusLoss
-                    draggable
-                    pauseOnHover
-                    theme="light"
-                />
             </div>
         </BaseTemplate>
     )

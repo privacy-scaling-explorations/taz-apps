@@ -16,11 +16,6 @@ const FavoriteButton = ({ session, isMiniButton }: Props) => {
         session.favoritedSessions.length > 0 ? session.favoritedSessions[0].id : null
     )
 
-    useEffect(() => {
-        console.log("session", session)
-        console.log("latestFavoritedSessionId", latestFavoritedSessionId)
-    }, [])
-
     const makeToast = (isSuccess: boolean, message: string) => {
         if (isSuccess) {
             toast.success(message, {

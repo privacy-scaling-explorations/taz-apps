@@ -12,7 +12,7 @@ type Props = {
     isTallButton: boolean
 }
 
-const ParticipateButton = ({ session, isTallButton, userId }: Props) => {
+const ParticipateButton = ({ session, isTallButton }: Props) => {
     const [openBuyTicketModal, setOpenBuyTicketModal] = useState(false)
 
     const { userInfo, isAuth } = useUserAuthenticationContext()

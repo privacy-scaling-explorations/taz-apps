@@ -10,7 +10,7 @@ import DeleteSessionModal from "../../components/DeleteSessionModal"
 import EditSessionModal from "../../components/EditSessionModal"
 import ParticipateButton from "../../components/ParticipateButton"
 import FavoriteButton from "../../components/FavoriteButton"
-
+import { useUserAuthenticationContext } from "../../context/UserAuthenticationContext"
 
 type Props = {
     session: SessionsDTO
