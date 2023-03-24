@@ -65,10 +65,11 @@ const CalendarSessionModal = ({ isOpen, closeModal, events, sessions }: Props) =
         track: "ZK Week",
         event_type: "Workshop",
         event_slug: "CoordiNations",
-        event_item_id: 111,
+        event_item_id: 111
     })
 
     console.log("selected params", newSession.event_id, newSession.event_slug, newSession.event_item_id)
+    console.log("steps: ", steps)
     const [amountTickets, setAmountTickets] = useState("0")
 
     const handleSubmit = async () => {
@@ -150,7 +151,7 @@ const CalendarSessionModal = ({ isOpen, closeModal, events, sessions }: Props) =
             track: "ZK Week",
             event_type: "Workshop",
             event_slug: "CoordiNations",
-            event_item_id: 111,
+            event_item_id: 111
         })
         closeModal(false)
     }
@@ -184,7 +185,15 @@ const CalendarSessionModal = ({ isOpen, closeModal, events, sessions }: Props) =
                             <Dialog.Panel className="flex flex-col h-full w-5/6 overflow-y-scroll max-w-full transform rounded-lg bg-white text-left align-middle  transition-all">
                                 <div className="w-full h-full py-5 px-10">
                                     <div className="flex w-full justify-between items-center">
-                                        <h1 className="text-[24px] font-[600]">Session Info (for the public)</h1>
+                                        <h1 className="text-[24px] font-[600]">
+                                            {steps == 1
+                                                ? "Select Subevent"
+                                                : steps == 2
+                                                ? "Session info (for the public)"
+                                                : steps == 3
+                                                ? "Session info (shared with the Zuzalu team)"
+                                                : "Confirmation"}
+                                        </h1>
                                         <div
                                             onClick={() => closeModal(false)}
                                             className="cursor-pointer flex items-center border-2 border-black justify-center w-[25px] h-[25px] rounded-full"
