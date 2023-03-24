@@ -359,6 +359,9 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                                 {item.role === "Organizer" && (
                                     <NextImage src={"/user-icon-4.svg"} alt="user-icon-6" width={24} height={24} />
                                 )}
+                                {item.role === "Facilitator" && (
+                                    <NextImage src={"/user-icon-5.svg"} alt="user-icon-6" width={24} height={24} />
+                                )}
                                 <p className="text-[#1C2928] font-[400] text-[16px]">
                                     {item.role}: <span className="font-[600] capitalize">{item.name}</span>
                                 </p>

@@ -225,6 +225,14 @@ const CalendarPageSessions = ({ sessions, showStartDate = false }: Props) => {
                                                 height={24}
                                             />
                                         )}
+                                        {organizer.role === "Facilitator" && (
+                                            <NextImage
+                                                src={"/user-icon-5.svg"}
+                                                alt="user-icon-5"
+                                                width={24}
+                                                height={24}
+                                            />
+                                        )}
                                         <p className="text-[#1C2928] font-[400] text-[16px]">
                                             {organizer.role}:{" "}
                                             <span className="font-[600] capitalize">{organizer.name}</span>
