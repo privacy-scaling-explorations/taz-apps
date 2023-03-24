@@ -15,7 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         try {
             const signIn = await supabase.auth.signInWithPassword({
                 email,
-                password
+                "q8Vonx$rdnmAlO7bSdoylwZ#oLoH"
             })
             if (signIn.data.user) {
                 res.status(200).json("User signed in!")
