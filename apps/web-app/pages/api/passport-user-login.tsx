@@ -31,7 +31,7 @@ export default async function handler(
       // Check if email is registered
       const { data: users } = await supabase.from("auth.users").select("email").eq("email", email);
 
-      if (users && users.length > 0) {
+      // if (users && users.length > 0) {
         // If registered, try sign in
         console.log("signing in data", email, password)
         const signIn = await supabase.auth.signInWithPassword({
@@ -44,31 +44,31 @@ export default async function handler(
         } else {
           res.status(400).json("Error with sign in");
         }
-      } else {
-        // If not registered, try sign up
-        console.log("signing up data", email, password, uuid, commitment, email, name, role, residence, order_id)
-        const signUpResponse = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            data: {
-              uuid,
-              commitment,
-              email,
-              name,
-              role,
-              residence,
-              order_id,
-            },
-          },
-        });
+      // } else {
+      //   // If not registered, try sign up
+      //   console.log("signing up data", email, password, uuid, commitment, email, name, role, residence, order_id)
+      //   const signUpResponse = await supabase.auth.signUp({
+      //     email,
+      //     password,
+      //     options: {
+      //       data: {
+      //         uuid,
+      //         commitment,
+      //         email,
+      //         name,
+      //         role,
+      //         residence,
+      //         order_id,
+      //       },
+      //     },
+      //   });
 
-        if (signUpResponse.data.user) {
-          res.status(200).json("User signed up!");
-        } else {
-          res.status(400).json("Error with sign up");
-        }
-      }
+      //   if (signUpResponse.data.user) {
+      //     res.status(200).json("User signed up!");
+      //   } else {
+      //     res.status(400).json("Error with sign up");
+      //   }
+      // }
     } catch (error) {
       console.log(error);
       res.status(500).json("Error occurred");
