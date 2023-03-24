@@ -85,7 +85,8 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
         setTag("")
     }
 
-    const handleRemoveTag = (index: number) => {
+    const handleRemoveTag = (e: any, index: number) => {
+        e.preventDefault()
         tags.splice(index, 1)
         setRerender(!rerender)
     }
