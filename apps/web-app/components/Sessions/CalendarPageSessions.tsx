@@ -4,8 +4,8 @@ import { useRouter } from "next/router"
 import axios from "axios"
 import { toast } from "react-toastify"
 import moment from "moment"
-import FavoriteButton from "../../components/FavoriteButton"
-
+import { SessionsDTO } from "../../types"
+import FavoriteButton from "../FavoriteButton"
 
 import { useUserAuthenticationContext } from "../../context/UserAuthenticationContext"
 import ParticipateButton from "../ParticipateButton"
@@ -110,6 +110,7 @@ const CalendarPageSessions = ({ sessions, showStartDate = false }: Props) => {
                                 </NextLink>
 
                                 <FavoriteButton session={item} isMiniButton={true} />
+
                             </div>
                             <ParticipateButton session={item} isTallButton={false} />
 
