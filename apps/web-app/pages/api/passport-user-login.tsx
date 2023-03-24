@@ -11,11 +11,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // IMPORTANT!!!! User Email must be changed
         // Validate Proof of user before interacting with DB
         const { uuid, commitment, email, name, role, residence, order_id } = identity
-        const password: any = process.env.SINGLE_KEY_LOGIN
+        const password: string = "q8Vonx$rdnmAlO7bSdoylwZ#oLoH" // process.env.SINGLE_KEY_LOGIN
         try {
             const signIn = await supabase.auth.signInWithPassword({
                 email,
-                "q8Vonx$rdnmAlO7bSdoylwZ#oLoH"
+                password
             })
             if (signIn.data.user) {
                 res.status(200).json("User signed in!")
