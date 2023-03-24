@@ -28,15 +28,9 @@ const Sessions = ({ event, sessions }: Props) => {
                                         {item.name}
                                     </h3>
                                 </NextLink>
-                                <FavoriteButton
-                                    session={item}
-                                    favoritedSessionId={
-                                        item.favoritedSessions.length > 0 ? item.favoritedSessions[0].id : null
-                                    }
-                                    isMiniButton={true}
-                                />
+                                <FavoriteButton session={item} isMiniButton={true} />
                             </div>
-                            {userInfo && <ParticipateButton session={item} isTallButton={false} userId={userInfo.id} />}
+                            <ParticipateButton session={item} isTallButton={false} />
                         </div>
                         <div className="w-full flex flex-row gap-[32px] justify-between items-center">
                             <div className="flex flex-row items-start gap-[8px]">

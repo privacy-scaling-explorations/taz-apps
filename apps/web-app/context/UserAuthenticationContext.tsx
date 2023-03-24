@@ -23,6 +23,7 @@ export function UserAuthenticationProvider({ children }: UserAuthenticationProvi
     const [userInfo, setUserInfo] = useState<UserDTO>()
     const [userSessions, setUserSessions] = useState<SessionsDTO[]>([])
     const [userRole, setUserRole] = useState("")
+
     const [userParticipatingSessions, setUserParticipatingSessions] = useState<SessionsDTO[]>([])
 
     const isAuth = useMemo(() => Boolean(userInfo), [userInfo])
@@ -41,6 +42,7 @@ export function UserAuthenticationProvider({ children }: UserAuthenticationProvi
         await axios
             .get(`/api/fetchUser/${session.user.id}`)
             .then((res) => {
+
                 setUserRole(session.user.user_metadata.role)
                 setUserInfo(res.data)
             })

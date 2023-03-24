@@ -196,7 +196,7 @@ const CalendarSessionModal = ({ isOpen, closeModal, events, sessions }: Props) =
                                         </h1>
                                         <div
                                             onClick={() => closeModal(false)}
-                                            className="cursor-pointer flex items-center border-2 border-black justify-center w-[25px] h-[25px] rounded-full"
+                                            className="cursor-pointer flex p-4 items-center border-2 border-black justify-center w-[25px] h-[25px] rounded-full"
                                         >
                                             X
                                         </div>
