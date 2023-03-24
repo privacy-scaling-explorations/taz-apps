@@ -16,8 +16,7 @@ type Props = {
 const CalendarPage = ({ sessions, events }: Props) => {
     const dateRef = useRef(null)
     const localtionRef = useRef(null)
-
-    const { isAuth } = useUserAuthenticationContext()
+    const { isAuth, userRole } = useUserAuthenticationContext()
 
     const [openAddSessionModal, setOpenAddSessionModal] = useState(false)
     const [selectedWeeks, setSelectedWeeks] = useState<string[]>([])
@@ -26,6 +25,8 @@ const CalendarPage = ({ sessions, events }: Props) => {
 
     const [openFilterOptions, setOpenFilterOptions] = useState(false)
     const [openLocationFilter, setOpenLocationFilter] = useState(false)
+    const isOrganizer = userRole === "resident"
+
 
     const filterOptions = [
         {
@@ -155,7 +156,8 @@ const CalendarPage = ({ sessions, events }: Props) => {
                     <div className="w-full flex flex-col lg:flex-row justify-between items-start lg:items-center p-[16px] gap-[24px]">
                         <div className="flex flex-col md:flex-row items-start md:items-center justify-center gap-[32px]">
                             <h1 className="text-[40px] text-[#37352F] font-[600]">Week 1 | March 25-31</h1>
-                            {isAuth ? (
+
+                            {isAuth && isOrganizer ? (
                                 <>
                                     <button
                                         className="flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"

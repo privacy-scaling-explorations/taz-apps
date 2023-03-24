@@ -11,14 +11,15 @@ import EditSessionModal from "../../components/EditSessionModal"
 import ParticipateButton from "../../components/ParticipateButton"
 import FavoriteButton from "../../components/FavoriteButton"
 
+
 type Props = {
     session: SessionsDTO
     sessions: SessionsDTO[]
 }
 
 const SessionPage = ({ session, sessions }: Props) => {
+    const { userInfo, isAuth } = useUserAuthenticationContext()
     const router = useRouter()
-
     const { startDate, location, startTime } = session
     const [openDeleteSessionModal, setOpenDeleteSessionModal] = useState(false)
     const [openEditSessionModal, setOpenEditSessionModal] = useState(false)
@@ -86,6 +87,7 @@ const SessionPage = ({ session, sessions }: Props) => {
                     <div className="flex flex-row gap-[8px] items-center">
                         <FavoriteButton session={session} isMiniButton={false} />
                         <ParticipateButton session={session} isTallButton={true} />
+
                         <button
                             className="flex gap-2 items-center bg-zulalu-primary border border-primary text-white font-[600] py-[8px] px-[16px] rounded-[8px]"
                             onClick={() => setOpenEditSessionModal(true)}
