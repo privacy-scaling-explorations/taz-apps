@@ -17,7 +17,9 @@ type Props = {
 const SessionPage = ({ session, sessions }: Props) => {
     const router = useRouter()
     const LOGGED_IN_USER_ID = 1
-    const is_favorited = session.favorited_sessions.some((favorited: any) => favorited.user_id === LOGGED_IN_USER_ID && favorited.session_id === session.id);
+    const is_favorited = session.favorited_sessions.some(
+        (favorited: any) => favorited.user_id === LOGGED_IN_USER_ID && favorited.session_id === session.id
+    )
 
     const { startDate, location, startTime } = session
     const [openDeleteSessionModal, setOpenDeleteSessionModal] = useState(false)
@@ -96,15 +98,16 @@ const SessionPage = ({ session, sessions }: Props) => {
                 slug: session.event_slug,
                 subEventId: session.subevent_id
             })
+            router.push("/calendar-full")
         } catch (error) {
             console.log(error)
             await axios.post("/api/pretix-deactivate-subevent", {
                 slug: session.event_slug,
                 subEventId: session.subevent_id
             })
+            router.push("/calendar-full")
         }
 
-        router.push("/calendar-full")
     }
 
     return (
@@ -134,11 +137,12 @@ const SessionPage = ({ session, sessions }: Props) => {
                             />
                             {is_favorited > 0 ? "BOOKMARKED" : "BOOKMARK"}
                         </button>
+                        <ParticipateButton session={session} isTallButton={true} />
                         <button
-                            className="flex gap-2 items-center bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]"
+                            className="flex gap-2 items-center bg-zulalu-primary border border-primary text-white font-[600] py-[8px] px-[16px] rounded-[8px]"
                             onClick={() => setOpenEditSessionModal(true)}
                         >
-                            <NextImage src={"/vector-bookmark.svg"} width={12} height={16} />
+                            <NextImage src={"/pencil.svg"} width={12} height={16} />
                             EDIT SESSION
                         </button>
                         <EditSessionModal
@@ -148,10 +152,9 @@ const SessionPage = ({ session, sessions }: Props) => {
                             sessions={sessions}
                         />
                         <button
-                            className="flex gap-2 items-center bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]"
+                            className="flex gap-2 items-center bg-zulalu-primary border border-primary text-white font-[600] py-[8px] px-[16px] rounded-[8px]"
                             onClick={() => setOpenDeleteSessionModal(true)}
                         >
-                            <NextImage src={"/vector-bookmark.svg"} width={12} height={16} />
                             DELETE SESSION
                         </button>
                         <DeleteSessionModal
@@ -159,78 +162,88 @@ const SessionPage = ({ session, sessions }: Props) => {
                             closeModal={setOpenDeleteSessionModal}
                             deleteSession={deleteSession}
                         />
-                        <ParticipateButton session={session} isTallButton={true} />
                     </div>
                 </div>
-            </div>
-            <div className="w-full flex flex-col md:flex-row gap-[8px] h-full">
-                <div className="flex flex-col items-start pt-4 md:pt-[32px] gap-2 px-4 md:px-[32px] pb-4 md:pb-[40px] bg-white rounded-[8px] w-full md:w-4/6">
-                    <div className="flex flex-row items-end">
-                        <p className="text-[40px] font-semibold">{session.name}</p>
-                    </div>
-                    <div className="flex flex-row flex-wrap items-center gap-[24px]">
-                        <div className="flex gap-1 items-center justify-start mt-4">
-                            <NextImage src={"/vector-calendar.svg"} alt="calendar" width={15} height={15} />
-                            <h1 className="text-zulalu-secondary">{`${startWeekDayFormatted}, ${eventMonthFormatted} ${startDateFormatted}th`}</h1>
+
+                <div className="w-full flex flex-col md:flex-row gap-[8px] h-full">
+                    <div className="flex flex-col items-start pt-4 md:pt-[32px] gap-2 px-4 md:px-[32px] pb-4 md:pb-[40px] bg-white rounded-[8px] w-full md:w-4/6">
+                        <div className="flex flex-row items-end">
+                            <p className="text-[40px] font-semibold">{session.name}</p>
                         </div>
-                        <div className="flex gap-1 items-center justify-start mt-4">
-                            <NextImage src={"/vector-clock.svg"} alt="calendar" width={15} height={15} />
-                            <h1 className="text-zulalu-secondary">{`${startTime}`}</h1>
+                        <div className="flex flex-row flex-wrap items-center gap-[24px]">
+                            <div className="flex gap-1 items-center justify-start mt-4">
+                                <NextImage src={"/vector-calendar.svg"} alt="calendar" width={15} height={15} />
+                                <h1 className="text-zulalu-secondary">{`${startWeekDayFormatted}, ${eventMonthFormatted} ${startDateFormatted}th`}</h1>
+                            </div>
+                            <div className="flex gap-1 items-center justify-start mt-4">
+                                <NextImage src={"/vector-clock.svg"} alt="calendar" width={15} height={15} />
+                                <h1 className="text-zulalu-secondary">{`${startTime}`}</h1>
+                            </div>
+                            <div className="flex gap-1 items-center justify-start mt-4">
+                                <NextImage src={"/vector-location.svg"} alt="calendar" width={15} height={15} />
+                                <h1 className="text-zulalu-secondary">{location}</h1>
+                            </div>
                         </div>
-                        <div className="flex gap-1 items-center justify-start mt-4">
-                            <NextImage src={"/vector-location.svg"} alt="calendar" width={15} height={15} />
-                            <h1 className="text-zulalu-secondary">{location}</h1>
-                        </div>
-                    </div>
-                    <div className="flex flex-row gap-[24px] w-full mt-4">
-                        <div className="w-5/6 py-5">{session.info}</div>
-                        <div className="flex flex-wrap gap-5 w-3/6 p-5">
-                            {session.team_members.map((item: any, index: any) => (
-                                <div
-                                    key={index}
-                                    className="flex w-auto rounded-[4px] gap-2 px-2 py-1 bg-[#E4EAEA] text-[16px]"
-                                >
-                                    {item.role === "Speaker" && (
-                                        <NextImage src={"/user-icon-6.svg"} alt="user-icon-6" width={24} height={24} />
-                                    )}
-                                    {item.role === "Organizer" && (
-                                        <NextImage src={"/user-icon-4.svg"} alt="user-icon-6" width={24} height={24} />
-                                    )}
-                                    <p>{item.role}:</p>
-                                    <p className="font-bold">{item.name}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-                <div className="flex flex-col gap-5 py-4 md:py-[32px] px-5 w-full md:w-2/6">
-                    <div className="flex flex-col gap-[8px]">
-                        <h4 className="text-xl font-semibold">Tags</h4>
-                        <div className="flex flex-wrap gap-5">
-                            {session.tags &&
-                                session.tags.map((tag, index) => (
+                        <div className="flex flex-row gap-[24px] w-full mt-4">
+                            <div className="w-5/6 py-5">{session.description}</div>
+                            <div className="flex flex-wrap gap-5 w-3/6 p-5">
+                                {session.team_members.map((item: any, index: any) => (
                                     <div
                                         key={index}
-                                        className="bg-[#F8FFFE] capitalize rounded-[37px] py-[4px] px-[16px] flex flex-row items-center justify-center"
+                                        className="flex w-auto rounded-[4px] gap-2 px-2 py-1 bg-[#E4EAEA] text-[16px]"
                                     >
-                                        {tag}
+                                        {item.role === "Speaker" && (
+                                            <NextImage
+                                                src={"/user-icon-6.svg"}
+                                                alt="user-icon-6"
+                                                width={24}
+                                                height={24}
+                                            />
+                                        )}
+                                        {item.role === "Organizer" && (
+                                            <NextImage
+                                                src={"/user-icon-4.svg"}
+                                                alt="user-icon-6"
+                                                width={24}
+                                                height={24}
+                                            />
+                                        )}
+                                        <p>{item.role}:</p>
+                                        <p className="font-bold">{item.name}</p>
                                     </div>
                                 ))}
+                            </div>
                         </div>
                     </div>
-                    <div className="flex flex-col gap-[8px]">
-                        <h4 className="text-xl font-semibold">About</h4>
-                        <div className="flex items-center gap-1">
-                            Format: <p className="font-bold">{session.format}</p>
+                    <div className="flex flex-col gap-5 py-4 md:py-[32px] px-5 w-full md:w-2/6">
+                        <div className="flex flex-col gap-[8px]">
+                            <h4 className="text-xl font-semibold">Tags</h4>
+                            <div className="flex flex-wrap gap-5">
+                                {session.tags &&
+                                    session.tags.map((tag, index) => (
+                                        <div
+                                            key={index}
+                                            className="bg-[#F8FFFE] capitalize rounded-[37px] py-[4px] px-[16px] flex flex-row items-center justify-center"
+                                        >
+                                            {tag}
+                                        </div>
+                                    ))}
+                            </div>
                         </div>
-                        <div className="flex items-center gap-1">
-                            Track: <p className="font-bold">{session.track}</p>
-                        </div>
-                        <div className="flex items-center gap-1">
-                            Type: <p className="font-bold">{session.event_type}</p>
-                        </div>
-                        <div className="flex items-center gap-1">
-                            Level: <p className="font-bold">{session.level}</p>
+                        <div className="flex flex-col gap-[8px]">
+                            <h4 className="text-xl font-semibold">About</h4>
+                            <div className="flex items-center gap-1">
+                                Format: <p className="font-bold">{session.format}</p>
+                            </div>
+                            <div className="flex items-center gap-1">
+                                Track: <p className="font-bold">{session.track}</p>
+                            </div>
+                            <div className="flex items-center gap-1">
+                                Type: <p className="font-bold">{session.event_type}</p>
+                            </div>
+                            <div className="flex items-center gap-1">
+                                Level: <p className="font-bold">{session.level}</p>
+                            </div>
                         </div>
                     </div>
                 </div>

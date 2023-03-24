@@ -7,9 +7,11 @@ const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY
 const supabase = createClient(supabaseUrl, supabaseKey as string)
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    console.log("Body: ", req.body)
     try {
         const {
             id,
+            description,
             name,
             startDate,
             location,
@@ -28,6 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             .from("sessions")
             .update({
                 name,
+                description,
                 startDate,
                 location,
                 startTime,

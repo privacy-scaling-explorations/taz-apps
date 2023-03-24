@@ -83,7 +83,7 @@ const Step3 = ({ setSteps, newSession, handleSubmit, isLoading, amountTickets }:
                     className="w-full flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
                     onClick={() => handleSubmit()}
                 >
-                    {isLoading ? <Loading size="xs" /> : "CREATE SESSION!"}
+                    {isLoading ? <Loading size="xs" /> : "EDIT SESSION"}
                 </button>
             </div>
         </div>
