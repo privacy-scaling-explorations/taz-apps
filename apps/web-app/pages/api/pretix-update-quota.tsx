@@ -25,8 +25,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         console.log("quota response: ", response)
 
-        if (response.status === 201) {
-            res.status(201).json(response.data)
+        if (response.status === 200) {
+            res.status(200).json(response.data)
         } else {
             throw new Error(`HTTP error! status: ${response.status}`)
         }
