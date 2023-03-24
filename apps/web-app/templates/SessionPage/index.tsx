@@ -109,6 +109,7 @@ const SessionPage = ({ session, sessions }: Props) => {
                     slug: session.event_slug,
                     subEventId: session.subevent_id
                 })
+                router.push("/calendar-full")
             }
         }
         router.push("/calendar-full")
