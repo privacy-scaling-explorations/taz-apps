@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import NextImage from "next/image"
 import BaseTemplate from "../Base"
 import Sessions from "../../components/Sessions/CalendarPageSessions"
-import { useUserIdentityContext } from "../../context/UserIdentityContext"
+import { useUserAuthenticationContext } from "../../context/UserAuthenticationContext"
 import CalendarSessionModal from "../../components/CalendarSessionModal"
 import { EventsDTO, SessionsDTO } from "../../types"
 
@@ -12,14 +12,16 @@ type Props = {
 }
 
 const MyProfilePage = ({ events, sessions }: Props) => {
-    const { userInfo, userSessions, userParticipatingSessions } = useUserIdentityContext()
 
+    const { userInfo, userSessions, userParticipatingSessions, userRole } = useUserAuthenticationContext()
     const [eventsOpt, setEventsOpt] = useState<string[]>([])
     const [selectedOpt, setSelectedOpt] = useState<string[]>([])
     const [openAddSessionModal, setOpenAddSessionModal] = useState(false)
 
+    const isOrganizer = userRole === "resident"
+
     useEffect(() => {
-        if (userSessions) {
+        if (userSessions.length > 0) {
             const eventsName = userSessions.map((item) => item.events).map((event) => event.name.replace("\n", ""))
             const uniqueValues = eventsName.filter((value, index, self) => self.indexOf(value) === index)
 
@@ -70,15 +72,19 @@ const MyProfilePage = ({ events, sessions }: Props) => {
                 />
                 <div className="flex flex-col md:flex-row justify-between h-full">
                     <div className="p-5 flex flex-col items-start bg-white rounded-[8px] w-full md:w-4/6 gap-10">
-                        <div className="flex flex-wrap md:flex-nowrap justify-between w-full">
-                            <div className="flex flex-wrap md:flex-nowrap items-center gap-10">
-                                <h1 className="font-semibold text-3xl md:text-[40px] mb-0 md:mb-0">My Sessions</h1>
-                                <button
-                                    onClick={() => setOpenAddSessionModal(true)}
-                                    className="flex flex-row font-semibold justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px] h-[40px]"
-                                >
-                                    CREATE SESSION
-                                </button>
+
+                        <div className="flex justify-between w-full">
+                            <div className="flex items-center gap-10">
+                                <h1 className="font-semibold text-[40px]">My Sessions</h1>
+                                {isOrganizer && (
+                                    <button
+                                        onClick={() => setOpenAddSessionModal(true)}
+                                        className="flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px] h-[40px]"
+                                    >
+                                        CREATE SESSION
+                                    </button>
+                                )}
+
                             </div>
                         </div>
                     </div>

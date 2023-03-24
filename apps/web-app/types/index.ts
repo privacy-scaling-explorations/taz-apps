@@ -25,6 +25,7 @@ export interface EventsDTO {
     type: String
     sessions: SessionsDTO[]
     item_id: number
+    image_url: string
 }
 
 export interface SessionsDTO {

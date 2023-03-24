@@ -1,18 +1,12 @@
 import React, { useEffect, useRef, useState } from "react"
-import { useRouter } from "next/router"
 import NextImage from "next/image"
 import Link from "next/link"
 
-import { createClient } from "@supabase/supabase-js"
-// import { getUserSession } from "../../hooks/getUserSession";
-import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs"
 import { SessionsDTO, EventsDTO } from "../../types"
 import BaseTemplate from "../Base"
-import { getUserOnID } from "../../hooks/getUserOnID"
 import CalendarPageSessions from "../../components/Sessions/CalendarPageSessions"
 import CalendarSessionModal from "../../components/CalendarSessionModal"
-
-const supabase = createBrowserSupabaseClient()
+import { useUserAuthenticationContext } from "../../context/UserAuthenticationContext"
 
 type Props = {
     sessions: SessionsDTO[]
@@ -20,11 +14,9 @@ type Props = {
 }
 
 const CalendarPage = ({ sessions, events }: Props) => {
-    const router = useRouter()
     const dateRef = useRef(null)
     const localtionRef = useRef(null)
-    const { parentMessageId } = router.query
-    const userObj = getUserOnID()
+    const { isAuth, userRole } = useUserAuthenticationContext()
 
     const [openAddSessionModal, setOpenAddSessionModal] = useState(false)
     const [selectedWeeks, setSelectedWeeks] = useState<string[]>([])
@@ -33,15 +25,8 @@ const CalendarPage = ({ sessions, events }: Props) => {
 
     const [openFilterOptions, setOpenFilterOptions] = useState(false)
     const [openLocationFilter, setOpenLocationFilter] = useState(false)
-    const [session, setSession] = useState<any>(null)
+    const isOrganizer = userRole === "resident"
 
-    useEffect(() => {
-        ;(async () => {
-            const userSession = await supabase.auth.getUser()
-            console.log("user object 1", userSession)
-            setSession(userSession)
-        })()
-    }, [])
 
     const filterOptions = [
         {
@@ -136,9 +121,11 @@ const CalendarPage = ({ sessions, events }: Props) => {
             <div className="flex flex-col border border-black p-5 bg-[#EEEEF0] gap-5 w-full h-full">
                 <div className="flex gap-5 md:gap-0 flex-col md:flex-row justify-between p-5 bg-white rounded-[16px]">
                     <div className="flex items-center gap-2">
-                        <h1 className={`text-[#1C292899]`}>Program</h1>
+                        <Link href="/events">
+                            <a className={`text-[#1C292899]`}>Events</a>
+                        </Link>
                         <h1 className={`text-[#1C292899]`}>/</h1>
-                        <h1 className={`text-black font-[600]`}>ZK Week</h1>
+                        <h1 className={`text-black font-[600]`}>Week 1</h1>
                     </div>
                     <div className="flex flex-row gap-[8px] justify-between items-center">
                         <button className="flex md:hidden bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]">
@@ -169,7 +156,8 @@ const CalendarPage = ({ sessions, events }: Props) => {
                     <div className="w-full flex flex-col lg:flex-row justify-between items-start lg:items-center p-[16px] gap-[24px]">
                         <div className="flex flex-col md:flex-row items-start md:items-center justify-center gap-[32px]">
                             <h1 className="text-[40px] text-[#37352F] font-[600]">Week 1 | March 25-31</h1>
-                            {session && session.data.user ? (
+
+                            {isAuth && isOrganizer ? (
                                 <>
                                     <button
                                         className="flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
@@ -258,18 +246,6 @@ const CalendarPage = ({ sessions, events }: Props) => {
 
                     <CalendarPageSessions sessions={filteredSessionsByDate} />
                 </div>
-                {/* <ToastContainer
-                    position="top-center"
-                    autoClose={3000}
-                    hideProgressBar={false}
-                    newestOnTop={false}
-                    closeOnClick
-                    rtl={false}
-                    pauseOnFocusLoss
-                    draggable
-                    pauseOnHover
-                    theme="light"
-                /> */}
             </div>
         </BaseTemplate>
     )

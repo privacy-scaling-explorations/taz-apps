@@ -1309,13 +1309,13 @@ __metadata:
   linkType: hard
 
 "@eslint-community/eslint-utils@npm:^4.2.0":
-  version: 4.3.0
-  resolution: "@eslint-community/eslint-utils@npm:4.3.0"
+  version: 4.4.0
+  resolution: "@eslint-community/eslint-utils@npm:4.4.0"
   dependencies:
     eslint-visitor-keys: ^3.3.0
   peerDependencies:
     eslint: ^6.0.0 || ^7.0.0 || >=8.0.0
-  checksum: f487760a692f0f1fef76e248ad72976919576ba57edc2b1b1dc1d182553bae6b5bf7b078e654da85d04f0af8a485d20bd26280002768f4fbcd2e330078340cb0
+  checksum: cdfe3ae42b4f572cbfb46d20edafe6f36fc5fb52bf2d90875c58aefe226892b9677fef60820e2832caf864a326fe4fc225714c46e8389ccca04d5f9288aabd22
   languageName: node
   linkType: hard
 
@@ -2108,7 +2108,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@semaphore-protocol/identity@latest, @semaphore-protocol/identity@npm:^3.1.0":
+"@semaphore-protocol/identity@npm:^3.1.0, @semaphore-protocol/identity@npm:latest":
   version: 3.4.0
   resolution: "@semaphore-protocol/identity@npm:3.4.0"
   dependencies:
@@ -2121,7 +2121,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@semaphore-protocol/proof@latest, @semaphore-protocol/proof@npm:^3.1.0":
+"@semaphore-protocol/proof@npm:^3.1.0, @semaphore-protocol/proof@npm:latest":
   version: 3.4.0
   resolution: "@semaphore-protocol/proof@npm:3.4.0"
   dependencies:
@@ -2138,7 +2138,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@semaphore-protocol/subgraph@latest":
+"@semaphore-protocol/subgraph@npm:latest":
   version: 3.1.0
   resolution: "@semaphore-protocol/subgraph@npm:3.1.0"
   dependencies:
@@ -2383,9 +2383,9 @@ __metadata:
   linkType: hard
 
 "@types/node@npm:*, @types/node@npm:>=13.7.0":
-  version: 18.15.6
-  resolution: "@types/node@npm:18.15.6"
-  checksum: 46a1b04553a03574fb845bb4414292d47338d29c40fa25861d3c9e8a957455dfb23ff6385428da1613b02ddc3b5b5fe91c9227c55db80a46a655799ea2add285
+  version: 18.15.7
+  resolution: "@types/node@npm:18.15.7"
+  checksum: 08d1dd1898be10cd274955ed7f491bcab5b7e70ce66b6a1e996a582d5467f7517046b0d9c5f4e15871df94dd72d1ad9e7be236d2cff1a1450ec906d7fa3062d2
   languageName: node
   linkType: hard
 
@@ -3665,6 +3665,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cookie@npm:^0.4.1":
+  version: 0.4.2
+  resolution: "cookie@npm:0.4.2"
+  checksum: a00833c998bedf8e787b4c342defe5fa419abd96b32f4464f718b91022586b8f1bafbddd499288e75c037642493c83083da426c6a9080d309e3bd90fd11baa9b
+  languageName: node
+  linkType: hard
+
 "core-js-compat@npm:^3.25.1":
   version: 3.29.1
   resolution: "core-js-compat@npm:3.29.1"
@@ -3985,9 +3992,9 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.4.284":
-  version: 1.4.338
-  resolution: "electron-to-chromium@npm:1.4.338"
-  checksum: 73f58d75ee7071db3c239b70f17c0cedfc097c0f8f39e77a6cc1ba7ad769b3153fd9e7644109a3af4ee5b3e30f121539ab7af2c4d56776fb9372e6016678f723
+  version: 1.4.339
+  resolution: "electron-to-chromium@npm:1.4.339"
+  checksum: e329efb7c471f75685fc6f83389d55eeeb73ea4fdd55c568ac8fce624076c41181d55e805e2064dd90d88949ca5af8b230b355d50e8d9370f401329a627c5d0c
   languageName: node
   linkType: hard
 
@@ -6804,6 +6811,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"nookies@npm:^2.5.2":
+  version: 2.5.2
+  resolution: "nookies@npm:2.5.2"
+  dependencies:
+    cookie: ^0.4.1
+    set-cookie-parser: ^2.4.6
+  checksum: 4cc6fd8d0ab9fce840ccdb161eefe9dee581f441429fc729f279924491ebd1c12c220f889b6e315d66f8ea00bef944966969c966c957a6b9918ced7d7f9cc8a8
+  languageName: node
+  linkType: hard
+
 "nopt@npm:^6.0.0":
   version: 6.0.0
   resolution: "nopt@npm:6.0.0"
@@ -7289,11 +7306,11 @@ __metadata:
   linkType: hard
 
 "prettier@npm:^2.5.1":
-  version: 2.8.6
-  resolution: "prettier@npm:2.8.6"
+  version: 2.8.7
+  resolution: "prettier@npm:2.8.7"
   bin:
     prettier: bin-prettier.js
-  checksum: 8ac94fa67aec0e65743ea15ebf954ef2f1e52638abd129dc04e8b49e8bb3224c0233c98df6b5c98efd31bd2a43866590486559438ee4ead09dc81be389068572
+  checksum: fdc8f2616f099f5f0d685907f4449a70595a0fc1d081a88919604375989e0d5e9168d6121d8cc6861f21990b31665828e00472544d785d5940ea08a17660c3a6
   languageName: node
   linkType: hard
 
@@ -7987,6 +8004,13 @@ __metadata:
   version: 2.0.0
   resolution: "set-blocking@npm:2.0.0"
   checksum: 6e65a05f7cf7ebdf8b7c75b101e18c0b7e3dff4940d480efed8aad3a36a4005140b660fa1d804cb8bce911cac290441dc728084a30504d3516ac2ff7ad607b02
+  languageName: node
+  linkType: hard
+
+"set-cookie-parser@npm:^2.4.6":
+  version: 2.6.0
+  resolution: "set-cookie-parser@npm:2.6.0"
+  checksum: bf11ebc594c53d84588f1b4c04f1b8ce14e0498b1c011b3d76b5c6d5aac481bbc3f7c5260ec4ce99bdc1d9aed19f9fc315e73166a36ca74d0f12349a73f6bdc9
   languageName: node
   linkType: hard
 
@@ -9089,6 +9113,7 @@ __metadata:
     moment: ^2.29.4
     next: ^12.2.5
     next-pwa: ^5.6.0
+    nookies: ^2.5.2
     qrcode: ^1.5.1
     react: ^18.2.0
     react-autocomplete-input: ^1.0.20

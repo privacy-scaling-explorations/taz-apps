@@ -1,5 +1,6 @@
 // pages/api/create-order.js
 import axios from "axios"
+import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs"
 
 export default async function handler(req, res) {
     const auth = process.env.NEXT_PUBLIC_PRETIX_API
@@ -9,11 +10,26 @@ export default async function handler(req, res) {
         "Content-Type": "application/json"
     }
 
+    const supabase = createServerSupabaseClient({ req, res });
+    // Check if we have a session
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    console.log("delete sesion 2", session)
+    if (!session)
+      return res.status(401).json({
+        error: "not_authenticated",
+        description:
+          "The user does not have an active session or is not authenticated",
+      });
+
+      console.log(session.user.email, session.user.user_metadata.name)
+
     const { subEventId, slug, itemId } = req.body
 
     // Will need user email as input, hard-coded for now
     const body = {
-        email: "falcorodenburg@gmail.com",
+        email: `${session.user.email}`,
         locale: "en",
         sales_channel: "web",
         positions: [
@@ -23,9 +39,9 @@ export default async function handler(req, res) {
                 variation: null,
                 price: "0",
                 attendee_name_parts: {
-                    full_name: "Falco"
+                    full_name: `${session.user.user_metadata.name}`
                 },
-                attendee_email: "falcorodenburg@gmail.com",
+                attendee_email: `${session.user.email}`,
                 addon_to: null,
                 subevent: subEventId
             }
