@@ -113,6 +113,7 @@ const SessionPage = ({ session, sessions }: Props) => {
         }
         router.push("/calendar-full")
     }
+
     return (
         <BaseTemplate>
             <div className="flex flex-col items-center bg-[#EEEEF0] h-[100vh] px-4 md:px-[24px] py-4 md:py-[24px] gap-4 md:gap-[16px]">
