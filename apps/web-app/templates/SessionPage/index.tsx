@@ -93,21 +93,21 @@ const SessionPage = ({ session, sessions }: Props) => {
 
     const deleteSession = async () => {
         await axios.post("/api/deleteSession", { id: session.id })
-        try {
-            await axios.post("/api/pretix-delete-subevent", {
-                slug: session.event_slug,
-                subEventId: session.subevent_id
-            })
-            router.push("/calendar-full")
-        } catch (error) {
-            console.log(error)
-            await axios.post("/api/pretix-deactivate-subevent", {
-                slug: session.event_slug,
-                subEventId: session.subevent_id
-            })
-            router.push("/calendar-full")
+        if (session.hasTicket) {
+            try {
+                await axios.post("/api/pretix-delete-subevent", {
+                    slug: session.event_slug,
+                    subEventId: session.subevent_id
+                })
+            } catch (error) {
+                console.log(error)
+                await axios.post("/api/pretix-deactivate-subevent", {
+                    slug: session.event_slug,
+                    subEventId: session.subevent_id
+                })
+            }
         }
-
+        router.push("/calendar-full")
     }
 
     return (
