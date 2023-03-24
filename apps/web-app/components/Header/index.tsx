@@ -98,9 +98,19 @@ const Header = () => {
                 )}
             </div>
             <ul className="flex gap-5 items-center text-white">
+
                 <NextLink href={"/events"}>
                     <li className="cursor-pointer">Schedule</li>
                 </NextLink>
+                {!isAuth && (
+                    <a
+                        href="https://airtable.com/shrRZrZbozPE2g6HH"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <li className="cursor-pointer">Apply now</li>
+                    </a>
+                    )}
                 {isAuth ? (
                     <li>
                         <NextLink href="/myprofile">My Profile</NextLink>
