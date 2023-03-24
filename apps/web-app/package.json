@@ -9,6 +9,7 @@
     "dependencies": {
         "@headlessui/react": "^1.7.2",
         "@pcd/passport-interface": "0.0.8",
+        "@pcd/pcd-types": "0.0.8",
         "@react-google-maps/api": "^2.18.1",
         "@semaphore-protocol/group": "^3.2.3",
         "@semaphore-protocol/identity": "latest",
