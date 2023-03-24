@@ -3,11 +3,13 @@ import NextImage from "next/image"
 import axios from "axios"
 import { toast } from "react-toastify"
 import { useRouter } from "next/router"
+import Link from "next/link"
 import { SessionsDTO } from "../../types"
 import BaseTemplate from "../Base"
 import DeleteSessionModal from "../../components/DeleteSessionModal"
 import EditSessionModal from "../../components/EditSessionModal"
 import ParticipateButton from "../../components/ParticipateButton"
+import { useUserAuthenticationContext } from "../../context/UserAuthenticationContext"
 
 type Props = {
     session: SessionsDTO
@@ -15,11 +17,13 @@ type Props = {
 }
 
 const SessionPage = ({ session, sessions }: Props) => {
+    const { userInfo, isAuth } = useUserAuthenticationContext()
     const router = useRouter()
-    const LOGGED_IN_USER_ID = 1
-    const is_favorited = session.favorited_sessions.some(
-        (favorited: any) => favorited.user_id === LOGGED_IN_USER_ID && favorited.session_id === session.id
-    )
+    const is_favorited =
+        userInfo &&
+        session.favorited_sessions.some(
+            (favorited: any) => favorited.user_id === userInfo.id && favorited.session_id === session.id
+        )
 
     const { startDate, location, startTime } = session
     const [openDeleteSessionModal, setOpenDeleteSessionModal] = useState(false)
@@ -55,14 +59,14 @@ const SessionPage = ({ session, sessions }: Props) => {
         }
     }
 
-    const handleAddFavorite = async (sessionId: number) => {
+    const handleAddFavorite = async (sessionId: number, userId: number) => {
         await axios
             .post("/api/addFavoriteSession", {
                 session_id: sessionId,
-                user_id: LOGGED_IN_USER_ID
+                user_id: userId
             })
             .then((res) => {
-                if (res.data === "Session favorited") {
+                if (res.status === 201) {
                     makeToast(true, "This session is now bookmarked.")
                     router.push(router.asPath)
                 }
@@ -115,29 +119,33 @@ const SessionPage = ({ session, sessions }: Props) => {
             <div className="flex flex-col items-center bg-[#EEEEF0] h-[100vh] px-4 md:px-[24px] py-4 md:py-[24px] gap-4 md:gap-[16px]">
                 <div className="flex flex-col md:flex-row justify-between p-5 bg-white w-full rounded-[8px]">
                     <div className="flex items-center gap-2 mb-4 md:mb-0">
-                        <h1 className={`text-[#1C292899]`}>Program</h1>
+                        <Link href={router.asPath.split("/").slice(0, 3).join("/")}>
+                            <a className={`text-[#1C292899]`}>{session.track}</a>
+                        </Link>
                         <h1 className={`text-[#1C292899]`}>/</h1>
-                        <h1 className={`text-black font-[600]`}>ZK Week</h1>
+                        <h1 className={`text-black font-[600]`}>{session.name}</h1>
                     </div>
                     <div className="flex flex-row gap-[8px] items-center">
-                        <button
-                            className="flex gap-2 items-center bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]"
-                            onClick={() => {
-                                if (is_favorited > 0) {
-                                    handleRemoveFavorite(session.id)
-                                } else {
-                                    handleAddFavorite(session.id)
-                                }
-                            }}
-                        >
-                            <NextImage
-                                src={is_favorited > 0 ? "/vector-bookmark2.svg" : "/vector-bookmark.svg"}
-                                width={12}
-                                height={16}
-                            />
-                            {is_favorited > 0 ? "BOOKMARKED" : "BOOKMARK"}
-                        </button>
-                        <ParticipateButton session={session} isTallButton={true} />
+                        {userInfo && (
+                            <button
+                                className="flex gap-2 items-center bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]"
+                                onClick={() => {
+                                    if (is_favorited > 0) {
+                                        handleRemoveFavorite(session.id)
+                                    } else {
+                                        handleAddFavorite(session.id, userInfo.id)
+                                    }
+                                }}
+                            >
+                                <NextImage
+                                    src={is_favorited > 0 ? "/vector-bookmark2.svg" : "/vector-bookmark.svg"}
+                                    width={12}
+                                    height={16}
+                                />
+                                {is_favorited > 0 ? "BOOKMARKED" : "BOOKMARK"}
+                            </button>
+                        )}
+                        {userInfo && <ParticipateButton session={session} isTallButton={true} userId={userInfo.id} />}
                         <button
                             className="flex gap-2 items-center bg-zulalu-primary border border-primary text-white font-[600] py-[8px] px-[16px] rounded-[8px]"
                             onClick={() => setOpenEditSessionModal(true)}

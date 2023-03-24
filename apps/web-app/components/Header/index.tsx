@@ -1,21 +1,17 @@
 import NextImage from "next/image"
 import NextLink from "next/link"
+import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { requestSignedZuzaluUUIDUrl, useFetchParticipant, useSemaphoreSignatureProof } from "@pcd/passport-interface"
 import axios from "axios"
-import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs"
-import { usePassportModalContext } from "../../context/PassportModalContext"
-import getUserSession from "../../hooks/getUserSession"
-
-const supabase = createBrowserSupabaseClient()
+import { useUserAuthenticationContext } from "../../context/UserAuthenticationContext"
 
 const Header = () => {
-    const { openPassportModal, setOpenPassportModal } = usePassportModalContext()
-    const [session, setSession] = useState<any>(null)
+    const { isAuth } = useUserAuthenticationContext()
     const [uuid, setUuid] = useState<string | undefined>()
     const [pcdStr, setPcdStr] = useState("")
     const [participentData, setParticipentData] = useState<any>()
-    const userObj = getUserSession()
+    const router = useRouter()
 
     const PASSPORT_URL = "https://zupass.eth.limo/"
     const PASSPORT_SERVER_URL = "https://api.pcd-passport.com/"
@@ -60,7 +56,7 @@ const Header = () => {
             console.log("log my proof", participant1)
             const response = await axios({
                 method: "post",
-                url: "https://zuzalu-event.vercel.app/api/passport-user-login/",
+                url: "https://1567-201-42-126-83.sa.ngrok.io/api/passport-user-login/",
                 data: participant1,
                 headers: {
                     "Content-Type": "application/json"
@@ -68,7 +64,7 @@ const Header = () => {
             })
             console.log("req response", response)
             // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-            window.location.reload
+            router.push("/")
         } catch (error1) {
             console.error(error1)
         }
@@ -85,14 +81,6 @@ const Header = () => {
         }
     }, [participant])
 
-    useEffect(() => {
-        ;(async () => {
-            const userSession = await supabase.auth.getUser()
-            console.log("user object", userSession)
-            setSession(userSession)
-        })()
-    }, [])
-
     return (
         <div className="flex p-5 justify-between w-full m-auto z-10 bg-zulalu-darkBase items-center">
             <div className="flex relative overflow-hidden gap-5 items-center">
@@ -102,19 +90,18 @@ const Header = () => {
                     </div>
                 </NextLink>
 
-                {session && session.user && (
-                    <li className="flex gap-5 items-center text-white">
+                {isAuth && (
+                    <div className="flex gap-2 text-[#B1F9CA] justify-center items-center text-white text-[18px]">
+                        <div className="w-[8px] h-[8px] bg-[#B1F9CA] rounded-full" />
                         <h1>Passport Connected</h1>
-                    </li>
+                    </div>
                 )}
             </div>
             <ul className="flex gap-5 items-center text-white">
-                {/* <li>About</li> */}
                 <NextLink href={"/events"}>
                     <li className="cursor-pointer">Schedule</li>
                 </NextLink>
-                {/* <li>FAQ</li> */}
-                {session && session.data.user ? (
+                {isAuth ? (
                     <li>
                         <NextLink href="/myprofile">My Profile</NextLink>
                     </li>

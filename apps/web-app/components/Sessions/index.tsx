@@ -1,79 +1,16 @@
 import NextImage from "next/image"
-import { useRouter } from "next/router"
 import NextLink from "next/link"
-import axios from "axios"
-import { toast } from "react-toastify"
 import ParticipateButton from "../ParticipateButton"
+import FavoriteButton from "../FavoriteButton"
 import { SessionsDTO, EventsDTO } from "../../types"
+import { useUserAuthenticationContext } from "../../context/UserAuthenticationContext"
 
 type Props = {
     event: EventsDTO
     sessions: SessionsDTO[]
 }
 const Sessions = ({ event, sessions }: Props) => {
-    const router = useRouter()
-    const LOGGED_IN_USER_ID = 1
-
-    const makeToast = (isSuccess: boolean, message: string) => {
-        if (isSuccess) {
-            toast.success(message, {
-                position: "top-center",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light"
-            })
-        } else {
-            toast.error(message, {
-                position: "top-center",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light"
-            })
-        }
-    }
-
-    const handleAddFavorite = async (sessionId: number) => {
-        await axios
-            .post("/api/addFavoriteSession", {
-                session_id: sessionId,
-                user_id: LOGGED_IN_USER_ID
-            })
-            .then((res) => {
-                if (res.data === "Session favorited") {
-                    makeToast(true, "This session is now bookmarked.")
-                    router.push(router.asPath)
-                }
-            })
-            .catch((err) => {
-                console.log(err)
-                makeToast(false, "Error")
-            })
-    }
-
-    const handleRemoveFavorite = async (favoritedSessionId: number) => {
-        await axios
-            .post("/api/removeFavoriteSession", {
-                id: favoritedSessionId
-            })
-            .then((res) => {
-                if (res.status === 200) {
-                    makeToast(true, "This session is no longer bookmarked.")
-                    router.push(router.asPath)
-                }
-            })
-            .catch((err) => {
-                console.log(err)
-                makeToast(false, "Error")
-            })
-    }
+    const { userInfo } = useUserAuthenticationContext()
 
     return (
         <div className="w-full flex flex-col items-start py-[2px] gap-[16px] rounded-[16px]">
@@ -91,26 +28,15 @@ const Sessions = ({ event, sessions }: Props) => {
                                         {item.name}
                                     </h3>
                                 </NextLink>
-                                <NextImage
-                                    className="text-[#91A8A7] cursor-pointer"
-                                    src={
-                                        item.favoritedSessions.length > 0
-                                            ? "/vector-bookmark2.svg"
-                                            : "/vector-bookmark.svg"
+                                <FavoriteButton
+                                    session={item}
+                                    favoritedSessionId={
+                                        item.favoritedSessions.length > 0 ? item.favoritedSessions[0].id : null
                                     }
-                                    alt="vector-bookmark"
-                                    width={24}
-                                    height={24}
-                                    onClick={() => {
-                                        if (item.favoritedSessions.length > 0) {
-                                            handleRemoveFavorite(item.favoritedSessions[0].id)
-                                        } else {
-                                            handleAddFavorite(item.id)
-                                        }
-                                    }}
+                                    isMiniButton={true}
                                 />
                             </div>
-                            <ParticipateButton session={item} isTallButton={false} />
+                            {userInfo && <ParticipateButton session={item} isTallButton={false} userId={userInfo.id} />}
                         </div>
                         <div className="w-full flex flex-row gap-[32px] justify-between items-center">
                             <div className="flex flex-row items-start gap-[8px]">
