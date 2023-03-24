@@ -22,7 +22,13 @@ const EventsPage = ({ events }: Props) => (
                         synthetic biology, ZK, public goods, longevity, and network states.
                     </h1>
                 </div>
-                <div className="bg-[url('/event-image-1.png')] w-[700px] h-[250px] bg-fill bg-no-repeat bg-center rounded-[16px] hidden lg:flex" />
+                <div className="relative flex border border-black z-[10]">
+                    <div className="absolute top-0 right-0 w-[200px] h-full z-[7] border border-black bg-eventbg1 filter blur-[150px]" />
+                    <div className="absolute top-0 w-[200px] z-[7] border border-black h-full bg-eventbg2 filter blur-[150px]" />
+
+                    <NextImage src={"/49.png"} alt="calendar" width={480} height={440} />
+                    {/* <NextImage src={"/vector.png"} alt="calendar" width={480} height={440} /> */}
+                </div>
             </div>
             <div className="flex flex-col bg-white p-5 rounded-[8px] gap-10">
                 <div className="flex flex-col md:flex-row md:gap-0 gap-5  w-full justify-between items-start md:items-center">

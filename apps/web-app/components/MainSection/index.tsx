@@ -1,14 +1,8 @@
 import Image from "next/image"
-import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs"
 import { requestSignedZuzaluUUIDUrl, useFetchParticipant, useSemaphoreSignatureProof } from "@pcd/passport-interface"
-import { usePassportModalContext } from "../../context/PassportModalContext"
 import getUserSession from "../../hooks/getUserSession"
-import { getUserOnID } from "../../hooks/getUserOnID"
-
-const supabase = createBrowserSupabaseClient()
 
 const MainSection = () => {
-    const { openPassportModal, setOpenPassportModal } = usePassportModalContext()
     const userObj = getUserSession()
     console.log("user object new", userObj)
 
