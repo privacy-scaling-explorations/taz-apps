@@ -62,7 +62,7 @@ const SessionPage = ({ session, sessions }: Props) => {
                 user_id: LOGGED_IN_USER_ID
             })
             .then((res) => {
-                if (res.data === "Session favorited") {
+                if (res.status === 201) {
                     makeToast(true, "This session is now bookmarked.")
                     router.push(router.asPath)
                 }
