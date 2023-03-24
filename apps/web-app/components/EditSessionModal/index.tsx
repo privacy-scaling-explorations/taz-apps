@@ -51,7 +51,7 @@ const EditSessionModal = ({ isOpen, closeModal, session, sessions }: Props) => {
     const [newSession, setNewSession] = useState<NewSessionState>({
         name: session.name,
         team_members: session.team_members,
-        startDate: session.startDate,
+        startDate: new Date(`${session.startDate}T00:00:00Z`),
         startTime: session.startTime,
         location: session.location,
         tags: session.tags,

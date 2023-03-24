@@ -41,6 +41,7 @@ type Props = {
 }
 
 const AddSessionModal = ({ isOpen, closeModal, event, sessions }: Props) => {
+    console.log("event:", event)
     const router = useRouter()
     const questionTextRef = useRef(null)
     const [isLoading, setIsLoading] = useState(false)
