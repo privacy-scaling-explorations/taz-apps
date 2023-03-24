@@ -50,7 +50,7 @@ const Step4 = ({ setSteps, newSession, handleSubmit, isLoading, amountTickets }:
         <div className="flex flex-col w-full gap-8 bg-white rounded-lg">
             <div className="flex flex-col gap-4">
                 <h1 className="text-[18px] font-bold uppercase ">{newSession.name}</h1>
-                <h1 className="text-[18px]">{newSession.info}</h1>
+                <h1 className="text-[18px]">{newSession.description}</h1>
 
                 <div className="flex items-center gap-2">
                     <NextImage src="/vector-calendar.svg" width={20} height={20} />

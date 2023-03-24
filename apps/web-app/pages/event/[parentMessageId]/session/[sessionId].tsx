@@ -21,13 +21,10 @@ export const getServerSideProps: GetServerSideProps = async ({ res, query }) => 
 
         const response = await axios.get(`${url}/api/fetchSession/${query.sessionId}/${LOGGED_IN_USER_ID}`)
         const session = await response.data
-        console.log("fetch session: ", session)
 
         console.log("URL to fetch", `${url}/api/fetchSession/${query.sessionId}`)
         const sessionsResponse = await axios.get(`${url}/api/fetchSessions/${LOGGED_IN_USER_ID}`)
         const sessions = sessionsResponse.data
-
-        console.log(sessions)
 
         return {
             props: { session, sessions}

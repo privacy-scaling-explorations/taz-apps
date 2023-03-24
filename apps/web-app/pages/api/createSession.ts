@@ -22,6 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         try {
             const {
                 name,
+                description,
                 startDate,
                 endDate,
                 location,
@@ -42,6 +43,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             await supabase.from("sessions").insert({
                 name,
+                description,
                 startDate,
                 endDate,
                 location,
