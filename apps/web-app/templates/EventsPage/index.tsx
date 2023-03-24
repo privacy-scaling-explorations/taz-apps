@@ -7,7 +7,26 @@ type Props = {
     events: EventsDTO[]
 }
 
-const EventsPage = ({ events }: Props) => (
+const EventsPage = ({ events }: Props) => {
+    console.log("Before sorting", events)
+
+    events.sort((a, b) => {
+        const dateA = new Date(a.startDate);
+        const dateB = new Date(b.startDate);
+    
+        // Compare the two dates to determine the sort order
+        if (dateA < dateB) {
+          return -1;
+        }
+        if (dateA > dateB) {
+          return 1;
+        }
+        return 0;
+      });
+
+      console.log("After sorting", events)
+
+    return (
         <BaseTemplate>
             <div className="flex flex-col min-h-[100vh] bg-[#EEEEF0] p-5 gap-10">
                 <div className="overflow-hidden w-full h-full flex justify-between lg:flex-row flex-col py-5  px-[28px] md:px-[48px] bg-white rounded-[16px] gap-[100px] lg:gap-10">
@@ -51,7 +70,7 @@ const EventsPage = ({ events }: Props) => (
                         <div className="grid md:grid-cols-2 grid-cols-1 gap-5">
                             <NextLink href={`/event/${events[0].id}`}>
                                 <div className="flex cursor-pointer flex-col gap-5 md:gap-2 justify-center md:justify-start md:col-span-2 p-[32px] bg-[url('/buildweek.png')] h-[250px] bg-cover bg-no-repeat bg-end rounded-[16px]">
-                                    <h1 className="md:text-[24px] text-[16px] font-semibold capitalize">{`${events[5].name}`}</h1>
+                                    <h1 className="md:text-[24px] text-[16px] font-semibold capitalize">{`${events[0].name}`}</h1>
                                     <div className="flex gap-1">
                                         <NextImage src={"/vector-calendar.svg"} alt="calendar" width={15} height={15} />
                                         <h1 className="text-black md:text-[14px] text-[10px]">{`${new Date(
@@ -288,7 +307,10 @@ const EventsPage = ({ events }: Props) => (
                 </div>
             </div>
         </BaseTemplate>
-    )
+    );
+    
+
+}
 
 
 export default EventsPage
