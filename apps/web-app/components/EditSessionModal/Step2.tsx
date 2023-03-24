@@ -41,33 +41,6 @@ const Step2 = ({ setSteps, amountTickets, setAmountTickets, newSession, setNewSe
     }
     return (
         <div className="flex flex-col w-full gap-5">
-            <div className="flex flex-col my-2 gap-5">
-                <h1 className="text-[18px] font-[600]">How do you want people to show attendance?</h1>
-                <div className="flex flex-col gap-2">
-                    <div className="flex items-center gap-4">
-                        <input
-                            type="radio"
-                            id="ticket"
-                            value="ticket"
-                            className="w-[24px] h-[24px]"
-                            checked={newSession.hasTicket}
-                            onChange={() => setNewSession({ ...newSession, hasTicket: !newSession.hasTicket })}
-                        />
-                        <label htmlFor="ticket">Ticket</label>
-                    </div>
-                    <div className="flex items-center gap-4">
-                        <input
-                            type="radio"
-                            id="RSVP"
-                            value="RSVP"
-                            className="w-[24px] h-[24px]"
-                            checked={!newSession.hasTicket}
-                            onChange={() => setNewSession({ ...newSession, hasTicket: !newSession.hasTicket })}
-                        />
-                        <label htmlFor="RSVP">RSVP</label>
-                    </div>
-                </div>
-            </div>
             {newSession.hasTicket ? (
                 <div className="flex flex-col gap-1 my-1 w-full">
                     <label htmlFor="amount" className="font-[600]">

@@ -37,6 +37,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     }
                 })
 
+                const addPublicUser = await supabase.from("users").insert({userName: name, email, uui_auth: signUpResponse.data.user!.id})
+
                 console.log("sign up", signUpResponse)
                 if (signUpResponse.data.user) {
                     res.status(200).json("User signed up!")

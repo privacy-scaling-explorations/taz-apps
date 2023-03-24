@@ -1,5 +1,6 @@
 import NextImage from "next/image"
 import NextLink from "next/link"
+import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { requestSignedZuzaluUUIDUrl, useFetchParticipant, useSemaphoreSignatureProof } from "@pcd/passport-interface"
 import axios from "axios"
@@ -10,6 +11,7 @@ const Header = () => {
     const [uuid, setUuid] = useState<string | undefined>()
     const [pcdStr, setPcdStr] = useState("")
     const [participentData, setParticipentData] = useState<any>()
+    const router = useRouter()
 
     const PASSPORT_URL = "https://zupass.eth.limo/"
     const PASSPORT_SERVER_URL = "https://api.pcd-passport.com/"
@@ -62,7 +64,7 @@ const Header = () => {
             })
             console.log("req response", response)
             // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-            window.location.reload
+            router.push("/")
         } catch (error1) {
             console.error(error1)
         }

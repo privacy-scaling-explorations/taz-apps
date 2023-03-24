@@ -5,8 +5,9 @@ import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs"
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     // Create authenticated Supabase Client
     const supabase = createServerSupabaseClient({ req, res })
+    console.log("create body:", req.body)
 
-    // Check if we have a session
+    //Check if we have a session
     const {
         data: { session }
     } = await supabase.auth.getSession()
@@ -31,17 +32,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 organizers,
                 tags,
                 info,
-                eventId,
+                event_id,
                 hasTicket,
-                type,
+                event_type,
+                level,
                 format,
                 equipment,
                 team_members,
                 track,
-                subEventId
+                subEventId,
+                event_slug,
+                event_item_id,
+                quota_id
             } = req.body
 
-            await supabase.from("sessions").insert({
+            const response = await supabase.from("sessions").insert({
                 name,
                 description,
                 startDate,
@@ -52,16 +57,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 organizers,
                 tags,
                 info,
-                event_id: eventId,
+                event_id,
                 hasTicket,
-                type,
+                event_type,
+                level,
                 format,
                 team_members,
                 track,
                 equipment,
-                subevent_id: subEventId
+                subevent_id: subEventId,
+                event_slug,
+                event_item_id,
+                quota_id
             })
-            // console.log("Response: ", response)
+            console.log("Response: ", response)
 
             res.status(201).json("Event created")
         } catch (error) {

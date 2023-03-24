@@ -3,6 +3,7 @@ import NextImage from "next/image"
 import axios from "axios"
 import { toast } from "react-toastify"
 import { useRouter } from "next/router"
+import Link from 'next/link';
 import { SessionsDTO } from "../../types"
 import BaseTemplate from "../Base"
 import DeleteSessionModal from "../../components/DeleteSessionModal"
@@ -62,7 +63,7 @@ const SessionPage = ({ session, sessions }: Props) => {
                 user_id: LOGGED_IN_USER_ID
             })
             .then((res) => {
-                if (res.data === "Session favorited") {
+                if (res.status === 201) {
                     makeToast(true, "This session is now bookmarked.")
                     router.push(router.asPath)
                 }
@@ -93,31 +94,31 @@ const SessionPage = ({ session, sessions }: Props) => {
 
     const deleteSession = async () => {
         await axios.post("/api/deleteSession", { id: session.id })
-        try {
-            await axios.post("/api/pretix-delete-subevent", {
-                slug: session.event_slug,
-                subEventId: session.subevent_id
-            })
-            router.push("/calendar-full")
-        } catch (error) {
-            console.log(error)
-            await axios.post("/api/pretix-deactivate-subevent", {
-                slug: session.event_slug,
-                subEventId: session.subevent_id
-            })
-            router.push("/calendar-full")
+        if (session.hasTicket) {
+            try {
+                await axios.post("/api/pretix-delete-subevent", {
+                    slug: session.event_slug,
+                    subEventId: session.subevent_id
+                })
+            } catch (error) {
+                console.log(error)
+                await axios.post("/api/pretix-deactivate-subevent", {
+                    slug: session.event_slug,
+                    subEventId: session.subevent_id
+                })
+            }
         }
-
+        router.push("/calendar-full")
     }
-
+    console.log(router.asPath)
     return (
         <BaseTemplate>
             <div className="flex flex-col items-center bg-[#EEEEF0] h-[100vh] px-4 md:px-[24px] py-4 md:py-[24px] gap-4 md:gap-[16px]">
                 <div className="flex flex-col md:flex-row justify-between p-5 bg-white w-full rounded-[8px]">
                     <div className="flex items-center gap-2 mb-4 md:mb-0">
-                        <h1 className={`text-[#1C292899]`}>Program</h1>
+                        <Link href={router.asPath.split('/').slice(0, 3).join('/')}><a className={`text-[#1C292899]`}>{session.track}</a></Link>
                         <h1 className={`text-[#1C292899]`}>/</h1>
-                        <h1 className={`text-black font-[600]`}>ZK Week</h1>
+                        <h1 className={`text-black font-[600]`}>{session.name}</h1>
                     </div>
                     <div className="flex flex-row gap-[8px] items-center">
                         <button
