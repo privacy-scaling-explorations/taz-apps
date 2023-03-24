@@ -5,6 +5,7 @@ import NextImage from "next/image"
 import moment from "moment"
 import { ToastContainer } from "react-toastify"
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs"
+import Link from 'next/link';
 import AddSessionModal from "../../components/AddSessionModal"
 import Sessions from "../../components/Sessions"
 import { EventsDTO, SessionsDTO } from "../../types"
@@ -86,9 +87,9 @@ const EventPage = ({ event, sessions }: Props) => {
             <div className="flex flex-col border border-black p-5 bg-[#EEEEF0] gap-5 w-full h-full">
                 <div className="flex flex-col md:flex-row justify-between p-5 bg-white rounded-[8px]">
                     <div className="flex items-center gap-2 mb-5 md:mb-0">
-                        <h1 className={`text-[#1C292899]`}>Program</h1>
+                        <Link href="/events"><a className={`text-[#1C292899]`}>Events</a></Link>
                         <h1 className={`text-[#1C292899]`}>/</h1>
-                        <h1 className={`text-black font-[600]`}>ZK Week</h1>
+                        <h1 className={`text-black font-[600]`}>{`${event.name.substring(0, 30)}...`}</h1>
                     </div>
                     <div className="flex flex-col md:flex-row gap-4 md:gap-[8px] items-center">
                         <button className="bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px] mb-4 md:mb-0">
