@@ -7,7 +7,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const supabase = createServerSupabaseClient({ req, res })
     console.log("create body:", req.body)
 
-    // Check if we have a session
+    //Check if we have a session
     const {
         data: { session }
     } = await supabase.auth.getSession()
