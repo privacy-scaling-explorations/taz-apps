@@ -46,7 +46,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 quota_id
             } = req.body
 
-            const response = await supabase.from("sessions").insert({
+            await supabase.from("sessions").insert({
                 name,
                 description,
                 startDate,
@@ -68,9 +68,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 subevent_id: subEventId,
                 event_slug,
                 event_item_id,
-                quota_id
+                quota_id,
+                creator_uuid: session.user.id
             })
-            console.log("Response: ", response)
 
             res.status(201).json("Event created")
         } catch (error) {
