@@ -91,7 +91,7 @@ const EventsPage = ({ events }: Props) => {
                                 <div
                                     key={index}
                                     onClick={() => handleClickEvent(event.id)}
-                                    className={`flex overflow-hidden relative cursor-pointer flex-col gap-5 md:gap-2 justify-center md:justify-start p-[32px] h-[250px] rounded-[16px] ${
+                                    className={`flex overflow-hidden relative cursor-pointer flex-col gap-5 md:gap-2 justify-start md:justify-start p-[32px] h-[250px] rounded-[16px] ${
                                         index === 0 && "md:col-span-2"
                                     }`}
                                 >
@@ -127,7 +127,7 @@ const EventsPage = ({ events }: Props) => {
                                 <div
                                     key={index}
                                     onClick={() => handleClickEvent(event.id)}
-                                    className={`flex overflow-hidden relative cursor-pointer flex-col gap-5 md:gap-2 justify-center md:justify-start p-[32px] h-[250px] rounded-[16px]`}
+                                    className={`flex overflow-hidden relative cursor-pointer flex-col gap-5 md:gap-2 justify-start md:justify-start p-[32px] h-[250px] rounded-[16px]`}
                                 >
                                     <div className="flex z-[1] absolute right-0 left-0 top-0 w-full h-full overflow-hidden">
                                         <NextImage

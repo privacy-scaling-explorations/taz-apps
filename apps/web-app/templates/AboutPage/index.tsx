@@ -123,7 +123,7 @@ const AboutPage = () => (
                                     to ensure that everyone feels comfortable and secure. To achieve this, we ask that
                                     everyone follows some simple guidelines →
                                 </h1>
-                                <ul className="flex flex-col w-[400px] my-5 gap-5 list-disc ml-10">
+                                <ul className="flex flex-col w-full md:w-[400px] md:pr-0 pr-5 my-5 gap-5 list-disc ml-10">
                                     <li>
                                         Always ask for consent before engaging in any physical contact or taking photos
                                     </li>
