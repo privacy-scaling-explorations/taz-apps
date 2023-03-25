@@ -39,7 +39,10 @@ const AboutPage = () => (
                         <h1>
                             or
                             <a href="https://airtable.com/shrRZrZbozPE2g6HH" target="_blank" rel="noopener noreferrer">
-                                <span className="text-zulalu-primary underline"> apply for a short-term visitor pass.</span>
+                                <span className="text-zulalu-primary underline">
+                                    {" "}
+                                    apply for a short-term visitor pass.
+                                </span>
                             </a>
                         </h1>
                     </div>
@@ -69,7 +72,7 @@ const AboutPage = () => (
                             <div className="bg-bgGradientAboutPage w-[28px] h-[28px] rounded-full absolute top-[15px] left-[-12px]" />
                             <div className="h-full w-[4px] bg-[#52B5A4]" />
                             <div className="flex flex-col max-w-full w-full">
-                                <h1 className="text-[24px] font-[600] md:text-[40px]">Be Health</h1>
+                                <h1 className="text-[24px] font-[600] md:text-[40px]">Be Healthy</h1>
                                 <h1 className="w-full md:w-[500px] mb-10">
                                     Easily keep a healthy lifestyle by default, with healthy food available,
                                     accountability buddies for healthy habits, group workouts and biohacking trials and
