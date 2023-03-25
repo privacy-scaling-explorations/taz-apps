@@ -16,6 +16,7 @@ const Header = () => {
 
     const PASSPORT_URL = "https://zupass.eth.limo/"
     const PASSPORT_SERVER_URL = "https://api.pcd-passport.com/"
+    const URL_PASSPORT_API = process.env.URL_PASSPORT_API_URL
 
     function requestProofFromPassport(proofUrl: string) {
         const popupUrl = `/popup?proofUrl=${encodeURIComponent(proofUrl)}`
@@ -57,7 +58,7 @@ const Header = () => {
             console.log("log my proof", participant1)
             const response = await axios({
                 method: "post",
-                url: "https://20ac-201-42-126-83.sa.ngrok.io/api/passport-user-login/",
+                url: `${URL_PASSPORT_API}/api/passport-user-login/`,
                 data: participant1,
                 headers: {
                     "Content-Type": "application/json"
