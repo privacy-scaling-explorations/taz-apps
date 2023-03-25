@@ -135,8 +135,32 @@ const Header = () => {
                     </button>
                 </div>
                 <ul className="hidden md:flex flex-row gap-5 md:ml-auto items-center text-white">
+                    <NextLink href={"/about"}>
+                        <li
+                            className={`cursor-pointer text-[#F8FFFE] text-[18px] ${
+                                router.asPath === "/about" ? "font-[700]" : "font-[400]"
+                            }`}
+                        >
+                            About
+                        </li>
+                    </NextLink>
                     <NextLink href={"/events"}>
-                        <li className="cursor-pointer font-[400] text-[18px] text-[#F8FFFE]">Program</li>
+                        <li
+                            className={`cursor-pointer text-[#F8FFFE] text-[18px] ${
+                                router.asPath === "/events" ? "font-[700]" : "font-[400]"
+                            }`}
+                        >
+                            Program
+                        </li>
+                    </NextLink>
+                    <NextLink href={"/faq"}>
+                        <li
+                            className={`cursor-pointer text-[#F8FFFE] text-[18px] ${
+                                router.asPath === "/faq" ? "font-[700]" : "font-[400]"
+                            }`}
+                        >
+                            FAQ
+                        </li>
                     </NextLink>
                     {!isAuth && (
                         <a href="https://airtable.com/shrRZrZbozPE2g6HH" target="_blank" rel="noopener noreferrer">
@@ -144,7 +168,11 @@ const Header = () => {
                         </a>
                     )}
                     {isAuth ? (
-                        <li className="font-[400] text-[18px] text-[#F8FFFE]">
+                        <li
+                            className={`cursor-pointer text-[#F8FFFE] text-[18px] ${
+                                router.asPath === "/myprofile" ? "font-[700]" : "font-[400]"
+                            }`}
+                        >
                             <NextLink href="/myprofile">My Profile</NextLink>
                         </li>
                     ) : (
@@ -166,11 +194,41 @@ const Header = () => {
                 } md:hidden absolute left-0 top-full mt-0 bg-zulalu-darkBase w-full flex flex-row items-start pt-[16px] pb-[32px] gap-[8px] px-[32px] space-x-2`}
             >
                 <ul className="flex flex-col pt-[16px] pb-[32px] w-full gap-[32px] text-f8fffe text-lg uppercase">
+                    <NextLink href={"/about"}>
+                        <li
+                            className={`cursor-pointer text-[#F8FFFE] text-[18px] ${
+                                router.asPath === "/about" ? "font-[700]" : "font-[400]"
+                            }`}
+                        >
+                            About
+                        </li>
+                    </NextLink>
                     <NextLink href={"/events"}>
-                        <li className="cursor-pointer text-[#F8FFFE] text-[18px] font-[400]">Program</li>
+                        <li
+                            className={`cursor-pointer text-[#F8FFFE] text-[18px] ${
+                                router.asPath === "/events" ? "font-[700]" : "font-[400]"
+                            }`}
+                        >
+                            Program
+                        </li>
+                    </NextLink>
+                    <NextLink href={"/faq"}>
+                        <li
+                            className={`cursor-pointer text-[#F8FFFE] text-[18px] ${
+                                router.asPath === "/faq" ? "font-[700]" : "font-[400]"
+                            }`}
+                        >
+                            FAQ
+                        </li>
                     </NextLink>
                     <NextLink href={"/myprofile"}>
-                        <li className="cursor-pointer text-[#F8FFFE] text-[18px] font-[400]">My Profile</li>
+                        <li
+                            className={`cursor-pointer text-[#F8FFFE] text-[18px] ${
+                                router.asPath === "/myprofile" ? "font-[700]" : "font-[400]"
+                            }`}
+                        >
+                            My Profile
+                        </li>
                     </NextLink>
                     {!isAuth && (
                         <a href="https://airtable.com/shrRZrZbozPE2g6HH" target="_blank" rel="noopener noreferrer">
