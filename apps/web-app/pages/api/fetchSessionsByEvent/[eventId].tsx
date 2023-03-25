@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs"
-
-const supabase = createBrowserSupabaseClient()
+import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    const supabase = createServerSupabaseClient({ req, res })
+
     let userId = 0
 
     const {
