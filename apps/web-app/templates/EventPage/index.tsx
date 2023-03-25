@@ -1,14 +1,16 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef, useState, useCallback } from "react"
 
 import NextImage from "next/image"
 import Link from "next/link"
 
 import moment from "moment"
+import DatePicker from "react-datepicker"
 import AddSessionModal from "../../components/AddSessionModal"
 import Sessions from "../../components/Sessions"
 import { EventsDTO, SessionsDTO } from "../../types"
 import BaseTemplate from "../Base"
 import { useUserAuthenticationContext } from "../../context/UserAuthenticationContext"
+import StyledDatePicker from "../../components/StyledDatePicker"
 
 type Props = {
     event: EventsDTO
@@ -19,9 +21,7 @@ const EventPage = ({ event, sessions }: Props) => {
     const wraperRef = useRef(null)
     const { isAuth, userRole } = useUserAuthenticationContext()
     const [openAddSessionModal, setOpenAddSessionModal] = useState(false)
-    // const [updateEventModal, setUpdateEventModal] = useState(false)
     const [selectedOptions, setSelectedOptions] = useState<string[]>([])
-    const [openFilterOptions, setOpenFilterOptions] = useState(false)
 
     const isOrganizer = userRole === "resident"
 
@@ -29,48 +29,120 @@ const EventPage = ({ event, sessions }: Props) => {
     const endDate = moment(new Date(event.endDate)).add(1, "day")
     const formattedDate = `${startDate.format("MMM D")}-${endDate.format("D, YYYY")}`
 
-    const filterSince = new Date(event.startDate)
-    const filterAfter = new Date(event.endDate)
+    /* Begin DatePicker code */
+    const [openDatePicker, setOpenDatePicker] = useState(false)
+    const [datePickerDescription, setDatePickerDescription] = useState("FULL PROGRAM")
+    const [filteredSessions, setFilteredSessions] = useState<SessionsDTO[]>(sessions)
+    const [datePickerStartDate, setDatePickerStartDate] = useState<Date | null>(null)
+    const [datePickerEndDate, setDatePickerEndDate] = useState<Date | null>(null)
+    const datePickerWrapperRef = useRef(null)
 
-    const dateOptions = []
-
-    for (let date = filterSince; date <= filterAfter; date.setDate(date.getDate() + 1)) {
-        const option = moment(new Date(date)).add(1, "day").format("dddd, MMMM Do, YYYY")
-        dateOptions.push(option)
+    const toggleDatePicker = () => {
+        setOpenDatePicker(!openDatePicker)
     }
 
-    const handleOptionChange = (option: string) => {
-        if (selectedOptions.includes(option)) {
-            setSelectedOptions(selectedOptions.filter((item) => item !== option))
-        } else {
-            setSelectedOptions([...selectedOptions, option])
+    const handleDateSelection = (selectedDates: [Date | null, Date | null]) => {
+        // Filter sessions
+        console.log("selectedDates: ", selectedDates)
+        const [start, end] = selectedDates
+        setDatePickerStartDate(start)
+        setDatePickerEndDate(end)
+        const filtered = sessions.filter((session) => {
+            const sessionDate = new Date(session.startDate)
+            sessionDate.setHours(0, 0, 0, 0) // Remove time part for date comparison
+            const endOfDay = end ? new Date(end) : null
+            if (endOfDay) {
+                endOfDay.setHours(23, 59, 59, 999) // Set end date to end of day
+            }
+            return (start === null || start <= sessionDate) && (endOfDay === null || sessionDate <= endOfDay)
+        })
+        setFilteredSessions(filtered)
+    }
+
+    // Update filter header description
+    // (done in useEffect because start and end date must be done updating first)
+    useEffect(() => {
+        const today = new Date()
+        today.setHours(0, 0, 0, 0)
+        if (datePickerStartDate?.getTime() === today.getTime() && datePickerEndDate?.getTime() === today.getTime()) {
+            setDatePickerDescription("TODAY")
+        } else if (datePickerStartDate?.getTime() === today.getTime()) {
+            setDatePickerDescription("TODAY ONWARD")
+        } else if (datePickerStartDate && datePickerEndDate === null) {
+            setDatePickerDescription(`${moment(datePickerStartDate).format("MMMM D")} ONWARD`)
+        } else if (
+            datePickerStartDate &&
+            datePickerEndDate &&
+            datePickerStartDate.getTime() === datePickerEndDate.getTime()
+        ) {
+            setDatePickerDescription(moment(datePickerStartDate).format("dddd MMMM D"))
+        } else if (datePickerStartDate && datePickerEndDate) {
+            setDatePickerDescription(
+                `${moment(datePickerStartDate).format("MMMM D")} - ${moment(datePickerEndDate).format("D")}`
+            )
         }
-    }
+    }, [datePickerStartDate, datePickerEndDate])
 
-    const filteredSessions =
-        selectedOptions.length !== 0
-            ? sessions.filter((item) => {
-                  const sessionDate = moment(new Date(item.startDate)).add(1, "day").format("dddd, MMMM Do, YYYY")
-
-                  return selectedOptions.includes(sessionDate)
-              })
-            : sessions
-
-    const handleClickOutside = (e: MouseEvent) => {
-        const { current: wrap } = wraperRef as { current: HTMLElement | null }
+    const handleDatePickerClickOutside = (e: MouseEvent) => {
+        const { current: wrap } = datePickerWrapperRef as { current: HTMLElement | null }
 
         if (wrap && !wrap.contains(e.target as Node)) {
-            setOpenFilterOptions(false)
+            setOpenDatePicker(false)
         }
     }
 
     useEffect(() => {
-        document.addEventListener("mousedown", handleClickOutside)
+        document.addEventListener("mousedown", handleDatePickerClickOutside)
 
         return () => {
-            document.removeEventListener("mousedown", handleClickOutside)
+            document.removeEventListener("mousedown", handleDatePickerClickOutside)
         }
     }, [])
+    /* End DatePicker code */
+
+    /* Begin DateList code */
+    // const [openFilterOptions, setOpenFilterOptions] = useState(false)
+    // const filterSince = new Date(event.startDate)
+    // const filterAfter = new Date(event.endDate)
+    // const dateOptions = []
+    // for (let date = filterSince; date <= filterAfter; date.setDate(date.getDate() + 1)) {
+    //     const option = moment(new Date(date)).add(1, "day").format("dddd, MMMM Do, YYYY")
+    //     dateOptions.push(option)
+    // }
+
+    // const handleOptionChange = (option: string) => {
+    //     if (selectedOptions.includes(option)) {
+    //         setSelectedOptions(selectedOptions.filter((item) => item !== option))
+    //     } else {
+    //         setSelectedOptions([...selectedOptions, option])
+    //     }
+    // }
+
+    // const filteredSessions =
+    //     selectedOptions.length !== 0
+    //         ? sessions.filter((item) => {
+    //               const sessionDate = moment(new Date(item.startDate)).add(1, "day").format("dddd, MMMM Do, YYYY")
+
+    //               return selectedOptions.includes(sessionDate)
+    //           })
+    //         : sessions
+
+    // const handleClickOutside = (e: MouseEvent) => {
+    //     const { current: wrap } = wraperRef as { current: HTMLElement | null }
+
+    //     if (wrap && !wrap.contains(e.target as Node)) {
+    //         setOpenFilterOptions(false)
+    //     }
+    // }
+
+    // useEffect(() => {
+    //     document.addEventListener("mousedown", handleClickOutside)
+
+    //     return () => {
+    //         document.addEventListener("mousedown", handleClickOutside)
+    //     }
+    // }, [])
+    /* End DateList code */
 
     return (
         <BaseTemplate>
@@ -182,7 +254,7 @@ const EventPage = ({ event, sessions }: Props) => {
                             event={event}
                             sessions={sessions}
                         />
-                        <div className="flex flex-col md:flex-row justify-center md:justify-end items:start md:items-center gap-2 md:gap-5 w-full">
+                        <div className="flex flex-col md:flex-row justify-center md:justify-end items:start md:items-center gap-2 md:gap-2 w-full">
                             <button
                                 onClick={() => setSelectedOptions([])}
                                 className="bg-white border border-primary justify-between  text-zulalu-primary font-[600] py-[8px] px-[16px] gap-[8px] text-[16px] rounded-[8px] flex flex-row justify-center items-center"
@@ -190,7 +262,33 @@ const EventPage = ({ event, sessions }: Props) => {
                                 <p>ALL SESSIONS</p>
                                 <NextImage src={"/arrow-down.svg"} width={8} height={4} />
                             </button>
-                            <div className="flex flex-col relative w-[auto]" ref={wraperRef}>
+
+                            {/* Begin DatePicker Filter */}
+                            <div className="flex flex-col w-auto min-w-[200px]" ref={datePickerWrapperRef}>
+                                <button
+                                    onClick={toggleDatePicker}
+                                    className="flex justify-between uppercase bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] gap-[8px] text-[16px] rounded-[8px] flex flex-row justify-center items-center"
+                                >
+                                    <p>{datePickerDescription}</p>
+                                    <NextImage src="/arrow-down.svg" width={8} height={4} />
+                                </button>
+
+                                {openDatePicker && (
+                                    <div className="relative">
+                                        <div className="absolute right-0 top-2 z-10 p-0">
+                                            <StyledDatePicker
+                                                onChange={handleDateSelection}
+                                                startDate={datePickerStartDate}
+                                                endDate={datePickerEndDate}
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                            {/* End DatePicker Filter */}
+
+                            {/* Begin DateList Filter */}
+                            {/* <div className="flex flex-col relative w-[auto]" ref={datePickerWrapperRef}>
                                 <button
                                     onClick={() => setOpenFilterOptions(!openFilterOptions)}
                                     className="flex justify-between uppercase bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] gap-[8px] text-[16px] rounded-[8px] flex flex-row justify-center items-center"
@@ -214,7 +312,8 @@ const EventPage = ({ event, sessions }: Props) => {
                                         ))}
                                     </div>
                                 )}
-                            </div>
+                            </div> */}
+                            {/* End DateList Filter */}
                         </div>
                     </div>
                     <Sessions event={event} sessions={filteredSessions} />

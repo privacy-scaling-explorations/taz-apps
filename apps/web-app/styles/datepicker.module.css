@@ -1,0 +1,49 @@
+.datepicker {
+    @apply text-[#35655F] bg-white border-2 border-[#35655F] rounded-full;
+}
+
+.datepicker__day {
+    @apply text-[#35655F];
+}
+
+.datepicker__day-name {
+    @apply text-[#35655F] font-bold;
+}
+
+.datepicker__day--weekend {
+    @apply text-[#FD8564];
+}
+
+.datepicker__day--today {
+    @apply bg-white;
+}
+
+.datepicker__day--disabled {
+    @apply opacity-50;
+}
+
+.datepicker__day--selected,
+.datepicker__day--in-range {
+    @apply bg-[#52B5A4] opacity-40 rounded-full !important; /* Add !important to enforce the custom styles */
+}
+
+.datepicker__day:hover,
+.datepicker__day--in-range:hover {
+    background-color: #bae1db !important;
+}
+
+.react-datepicker__header {
+    @apply bg-white;
+}
+
+.react-datepicker__current-month {
+    @apply text-[#35655F] font-bold;
+}
+
+.datepicker__month {
+    @apply text-[#35655F] font-bold;
+}
+
+.datepicker__container {
+    @apply bg-white;
+}
