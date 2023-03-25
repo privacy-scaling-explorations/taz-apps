@@ -82,6 +82,7 @@ module.exports = {
                 flip: "-1"
             },
             backgroundImage: {
+                bgGradientAboutPage: "linear-gradient(106.19deg, #F7DE37 3.32%, #D2F8E8 75.54%)",
                 "gradient-radial": "radial-gradient(50.56% 39.32% at 49.87% 33.22%, #468C80 8.85%, #325F57 100%)",
                 "gradient-linear":
                     "linear-gradient(106.41deg, rgba(210, 248, 232, 0.8) 58.63%, rgba(255, 242, 80, 0.8) 99.09%)",
