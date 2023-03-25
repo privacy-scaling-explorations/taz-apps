@@ -1,7 +1,7 @@
 import Image from "next/image"
 
 const MainSection = () => (
-    <div className="flex flex-col min-h-[100vh] bg-[#EEEEF0] p-5 gap-10">
+    <div className="flex flex-col bg-[#EEEEF0]">
         <div className="overflow-hidden w-full h-full flex justify-between lg:flex-row flex-col py-5  px-[28px] md:px-[48px] bg-white rounded-[16px] gap-[100px] lg:gap-10">
             <div className="flex md:w-3/6 w-full flex-col gap-5">
                 <h1 className="font-semibold text-[32px] md:text-[52px] md:mb-10">
