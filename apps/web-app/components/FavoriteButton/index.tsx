@@ -99,7 +99,7 @@ const FavoriteButton = ({ session, isMiniButton }: Props) => {
                     />
                 ) : (
                     <button
-                        className="flex gap-2 items-center bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]"
+                        className="flex w-full md:w-auto justify-center gap-2 items-center bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]"
                         onClick={() => {
                             if (latestFavoritedSessionId !== null) {
                                 handleRemoveFavorite()

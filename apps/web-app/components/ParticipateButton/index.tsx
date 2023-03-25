@@ -15,7 +15,7 @@ type Props = {
 const ParticipateButton = ({ session, isTallButton }: Props) => {
     const [openBuyTicketModal, setOpenBuyTicketModal] = useState(false)
 
-    const { userInfo, isAuth } = useUserAuthenticationContext()
+    const { userInfo } = useUserAuthenticationContext()
     const router = useRouter()
 
     const makeToast = (isSuccess: boolean, message: string) => {
@@ -80,7 +80,7 @@ const ParticipateButton = ({ session, isTallButton }: Props) => {
         <>
             {session.participants.length > 0 ? (
                 <button
-                    className={`flex gap-2 items-center bg-white border border-primary text-zulalu-primary font-[600] py-[${
+                    className={`flex gap-2 w-full md:w-auto justify-center items-center bg-white border border-primary text-zulalu-primary font-[600] py-[${
                         isTallButton ? 8 : 4
                     }px] px-[16px] rounded-[8px] cursor-default`}
                 >
@@ -90,7 +90,7 @@ const ParticipateButton = ({ session, isTallButton }: Props) => {
             ) : session.hasTicket ? (
                 <>
                     <button
-                        className={`bg-[#35655F] text-white py-[${
+                        className={`bg-[#35655F] w-full md:w-auto justify-center text-white py-[${
                             isTallButton ? 8 : 4
                         }px] px-[16px] text-[16px] rounded-[6px]`}
                         onClick={() => {
@@ -107,7 +107,7 @@ const ParticipateButton = ({ session, isTallButton }: Props) => {
                 </>
             ) : (
                 <button
-                    className={`bg-[#35655F] text-white py-[${
+                    className={`bg-[#35655F] w-full md:w-auto justify-center text-white py-[${
                         isTallButton ? 8 : 4
                     }px] px-[16px] text-[16px] rounded-[6px]`}
                     onClick={() => handleClickAttend(session.id)}

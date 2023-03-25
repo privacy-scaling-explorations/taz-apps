@@ -76,23 +76,23 @@ const EventPage = ({ event, sessions }: Props) => {
         <BaseTemplate>
             <div className="flex flex-col p-5 bg-[#EEEEF0] gap-5 w-full h-full">
                 <div className="flex flex-col md:flex-row justify-between p-5 bg-white rounded-[16px]">
-                    <div className="flex items-center gap-2 mb-5 md:mb-0">
+                    <div className="flex items-center gap-2 mb-5 md:mb-0 text-[12px] md:text-[14px]">
                         <Link href="/events">
                             <a className={`text-[#1C292899]`}>Events</a>
                         </Link>
                         <h1 className={`text-[#1C292899]`}>/</h1>
                         <h1 className={`text-black font-[600]`}>{`${event.name}`}</h1>
                     </div>
-                    <div className="flex flex-row gap-4 md:gap-[8px] items-start md:items-center">
-                        <a href={event.apply_form} target="_blank">
-                            <div className="bg-white border border-primary py-[8px] px-[5px] md:px-[15px] text-zulalu-primary font-[600] rounded-[8px] text-[12px] md:text-[16px]">
+                    <div className="flex flex-col w-auto md:flex-row gap-4 md:gap-[8px] justify-end items-start md:items-center">
+                        <a className="w-full md:w-auto" href={event.apply_form} target="_blank">
+                            <div className="w-full md:w-auto justify-center text-center md:w-auto bg-white border border-primary py-[8px] px-[5px] md:px-[15px] text-zulalu-primary font-[600] rounded-[8px] text-[12px] md:text-[16px]">
                                 <p>APPLY NOW</p>
                             </div>
                         </a>
-                        <button className="bg-white border border-primary py-[8px] px-[5px] md:px-[15px] text-zulalu-primary font-[600] rounded-[8px] text-[12px] md:text-[16px]">
+                        <button className="w-full md:w-auto justify-center text-center bg-white border border-primary py-[8px] px-[5px] md:px-[15px] text-zulalu-primary font-[600] rounded-[8px] text-[12px] md:text-[16px]">
                             CONTACT ORGANIZERS
                         </button>
-                        <button className="flex gap-1 items-center bg-zulalu-primary text-white py-[8px] px-[5px] md:px-[15px] font-[600] rounded-[8px] text-[12px] md:text-[16px]">
+                        <button className="w-full md:w-auto justify-center text-center flex gap-1 items-center bg-zulalu-primary text-white py-[8px] px-[5px] md:px-[15px] font-[600] rounded-[8px] text-[12px] md:text-[16px]">
                             <NextImage src={"/ticket.svg"} width={13} height={12} />
                             TICKETS COMING SOON
                         </button>
