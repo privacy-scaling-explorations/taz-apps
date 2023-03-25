@@ -27,6 +27,7 @@ export interface EventsDTO {
     item_id: number
     image_url: string
     bg_image_url: string
+    apply_form: string
 }
 
 export interface SessionsDTO {

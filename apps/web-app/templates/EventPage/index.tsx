@@ -84,12 +84,17 @@ const EventPage = ({ event, sessions }: Props) => {
                         <h1 className={`text-black font-[600]`}>{`${event.name}`}</h1>
                     </div>
                     <div className="flex flex-row gap-4 md:gap-[8px] items-start md:items-center">
+                        <a href={event.apply_form} target="_blank">
+                            <div className="bg-white border border-primary py-[8px] px-[5px] md:px-[15px] text-zulalu-primary font-[600] rounded-[8px] text-[12px] md:text-[16px]">
+                                <p>APPLY NOW</p>
+                            </div>
+                        </a>
                         <button className="bg-white border border-primary py-[8px] px-[5px] md:px-[15px] text-zulalu-primary font-[600] rounded-[8px] text-[12px] md:text-[16px]">
                             CONTACT ORGANIZERS
                         </button>
                         <button className="flex gap-1 items-center bg-zulalu-primary text-white py-[8px] px-[5px] md:px-[15px] font-[600] rounded-[8px] text-[12px] md:text-[16px]">
                             <NextImage src={"/ticket.svg"} width={13} height={12} />
-                            TICKETS
+                            TICKETS COMING SOON
                         </button>
                         {/* <a href={event.publicUrl} target="_blank">
                             <div className="bg-zulalu-primary text-white py-[8px] px-[16px] text-[12px] md:text-[16px] rounded-[8px] gap-[8px] flex flex-row items-center justify-center hover:bg-zulalu-primary-light cursor-pointer">
