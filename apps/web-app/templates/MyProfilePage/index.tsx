@@ -88,8 +88,8 @@ const MyProfilePage = ({ events, sessions }: Props) => {
                     sessions={sessions}
                 />
                 <div className="flex flex-col md:flex-row justify-between h-full">
-                    <div className="p-5 flex flex-col items-start bg-white rounded-[8px] w-full md:w-4/6 gap-10">
-                        <div className="flex justify-between w-full">
+                    <div className="p-5 flex flex-col items-start bg-white rounded-[8px] w-full md:w-4/6 gap-[8px]">
+                        <div className="flex flex-col justify-between w-full gap-[16px]">
                             <div className="flex items-center gap-10">
                                 <h1 className="font-semibold text-[40px]">My Sessions</h1>
                                 {isOrganizer && (
@@ -100,6 +100,10 @@ const MyProfilePage = ({ events, sessions }: Props) => {
                                         CREATE SESSION
                                     </button>
                                 )}
+                            </div>
+                            <div className="flex flex-col items-start p-[2px] gap-[16px]">
+                                <Sessions sessions={filteredSessions} showStartDate={true} />
+                                {/* <h1>placeholder</h1> */}
                             </div>
                         </div>
                     </div>
