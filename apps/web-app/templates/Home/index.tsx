@@ -118,7 +118,7 @@ const HomeTemplate = ({ events }: Props) => {
                                 <p className="font-[600] text-[16px] text-[#F8FFFE]">Connect Passport</p>
                             </button>
                             <NextLink href="/full-program">
-                                <button className="flex flex-row justify-center items-center py-[8px] px-[16px] w-[310px] w-[416px] h-[40px] gap-[8px] bg-[#1C2928] rounded-[8px]">
+                                <button className="flex flex-row justify-center items-center py-[8px] px-[16px] w-[310px] md:w-[416px] h-[40px] gap-[8px] bg-[#1C2928] rounded-[8px]">
                                     <NextImage src={"/calendar-vector.svg"} width={16} height={16} />
                                     <p className="font-[600] text-[16px] text-[#F8FFFE]">Full Program</p>
                                 </button>
