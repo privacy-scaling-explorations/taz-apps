@@ -2,6 +2,23 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 
 export default function TicketsModalView(props) {
+  const downloadFile = async (url) => {
+    const headers = {
+      Accept: "application/json, text/javascript",
+      Authorization: `Token ${process.env.NEXT_PUBLIC_PRETIX_API}`,
+      "Content-Type": "application/json",
+    };
+
+    try {
+      const response = await fetch(url, { headers });
+      if (!response.ok) {
+        throw new Error("Error fetching file");
+      }
+    } catch (error) {
+      console.error("Error downloading file:", error);
+    }
+  };
+
   return (
     <>
       <Transition appear show={props.isOpen} as={Fragment}>
@@ -69,8 +86,8 @@ export default function TicketsModalView(props) {
                       {props.tickets
                         ? props.tickets.map((ticket, index) => (
                             <div key={index}>
-                              <a href={ticket.pdf_link} download>
-                                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                              <a >
+                                <button onClick={downloadFile} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                   Download Ticket
                                 </button>
                               </a>
