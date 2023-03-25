@@ -48,7 +48,9 @@ const ParticipateButton = ({ session, isTallButton }: Props) => {
         await axios.post("/api/pretix-create-order", {
             subEventId: session.subevent_id,
             slug: session.event_slug,
-            itemId: session.event_item_id
+            itemId: session.event_item_id,
+            name: session.name,
+            session_id: session.id
         })
     }
 
