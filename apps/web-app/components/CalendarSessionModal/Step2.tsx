@@ -85,7 +85,7 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
         setTag("")
     }
 
-    const handleRemoveTag = (e:any, index: number) => {
+    const handleRemoveTag = (e: any, index: number) => {
         e.preventDefault()
         tags.splice(index, 1)
         setRerender(!rerender)
@@ -174,8 +174,6 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
             }
             return { ...slot, disabled: false }
         })
-
-        // const slotAvailable = newSlotsUnavailable.find((item) => item.disabled === false)
 
         setSlotsUnavailable(newSlotsUnavailable)
     }, [newSession])
@@ -379,7 +377,11 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                 </div>
                 <ul className="flex flex-row items-center">
                     {newSession.tags.map((item, index) => (
-                        <div key={index} className="bg-[#E4EAEA] py-[4px] px-[8px] text-sm rounded-[4px] cursor-pointe mr-[8px] cursor-pointer" onClick={(e) => handleRemoveTag(e, index)}>
+                        <div
+                            key={index}
+                            className="bg-[#E4EAEA] py-[4px] px-[8px] text-sm rounded-[4px] cursor-pointe mr-[8px] cursor-pointer"
+                            onClick={(e) => handleRemoveTag(e, index)}
+                        >
                             {item}
                         </div>
                     ))}

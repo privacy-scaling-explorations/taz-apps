@@ -54,13 +54,11 @@ const Step1 = ({ events, setSteps, newSession, setNewSession }: Props) => {
                     className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px] w-full my-2"
                     onChange={(e) => handleSelect(parseInt(e.target.value))}
                 >
-                    {events.map((item, index) => {
-                        return (
-                            <option key={item.id} value={index}>
-                                {item.name}
-                            </option>
-                        )
-                    })}
+                    {events.map((item, index) => (
+                        <option key={item.id} value={index}>
+                            {item.name}
+                        </option>
+                    ))}
                 </select>
                 <button
                     type="button"
