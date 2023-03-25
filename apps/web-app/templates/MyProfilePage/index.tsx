@@ -24,18 +24,18 @@ const MyProfilePage = ({ events, sessions }: Props) => {
   } = useUserAuthenticationContext();
   const [eventsOpt, setEventsOpt] = useState<string[]>([]);
   const [selectedOpt, setSelectedOpt] = useState<string[]>([]);
-  const [tickets, setTickets] = useState<object[]>([]);
+  const [tickets, setTickets] = useState<any[]>([]);
   const [openAddSessionModal, setOpenAddSessionModal] = useState(false);
 
   const isOrganizer = userRole === "resident";
 
   async function getUserTickets() {
     try {
-      console.log(userInfo.email);
+      console.log(userInfo!.email);
       const supabaseResponse = await supabase
         .from("tickets")
         .select("*")
-        .eq("email", userInfo.email);
+        .eq("email", userInfo!.email);
       console.log("my profile", supabaseResponse);
       if (!supabaseResponse.error) {
         setTickets(supabaseResponse.data);
