@@ -77,7 +77,7 @@ const EventsPage = ({ events }: Props) => {
                                 privacy, public goods, longevity, governance and more.
                             </h1>
                         </div>
-                        <NextLink href="/calendar-full">
+                        <NextLink href="/">
                             <div className="flex cursor-pointer items-center gap-2 bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]">
                                 <NextImage src={"/vector-calendar.svg"} width={16} height={16} />
                                 FULL PROGRAM
