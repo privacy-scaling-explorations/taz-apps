@@ -6,6 +6,7 @@ import { SessionsDTO, EventsDTO } from "../../types"
 import BaseTemplate from "../Base"
 import CalendarPageSessions from "../../components/Sessions/CalendarPageSessions"
 import CalendarSessionModal from "../../components/CalendarSessionModal"
+import TicketsModal from "../../components/TicketsModal"
 import { useUserAuthenticationContext } from "../../context/UserAuthenticationContext"
 
 type Props = {
@@ -16,9 +17,10 @@ type Props = {
 const CalendarPage = ({ sessions, events }: Props) => {
     const dateRef = useRef(null)
     const localtionRef = useRef(null)
-    const { isAuth, userRole } = useUserAuthenticationContext()
+    const { isAuth, userRole, userInfo } = useUserAuthenticationContext()
 
     const [openAddSessionModal, setOpenAddSessionModal] = useState(false)
+    const [openAddTicketsModal, setOpenAddTicketsModal] = useState(false)
     const [selectedWeeks, setSelectedWeeks] = useState<string[]>([])
     const [selectedLocations, setSelectedLocations] = useState<string[]>([])
     const [locationsOptions, setLocationsOptions] = useState<string[]>([])
@@ -117,27 +119,40 @@ const CalendarPage = ({ sessions, events }: Props) => {
 
     return (
         <BaseTemplate>
-            <div className="flex flex-col p-5 bg-[#EEEEF0] gap-5 w-full h-full">
+            <div className="flex flex-col border border-black p-5 bg-[#EEEEF0] gap-5 w-full h-full">
                 <div className="flex gap-5 md:gap-0 flex-col md:flex-row justify-between p-5 bg-white rounded-[16px]">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 text-[12px] md:text-[14px">
                         <h1 className={`text-black font-[600]`}>Program</h1>
                     </div>
                     <div className="flex flex-row gap-[8px] justify-between items-center">
-                        <button className="flex bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[5px] md:px-[16px] rounded-[8px]">
+                        <button className="flex md:hidden bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]">
+                            CONTACT
+                        </button>
+                        <button className="hidden md:flex bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]">
                             CONTACT ORGANIZERS
                         </button>
-                        <Link href="events">
-                            <button className="bg-zulalu-primary text-white py-[8px] px-[16px] rounded-[8px] gap-[8px] flex flex-row items-center justify-center">
-                                <NextImage src={"/ticket.svg"} width={13} height={12} />
-                                <p>TICKETS</p>
-                            </button>
-                        </Link>
+
+                        <button
+                            onClick={() => setOpenAddTicketsModal(true)}
+                            className="bg-zulalu-primary text-white py-[8px] px-[16px] rounded-[8px] gap-[8px] flex flex-row items-center justify-center"
+                        >
+                            <NextImage src={"/ticket.svg"} width={13} height={12} />
+                            <p>TICKETS</p>
+                        </button>
+
+                        <TicketsModal
+                            isOpen={openAddTicketsModal}
+                            closeModal={setOpenAddTicketsModal}
+                            checkSession={undefined}
+                            userInfo={userInfo}
+                        />
                     </div>
                 </div>
+
                 {isAuth && isOrganizer ? (
                     <>
                         <button
-                            className="flex md:hidden flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
+                            className="flex md:hidden w-full flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
                             onClick={() => setOpenAddSessionModal(true)}
                         >
                             CREATE SESSION
@@ -152,27 +167,27 @@ const CalendarPage = ({ sessions, events }: Props) => {
                 ) : (
                     ""
                 )}
-                <div className="hidden md:flex h-full w-full items-center justify-center rounded-[8px]">
-                    <NextImage
-                        src="https://polcxtixgqxfuvrqgthn.supabase.co/storage/v1/object/public/zulalu-images/Tag.png"
-                        objectFit="contain"
-                        alt="event-image"
-                        style={{ borderRadius: "18px" }}
-                        width="1400px"
-                        height="245px"
-                    />
-                </div>
                 <div className="flex md:hidden h-full w-full items-center justify-center rounded-[8px]">
                     <NextImage
                         src="https://polcxtixgqxfuvrqgthn.supabase.co/storage/v1/object/public/zulalu-images/Tag%20(1).png"
-                        objectFit="cover"
+                        objectFit="fill"
                         alt="event-image"
                         style={{ borderRadius: "18px" }}
-                        width="2000px"
-                        height="1200px"
+                        width="600px"
+                        height="345px"
                     />
                 </div>
-                <div className="flex flex-col items-center pt-[16px] md:px-[32px] px-[8px] pb-[40px] bg-white gap-[8px] rounded-[16px]">
+                <div className="hidden md:flex h-full w-full items-center justify-center rounded-[8px]">
+                    <NextImage
+                        src="https://polcxtixgqxfuvrqgthn.supabase.co/storage/v1/object/public/zulalu-images/Tag.png"
+                        objectFit="fill"
+                        alt="event-image"
+                        style={{ borderRadius: "18px" }}
+                        width="1900px"
+                        height="245px"
+                    />
+                </div>
+                <div className="flex flex-col items-center pt-[16px] md:px-[32px] px-[18px] pb-[40px] bg-white gap-[8px] rounded-[16px]">
                     <div className="w-full flex flex-col lg:flex-row justify-between items-start lg:items-center p-[16px] gap-[24px]">
                         <div className="flex flex-col md:flex-row items-start md:items-center justify-center gap-[32px]">
                             <h1 className="text-[24px] md:text-[40px] text-[#37352F] font-[600]">Sessions</h1>
@@ -180,7 +195,7 @@ const CalendarPage = ({ sessions, events }: Props) => {
                             {isAuth && isOrganizer ? (
                                 <>
                                     <button
-                                        className="hidden md:flex w-[200px] flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
+                                        className="hidden md:flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
                                         onClick={() => setOpenAddSessionModal(true)}
                                     >
                                         CREATE SESSION
@@ -196,7 +211,7 @@ const CalendarPage = ({ sessions, events }: Props) => {
                                 ""
                             )}
                         </div>
-                        <div className="w-full flex flex-col md:flex-row justify-end items-start md:items-start gap-2 md:gap-5">
+                        <div className="flex flex-col md:flex-row justify-center items-start md:items-start gap-5 w-full md:w-auto">
                             <div className="flex flex-col relative w-full md:w-[150px]" ref={localtionRef}>
                                 <button
                                     onClick={() => setOpenLocationFilter(!openLocationFilter)}
@@ -228,12 +243,12 @@ const CalendarPage = ({ sessions, events }: Props) => {
                                     setSelectedLocations([])
                                     setSelectedWeeks([])
                                 }}
-                                className="bg-white md:w-auto w-full justify-between border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] gap-[8px] text-[16px] rounded-[8px] flex flex-row justify-center items-center"
+                                className="bg-white border w-full md:w-auto border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] gap-[8px] text-[16px] rounded-[8px] flex flex-row justify-between md:justify-center items-center"
                             >
                                 <p>ALL SESSIONS</p>
                                 <NextImage src={"/arrow-down.svg"} width={8} height={4} />
                             </button>
-                            <div className="flex flex-col relative w-full md:w-auto" ref={dateRef}>
+                            <div className="flex flex-col relative w-full md:w-[auto]" ref={dateRef}>
                                 <button
                                     onClick={() => setOpenFilterOptions(!openFilterOptions)}
                                     className="flex justify-between uppercase bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] gap-[8px] text-[16px] rounded-[8px] flex flex-row justify-center items-center"
