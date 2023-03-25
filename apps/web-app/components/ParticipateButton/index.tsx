@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import NextImage from "next/image"
 import { useRouter } from "next/router"
 import { toast } from "react-toastify"
@@ -80,43 +80,44 @@ const ParticipateButton = ({ session, isTallButton }: Props) => {
 
     return (
         <>
-            {session.participants.length > 0 ? (
-                <button
-                    className={`flex gap-2 items-center bg-white border border-primary text-zulalu-primary font-[600] py-[${
-                        isTallButton ? 8 : 4
-                    }px] px-[16px] rounded-[8px] cursor-default`}
-                >
-                    <NextImage src={"/vector-circle-check.svg"} width={16} height={16} />
-                    SEE YOU THERE!
-                </button>
-            ) : session.hasTicket ? (
-                <>
+            {userInfo &&
+                (session.participants.length > 0 ? (
+                    <button
+                        className={`flex gap-2 items-center bg-white border border-primary text-zulalu-primary font-[600] py-[${
+                            isTallButton ? 8 : 4
+                        }px] px-[16px] rounded-[8px] cursor-default`}
+                    >
+                        <NextImage src={"/vector-circle-check.svg"} width={16} height={16} />
+                        SEE YOU THERE!
+                    </button>
+                ) : session.hasTicket ? (
+                    <>
+                        <button
+                            className={`bg-[#35655F] text-white py-[${
+                                isTallButton ? 8 : 4
+                            }px] px-[16px] text-[16px] rounded-[6px]`}
+                            onClick={() => {
+                                setOpenBuyTicketModal(true)
+                            }}
+                        >
+                            GET TICKET
+                        </button>
+                        <BuyTicketModal
+                            closeModal={closeTicketModal}
+                            isOpen={openBuyTicketModal}
+                            handleBuyTicket={handleBuyTicket}
+                        />
+                    </>
+                ) : (
                     <button
                         className={`bg-[#35655F] text-white py-[${
                             isTallButton ? 8 : 4
                         }px] px-[16px] text-[16px] rounded-[6px]`}
-                        onClick={() => {
-                            setOpenBuyTicketModal(true)
-                        }}
+                        onClick={() => handleClickAttend(session.id)}
                     >
-                        GET TICKET
+                        RSVP
                     </button>
-                    <BuyTicketModal
-                        closeModal={closeTicketModal}
-                        isOpen={openBuyTicketModal}
-                        handleBuyTicket={handleBuyTicket}
-                    />
-                </>
-            ) : (
-                <button
-                    className={`bg-[#35655F] text-white py-[${
-                        isTallButton ? 8 : 4
-                    }px] px-[16px] text-[16px] rounded-[6px]`}
-                    onClick={() => handleClickAttend(session.id)}
-                >
-                    RSVP
-                </button>
-            )}
+                ))}
         </>
     )
 }

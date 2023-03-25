@@ -94,7 +94,7 @@ const SessionPage = ({ session, sessions }: Props) => {
                         <ParticipateButton session={session} isTallButton={true} />
 
                         <button
-                            className="flex gap-2 items-center bg-zulalu-primary border border-primary text-white font-[600] py-[8px] px-[16px] rounded-[8px]"
+                            className={`${userInfo?.uui_auth == session.creator_uuid? "flex" : "hidden"} gap-2 items-center bg-zulalu-primary border border-primary text-white font-[600] py-[8px] px-[16px] rounded-[8px]`}
                             onClick={() => setOpenEditSessionModal(true)}
                         >
                             <NextImage src={"/pencil.svg"} width={12} height={16} />
@@ -107,7 +107,7 @@ const SessionPage = ({ session, sessions }: Props) => {
                             sessions={sessions}
                         />
                         <button
-                            className="flex gap-2 items-center bg-zulalu-primary border border-primary text-white font-[600] py-[8px] px-[16px] rounded-[8px]"
+                            className={`${userInfo?.uui_auth == session.creator_uuid? "flex" : "hidden"} gap-2 items-center bg-zulalu-primary border border-primary text-white font-[600] py-[8px] px-[16px] rounded-[8px]`}
                             onClick={() => setOpenDeleteSessionModal(true)}
                         >
                             DELETE SESSION
@@ -117,6 +117,7 @@ const SessionPage = ({ session, sessions }: Props) => {
                             closeModal={closeDeleteSessionModal}
                             deleteSession={deleteSession}
                         />
+
                     </div>
                 </div>
 

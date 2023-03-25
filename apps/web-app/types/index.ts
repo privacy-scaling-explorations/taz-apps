@@ -5,7 +5,7 @@ export interface UserDTO {
     id: number
     semaphoreId: string
     userName: string
-    uuid_auth: string
+    uui_auth: string
 }
 
 export interface EventsDTO {
@@ -27,6 +27,7 @@ export interface EventsDTO {
     item_id: number
     image_url: string
     bg_image_url: string
+    apply_form: string
 }
 
 export interface SessionsDTO {
@@ -60,6 +61,7 @@ export interface SessionsDTO {
     type: any
     events: EventsDTO
     quota_id: number
+    creator_uuid: string
 }
 
 export interface RsvpDTO {

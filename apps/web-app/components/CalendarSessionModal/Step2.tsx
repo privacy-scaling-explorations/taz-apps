@@ -99,15 +99,6 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
         }
     }
 
-    const fetchUsers = async () => {
-        await axios
-            .get("/api/fetchUsers")
-            .then((res) => {
-                setSuggestions(res.data)
-            })
-            .catch((err) => console.log(err))
-    }
-
     const fetchTraks = async () => {
         await axios
             .get("/api/fetchTracks")
@@ -154,7 +145,7 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
     }
 
     useEffect(() => {
-        Promise.all([fetchUsers(), fetchLevels(), fetchEventTypes(), fetchFormats(), fetchLocations(), fetchTraks()])
+        Promise.all([fetchLevels(), fetchEventTypes(), fetchFormats(), fetchLocations(), fetchTraks()])
     }, [])
 
     useEffect(() => {
@@ -188,11 +179,6 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
 
         setSlotsUnavailable(newSlotsUnavailable)
     }, [newSession])
-
-    // const checkIfAnyOtherSuggestion =
-    //     suggestions
-    //         .filter((item) => !organizers.includes(item.userName))
-    //         .filter(({ userName }) => userName.toLowerCase().indexOf(organizer.toLowerCase()) > -1).length !== 0
 
     const handleNextStep = () => {
         if (
