@@ -18,7 +18,11 @@ const Sessions = ({ event, sessions }: Props) => {
             {sessions.map((item, index) => (
                 <div className="w-full" key={index}>
                     <div className="bg-[#1C2928] w-full flex flex-row items-center rounded-[8px]">
-                        <p className="text-white py-[8px] px-[16px]">{item.startTime}</p>
+                        <p className="text-white py-[8px] px-[16px]">
+                            {item.startDate && item.startTime && moment(`${item.startDate}T${item.startTime}`).isValid()
+                                ? moment(`${item.startDate}T${item.startTime}`).format("h A [|] dddd, MMMM Do")
+                                : "\u00A0"}
+                        </p>
                     </div>
 
                     <div className="w-full pl-5 md:pl-0 flex gap-2 flex-row md:flex-col items-start">
