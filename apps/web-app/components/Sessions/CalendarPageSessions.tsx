@@ -96,7 +96,13 @@ const CalendarPageSessions = ({ sessions, showStartDate = false }: Props) => {
                                 {moment(item.startDate).format("MMMM DD")}
                             </p>
                         ) : (
-                            <p className="text-white py-[8px] px-[16px]">{item.startTime}</p>
+                            <p className="text-white py-[8px] px-[16px]">
+                                {item.startDate &&
+                                item.startTime &&
+                                moment(`${item.startDate}T${item.startTime}`).isValid()
+                                    ? moment(`${item.startDate}T${item.startTime}`).format("h A [|] dddd, MMMM Do")
+                                    : "\u00A0"}
+                            </p>
                         )}
                     </div>
 
