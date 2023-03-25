@@ -27,7 +27,6 @@ const CalendarPage = ({ sessions, events }: Props) => {
     const [openLocationFilter, setOpenLocationFilter] = useState(false)
     const isOrganizer = userRole === "resident"
 
-
     const filterOptions = [
         {
             week: 1,
@@ -144,7 +143,7 @@ const CalendarPage = ({ sessions, events }: Props) => {
                 </div>
                 <div className="flex h-full w-full items-center justify-center rounded-[8px]">
                     <NextImage
-                        src="/calendar-image.png"
+                        src="https://polcxtixgqxfuvrqgthn.supabase.co/storage/v1/object/public/zulalu-images/Tag.png"
                         objectFit="contain"
                         alt="event-image"
                         style={{ borderRadius: "18px" }}

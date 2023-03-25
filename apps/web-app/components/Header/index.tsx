@@ -57,7 +57,7 @@ const Header = () => {
             console.log("log my proof", participant1)
             const response = await axios({
                 method: "post",
-                url: "https://zuzalu.city/api/passport-user-login/",
+                url: "https://9e60-201-42-126-83.sa.ngrok.io/api/passport-user-login/",
                 data: participant1,
                 headers: {
                     "Content-Type": "application/json"
@@ -66,8 +66,8 @@ const Header = () => {
             console.log("req response", response)
             // eslint-disable-next-line @typescript-eslint/no-unused-expressions
             router.push("/").then(() => {
-                router.reload();
-            });
+                router.reload()
+            })
         } catch (error1) {
             console.error(error1)
         }
@@ -83,14 +83,20 @@ const Header = () => {
             loginProof(participant)
         }
     }, [participant])
-    console.log(isAuth)
 
     return (
         <div className="relative px-[24px] flex flex-row h-[112px] justify-between w-full z-10 bg-zulalu-darkBase items-center">
             <div className="flex relative overflow-hidden gap-5 items-center">
                 <NextLink href={"/"}>
                     <div className="hidden md:flex cursor-pointer gap-2 items-center justify-center ">
-                        <NextImage src={"/logo.png"} objectFit="contain" width="200px" height="50px" />
+                        <NextImage
+                            src={
+                                "https://polcxtixgqxfuvrqgthn.supabase.co/storage/v1/object/public/zulalu-images/zulalologo.png"
+                            }
+                            objectFit="contain"
+                            width="200px"
+                            height="50px"
+                        />
                     </div>
                 </NextLink>
                 <NextLink href={"/"}>
@@ -131,26 +137,22 @@ const Header = () => {
                     <NextLink href={"/myprofile"}>
                         <li className="cursor-pointer text-[#F8FFFE] text-[18px] font-[400]">My Profile</li>
                     </NextLink>
-                    {!isAuth && (<a 
-                        href="https://airtable.com/shrRZrZbozPE2g6HH"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                    <li className="cursor-pointer font-[400] text-[18px] text-[#F8FFFE]">Apply Now</li>
-                </a>)}
+                    {!isAuth && (
+                        <a href="https://airtable.com/shrRZrZbozPE2g6HH" target="_blank" rel="noopener noreferrer">
+                            <li className="cursor-pointer font-[400] text-[18px] text-[#F8FFFE]">Apply Now</li>
+                        </a>
+                    )}
                 </ul>
             </div>
             <ul className="hidden md:flex flex-row gap-5 items-center text-white">
                 <NextLink href={"/events"}>
                     <li className="cursor-pointer font-[400] text-[18px] text-[#F8FFFE]">Program</li>
                 </NextLink>
-                {!isAuth && (<a 
-                        href="https://airtable.com/shrRZrZbozPE2g6HH"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                    <li className="cursor-pointer font-[400] text-[18px] text-[#F8FFFE]">Apply Now</li>
-                </a>)}
+                {!isAuth && (
+                    <a href="https://airtable.com/shrRZrZbozPE2g6HH" target="_blank" rel="noopener noreferrer">
+                        <li className="cursor-pointer font-[400] text-[18px] text-[#F8FFFE]">Apply Now</li>
+                    </a>
+                )}
                 {isAuth ? (
                     <li className="font-[400] text-[18px] text-[#F8FFFE]">
                         <NextLink href="/myprofile">My Profile</NextLink>

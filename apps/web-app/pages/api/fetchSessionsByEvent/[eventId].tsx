@@ -4,12 +4,34 @@ import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs"
 const supabase = createBrowserSupabaseClient()
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    let userId = 0
+
+    const {
+        data: { session }
+    } = await supabase.auth.getSession()
+
+    try {
+        if (session) {
+            await supabase
+                .from("users")
+                .select()
+                .eq("uui_auth", session.user.id)
+                .single()
+                .then((user: any) => {
+                    userId = user.data.id
+                })
+        }
+    } catch (err) {
+        userId = 0
+        console.log(err)
+    }
+
     try {
         const response = await supabase
             .from("sessions")
             .select("*, participants (*), favoritedSessions:favorited_sessions (*)")
-            .eq("participants.user_id", req.query.userId)
-            .eq("favoritedSessions.user_id", req.query.userId)
+            .eq("participants.user_id", userId)
+            .eq("favoritedSessions.user_id", userId)
             .eq("event_id", req.query.eventId)
         if (response.error === null) res.status(200).send(response.data)
         else res.status(response.status).send(response.error)

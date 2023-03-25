@@ -24,20 +24,16 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 
         const events: EventsDTO[] = await eventsResponse.json()
 
-        let sessionsRes: SessionsDTO[] = []
+        const sessionsResponse = await axios.get(`${url}/api/fetchSessions`, {
+            headers: {
+                Cookie: req.headers.cookie || "" // Pass cookies from the incoming request
+            }
+        })
 
-        await axios
-            .get(`${url}/api/fetchSessions`, {
-                headers: {
-                    Cookie: req.headers.cookie || "" // Pass cookies from the incoming request
-                }
-            })
-            .then((response: any) => {
-                sessionsRes = response.data
-            })
+        const sessions = await sessionsResponse.data
 
         return {
-            props: { sessions: sessionsRes, events }
+            props: { sessions, events }
         }
     } catch (error) {
         res.statusCode = 404

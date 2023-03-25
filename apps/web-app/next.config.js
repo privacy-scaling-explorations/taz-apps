@@ -11,6 +11,11 @@ module.exports = withPWA({
                 protocol: "https",
                 hostname: "i.imgur.com",
                 port: ""
+            },
+            {
+                protocol: "https",
+                hostname: "polcxtixgqxfuvrqgthn.supabase.co",
+                port: ""
             }
         ]
     },
