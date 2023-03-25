@@ -68,10 +68,10 @@ const SessionPage = ({ session, sessions }: Props) => {
                     slug: session.event_slug,
                     subEventId: session.subevent_id
                 })
-                router.push("/calendar-full")
+                router.push("/")
             }
         }
-        router.push("/calendar-full")
+        router.push("/")
     }
 
     const closeDeleteSessionModal = (close = false) => {
@@ -83,7 +83,7 @@ const SessionPage = ({ session, sessions }: Props) => {
             <div className="flex flex-col items-center bg-[#EEEEF0] h-full md:h-[100vh] px-4 md:px-[24px] py-4 md:py-[24px] gap-4 md:gap-[16px]">
                 <div className="flex flex-col md:flex-row justify-between p-5 bg-white w-full rounded-[16px]">
                     <div className="flex items-center gap-2 mb-4 md:mb-0 text-[12px] md:text-[14px]">
-                        <Link href={"/calendar-full"}>
+                        <Link href={"/"}>
                             <a className={`text-[#1C292899]`}>Program</a>
                         </Link>
                         <h1 className={`text-[#1C292899]`}>/</h1>
