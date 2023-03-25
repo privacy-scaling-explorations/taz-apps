@@ -72,29 +72,31 @@ const EventPage = ({ event, sessions }: Props) => {
         }
     }, [])
 
-    console.log(event.image_url)
-
     return (
         <BaseTemplate>
-            <div className="flex flex-col border border-black p-5 bg-[#EEEEF0] gap-5 w-full h-full">
-                <div className="flex flex-col md:flex-row justify-between p-5 bg-white rounded-[8px]">
+            <div className="flex flex-col p-5 bg-[#EEEEF0] gap-5 w-full h-full">
+                <div className="flex flex-col md:flex-row justify-between p-5 bg-white rounded-[16px]">
                     <div className="flex items-center gap-2 mb-5 md:mb-0">
                         <Link href="/events">
                             <a className={`text-[#1C292899]`}>Events</a>
                         </Link>
                         <h1 className={`text-[#1C292899]`}>/</h1>
-                        <h1 className={`text-black font-[600]`}>{`${event.name.substring(0, 30)}...`}</h1>
+                        <h1 className={`text-black font-[600]`}>{`${event.name}`}</h1>
                     </div>
-                    <div className="flex flex-col md:flex-row gap-4 md:gap-[8px] items-center">
-                        <button className="bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px] mb-4 md:mb-0">
+                    <div className="flex flex-row gap-4 md:gap-[8px] items-start md:items-center">
+                        <button className="bg-white border border-primary py-[8px] px-[5px] md:px-[15px] text-zulalu-primary font-[600] rounded-[8px] text-[12px] md:text-[16px]">
                             CONTACT ORGANIZERS
                         </button>
-                        <a href={event.publicUrl} target="_blank">
-                            <div className="bg-zulalu-primary text-white py-[8px] px-[16px] rounded-[8px] gap-[8px] flex flex-row items-center justify-center hover:bg-zulalu-primary-light cursor-pointer mb-4 md:mb-0">
+                        <button className="flex gap-1 items-center bg-zulalu-primary text-white py-[8px] px-[5px] md:px-[15px] font-[600] rounded-[8px] text-[12px] md:text-[16px]">
+                            <NextImage src={"/ticket.svg"} width={13} height={12} />
+                            TICKETS
+                        </button>
+                        {/* <a href={event.publicUrl} target="_blank">
+                            <div className="bg-zulalu-primary text-white py-[8px] px-[16px] text-[12px] md:text-[16px] rounded-[8px] gap-[8px] flex flex-row items-center justify-center hover:bg-zulalu-primary-light cursor-pointer">
                                 <NextImage src={"/ticket.svg"} width={13} height={12} />
                                 <p>TICKETS</p>
                             </div>
-                        </a>
+                        </a> */}
                         {/* {session && session.data.user.user_metadata.event === event.name ? (
                             <button
                                 className="text-[#F8FFFE] bg-[#35655F] rounded-[8px] flex flex-row justify-center items-center py-[8px] px-[16px] flex flex-row gap-[8px]"
@@ -108,8 +110,8 @@ const EventPage = ({ event, sessions }: Props) => {
                         )} */}
                     </div>
                 </div>
-                <div className="flex flex-col lg:flex-row w-full justify-start bg-white rounded-[8px] h-full">
-                    <div className="flex h-full max-w-[1014px] w-full rounded-[8px]">
+                <div className="flex flex-col lg:flex-row w-full justify-start bg-white rounded-[16px] h-full">
+                    <div className="hidden md:flex h-full max-w-[1014px] w-full rounded-l-[16px] overflow-hidden">
                         <NextImage
                             src={event.image_url}
                             objectFit="cover"
@@ -146,29 +148,44 @@ const EventPage = ({ event, sessions }: Props) => {
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-col items-center pt-[16px] px-[32px] pb-[40px] bg-white gap-[8px] rounded-[8px]">
-                    <div className="w-full flex flex-col md:flex-row justify-between items-center p-[16px] gap-[24px]">
-                        <div className="flex flex-col md:flex-row items-center justify-center gap-[32px] mb-5 md:mb-0">
-                            <h1 className="text-[40px] text-[#37352F] font-[600]">Sessions</h1>
-                            {isAuth && isOrganizer && (
-                                <button
-                                    className="flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
-                                    onClick={() => setOpenAddSessionModal(true)}
-                                >
-                                    CREATE SESSION
-                                </button>
-                            )}
-                            <AddSessionModal
-                                closeModal={setOpenAddSessionModal}
-                                isOpen={openAddSessionModal}
-                                event={event}
-                                sessions={sessions}
-                            />
-                        </div>
-                        <div className="flex flex-col md:flex-row justify-center items-center gap-5">
+                <div className="flex md:hidden h-full max-w-[1014px] w-full rounded-[16px] overflow-hidden">
+                    <NextImage
+                        src={event.image_url}
+                        objectFit="cover"
+                        alt="event-image"
+                        width="1014px"
+                        height="682px"
+                    />
+                </div>
+                {isAuth && isOrganizer && (
+                    <button
+                        className="flex md:hidden flex-row font-[600] w-full justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
+                        onClick={() => setOpenAddSessionModal(true)}
+                    >
+                        CREATE SESSION
+                    </button>
+                )}
+                <div className="flex flex-col items-center pt-[16px] px-[18px] md:px-[32px] pb-[40px] bg-white gap-[8px] rounded-[16px]">
+                    <div className="w-full flex flex-col md:flex-row justify-between items-start md:items-center p-0 md:p-[16px] gap-[24px]">
+                        <h1 className="text-[24px] md:text-[40px] text-[#37352F] font-[600]">Sessions</h1>
+                        {isAuth && isOrganizer && (
+                            <button
+                                className="hidden md:flex flex-row font-[600] w-[300px] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
+                                onClick={() => setOpenAddSessionModal(true)}
+                            >
+                                CREATE SESSION
+                            </button>
+                        )}
+                        <AddSessionModal
+                            closeModal={setOpenAddSessionModal}
+                            isOpen={openAddSessionModal}
+                            event={event}
+                            sessions={sessions}
+                        />
+                        <div className="flex flex-col md:flex-row justify-center md:justify-end items:start md:items-center gap-2 md:gap-5 w-full">
                             <button
                                 onClick={() => setSelectedOptions([])}
-                                className="bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] gap-[8px] text-[16px] rounded-[8px] flex flex-row justify-center items-center mb-5 md:mb-0"
+                                className="bg-white border border-primary justify-between  text-zulalu-primary font-[600] py-[8px] px-[16px] gap-[8px] text-[16px] rounded-[8px] flex flex-row justify-center items-center"
                             >
                                 <p>ALL SESSIONS</p>
                                 <NextImage src={"/arrow-down.svg"} width={8} height={4} />

@@ -1,8 +1,6 @@
 import { GetServerSideProps } from "next"
 import axios from "axios"
 
-import { parseCookies } from "nookies"
-
 import { EventsDTO, SessionsDTO } from "../types"
 import CalendarPage from "../templates/CalendarPage"
 
@@ -23,20 +21,16 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 
         const events: EventsDTO[] = await eventsResponse.json()
 
-        let sessionsRes: SessionsDTO[] = []
+        const responseSessions = await axios.get(`${url}/api/fetchSessions`, {
+            headers: {
+                Cookie: req.headers.cookie || "" // Pass cookies from the incoming request
+            }
+        })
 
-        await axios
-            .get(`${url}/api/fetchSessions`, {
-                headers: {
-                    Cookie: req.headers.cookie || "" // Pass cookies from the incoming request
-                }
-            })
-            .then((response: any) => {
-                sessionsRes = response.data
-            })
+        const sessions = await responseSessions.data
 
         return {
-            props: { sessions: sessionsRes, events }
+            props: { sessions, events }
         }
     } catch (error) {
         res.statusCode = 404

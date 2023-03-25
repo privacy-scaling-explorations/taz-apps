@@ -12,6 +12,7 @@ class MyDocument extends Document {
                 <Head>
                     <link rel="manifest" href="/manifest.json" />
                     <link rel="apple-touch-icon" href="/icon.png" />
+                    <link rel="icon" href="https://polcxtixgqxfuvrqgthn.supabase.co/storage/v1/object/public/zulalu-images/zulalofavicon.svg" />
                     <meta property="theme-color" content="#fff" />
                     <link rel="preconnect" href="https://fonts.googleapis.com" />
                     <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />

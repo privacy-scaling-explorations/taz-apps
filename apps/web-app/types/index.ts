@@ -26,6 +26,7 @@ export interface EventsDTO {
     sessions: SessionsDTO[]
     item_id: number
     image_url: string
+    bg_image_url: string
 }
 
 export interface SessionsDTO {
