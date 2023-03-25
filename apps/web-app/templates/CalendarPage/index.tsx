@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react"
 import NextImage from "next/image"
-import Link from "next/link"
+import moment from "moment"
 
 import { SessionsDTO, EventsDTO } from "../../types"
 import BaseTemplate from "../Base"
@@ -8,6 +8,7 @@ import CalendarPageSessions from "../../components/Sessions/CalendarPageSessions
 import CalendarSessionModal from "../../components/CalendarSessionModal"
 import TicketsModal from "../../components/TicketsModal"
 import { useUserAuthenticationContext } from "../../context/UserAuthenticationContext"
+import StyledDatePicker from "../../components/StyledDatePicker"
 
 type Props = {
     sessions: SessionsDTO[]
@@ -15,55 +16,88 @@ type Props = {
 }
 
 const CalendarPage = ({ sessions, events }: Props) => {
-    const dateRef = useRef(null)
     const localtionRef = useRef(null)
     const { isAuth, userRole, userInfo } = useUserAuthenticationContext()
 
     const [openAddSessionModal, setOpenAddSessionModal] = useState(false)
     const [openAddTicketsModal, setOpenAddTicketsModal] = useState(false)
-    const [selectedWeeks, setSelectedWeeks] = useState<string[]>([])
     const [selectedLocations, setSelectedLocations] = useState<string[]>([])
     const [locationsOptions, setLocationsOptions] = useState<string[]>([])
 
-    const [openFilterOptions, setOpenFilterOptions] = useState(false)
     const [openLocationFilter, setOpenLocationFilter] = useState(false)
     const isOrganizer = userRole === "resident"
 
-    const filterOptions = [
-        {
-            week: 1,
-            month: "March",
-            dates: [25, 31]
-        },
-        {
-            week: 2,
-            month: "April",
-            dates: [1, 7]
-        },
-        {
-            week: 3,
-            month: "April",
-            dates: [8, 14]
-        },
-        {
-            week: 4,
-            month: "April",
-            dates: [15, 21]
-        },
-        {
-            week: 5,
-            month: "April",
-            dates: [22, 28]
+    /* Begin DatePicker code */
+    const [openDatePicker, setOpenDatePicker] = useState(false)
+    const [datePickerDescription, setDatePickerDescription] = useState("FULL PROGRAM")
+    const [filteredSessions, setFilteredSessions] = useState<SessionsDTO[]>(sessions)
+    const [datePickerStartDate, setDatePickerStartDate] = useState<Date | null>(null)
+    const [datePickerEndDate, setDatePickerEndDate] = useState<Date | null>(null)
+    const datePickerWrapperRef = useRef(null)
+
+    const toggleDatePicker = () => {
+        setOpenDatePicker(!openDatePicker)
+    }
+
+    const handleDateSelection = (selectedDates: [Date | null, Date | null]) => {
+        const [start, end] = selectedDates
+        setDatePickerStartDate(start)
+        setDatePickerEndDate(end)
+        const filtered = sessions.filter((session) => {
+            const sessionDate = new Date(session.startDate)
+            sessionDate.setHours(0, 0, 0, 0) // Remove time part for date comparison
+            const endOfDay = end ? new Date(end) : null
+            if (endOfDay) {
+                endOfDay.setHours(23, 59, 59, 999) // Set end date to end of day
+            }
+            return (start === null || start <= sessionDate) && (endOfDay === null || sessionDate <= endOfDay)
+        })
+        setFilteredSessions(filtered)
+    }
+
+    // Update filter header description
+    // (done in useEffect because start and end date must be done updating first)
+    useEffect(() => {
+        const today = new Date()
+        today.setHours(0, 0, 0, 0)
+        if (datePickerStartDate?.getTime() === today.getTime() && datePickerEndDate?.getTime() === today.getTime()) {
+            setDatePickerDescription("TODAY")
+        } else if (datePickerStartDate?.getTime() === today.getTime()) {
+            setDatePickerDescription("TODAY ONWARD")
+        } else if (datePickerStartDate && datePickerEndDate === null) {
+            setDatePickerDescription(`${moment(datePickerStartDate).format("MMMM D")} ONWARD`)
+        } else if (
+            datePickerStartDate &&
+            datePickerEndDate &&
+            datePickerStartDate.getTime() === datePickerEndDate.getTime()
+        ) {
+            setDatePickerDescription(moment(datePickerStartDate).format("dddd MMMM D"))
+        } else if (datePickerStartDate && datePickerEndDate) {
+            setDatePickerDescription(
+                `${moment(datePickerStartDate).format("MMMM D")} - ${moment(datePickerEndDate).format("D")}`
+            )
         }
-    ]
+    }, [datePickerStartDate, datePickerEndDate])
+
+    const handleDatePickerClickOutside = (e: MouseEvent) => {
+        const { current: wrap } = datePickerWrapperRef as { current: HTMLElement | null }
+
+        if (wrap && !wrap.contains(e.target as Node)) {
+            setOpenDatePicker(false)
+        }
+    }
+
+    useEffect(() => {
+        document.addEventListener("mousedown", handleDatePickerClickOutside)
+
+        return () => {
+            document.removeEventListener("mousedown", handleDatePickerClickOutside)
+        }
+    }, [])
 
     const handleClickOutside = (event: any) => {
-        const { current: dateCurrent } = dateRef as { current: HTMLElement | null }
         const { current: locationCurrent } = localtionRef as {
             current: HTMLElement | null
-        }
-        if (dateCurrent && !dateCurrent.contains(event.target)) {
-            setOpenFilterOptions(false)
         }
         if (locationCurrent && !locationCurrent.contains(event.target)) {
             setOpenLocationFilter(false)
@@ -83,14 +117,6 @@ const CalendarPage = ({ sessions, events }: Props) => {
         setLocationsOptions(locations)
     }, [])
 
-    const handleCheckboxChangeDate = (week: string) => {
-        if (selectedWeeks.includes(week)) {
-            setSelectedWeeks(selectedWeeks.filter((selectedWeek) => selectedWeek !== week))
-        } else {
-            setSelectedWeeks([...selectedWeeks, week])
-        }
-    }
-
     const handleCheckboxChangeLocation = (location: string) => {
         if (selectedLocations.includes(location)) {
             setSelectedLocations(selectedLocations.filter((selectedWeek) => selectedWeek !== location))
@@ -100,28 +126,15 @@ const CalendarPage = ({ sessions, events }: Props) => {
     }
 
     const filteredSessionsByLocation =
-        selectedLocations.length !== 0 ? sessions.filter((item) => selectedLocations.includes(item.location)) : sessions
-
-    const filteredSessionsByDate =
-        selectedWeeks.length > 0
-            ? filteredSessionsByLocation.filter((event) => {
-                  const startDate = new Date(event.startDate)
-                  const weekObj = filterOptions.find(
-                      (week) =>
-                          week.month.toLowerCase() ===
-                              startDate.toLocaleString("default", { month: "long" }).toLowerCase() &&
-                          startDate.getDate() >= week.dates[0] &&
-                          startDate.getDate() <= week.dates[1]
-                  )
-                  return weekObj && selectedWeeks.includes(String(weekObj.week))
-              })
-            : filteredSessionsByLocation
+        selectedLocations.length !== 0
+            ? filteredSessions.filter((item) => selectedLocations.includes(item.location))
+            : filteredSessions
 
     return (
         <BaseTemplate>
             <div className="flex flex-col border border-black p-5 bg-[#EEEEF0] gap-5 w-full h-full">
                 <div className="flex gap-5 md:gap-0 flex-col md:flex-row justify-between p-5 bg-white rounded-[16px]">
-                    <div className="flex items-center gap-2 text-[12px] md:text-[14px">
+                    <div className="flex items-center gap-2 text-[12px] md:text-[14px]">
                         <h1 className={`text-black font-[600]`}>Program</h1>
                     </div>
                     <div className="flex flex-row gap-[8px] justify-between items-center">
@@ -241,45 +254,43 @@ const CalendarPage = ({ sessions, events }: Props) => {
                             <button
                                 onClick={() => {
                                     setSelectedLocations([])
-                                    setSelectedWeeks([])
+                                    setFilteredSessions(sessions)
+                                    setDatePickerDescription("FULL PROGRAM")
                                 }}
                                 className="bg-white border w-full md:w-auto border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] gap-[8px] text-[16px] rounded-[8px] flex flex-row justify-between md:justify-center items-center"
                             >
                                 <p>ALL SESSIONS</p>
                                 <NextImage src={"/arrow-down.svg"} width={8} height={4} />
                             </button>
-                            <div className="flex flex-col relative w-full md:w-[auto]" ref={dateRef}>
+                            {/* Begin DatePicker Filter */}
+                            <div className="flex flex-col w-auto min-w-[200px]" ref={datePickerWrapperRef}>
                                 <button
-                                    onClick={() => setOpenFilterOptions(!openFilterOptions)}
+                                    onClick={toggleDatePicker}
                                     className="flex justify-between uppercase bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] gap-[8px] text-[16px] rounded-[8px] flex flex-row justify-center items-center"
                                 >
-                                    <p>WEEK 1 | March 25-31</p>
-                                    <NextImage src={"/arrow-down.svg"} width={8} height={4} />
+                                    <p>{datePickerDescription}</p>
+                                    <NextImage src="/arrow-down.svg" width={8} height={4} />
                                 </button>
 
-                                {openFilterOptions && (
-                                    <div className="flex z-[10] flex-col gap-3 bg-white border w-full py-[8px] px-[16px] border-primary absolute top-[45px] text-zulalu-primary rounded-[8px]">
-                                        {filterOptions.map((week, index) => (
-                                            <label key={index} className="flex w-full items-center gap-2 capitalize">
-                                                <input
-                                                    type="checkbox"
-                                                    name="checkbox"
-                                                    value="value"
-                                                    checked={selectedWeeks.includes(String(week.week))}
-                                                    onChange={() => handleCheckboxChangeDate(String(week.week))}
-                                                />
-                                                {`${week.month} Week ${week.week} (${week.dates[0]} - ${week.dates[1]})`}
-                                            </label>
-                                        ))}
+                                {openDatePicker && (
+                                    <div className="relative">
+                                        <div className="absolute right-0 top-2 z-10 p-0">
+                                            <StyledDatePicker
+                                                onChange={handleDateSelection}
+                                                startDate={datePickerStartDate}
+                                                endDate={datePickerEndDate}
+                                            />
+                                        </div>
                                     </div>
                                 )}
                             </div>
+                            {/* End DatePicker Filter */}
                         </div>
                     </div>
 
                     <div className="border border-black flex flex-col"></div>
 
-                    <CalendarPageSessions sessions={filteredSessionsByDate} />
+                    <CalendarPageSessions sessions={filteredSessionsByLocation} />
                 </div>
             </div>
         </BaseTemplate>
