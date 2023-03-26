@@ -1,12 +1,12 @@
 import Head from "next/head"
-import MainSection from "../../components/MainSection"
-import Events from "../../components/Events"
 import NextImage from "next/image"
 import NextLink from "next/link"
 import { useRouter } from "next/router"
 import { useEffect, useState, useContext } from "react"
 import { requestSignedZuzaluUUIDUrl, useFetchParticipant, useSemaphoreSignatureProof } from "@pcd/passport-interface"
 import axios from "axios"
+import Events from "../../components/Events"
+import MainSection from "../../components/MainSection"
 import { useUserAuthenticationContext } from "../../context/UserAuthenticationContext"
 
 import BaseTemplate from "../Base"
@@ -24,7 +24,7 @@ const HomeTemplate = ({ events }: Props) => {
     const [navbar, setNavbar] = useState(false)
     const router = useRouter()
 
-    const PASSPORT_URL = "https://zupass.eth.limo/"
+    const PASSPORT_URL = "https://zupass.org/"
     const PASSPORT_SERVER_URL = "https://api.pcd-passport.com/"
     const URL_PASSPORT_API = process.env.URL_PASSPORT_API_URL
 
