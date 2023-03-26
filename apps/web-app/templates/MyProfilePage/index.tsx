@@ -36,22 +36,11 @@ const MyProfilePage = ({ events, sessions }: Props) => {
         }
     }
 
-    const downloadFile = async (url: any) => {
-        const headers = {
-            Accept: "application/json, text/javascript",
-            Authorization: `Token ${process.env.NEXT_PUBLIC_PRETIX_API}`,
-            "Content-Type": "application/json"
-        }
-
-        try {
-            const response = await fetch(url, { headers })
-            if (!response.ok) {
-                throw new Error("Error fetching file")
-            }
-        } catch (error) {
-            console.error("Error downloading file:", error)
-        }
-    }
+    const callDownloadFileAPI = (url : any) => {
+        const apiURL = `/api/downloadFile?url=${encodeURIComponent(url)}`;
+        console.log(apiURL)
+        return apiURL;
+      };
 
     useEffect(() => {
         if (userSessions.length > 0) {
@@ -163,7 +152,7 @@ const MyProfilePage = ({ events, sessions }: Props) => {
                                         <div key={index} className="flex items-center gap-1 cursor-pointer w-auto">
                                             <NextImage src={"/vector-ticket-black.svg"} width={14} height={12} />
                                             <a
-                                                onClick={() => downloadFile(item.pdf_link)}
+                                                onClick={() => callDownloadFileAPI(item.pdf_link)}
                                                 className="capitalize border-b border-[#52B5A4] text-[16px]"
                                                 style={{ cursor: "pointer" }}
                                             >
