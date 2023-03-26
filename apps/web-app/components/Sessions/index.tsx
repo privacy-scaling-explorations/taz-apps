@@ -93,7 +93,9 @@ const Sessions = ({ event, sessions }: Props) => {
                                             height={16}
                                         />
                                         <p className="text-[#708E8C] text-[18px]">
-                                            {moment(new Date(item.startDate)).format("dddd, MMMM Do")}
+                                            {item.startDate && moment(`${item.startDate}T00:00:00Z`).isValid()
+                                                ? moment(`${item.startDate}T${item.startTime}`).format("dddd, MMMM Do")
+                                                : "\u00A0"}
                                         </p>
                                     </div>
                                     <div className="flex flex-row items-center gap-[8px]">
