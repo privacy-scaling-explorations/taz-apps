@@ -22,6 +22,7 @@ const EventPage = ({ event, sessions }: Props) => {
     const { isAuth, userRole } = useUserAuthenticationContext()
     const [openAddSessionModal, setOpenAddSessionModal] = useState(false)
     const [selectedOptions, setSelectedOptions] = useState<string[]>([])
+    const [speakers, setSpeakers] = useState<string[]>([])
 
     const isOrganizer = userRole === "resident"
 
@@ -144,6 +145,19 @@ const EventPage = ({ event, sessions }: Props) => {
     // }, [])
     /* End DateList code */
 
+    const filterSpeakers = () => {
+        const speakers = sessions.map((item) => {
+            const sessionSpeakers = item.team_members.filter((item) => item.role == "Speaker").map((item) => item.name)
+            return sessionSpeakers
+        })
+        const uniqueSpeakers = Array.from(new Set(speakers.flat()))
+        setSpeakers(uniqueSpeakers)
+    }
+
+    useEffect(() => {
+        filterSpeakers()
+    })
+
     return (
         <BaseTemplate>
             <div className="flex flex-col p-5 bg-[#EEEEF0] gap-5 w-full h-full">
@@ -214,11 +228,11 @@ const EventPage = ({ event, sessions }: Props) => {
                         <div className="flex flex-col mt-10 gap-5">
                             <h1 className="text-black text-[24px]">Speakers</h1>
 
-                            <div className="flex flex-wrap">
-                                {event.organizers?.map((organizer, idx) => (
+                            <div className="flex flex-wrap gap-[24px]">
+                                {speakers.map((speaker, idx) => (
                                     <div className="flex gap-2 bg-gray-200 rounded-[4px] px-3 py-1" key={idx}>
                                         <img src="/user-icon-4.svg" className="w-[24px] h-[24px]" />
-                                        <h1 className="capitalize">{organizer}</h1>
+                                        <h1 className="capitalize">{speaker}</h1>
                                     </div>
                                 ))}
                             </div>
