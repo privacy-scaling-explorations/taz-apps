@@ -14,7 +14,7 @@ const Header = () => {
     const [navbar, setNavbar] = useState(false)
     const router = useRouter()
 
-    const PASSPORT_URL = "https://zupass.eth.limo/"
+    const PASSPORT_URL = "https://zupass.org/"
     const PASSPORT_SERVER_URL = "https://api.pcd-passport.com/"
     const URL_PASSPORT_API = process.env.URL_PASSPORT_API_URL
 
