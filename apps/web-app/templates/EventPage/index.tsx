@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 import React, { useEffect, useRef, useState, useCallback } from "react"
 
 import NextImage from "next/image"
@@ -142,7 +143,6 @@ const EventPage = ({ event, sessions }: Props) => {
             ? filteredSessions.filter((item) => selectedLocations.includes(item.location))
             : filteredSessions
 
-
     /* Begin DateList code */
     // const [openFilterOptions, setOpenFilterOptions] = useState(false)
     // const filterSince = new Date(event.startDate)
@@ -189,7 +189,7 @@ const EventPage = ({ event, sessions }: Props) => {
 
     const filterSpeakers = () => {
         const speakers = sessions.map((item) => {
-            const sessionSpeakers = item.team_members.filter((item) => item.role == "Speaker").map((item) => item.name)
+            const sessionSpeakers = item.team_members.filter((item) => item.role === "Speaker").map((item) => item.name)
             return sessionSpeakers
         })
         const uniqueSpeakers = Array.from(new Set(speakers.flat()))
@@ -198,7 +198,7 @@ const EventPage = ({ event, sessions }: Props) => {
 
     useEffect(() => {
         filterSpeakers()
-    })
+    }, [])
 
     return (
         <BaseTemplate>
@@ -316,7 +316,7 @@ const EventPage = ({ event, sessions }: Props) => {
                             sessions={sessions}
                         />
                         <div className="flex flex-col md:flex-row justify-center md:justify-end items:start md:items-center gap-2 md:gap-2 w-full">
-                        <div className="flex flex-col relative w-full md:w-[150px]" ref={localtionRef}>
+                            <div className="flex flex-col relative w-full md:w-[150px]" ref={localtionRef}>
                                 <button
                                     onClick={() => setOpenLocationFilter(!openLocationFilter)}
                                     className="flex justify-between uppercase bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] gap-[8px] text-[16px] rounded-[8px] flex flex-row justify-center items-center"
