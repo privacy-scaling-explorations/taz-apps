@@ -87,14 +87,14 @@ const MyProfilePage = ({ events, sessions }: Props) => {
                             <NextImage src={"/user-icon-5.svg"} alt="calendar" width={24} height={24} />
                             <p className="font-bold capitalize">{userInfo && userInfo.userName}</p>
                         </div>
-                        <div className="flex w-auto gap-2 px-2 py-1 text-[16px] items-center">
+                        {/* <div className="flex w-auto gap-2 px-2 py-1 text-[16px] items-center">
                             <NextImage src={"/vector-location.svg"} alt="location" width={24} height={24} />
                             <p>Ho Chi Minh City</p>
                         </div>
                         <div className="flex w-auto gap-2 px-2 py-1 text-[16px] items-center">
                             <NextImage src={"/vector-computer.svg"} alt="location" width={24} height={24} />
                             <p>Ethereum Foundation</p>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
                 <CalendarSessionModal
