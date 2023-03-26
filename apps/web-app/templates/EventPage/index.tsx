@@ -24,6 +24,12 @@ const EventPage = ({ event, sessions }: Props) => {
     const [selectedOptions, setSelectedOptions] = useState<string[]>([])
     const [speakers, setSpeakers] = useState<string[]>([])
 
+    const localtionRef = useRef(null)
+    const [selectedLocations, setSelectedLocations] = useState<string[]>([])
+    const [locationsOptions, setLocationsOptions] = useState<string[]>([])
+
+    const [openLocationFilter, setOpenLocationFilter] = useState(false)
+
     const isOrganizer = userRole === "resident"
 
     const startDate = moment(new Date(event.startDate)).add(1, "day")
@@ -100,6 +106,42 @@ const EventPage = ({ event, sessions }: Props) => {
         }
     }, [])
     /* End DatePicker code */
+
+    const handleClickOutside = (event: any) => {
+        const { current: locationCurrent } = localtionRef as {
+            current: HTMLElement | null
+        }
+        if (locationCurrent && !locationCurrent.contains(event.target)) {
+            setOpenLocationFilter(false)
+        }
+    }
+
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClickOutside)
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside)
+        }
+    }, [])
+
+    useEffect(() => {
+        const locations = Array.from(new Set(sessions.map((item) => item.location)))
+        setLocationsOptions(locations)
+    }, [])
+
+    const handleCheckboxChangeLocation = (location: string) => {
+        if (selectedLocations.includes(location)) {
+            setSelectedLocations(selectedLocations.filter((selectedWeek) => selectedWeek !== location))
+        } else {
+            setSelectedLocations([...selectedLocations, location])
+        }
+    }
+
+    const filteredSessionsByLocation =
+        selectedLocations.length !== 0
+            ? filteredSessions.filter((item) => selectedLocations.includes(item.location))
+            : filteredSessions
+
 
     /* Begin DateList code */
     // const [openFilterOptions, setOpenFilterOptions] = useState(false)
@@ -274,13 +316,32 @@ const EventPage = ({ event, sessions }: Props) => {
                             sessions={sessions}
                         />
                         <div className="flex flex-col md:flex-row justify-center md:justify-end items:start md:items-center gap-2 md:gap-2 w-full">
-                            <button
-                                onClick={() => setSelectedOptions([])}
-                                className="bg-white border border-primary justify-between  text-zulalu-primary font-[600] py-[8px] px-[16px] gap-[8px] text-[16px] rounded-[8px] flex flex-row justify-center items-center"
-                            >
-                                <p>ALL SESSIONS</p>
-                                <NextImage src={"/arrow-down.svg"} width={8} height={4} />
-                            </button>
+                        <div className="flex flex-col relative w-full md:w-[150px]" ref={localtionRef}>
+                                <button
+                                    onClick={() => setOpenLocationFilter(!openLocationFilter)}
+                                    className="flex justify-between uppercase bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] gap-[8px] text-[16px] rounded-[8px] flex flex-row justify-center items-center"
+                                >
+                                    <p>Location</p>
+                                    <NextImage src={"/arrow-down.svg"} width={8} height={4} />
+                                </button>
+
+                                {openLocationFilter && (
+                                    <div className="flex z-[10] flex-col gap-3 bg-white border w-full py-[8px] px-[16px] border-primary absolute top-[45px] text-zulalu-primary rounded-[8px]">
+                                        {locationsOptions.map((item, index) => (
+                                            <label key={index} className="flex w-full items-center gap-2 capitalize">
+                                                <input
+                                                    type="checkbox"
+                                                    name="checkbox"
+                                                    value="value"
+                                                    checked={selectedLocations.includes(item)}
+                                                    onChange={() => handleCheckboxChangeLocation(item)}
+                                                />
+                                                {item}
+                                            </label>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
 
                             {/* Begin DatePicker Filter */}
                             <div className="flex flex-col w-auto min-w-[200px]" ref={datePickerWrapperRef}>
@@ -335,7 +396,7 @@ const EventPage = ({ event, sessions }: Props) => {
                             {/* End DateList Filter */}
                         </div>
                     </div>
-                    <Sessions event={event} sessions={filteredSessions} />
+                    <Sessions event={event} sessions={filteredSessionsByLocation} />
                 </div>
             </div>
         </BaseTemplate>
