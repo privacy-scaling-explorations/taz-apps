@@ -36,22 +36,13 @@ const MyProfilePage = ({ events, sessions }: Props) => {
         }
     }
 
-    const downloadFile = async (url: any) => {
-        const headers = {
-            Accept: "application/json, text/javascript",
-            Authorization: `Token ${process.env.NEXT_PUBLIC_PRETIX_API}`,
-            "Content-Type": "application/json"
-        }
 
-        try {
-            const response = await fetch(url, { headers })
-            if (!response.ok) {
-                throw new Error("Error fetching file")
-            }
-        } catch (error) {
-            console.error("Error downloading file:", error)
-        }
-    }
+      const openPDFPopup = async (apiURL : any) => {
+        const response = await fetch(`/api/download-ticket?apiURL=${encodeURIComponent(apiURL)}`);
+        const pdfBlob = await response.blob();
+        const pdfURL = URL.createObjectURL(pdfBlob);
+        window.open(pdfURL, "_blank", "resizable=yes,scrollbars=yes,width=800,height=600");
+      };
 
     useEffect(() => {
         if (userSessions.length > 0) {
@@ -87,14 +78,14 @@ const MyProfilePage = ({ events, sessions }: Props) => {
                             <NextImage src={"/user-icon-5.svg"} alt="calendar" width={24} height={24} />
                             <p className="font-bold capitalize">{userInfo && userInfo.userName}</p>
                         </div>
-                        <div className="flex w-auto gap-2 px-2 py-1 text-[16px] items-center">
+                        {/* <div className="flex w-auto gap-2 px-2 py-1 text-[16px] items-center">
                             <NextImage src={"/vector-location.svg"} alt="location" width={24} height={24} />
                             <p>Ho Chi Minh City</p>
                         </div>
                         <div className="flex w-auto gap-2 px-2 py-1 text-[16px] items-center">
                             <NextImage src={"/vector-computer.svg"} alt="location" width={24} height={24} />
                             <p>Ethereum Foundation</p>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
                 <CalendarSessionModal
@@ -163,7 +154,7 @@ const MyProfilePage = ({ events, sessions }: Props) => {
                                         <div key={index} className="flex items-center gap-1 cursor-pointer w-auto">
                                             <NextImage src={"/vector-ticket-black.svg"} width={14} height={12} />
                                             <a
-                                                onClick={() => downloadFile(item.pdf_link)}
+                                                onClick={() => openPDFPopup(item.pdf_link)}
                                                 className="capitalize border-b border-[#52B5A4] text-[16px]"
                                                 style={{ cursor: "pointer" }}
                                             >
