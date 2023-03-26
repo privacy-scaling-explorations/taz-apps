@@ -2028,7 +2028,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@semaphore-protocol/group@npm:^3.1.0, @semaphore-protocol/group@npm:^3.2.3":
+"@semaphore-protocol/group@npm:^3.1.0":
   version: 3.4.0
   resolution: "@semaphore-protocol/group@npm:3.4.0"
   dependencies:
@@ -2040,7 +2040,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@semaphore-protocol/identity@npm:^3.1.0, @semaphore-protocol/identity@npm:latest":
+"@semaphore-protocol/identity@npm:^3.1.0":
   version: 3.4.0
   resolution: "@semaphore-protocol/identity@npm:3.4.0"
   dependencies:
@@ -2053,7 +2053,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@semaphore-protocol/proof@npm:^3.1.0, @semaphore-protocol/proof@npm:latest":
+"@semaphore-protocol/proof@npm:^3.1.0":
   version: 3.4.0
   resolution: "@semaphore-protocol/proof@npm:3.4.0"
   dependencies:
@@ -2067,15 +2067,6 @@ __metadata:
     "@semaphore-protocol/group": 3.4.0
     "@semaphore-protocol/identity": 3.4.0
   checksum: 111348e12783ece6a52fcca35e8f077d95168321ac984041ce2ffc0cd322d125ddde38e679c58ff813517eb3f31cb424f220f16eed513d9e95da9c22a37d34bb
-  languageName: node
-  linkType: hard
-
-"@semaphore-protocol/subgraph@npm:latest":
-  version: 3.1.0
-  resolution: "@semaphore-protocol/subgraph@npm:3.1.0"
-  dependencies:
-    axios: ^0.27.2
-  checksum: 69ac3eaeb3cfb8ff89b3318494bce0d1d44084a0fb5d249e05cc52e871beecdeff8e8ba9fcd1005b31f75500b9ebd02ad14ea9aa98e0ede21b21b11334c29bcd
   languageName: node
   linkType: hard
 
@@ -2950,13 +2941,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"base64-arraybuffer@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "base64-arraybuffer@npm:1.0.2"
-  checksum: 15e6400d2d028bf18be4ed97702b11418f8f8779fb8c743251c863b726638d52f69571d4cc1843224da7838abef0949c670bde46936663c45ad078e89fee5c62
-  languageName: node
-  linkType: hard
-
 "big-integer@npm:^1.6.42, big-integer@npm:^1.6.48":
   version: 1.6.51
   resolution: "big-integer@npm:1.6.51"
@@ -3382,15 +3366,6 @@ __metadata:
   version: 2.0.0
   resolution: "crypto-random-string@npm:2.0.0"
   checksum: 0283879f55e7c16fdceacc181f87a0a65c53bc16ffe1d58b9d19a6277adcd71900d02bb2c4843dd55e78c51e30e89b0fec618a7f170ebcc95b33182c28f05fd6
-  languageName: node
-  linkType: hard
-
-"css-line-break@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "css-line-break@npm:2.1.0"
-  dependencies:
-    utrie: ^1.0.2
-  checksum: 37b1fe632b03be7a287cd394cef8b5285666343443125c510df9cfb6a4734a2c71e154ec8f7bbff72d7c339e1e5872989b1c52d86162aed27d6cc114725bb4d0
   languageName: node
   linkType: hard
 
@@ -4587,16 +4562,6 @@ __metadata:
   version: 1.0.8
   resolution: "hey-listen@npm:1.0.8"
   checksum: 6bad60b367688f5348e25e7ca3276a74b59ac5a09b0455e6ff8ab7d4a9e38cd2116c708a7dcd8a954d27253ce1d8717ec891d175723ea739885b828cf44e4072
-  languageName: node
-  linkType: hard
-
-"html2canvas@npm:^1.4.1":
-  version: 1.4.1
-  resolution: "html2canvas@npm:1.4.1"
-  dependencies:
-    css-line-break: ^2.1.0
-    text-segmentation: ^1.0.3
-  checksum: c134324af57f3262eecf982e436a4843fded3c6cf61954440ffd682527e4dd350e0c2fafd217c0b6f9a455fe345d0c67b4505689796ab160d4ca7c91c3766739
   languageName: node
   linkType: hard
 
@@ -7215,15 +7180,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"text-segmentation@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "text-segmentation@npm:1.0.3"
-  dependencies:
-    utrie: ^1.0.2
-  checksum: 2e24632d59567c55ab49ac324815e2f7a8043e63e26b109636322ac3e30692cee8679a448fd5d0f0598a345f407afd0e34ba612e22524cf576d382d84058c013
-  languageName: node
-  linkType: hard
-
 "text-table@npm:^0.2.0":
   version: 0.2.0
   resolution: "text-table@npm:0.2.0"
@@ -7610,15 +7566,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"utrie@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "utrie@npm:1.0.2"
-  dependencies:
-    base64-arraybuffer: ^1.0.2
-  checksum: c96fbb7d4d8855a154327da0b18e39b7511cc70a7e4bcc3658e24f424bb884312d72b5ba777500b8858e34d365dc6b1a921dc5ca2f0d341182519c6b78e280a5
-  languageName: node
-  linkType: hard
-
 "uuid@npm:^9.0.0":
   version: 9.0.0
   resolution: "uuid@npm:9.0.0"
@@ -7689,10 +7636,6 @@ __metadata:
     "@pcd/pcd-collection": 0.0.8
     "@pcd/pcd-types": 0.0.8
     "@react-google-maps/api": ^2.18.1
-    "@semaphore-protocol/group": ^3.2.3
-    "@semaphore-protocol/identity": latest
-    "@semaphore-protocol/proof": latest
-    "@semaphore-protocol/subgraph": latest
     "@supabase/auth-helpers-nextjs": ^0.5.6
     "@supabase/supabase-js": ^2.10.0
     "@tailwindcss/line-clamp": ^0.4.2
@@ -7706,7 +7649,6 @@ __metadata:
     axios: ^0.27.2
     dotenv: ^16.0.1
     framer-motion: ^7.2.1
-    html2canvas: ^1.4.1
     js-sha256: ^0.9.0
     libsodium-wrappers: ^0.7.11
     moment: ^2.29.4
