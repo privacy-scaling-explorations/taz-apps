@@ -16,6 +16,7 @@ type Props = {
 
 const MyProfilePage = ({ events, sessions }: Props) => {
     const { userInfo, userSessions, userParticipatingSessions, userRole } = useUserAuthenticationContext()
+    const [pdfURL, setPdfURL] = useState<string>();
     const [eventsOpt, setEventsOpt] = useState<string[]>([])
     const [selectedOpt, setSelectedOpt] = useState<string[]>([])
     const [tickets, setTickets] = useState<any[]>([])
@@ -39,6 +40,7 @@ const MyProfilePage = ({ events, sessions }: Props) => {
     const callDownloadFileAPI = (url : any) => {
         const apiURL = `/api/downloadFile?url=${encodeURIComponent(url)}`;
         console.log(apiURL)
+        setPdfURL(apiURL);
         return apiURL;
       };
 
@@ -161,6 +163,15 @@ const MyProfilePage = ({ events, sessions }: Props) => {
                                         </div>
                                     ))}
                             </div>
+                        </div>
+                        <div>
+                        {pdfURL && (
+                            <iframe
+                            src={pdfURL}
+                            style={{ width: "100%", height: "500px", border: "none" }}
+                            title="PDF Viewer"
+                            ></iframe>
+                        )}
                         </div>
                     </div>
                 </div>
