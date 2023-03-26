@@ -1,34 +1,33 @@
 // pages/displayPDF.js
 import { useEffect, useState } from "react";
 
-const callDownloadPDFEndpoint = () => {
-  const apiURL = "/api/download-ticket";
-  return apiURL;
-};
+// const callDownloadPDFEndpoint = () => {
+//   const apiURL = "/api/download-ticket";
+//   return apiURL;
+// };
 
 const DisplayPDF = () => {
-  const [pdfURL, setPdfURL] = useState(null);
 
-  useEffect(() => {
-    const fetchPDF = async () => {
-      const apiURL = callDownloadPDFEndpoint();
-      console.log(apiURL)
-      setPdfURL(apiURL);
-    };
+//   useEffect(() => {
+//     const fetchPDF = async () => {
+//       const apiURL = callDownloadPDFEndpoint();
+//       setPdfURL(apiURL);
+//     };
 
-    fetchPDF();
-  }, []);
+//     fetchPDF();
+//   }, []);
+
+const openPDFPopup = async (apiURL) => {
+    const response = await fetch(`/api/download-ticket?apiURL=${encodeURIComponent(apiURL)}`);
+    const pdfBlob = await response.blob();
+    const pdfURL = URL.createObjectURL(pdfBlob);
+    window.open(pdfURL, "_blank", "resizable=yes,scrollbars=yes,width=800,height=600");
+  };
 
   return (
     <div>
       <h1>PDF Viewer</h1>
-      {pdfURL && (
-        <iframe
-          src={pdfURL}
-          style={{ width: "100%", height: "500px", border: "none" }}
-          title="PDF Viewer"
-        ></iframe>
-      )}
+      <button onClick={() => openPDFPopup("https://beta.ticketh.xyz/api/v1/organizers/zuzalu/events/ZK/orders/GLZED/download/pdf/")}>Open PDF</button>
     </div>
   );
 };
