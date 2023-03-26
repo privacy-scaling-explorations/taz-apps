@@ -98,8 +98,8 @@ const HomeTemplate = ({ events }: Props) => {
     return (
         <BaseTemplate>
             <Head>
-                <title>Home</title>
-                <meta property="og:title" content="My new title" key="title" />
+                <title>Zuzalu - home</title>
+                <meta property="og:title" content="Zuzalu" key="title" />
             </Head>
 
             <div className="flex flex-col min-h-[100vh] bg-[#EEEEF0] p-5 gap-10">

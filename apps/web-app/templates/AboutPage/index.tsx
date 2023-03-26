@@ -10,9 +10,9 @@ const AboutPage = () => (
                     Zuzalu is a first-of-its-kind pop-up city community in
                     <span className="relative z-10 inline-block px-2">
                         <span className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-green-200" />
-                        <span className="relative z-10">Montenegro.</span>
+                        <span className="relative z-10">Montenegro,</span>
                     </span>{" "}
-                    , from March 25 to May 25, 2023.
+                    from March 25 to May 25, 2023.
                 </h1>
 
                 <div className="pl-0 md:pl-10 w-full flex flex-col gap-5 z-[10]">
@@ -27,7 +27,7 @@ const AboutPage = () => (
                 </div>
                 <div className="hidden md:w-full md:w-[100px] h-[2px] flex bg-[#52B5A4] mt-[60px] mb-[60px]" />
                 <div className="flex flex-col gap-5 pl-0 md:pl-10 z-[10]">
-                    <h1 className="font-[600] text-[52px]">Joins us!</h1>
+                    <h1 className="font-[600] text-[52px]">Join us!</h1>
                     <div className="flex flex-col text-[16px] gap-1">
                         <h1>There are many ways to participate in Zuzalu.</h1>
                         <h1>
@@ -38,7 +38,12 @@ const AboutPage = () => (
                         </h1>
                         <h1>
                             or
-                            <span className="text-zulalu-primary underline"> apply for a short-term visitor pass.</span>
+                            <a href="https://airtable.com/shrRZrZbozPE2g6HH" target="_blank" rel="noopener noreferrer">
+                                <span className="text-zulalu-primary underline">
+                                    {" "}
+                                    apply for a short-term visitor pass.
+                                </span>
+                            </a>
                         </h1>
                     </div>
                 </div>
@@ -55,8 +60,8 @@ const AboutPage = () => (
                             <div className="bg-bgGradientAboutPage w-[28px] h-[28px] rounded-full absolute top-[15px] left-[-12px]" />
                             <div className="h-[90%] w-[4px] bg-[#52B5A4]" />
                             <div className="flex flex-col max-w-full w-full">
-                                <h1 className="text-[40px] font-[600]">Learn</h1>
-                                <h1 className="w-full md:w-[500px]">
+                                <h1 className="text-[24px] font-[600] md:text-[40px]">Learn</h1>
+                                <h1 className="w-full md:w-[500px] mb-10">
                                     Zuzalu will be full of opportunities to learn, from themed events to informal
                                     reading groups - think of it like a campus with a 10% course load, where you can
                                     walk around and have a fascinating conversation with anyone.
@@ -67,8 +72,8 @@ const AboutPage = () => (
                             <div className="bg-bgGradientAboutPage w-[28px] h-[28px] rounded-full absolute top-[15px] left-[-12px]" />
                             <div className="h-full w-[4px] bg-[#52B5A4]" />
                             <div className="flex flex-col max-w-full w-full">
-                                <h1 className="text-[40px] font-[600]">Be Health</h1>
-                                <h1 className="w-full md:w-[500px]">
+                                <h1 className="text-[24px] font-[600] md:text-[40px]">Be Healthy</h1>
+                                <h1 className="w-full md:w-[500px] mb-10">
                                     Easily keep a healthy lifestyle by default, with healthy food available,
                                     accountability buddies for healthy habits, group workouts and biohacking trials and
                                     experimentation.
@@ -79,8 +84,8 @@ const AboutPage = () => (
                             <div className="bg-bgGradientAboutPage w-[28px] h-[28px] rounded-full absolute top-[15px] left-[-12px]" />
                             <div className="h-full w-[4px] bg-[#52B5A4]" />
                             <div className="flex flex-col max-w-full w-full">
-                                <h1 className="text-[40px] font-[600]">Reimagine Aging</h1>
-                                <h1 className="w-full md:w-[500px]">
+                                <h1 className="text-[24px] font-[600] md:text-[40px]">Reimagine Aging</h1>
+                                <h1 className="w-full md:w-[500px] mb-10">
                                     Advances in aging research are being translated into medicine, in clinical trials.
                                     We will dive into biotech to bring aging under medical control, and into medical
                                     innovation jurisdictions to enable better regulatory pathways for innovating in
@@ -92,8 +97,8 @@ const AboutPage = () => (
                             <div className="bg-bgGradientAboutPage w-[28px] h-[28px] rounded-full absolute top-[15px] left-[-12px]" />
                             <div className="h-full w-[4px] bg-[#52B5A4]" />
                             <div className="flex flex-col max-w-full w-full">
-                                <h1 className="text-[40px] font-[600]">Hack</h1>
-                                <h1 className="w-full md:w-[500px]">
+                                <h1 className="text-[24px] font-[600] md:text-[40px]">Hack</h1>
+                                <h1 className="w-full md:w-[500px] mb-10">
                                     We’re creating a meta-hackathon while at Zuzalu. Help us imagine, build and test
                                     tools and infrastructure that optimize for community members to collaborate and
                                     self-organize.
@@ -104,8 +109,8 @@ const AboutPage = () => (
                             <div className="bg-bgGradientAboutPage w-[28px] h-[28px] rounded-full absolute top-[15px] left-[-12px]" />
                             <div className="h-full w-[4px] bg-[#52B5A4]" />
                             <div className="flex flex-col max-w-full w-full">
-                                <h1 className="text-[40px] font-[600]">Build Community</h1>
-                                <h1 className="w-full md:w-[500px]">
+                                <h1 className="text-[24px] font-[600] md:text-[40px]">Build Community</h1>
+                                <h1 className="w-full md:w-[500px] mb-10">
                                     At Zuzalu we hope you feel ownership of what you’re helping create and help build
                                     the city you’d love to live in. We encourage attendees to take responsibility for
                                     their experience and the experience of others, and foster a spirit of
@@ -117,7 +122,7 @@ const AboutPage = () => (
                             <div className="bg-bgGradientAboutPage w-[28px] h-[28px] rounded-full absolute top-[15px] left-[-12px]" />
                             <div className="h-[40px] w-[4px] bg-[#52B5A4]" />
                             <div className="flex flex-col max-w-full w-full">
-                                <h1 className="text-[40px] font-[600]">Staying safe at Zuzalu</h1>
+                                <h1 className="text-[24px] font-[600] md:text-[40px]">Staying safe at Zuzalu</h1>
                                 <h1 className="w-full md:w-[500px]">
                                     Staying safe and respecting consent are important values in our community. We want
                                     to ensure that everyone feels comfortable and secure. To achieve this, we ask that

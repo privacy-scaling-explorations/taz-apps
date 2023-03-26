@@ -58,7 +58,7 @@ const Header = () => {
             console.log("log my proof", participant1)
             const response = await axios({
                 method: "post",
-                url: `${URL_PASSPORT_API}/api/passport-user-login/`,
+                url: "https://zuzalu.city/api/passport-user-login/",
                 data: participant1,
                 headers: {
                     "Content-Type": "application/json"
@@ -153,7 +153,7 @@ const Header = () => {
                             Program
                         </li>
                     </NextLink>
-                    {/* <NextLink href={"/faq"}>
+                    <NextLink href={"/faq"}>
                         <li
                             className={`cursor-pointer text-[#F8FFFE] text-[18px] ${
                                 router.asPath === "/faq" ? "font-[700]" : "font-[400]"
@@ -161,7 +161,7 @@ const Header = () => {
                         >
                             FAQ
                         </li>
-                    </NextLink> */}
+                    </NextLink>
                     {!isAuth && (
                         <a href="https://airtable.com/shrRZrZbozPE2g6HH" target="_blank" rel="noopener noreferrer">
                             <li className="cursor-pointer font-[400] text-[18px] text-[#F8FFFE]">Apply Now</li>
