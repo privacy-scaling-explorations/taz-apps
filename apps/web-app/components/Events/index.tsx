@@ -42,6 +42,18 @@ const Events = ({ events }: Props) => {
         router.push(`/event/${eventId}`)
     }
 
+    const formatDates = (startDate: Date, endDate: Date) => {
+        const start = moment.utc(startDate)
+        const end = moment.utc(endDate)
+
+        if (start.month() === end.month()) {
+            const formattedDate = `${start.format("MMMM D")} - ${end.format("D")}`
+            return formattedDate
+        }
+        const formattedDate = `${start.format("MMMM D")} - ${end.format("MMMM D")}`
+        return formattedDate
+    }
+
     return (
         <div className="flex flex-col bg-white py-[40px] px-[36px] rounded-[8px] gap-10">
             <div className="flex flex-col md:flex-row md:gap-0 gap-5  w-full justify-between items-start">
@@ -74,41 +86,33 @@ const Events = ({ events }: Props) => {
                             <h1 className="md:text-[24px] text-[16px] font-semibold capitalize z-[2]">{`${event.name}`}</h1>
                             <div className="flex gap-1 z-[2] font-[600]">
                                 <NextImage src={"/vector-calendar.svg"} alt="calendar" width={15} height={15} />
-                                <h1 className="text-black md:text-[14px] text-[10px]">{`${moment
-                                    .utc(event.startDate)
-                                    .format("MMMM D")}-${moment.utc(event.endDate).format("D")},${moment
-                                    .utc(event.startDate)
-                                    .format("YYYY")}`}</h1>
+                                <h1 className="text-black md:text-[14px] text-[10px]">
+                                    {formatDates(event.startDate, event.endDate)}
+                                </h1>
                             </div>
                         </div>
                     ))}
                 </div>
                 <div className="grid md:grid-rows-1 md:grid-cols-4 grid-cols-1 gap-5">
-                    {secondHalf.map((event, index) => {
-                        const start = moment(new Date(event.startDate)).add(1, "day").format("MMMM D")
-                        const end = moment(new Date(event.endDate)).add(1, "day").format("D, YYYY")
-                        return (
-                            <div
-                                key={index}
-                                onClick={() => handleClickEvent(event.id)}
-                                className={`flex overflow-hidden relative cursor-pointer flex-col gap-1 md:gap-2 justify-start md:justify-start p-5 md:p-[32px] h-[100px] md:h-[250px] rounded-[16px]`}
-                            >
-                                <div className="flex z-[1] absolute right-0 left-0 top-0 w-full h-full overflow-hidden">
-                                    <NextImage src={event.bg_image_url} width={900} height={400} objectFit="cover" />
-                                </div>
-
-                                <h1 className="md:text-[24px] text-[16px] font-semibold capitalize z-[2]">{`${event.name}`}</h1>
-                                <div className="flex gap-1 z-[2] font-[600]">
-                                    <NextImage src={"/vector-calendar.svg"} alt="calendar" width={15} height={15} />
-                                    <h1 className="text-black md:text-[14px] text-[10px]">{`${moment
-                                        .utc(event.startDate)
-                                        .format("MMMM D")}-${moment.utc(event.endDate).format("D")},${moment
-                                        .utc(event.startDate)
-                                        .format("YYYY")}`}</h1>
-                                </div>
+                    {secondHalf.map((event, index) => (
+                        <div
+                            key={index}
+                            onClick={() => handleClickEvent(event.id)}
+                            className={`flex overflow-hidden relative cursor-pointer flex-col gap-1 md:gap-2 justify-start md:justify-start p-5 md:p-[32px] h-[100px] md:h-[250px] rounded-[16px]`}
+                        >
+                            <div className="flex z-[1] absolute right-0 left-0 top-0 w-full h-full overflow-hidden">
+                                <NextImage src={event.bg_image_url} width={900} height={400} objectFit="cover" />
                             </div>
-                        )
-                    })}
+
+                            <h1 className="md:text-[24px] text-[16px] font-semibold capitalize z-[2]">{`${event.name}`}</h1>
+                            <div className="flex gap-1 z-[2] font-[600]">
+                                <NextImage src={"/vector-calendar.svg"} alt="calendar" width={15} height={15} />
+                                <h1 className="text-black md:text-[14px] text-[10px]">
+                                    {formatDates(event.startDate, event.endDate)}
+                                </h1>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>
