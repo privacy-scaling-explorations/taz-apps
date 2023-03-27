@@ -100,7 +100,11 @@ const Events = ({ events }: Props) => {
                                 <h1 className="md:text-[24px] text-[16px] font-semibold capitalize z-[2]">{`${event.name}`}</h1>
                                 <div className="flex gap-1 z-[2] font-[600]">
                                     <NextImage src={"/vector-calendar.svg"} alt="calendar" width={15} height={15} />
-                                    <h1 className="text-black md:text-[14px] text-[10px]">{`${start}-${end}`}</h1>
+                                    <h1 className="text-black md:text-[14px] text-[10px]">{`${moment
+                                        .utc(event.startDate)
+                                        .format("MMMM D")}-${moment.utc(event.endDate).format("D")},${moment
+                                        .utc(event.startDate)
+                                        .format("YYYY")}`}</h1>
                                 </div>
                             </div>
                         )
