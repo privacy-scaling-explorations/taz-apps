@@ -9,6 +9,7 @@ import CalendarSessionModal from "../../components/CalendarSessionModal"
 import TicketsModal from "../../components/TicketsModal"
 import { useUserAuthenticationContext } from "../../context/UserAuthenticationContext"
 import StyledDatePicker from "../../components/StyledDatePicker"
+import ContactModal from "../../components/ContactModal"
 
 type Props = {
     sessions: SessionsDTO[]
@@ -23,6 +24,7 @@ const CalendarPage = ({ sessions, events }: Props) => {
     const [openAddTicketsModal, setOpenAddTicketsModal] = useState(false)
     const [selectedLocations, setSelectedLocations] = useState<string[]>([])
     const [locationsOptions, setLocationsOptions] = useState<string[]>([])
+    const [openContactModal, setOpenContactModal] = useState(false)
 
     const [openLocationFilter, setOpenLocationFilter] = useState(false)
     const isOrganizer = userRole === "resident"
@@ -138,10 +140,16 @@ const CalendarPage = ({ sessions, events }: Props) => {
                         <h1 className={`text-black font-[600]`}>Program</h1>
                     </div>
                     <div className="flex flex-row gap-[8px] justify-between items-center">
-                        <button className="flex md:hidden bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]">
+                        <button
+                            className="flex md:hidden bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]"
+                            onClick={() => setOpenContactModal(true)}
+                        >
                             CONTACT
                         </button>
-                        <button className="hidden md:flex bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]">
+                        <button
+                            className="hidden md:flex bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] rounded-[8px]"
+                            onClick={() => setOpenContactModal(true)}
+                        >
                             CONTACT ORGANIZERS
                         </button>
 
@@ -291,6 +299,7 @@ const CalendarPage = ({ sessions, events }: Props) => {
                     <div className="border border-black flex flex-col"></div>
 
                     <CalendarPageSessions sessions={filteredSessionsByLocation} />
+                    <ContactModal isOpen={openContactModal} closeModal={setOpenContactModal} />
                 </div>
             </div>
         </BaseTemplate>
