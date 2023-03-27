@@ -33,10 +33,6 @@ const EventPage = ({ event, sessions }: Props) => {
 
     const isOrganizer = userRole === "resident"
 
-    const startDate = moment(new Date(event.startDate)).add(1, "day")
-    const endDate = moment(new Date(event.endDate)).add(1, "day")
-    const formattedDate = `${startDate.format("MMM D")}-${endDate.format("D, YYYY")}`
-
     /* Begin DatePicker code */
     const [openDatePicker, setOpenDatePicker] = useState(false)
     const [datePickerDescription, setDatePickerDescription] = useState("FULL PROGRAM")
@@ -65,6 +61,18 @@ const EventPage = ({ event, sessions }: Props) => {
             return (start === null || start <= sessionDate) && (endOfDay === null || sessionDate <= endOfDay)
         })
         setFilteredSessions(filtered)
+    }
+
+    const formatDates = (startDate: Date, endDate: Date) => {
+        const start = moment.utc(startDate)
+        const end = moment.utc(endDate)
+
+        if (start.month() === end.month()) {
+            const formattedDate = `${start.format("MMMM D")} - ${end.format("D")}`
+            return formattedDate
+        }
+        const formattedDate = `${start.format("MMMM D")} - ${end.format("MMMM D")}`
+        return formattedDate
     }
 
     // Update filter header description
@@ -255,17 +263,14 @@ const EventPage = ({ event, sessions }: Props) => {
                     </div>
                     <div className="flex flex-col w-full lg:w-2/6 pl-5 pr-20 md:mb-0 mb-10">
                         <div className="flex my-5 w-full">
-                            <h1 className="text-black text-[52px] font-[600]">{`${event.name.substring(0, 30)}...`}</h1>
+                            <h1 className="text-black text-[52px] font-[600] leading-tight">{event.name}</h1>
                         </div>
                         <div className="flex flex-col w-full gap-4">
                             <div className="flex gap-1 items-center justify-start">
                                 <NextImage src={"/vector-calendar.svg"} alt="calendar" width={15} height={15} />
-                                <h1 className="text-zulalu-secondary">{formattedDate}</h1>
+                                <h1 className="text-zulalu-secondary">{formatDates(event.startDate, event.endDate)}</h1>
                             </div>
-                            <h1>
-                                Join us for presentations, workshops, and roundtables to discuss beginner ZK, ZK for
-                                biohackers, new proving systems and more.
-                            </h1>
+                            <h1>{event.info}</h1>
                         </div>
                         <div className="flex flex-col mt-10 gap-5">
                             <h1 className="text-black text-[24px]">Speakers</h1>
