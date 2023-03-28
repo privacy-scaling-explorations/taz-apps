@@ -23,6 +23,24 @@ const StyledDatePicker: React.FC<StyledDatePickerProps> = ({ onChange, startDate
         return <span className={isWeekend ? styles.datepicker__day_name_weekend : ""}>{formattedDay}</span>
     }
 
+    function convertUTCToLocalDate(date: Date | null) {
+        if (!date) {
+            return date
+        }
+        date = new Date(date)
+        date = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())
+        return date
+    }
+
+    function convertLocalToUTCDate(date: Date | null) {
+        if (!date) {
+            return date
+        }
+        date = new Date(date)
+        date = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()))
+        return date
+    }
+
     const renderCustomHeader = (props: ReactDatePickerCustomHeaderProps) => {
         const { date, decreaseMonth, increaseMonth } = props
         return (
@@ -55,9 +73,14 @@ const StyledDatePicker: React.FC<StyledDatePickerProps> = ({ onChange, startDate
     return (
         <DatePicker
             className="border-2 border-[#35655F] rounded-full"
-            onChange={(dates: [Date | null, Date | null]) => onChange(dates)}
-            startDate={startDate}
-            endDate={endDate}
+            startDate={convertUTCToLocalDate(startDate)}
+            endDate={convertUTCToLocalDate(endDate)}
+            onChange={(dates) => {
+                const [localStartDate, localEndDate] = dates
+                const utcStartDate = convertLocalToUTCDate(localStartDate)
+                const utcEndDate = convertLocalToUTCDate(localEndDate)
+                onChange([utcStartDate, utcEndDate])
+            }}
             selectsRange
             inline
             dateFormat="DD/MM/YYYY"
