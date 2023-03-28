@@ -6,6 +6,7 @@ import axios from "axios"
 import moment from "moment"
 import { ToastContainer, toast } from "react-toastify"
 import NextImage from "next/image"
+import { IoMdArrowBack } from "react-icons/io"
 
 import { UserDTO, TracksDTO, FormatDTO, LevelDTO, LocationDTO, EventTypeDTO, SessionsDTO } from "../../types"
 
@@ -438,7 +439,15 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                         ))}
                 </select>
             </div>
-            <div className="w-full flex flex-col my-10 items-start">
+            <div className="w-full flex flex-col md:flex-row gap-5 justify-center items-center mt-5">
+                <button
+                    type="button"
+                    className="w-full flex flex-row border-zulalu-primary border font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-white rounded-[8px] text-black text-[16px] mb-5"
+                    onClick={() => setSteps(1)}
+                >
+                    <IoMdArrowBack size={20} />
+                    BACK
+                </button>
                 <button
                     type="button"
                     className="w-full lex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
