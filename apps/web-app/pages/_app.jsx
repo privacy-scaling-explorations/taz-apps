@@ -1,6 +1,6 @@
 // import type { AppProps } from "next/app"
-import { PassportModalContextProvider } from "../context/PassportModalContext"
 import { UserAuthenticationProvider } from "../context/UserAuthenticationContext"
+import { UserPassportContextProvider } from "../context/UserPassportContext"
 
 import "../styles/globals.css"
 import "../styles/drawingComponent.css"
@@ -10,9 +10,9 @@ import "react-datepicker/dist/react-datepicker.css"
 
 const MyApp = ({ Component, pageProps }) => (
     <UserAuthenticationProvider>
-        <PassportModalContextProvider>
+        <UserPassportContextProvider>
             <Component {...pageProps} />
-        </PassportModalContextProvider>
+        </UserPassportContextProvider>
     </UserAuthenticationProvider>
 )
 

@@ -88,7 +88,7 @@ const SessionPage = ({ session, sessions }: Props) => {
                         </Link>
                         <h1 className={`text-[#1C292899]`}>/</h1>
                         <Link href={router.asPath.split("/").slice(0, 3).join("/")}>
-                            <a className={`text-[#1C292899]`}>{session.track}</a>
+                            <a className={`text-[#1C292899]`}>{session.event_slug}</a>
                         </Link>
                         <h1 className={`text-[#1C292899]`}>/</h1>
                         <h1 className={`text-black font-[600]`}>{session.name}</h1>

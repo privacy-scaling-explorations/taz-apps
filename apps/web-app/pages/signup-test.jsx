@@ -38,12 +38,18 @@ function SignupPage() {
 
     async function handleLogout() {
       const { data, error } = await supabase.auth.admin.deleteUser(
-        '7390a184-5bf6-486c-a244-d760e731661c'
+        '132670f3-dfcd-42d0-babb-607cbe8b8ff1'
       )
       console.log(data, error)
       try {
             await supabase.auth.signOut()
         } catch (error) {}
+    }
+
+    async function deleteUsers() {
+      const { data, error } = await supabase.auth.admin.deleteUser(
+        '132670f3-dfcd-42d0-babb-607cbe8b8ff1'
+      )
     }
 
     return (
