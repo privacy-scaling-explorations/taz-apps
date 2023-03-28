@@ -42,15 +42,17 @@ const CalendarPage = ({ sessions, events }: Props) => {
     }
 
     const handleDateSelection = (selectedDates: [Date | null, Date | null]) => {
-        const [start, end] = selectedDates
+        // Filter sessions
+        console.log("selectedDates: ", selectedDates)
+        const [start, end] = selectedDates.map((date) => (date ? moment.utc(date).startOf("day").toDate() : null))
         setDatePickerStartDate(start)
         setDatePickerEndDate(end)
         const filtered = sessions.filter((session) => {
-            const sessionDate = new Date(session.startDate)
-            sessionDate.setHours(0, 0, 0, 0) // Remove time part for date comparison
-            const endOfDay = end ? new Date(end) : null
-            if (endOfDay) {
-                endOfDay.setHours(23, 59, 59, 999) // Set end date to end of day
+            const sessionDate = moment.utc(session.startDate).startOf("day").toDate() // Remove time part for date comparison
+            const sessionEndDate = end ? moment.utc(end) : null
+            let endOfDay = null
+            if (sessionEndDate) {
+                endOfDay = sessionEndDate.endOf("day").toDate()
             }
             return (start === null || start <= sessionDate) && (endOfDay === null || sessionDate <= endOfDay)
         })
@@ -60,24 +62,20 @@ const CalendarPage = ({ sessions, events }: Props) => {
     // Update filter header description
     // (done in useEffect because start and end date must be done updating first)
     useEffect(() => {
-        const today = new Date()
-        today.setHours(0, 0, 0, 0)
-        if (datePickerStartDate?.getTime() === today.getTime() && datePickerEndDate?.getTime() === today.getTime()) {
+        const today = moment().utc().startOf("day")
+        const start = datePickerStartDate ? moment(datePickerStartDate).utc() : null
+        const end = datePickerEndDate ? moment(datePickerEndDate).utc() : null
+
+        if (start?.isSame(today) && end?.isSame(today)) {
             setDatePickerDescription("TODAY")
-        } else if (datePickerStartDate?.getTime() === today.getTime()) {
+        } else if (start?.isSame(today)) {
             setDatePickerDescription("TODAY ONWARD")
-        } else if (datePickerStartDate && datePickerEndDate === null) {
-            setDatePickerDescription(`${moment(datePickerStartDate).format("MMMM D")} ONWARD`)
-        } else if (
-            datePickerStartDate &&
-            datePickerEndDate &&
-            datePickerStartDate.getTime() === datePickerEndDate.getTime()
-        ) {
-            setDatePickerDescription(moment(datePickerStartDate).format("dddd MMMM D"))
-        } else if (datePickerStartDate && datePickerEndDate) {
-            setDatePickerDescription(
-                `${moment(datePickerStartDate).format("MMMM D")} - ${moment(datePickerEndDate).format("D")}`
-            )
+        } else if (start && end === null) {
+            setDatePickerDescription(`${start.format("MMMM D")} ONWARD`)
+        } else if (start && end && start.isSame(end)) {
+            setDatePickerDescription(start.format("dddd MMMM D"))
+        } else if (start && end) {
+            setDatePickerDescription(`${start.format("MMMM D")} - ${end.format("D")}`)
         }
     }, [datePickerStartDate, datePickerEndDate])
 
@@ -268,7 +266,7 @@ const CalendarPage = ({ sessions, events }: Props) => {
                                 className="bg-white border w-full md:w-auto border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] gap-[8px] text-[16px] rounded-[8px] flex flex-row justify-between md:justify-center items-center"
                             >
                                 <p>ALL SESSIONS</p>
-                                <NextImage src={"/arrow-down.svg"} width={8} height={4} />
+                                {/* <NextImage src={"/arrow-down.svg"} width={8} height={4} /> */}
                             </button>
                             {/* Begin DatePicker Filter */}
                             <div className="flex flex-col w-auto min-w-[200px]" ref={datePickerWrapperRef}>
