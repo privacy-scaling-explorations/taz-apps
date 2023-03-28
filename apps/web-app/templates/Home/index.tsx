@@ -1,13 +1,10 @@
 import Head from "next/head"
 import NextImage from "next/image"
 import NextLink from "next/link"
-import { useRouter } from "next/router"
-import { useEffect, useState, useContext } from "react"
-import { requestSignedZuzaluUUIDUrl, useFetchParticipant, useSemaphoreSignatureProof } from "@pcd/passport-interface"
-import axios from "axios"
 import Events from "../../components/Events"
 import MainSection from "../../components/MainSection"
 import { useUserAuthenticationContext } from "../../context/UserAuthenticationContext"
+import { useUserPassportContext } from "../../context/UserPassportContext"
 
 import BaseTemplate from "../Base"
 import { EventsDTO } from "../../types"
@@ -18,82 +15,7 @@ type Props = {
 
 const HomeTemplate = ({ events }: Props) => {
     const { isAuth } = useUserAuthenticationContext()
-    const [uuid, setUuid] = useState<string | undefined>()
-    const [pcdStr, setPcdStr] = useState("")
-    const [participentData, setParticipentData] = useState<any>()
-    const [navbar, setNavbar] = useState(false)
-    const router = useRouter()
-
-    const PASSPORT_URL = "https://zupass.org/"
-    const PASSPORT_SERVER_URL = "https://api.pcd-passport.com/"
-    const URL_PASSPORT_API = process.env.URL_PASSPORT_API_URL
-
-    function requestProofFromPassport(proofUrl: string) {
-        const popupUrl = `/popup?proofUrl=${encodeURIComponent(proofUrl)}`
-        window.open(popupUrl, "_blank", "width=360,height=480,top=100,popup")
-    }
-
-    function requestSignedZuID() {
-        const proofUrl = requestSignedZuzaluUUIDUrl(PASSPORT_URL, `${window.location.origin}/popup`)
-        requestProofFromPassport(proofUrl)
-    }
-
-    // Listen for PCDs coming back from the Passport popup
-    useEffect(() => {
-        async function receiveMessage(ev: MessageEvent<any>) {
-            if (!ev.data.encodedPcd) return
-            console.log("Received message", ev.data)
-            setPcdStr(ev.data.encodedPcd)
-        }
-        window.addEventListener("message", receiveMessage, false)
-    }, [])
-
-    // Request a Zuzalu UUID-revealing proof from Passport
-    const { signatureProof, signatureProofValid } = useSemaphoreSignatureProof(pcdStr)
-
-    // Extract UUID, the signed message of the returned PCD
-    useEffect(() => {
-        if (signatureProofValid && signatureProof) {
-            const userUuid = signatureProof.claim.signedMessage
-            console.log("USER UUID", userUuid)
-            setUuid(userUuid)
-        }
-    }, [signatureProofValid, signatureProof])
-
-    // Finally, once we have the UUID, fetch the participant data from Passport.
-    const { participant, error, loading } = useFetchParticipant(PASSPORT_SERVER_URL, uuid)
-
-    const loginProof = async (participant1: any) => {
-        try {
-            console.log("log my proof", participant1)
-            const response = await axios({
-                method: "post",
-                url: `${URL_PASSPORT_API}/api/passport-user-login/`,
-                data: participant1,
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            })
-            console.log("req response", response)
-            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-            router.push("/").then(() => {
-                router.reload()
-            })
-        } catch (error1) {
-            console.error(error1)
-        }
-    }
-
-    useEffect(() => {
-        console.log("pp", participant)
-        if (participant) {
-            console.log("PARTICIPANT", participant)
-            setParticipentData(participant)
-            // TODO: Login Flow
-
-            loginProof(participant)
-        }
-    }, [participant])
+    const { requestSignedZuID } = useUserPassportContext()
 
     return (
         <BaseTemplate>
