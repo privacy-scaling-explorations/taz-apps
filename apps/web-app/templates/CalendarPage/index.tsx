@@ -265,7 +265,7 @@ const CalendarPage = ({ sessions, events }: Props) => {
                                 }}
                                 className="bg-white border w-full md:w-auto border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] gap-[8px] text-[16px] rounded-[8px] flex flex-row justify-between md:justify-center items-center"
                             >
-                                <p>ALL SESSIONS</p>
+                                <p>CLEAR FILTER</p>
                                 {/* <NextImage src={"/arrow-down.svg"} width={8} height={4} /> */}
                             </button>
                             {/* Begin DatePicker Filter */}
