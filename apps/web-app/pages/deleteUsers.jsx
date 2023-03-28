@@ -3,17 +3,13 @@ import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co";
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
-const supabase = createClient(
-  supabaseUrl,
-  "",
-  {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false,
-      detectSessionInUrl: false,
-    },
-  }
-);
+const supabase = createClient(supabaseUrl, "", {
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false,
+    detectSessionInUrl: false,
+  },
+});
 
 function App() {
   const [response, setResponse] = useState({ data: null, error: null });
