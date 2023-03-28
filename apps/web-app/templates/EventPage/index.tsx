@@ -46,54 +46,38 @@ const EventPage = ({ event, sessions, allSessions }: Props) => {
     const handleDateSelection = (selectedDates: [Date | null, Date | null]) => {
         // Filter sessions
         console.log("selectedDates: ", selectedDates)
-        const [start, end] = selectedDates
+        const [start, end] = selectedDates.map((date) => (date ? moment.utc(date).startOf("day").toDate() : null))
         setDatePickerStartDate(start)
         setDatePickerEndDate(end)
         const filtered = sessions.filter((session) => {
-            const sessionDate = new Date(session.startDate)
-            sessionDate.setHours(0, 0, 0, 0) // Remove time part for date comparison
-            const endOfDay = end ? new Date(end) : null
-            if (endOfDay) {
-                endOfDay.setHours(23, 59, 59, 999) // Set end date to end of day
+            const sessionDate = moment.utc(session.startDate).startOf("day").toDate() // Remove time part for date comparison
+            const sessionEndDate = end ? moment.utc(end) : null
+            let endOfDay = null
+            if (sessionEndDate) {
+                endOfDay = sessionEndDate.endOf("day").toDate()
             }
             return (start === null || start <= sessionDate) && (endOfDay === null || sessionDate <= endOfDay)
         })
         setFilteredSessions(filtered)
     }
 
-    const formatDates = (startDate: Date, endDate: Date) => {
-        const start = moment.utc(startDate)
-        const end = moment.utc(endDate)
-
-        if (start.month() === end.month()) {
-            const formattedDate = `${start.format("MMMM D")} - ${end.format("D")}`
-            return formattedDate
-        }
-        const formattedDate = `${start.format("MMMM D")} - ${end.format("MMMM D")}`
-        return formattedDate
-    }
-
     // Update filter header description
     // (done in useEffect because start and end date must be done updating first)
     useEffect(() => {
-        const today = new Date()
-        today.setHours(0, 0, 0, 0)
-        if (datePickerStartDate?.getTime() === today.getTime() && datePickerEndDate?.getTime() === today.getTime()) {
+        const today = moment().utc().startOf("day")
+        const start = datePickerStartDate ? moment(datePickerStartDate).utc() : null
+        const end = datePickerEndDate ? moment(datePickerEndDate).utc() : null
+
+        if (start?.isSame(today) && end?.isSame(today)) {
             setDatePickerDescription("TODAY")
-        } else if (datePickerStartDate?.getTime() === today.getTime()) {
+        } else if (start?.isSame(today)) {
             setDatePickerDescription("TODAY ONWARD")
-        } else if (datePickerStartDate && datePickerEndDate === null) {
-            setDatePickerDescription(`${moment(datePickerStartDate).format("MMMM D")} ONWARD`)
-        } else if (
-            datePickerStartDate &&
-            datePickerEndDate &&
-            datePickerStartDate.getTime() === datePickerEndDate.getTime()
-        ) {
-            setDatePickerDescription(moment(datePickerStartDate).format("dddd MMMM D"))
-        } else if (datePickerStartDate && datePickerEndDate) {
-            setDatePickerDescription(
-                `${moment(datePickerStartDate).format("MMMM D")} - ${moment(datePickerEndDate).format("D")}`
-            )
+        } else if (start && end === null) {
+            setDatePickerDescription(`${start.format("MMMM D")} ONWARD`)
+        } else if (start && end && start.isSame(end)) {
+            setDatePickerDescription(start.format("dddd MMMM D"))
+        } else if (start && end) {
+            setDatePickerDescription(`${start.format("MMMM D")} - ${end.format("D")}`)
         }
     }, [datePickerStartDate, datePickerEndDate])
 
@@ -113,6 +97,18 @@ const EventPage = ({ event, sessions, allSessions }: Props) => {
         }
     }, [])
     /* End DatePicker code */
+
+    const formatDates = (startDate: Date, endDate: Date) => {
+        const start = moment.utc(startDate)
+        const end = moment.utc(endDate)
+
+        if (start.month() === end.month()) {
+            const formattedDate = `${start.format("MMMM D")} - ${end.format("D")}`
+            return formattedDate
+        }
+        const formattedDate = `${start.format("MMMM D")} - ${end.format("MMMM D")}`
+        return formattedDate
+    }
 
     const handleClickOutside = (event: any) => {
         const { current: locationCurrent } = localtionRef as {
@@ -148,50 +144,6 @@ const EventPage = ({ event, sessions, allSessions }: Props) => {
         selectedLocations.length !== 0
             ? filteredSessions.filter((item) => selectedLocations.includes(item.location))
             : filteredSessions
-
-    /* Begin DateList code */
-    // const [openFilterOptions, setOpenFilterOptions] = useState(false)
-    // const filterSince = new Date(event.startDate)
-    // const filterAfter = new Date(event.endDate)
-    // const dateOptions = []
-    // for (let date = filterSince; date <= filterAfter; date.setDate(date.getDate() + 1)) {
-    //     const option = moment(new Date(date)).add(1, "day").format("dddd, MMMM Do, YYYY")
-    //     dateOptions.push(option)
-    // }
-
-    // const handleOptionChange = (option: string) => {
-    //     if (selectedOptions.includes(option)) {
-    //         setSelectedOptions(selectedOptions.filter((item) => item !== option))
-    //     } else {
-    //         setSelectedOptions([...selectedOptions, option])
-    //     }
-    // }
-
-    // const filteredSessions =
-    //     selectedOptions.length !== 0
-    //         ? sessions.filter((item) => {
-    //               const sessionDate = moment(new Date(item.startDate)).add(1, "day").format("dddd, MMMM Do, YYYY")
-
-    //               return selectedOptions.includes(sessionDate)
-    //           })
-    //         : sessions
-
-    // const handleClickOutside = (e: MouseEvent) => {
-    //     const { current: wrap } = wraperRef as { current: HTMLElement | null }
-
-    //     if (wrap && !wrap.contains(e.target as Node)) {
-    //         setOpenFilterOptions(false)
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     document.addEventListener("mousedown", handleClickOutside)
-
-    //     return () => {
-    //         document.addEventListener("mousedown", handleClickOutside)
-    //     }
-    // }, [])
-    /* End DateList code */
 
     const filterSpeakers = () => {
         const speakers = sessions.map((item) => {
@@ -230,23 +182,6 @@ const EventPage = ({ event, sessions, allSessions }: Props) => {
                             <NextImage src={"/ticket.svg"} width={13} height={12} />
                             TICKETS COMING SOON
                         </button>
-                        {/* <a href={event.publicUrl} target="_blank">
-                            <div className="bg-zulalu-primary text-white py-[8px] px-[16px] text-[12px] md:text-[16px] rounded-[8px] gap-[8px] flex flex-row items-center justify-center hover:bg-zulalu-primary-light cursor-pointer">
-                                <NextImage src={"/ticket.svg"} width={13} height={12} />
-                                <p>TICKETS</p>
-                            </div>
-                        </a> */}
-                        {/* {session && session.data.user.user_metadata.event === event.name ? (
-                            <button
-                                className="text-[#F8FFFE] bg-[#35655F] rounded-[8px] flex flex-row justify-center items-center py-[8px] px-[16px] flex flex-row gap-[8px]"
-                                onClick={() => setUpdateEventModal(true)}
-                            >
-                                <NextImage src={"/pencil.svg"} width={13} height={12} />
-                                <p>EDIT</p>
-                            </button>
-                        ) : (
-                            ""
-                        )} */}
                     </div>
                 </div>
                 <div className="flex flex-col lg:flex-row w-full justify-start bg-white rounded-[16px] h-full">
@@ -369,34 +304,6 @@ const EventPage = ({ event, sessions, allSessions }: Props) => {
                                 )}
                             </div>
                             {/* End DatePicker Filter */}
-
-                            {/* Begin DateList Filter */}
-                            {/* <div className="flex flex-col relative w-[auto]" ref={datePickerWrapperRef}>
-                                <button
-                                    onClick={() => setOpenFilterOptions(!openFilterOptions)}
-                                    className="flex justify-between uppercase bg-white border border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] gap-[8px] text-[16px] rounded-[8px] flex flex-row justify-center items-center"
-                                >
-                                    <p>{formattedDate}</p>
-                                    <NextImage src={"/arrow-down.svg"} width={8} height={4} />
-                                </button>
-                                {openFilterOptions && (
-                                    <div className="flex z-[10] flex-col gap-3 bg-white border w-full py-[8px] px-[16px] border-primary absolute top-[45px] text-zulalu-primary rounded-[8px]">
-                                        {dateOptions.map((item, index) => (
-                                            <label key={index} className="flex w-full items-center gap-2 capitalize">
-                                                <input
-                                                    type="checkbox"
-                                                    name="checkbox"
-                                                    value="value"
-                                                    checked={selectedOptions.includes(item)}
-                                                    onChange={() => handleOptionChange(item)}
-                                                />
-                                                {item}
-                                            </label>
-                                        ))}
-                                    </div>
-                                )}
-                            </div> */}
-                            {/* End DateList Filter */}
                         </div>
                     </div>
                     <Sessions event={event} sessions={filteredSessionsByLocation} />

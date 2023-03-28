@@ -33,8 +33,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             .eq("participants.user_id", userId)
             .eq("favoritedSessions.user_id", userId)
             .eq("event_id", req.query.eventId)
-        if (response.error === null) res.status(200).send(response.data)
-        else res.status(response.status).send(response.error)
+            .order("startDate", { ascending: true })
+        if (response.error === null) {
+            res.status(200).send(response.data)
+        } else res.status(response.status).send(response.error)
     } catch (err: any) {
         console.log("error: ", err)
         res.status(500).json({ statusCode: 500, message: err })

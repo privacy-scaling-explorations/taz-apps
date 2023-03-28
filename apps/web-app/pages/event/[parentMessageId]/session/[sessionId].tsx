@@ -23,7 +23,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
         })
 
         const session = await responseSession.data
-
+        console.log("found", session)
         const responseSessions = await axios.get(`${url}/api/fetchSessions`, {
             headers: {
                 Cookie: req.headers.cookie || "" // Pass cookies from the incoming request
