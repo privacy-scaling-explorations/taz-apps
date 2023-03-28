@@ -19,7 +19,7 @@ function App() {
   const [response, setResponse] = useState({ data: null, error: null });
 
   async function deleteUsers() {
-    deleteArray = [
+    const deleteArray = [
       "f70b83ad-c671-46e4-9f53-536a7f9aad2c",
       "fa746ae0-3d15-425b-aa36-e394a4283229",
       "80a46a24-7c6a-4d02-ad62-b093c735ebfc",
@@ -147,7 +147,7 @@ function App() {
     ];
 
     const { data, error } = await supabase.auth.admin.deleteUser(
-      "72ba6b67-3715-4cab-96cf-dd031798e09a",
+      "1c79e5fb-b850-4529-a032-397fe0eab98e",
       true
     );
     console.log(data, error);
