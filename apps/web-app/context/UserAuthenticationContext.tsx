@@ -40,7 +40,7 @@ export function UserAuthenticationProvider({ children }: UserAuthenticationProvi
         }
 
         await axios
-            .get(`/api/fetchUser/${session.user.id}`)
+            .get(`${window.location.href}/api/fetchUser/${session.user.id}/`)
             .then((res) => {
 
                 setUserRole(session.user.user_metadata.role)
