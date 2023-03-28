@@ -65,7 +65,7 @@ const AddSessionModal = ({ isOpen, closeModal, event, sessions }: Props) => {
         event_item_id: event.item_id
     })
     const [amountTickets, setAmountTickets] = useState("0")
-
+    console.log("evvvent", event)
     const handleSubmit = async () => {
         setIsLoading(true)
         const formattedTime = `${newSession.startTime}:00`

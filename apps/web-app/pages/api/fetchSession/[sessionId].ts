@@ -29,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
         const response = await supabase
             .from("sessions")
-            .select("*, participants (*), favoritedSessions:favorited_sessions (*)")
+            .select("*, events (*), participants (*), favoritedSessions:favorited_sessions (*)")
             .eq("id", req.query.sessionId)
             .eq("participants.user_id", userId)
             .eq("favorited_sessions.user_id", userId)

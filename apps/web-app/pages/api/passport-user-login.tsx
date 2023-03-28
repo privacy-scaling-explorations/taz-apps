@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const signInWithSemaphoreProof = async (identity: Identity) => {
         // Validate Proof of user before interacting with DB
         const { uuid, commitment, email, name, role, residence, order_id } = identity
-        const password: any = process.env.SINGLE_KEY_LOGIN
+        const password: any = (process.env.SINGLE_KEY_LOGIN)?.trim()
 
         try {
             // Try to log the user in
