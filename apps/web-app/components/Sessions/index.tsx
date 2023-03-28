@@ -19,8 +19,10 @@ const Sessions = ({ event, sessions }: Props) => {
                 <div className="w-full" key={index}>
                     <div className="bg-[#1C2928] w-full flex flex-row items-center rounded-[8px]">
                         <p className="text-white py-[8px] px-[16px]">
-                            {item.startDate && item.startTime && moment(`${item.startDate}T${item.startTime}`).isValid()
-                                ? moment(`${item.startDate}T${item.startTime}`).format("h A [|] dddd, MMMM Do")
+                            {item.startDate &&
+                            item.startTime &&
+                            moment.utc(`${item.startDate}T${item.startTime}`).isValid()
+                                ? moment.utc(`${item.startDate}T${item.startTime}`).format("h A [|] dddd, MMMM Do")
                                 : "\u00A0"}
                         </p>
                     </div>

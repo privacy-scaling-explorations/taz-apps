@@ -4,6 +4,7 @@ import axios from "axios"
 import { toast } from "react-toastify"
 import { useRouter } from "next/router"
 import Link from "next/link"
+import moment from "moment"
 import { SessionsDTO } from "../../types"
 import BaseTemplate from "../Base"
 import DeleteSessionModal from "../../components/DeleteSessionModal"
@@ -24,13 +25,31 @@ const SessionPage = ({ session, sessions }: Props) => {
     const [openDeleteSessionModal, setOpenDeleteSessionModal] = useState(false)
     const [openEditSessionModal, setOpenEditSessionModal] = useState(false)
 
-    const startDateFormatted = new Date(startDate).toLocaleDateString("en-US", {
-        day: "numeric"
-    })
-    const startWeekDayFormatted = new Date(startDate).toLocaleDateString("en-US", { weekday: "long" })
-    const eventMonthFormatted = new Date(startDate).toLocaleDateString("en-US", {
-        month: "long"
-    })
+    const makeToast = (isSuccess: boolean, message: string) => {
+        if (isSuccess) {
+            toast.success(message, {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light"
+            })
+        } else {
+            toast.error(message, {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light"
+            })
+        }
+    }
 
     const deleteSession = async () => {
         await axios.post("/api/deleteSession", { id: session.id })
@@ -56,11 +75,14 @@ const SessionPage = ({ session, sessions }: Props) => {
         if (close) setOpenDeleteSessionModal(false)
     }
 
+
     return (
         <BaseTemplate>
             <div className="flex flex-col items-center bg-[#EEEEF0] h-full md:h-[100vh] px-4 md:px-[24px] py-4 md:py-[24px] gap-4 md:gap-[16px]">
                 <div className="flex flex-col md:flex-row justify-between p-5 bg-white w-full rounded-[16px]">
+
                     <div className="flex md:w-3/6 w-full items-center gap-2 mb-4 md:mb-0 text-[12px] md:text-[14px]">
+
                         <Link href={"/"}>
                             <a className={`text-[#1C292899]`}>Program</a>
                         </Link>
@@ -71,7 +93,9 @@ const SessionPage = ({ session, sessions }: Props) => {
                         <h1 className={`text-[#1C292899]`}>/</h1>
                         <h1 className={`text-black font-[600]`}>{session.name}</h1>
                     </div>
+
                     <div className="flex justify-end flex-col md:flex-row gap-[8px] items-center w-full">
+
                         <FavoriteButton session={session} isMiniButton={false} />
                         <ParticipateButton session={session} isTallButton={true} />
 
@@ -114,7 +138,11 @@ const SessionPage = ({ session, sessions }: Props) => {
                         <div className="flex flex-col md:flex-row flex-wrap items-start md:items-center gap-0 md:gap-[24px]">
                             <div className="flex gap-1 items-center justify-start mt-4">
                                 <NextImage src={"/vector-calendar.svg"} alt="calendar" width={15} height={15} />
-                                <h1 className="text-zulalu-secondary">{`${startWeekDayFormatted}, ${eventMonthFormatted} ${startDateFormatted}th`}</h1>
+                                <h1 className="text-zulalu-secondary">
+                                    {startDate && moment.utc(startDate).isValid()
+                                        ? moment.utc(startDate).format("dddd, MMMM Do")
+                                        : "\u00A0"}
+                                </h1>
                             </div>
                             <div className="flex gap-1 items-center justify-start mt-4">
                                 <NextImage src={"/vector-clock.svg"} alt="calendar" width={15} height={15} />

@@ -93,14 +93,14 @@ const CalendarPageSessions = ({ sessions, showStartDate = false }: Props) => {
                     <div className="bg-[#1C2928] w-full flex flex-row items-center rounded-[8px]">
                         {showStartDate ? (
                             <p className="text-white py-[8px] px-[16px] uppercase">
-                                {moment(item.startDate).format("MMMM DD")}
+                                {moment.utc(item.startDate).format("MMMM DD")}
                             </p>
                         ) : (
                             <p className="text-white py-[8px] px-[16px]">
                                 {item.startDate &&
                                 item.startTime &&
-                                moment(`${item.startDate}T${item.startTime}`).isValid()
-                                    ? moment(`${item.startDate}T${item.startTime}`).format("h A [|] dddd, MMMM Do")
+                                moment.utc(`${item.startDate}T${item.startTime}`).isValid()
+                                    ? moment.utc(`${item.startDate}T${item.startTime}`).format("h A [|] dddd, MMMM Do")
                                     : "\u00A0"}
                             </p>
                         )}
