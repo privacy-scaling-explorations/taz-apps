@@ -9,6 +9,7 @@ type NewSessionState = {
     event_item_id: number
     event_slug: string
     event_type: string
+    duration: string
     format: string
     hasTicket: boolean
     info: string

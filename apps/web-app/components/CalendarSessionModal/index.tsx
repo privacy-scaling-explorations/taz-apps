@@ -33,6 +33,7 @@ type NewSessionState = {
     }[]
     track: string
     event_slug: string
+    duration: string
     event_item_id: number
 }
 
@@ -59,6 +60,7 @@ const CalendarSessionModal = ({ isOpen, closeModal, events, sessions }: Props) =
         info: "",
         event_id: 97,
         hasTicket: false,
+        duration: "0",
         format: "Live",
         level: "Beginner",
         equipment: "",
@@ -141,6 +143,7 @@ const CalendarSessionModal = ({ isOpen, closeModal, events, sessions }: Props) =
             location: "Amphitheater",
             tags: [],
             info: "",
+            duration: "0",
             event_id: 97,
             hasTicket: false,
             format: "Live",

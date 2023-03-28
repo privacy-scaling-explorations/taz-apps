@@ -21,6 +21,7 @@ type NewSessionState = {
     level: string
     location: string
     name: string
+    duration: string
     startDate: Date
     startTime: string
     tags: string[]
@@ -54,6 +55,7 @@ const AddSessionModal = ({ isOpen, closeModal, event, sessions }: Props) => {
         tags: [],
         info: "",
         event_id: event.id,
+        duration: "0",
         hasTicket: false,
         format: "Live",
         level: "Beginner",
@@ -140,6 +142,7 @@ const AddSessionModal = ({ isOpen, closeModal, event, sessions }: Props) => {
             event_id: event.id,
             event_item_id: event.item_id,
             event_slug: event.slug,
+            duration: "0",
             description: "",
             hasTicket: false,
             track: "ZK Week",

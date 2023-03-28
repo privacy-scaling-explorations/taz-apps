@@ -7,6 +7,7 @@ type NewSessionState = {
     equipment: string
     event_id: number
     event_item_id: number
+    duration: string
     event_slug: string
     event_type: string
     format: string
