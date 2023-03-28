@@ -5,7 +5,6 @@ import NextImage from "next/image"
 import Link from "next/link"
 
 import moment from "moment"
-import DatePicker from "react-datepicker"
 import AddSessionModal from "../../components/AddSessionModal"
 import Sessions from "../../components/Sessions"
 import { EventsDTO, SessionsDTO } from "../../types"
@@ -16,13 +15,12 @@ import StyledDatePicker from "../../components/StyledDatePicker"
 type Props = {
     event: EventsDTO
     sessions: SessionsDTO[]
+    allSessions: SessionsDTO[]
 }
 
-const EventPage = ({ event, sessions }: Props) => {
-    const wraperRef = useRef(null)
+const EventPage = ({ event, sessions, allSessions }: Props) => {
     const { isAuth, userRole } = useUserAuthenticationContext()
     const [openAddSessionModal, setOpenAddSessionModal] = useState(false)
-    const [selectedOptions, setSelectedOptions] = useState<string[]>([])
     const [speakers, setSpeakers] = useState<string[]>([])
 
     const localtionRef = useRef(null)
@@ -318,7 +316,7 @@ const EventPage = ({ event, sessions }: Props) => {
                             closeModal={setOpenAddSessionModal}
                             isOpen={openAddSessionModal}
                             event={event}
-                            sessions={sessions}
+                            sessions={allSessions}
                         />
                         <div className="flex flex-col md:flex-row justify-center md:justify-end items:start md:items-center gap-2 md:gap-2 w-full">
                             <div className="flex flex-col relative w-full md:w-[150px]" ref={localtionRef}>

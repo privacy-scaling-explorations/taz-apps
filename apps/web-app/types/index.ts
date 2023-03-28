@@ -41,6 +41,7 @@ export interface SessionsDTO {
     favoritedSessions: FavoritedSessionsDTO[]
     favorited_sessions: any
     format: string
+    duration: string
     hasTicket: boolean
     id: number
     info: string
