@@ -45,7 +45,6 @@ const EventPage = ({ event, sessions, allSessions }: Props) => {
 
     const handleDateSelection = (selectedDates: [Date | null, Date | null]) => {
         // Filter sessions
-        console.log("selectedDates: ", selectedDates)
         const [start, end] = selectedDates.map((date) => (date ? moment.utc(date).startOf("day").toDate() : null))
         setDatePickerStartDate(start)
         setDatePickerEndDate(end)

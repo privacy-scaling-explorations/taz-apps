@@ -19,7 +19,7 @@ type Props = {
 }
 
 const SessionPage = ({ session, sessions }: Props) => {
-    const { userInfo, isAuth } = useUserAuthenticationContext()
+    const { userInfo } = useUserAuthenticationContext()
     const router = useRouter()
     const { startDate, location, startTime } = session
     const [openDeleteSessionModal, setOpenDeleteSessionModal] = useState(false)
@@ -75,11 +75,14 @@ const SessionPage = ({ session, sessions }: Props) => {
         if (close) setOpenDeleteSessionModal(false)
     }
 
+
     return (
         <BaseTemplate>
             <div className="flex flex-col items-center bg-[#EEEEF0] h-full md:h-[100vh] px-4 md:px-[24px] py-4 md:py-[24px] gap-4 md:gap-[16px]">
                 <div className="flex flex-col md:flex-row justify-between p-5 bg-white w-full rounded-[16px]">
-                    <div className="flex items-center gap-2 mb-4 md:mb-0 text-[12px] md:text-[14px]">
+
+                    <div className="flex md:w-3/6 w-full items-center gap-2 mb-4 md:mb-0 text-[12px] md:text-[14px]">
+
                         <Link href={"/"}>
                             <a className={`text-[#1C292899]`}>Program</a>
                         </Link>
@@ -90,7 +93,9 @@ const SessionPage = ({ session, sessions }: Props) => {
                         <h1 className={`text-[#1C292899]`}>/</h1>
                         <h1 className={`text-black font-[600]`}>{session.name}</h1>
                     </div>
-                    <div className="flex flex-col md:flex-row gap-[8px] items-center w-full">
+
+                    <div className="flex justify-end flex-col md:flex-row gap-[8px] items-center w-full">
+
                         <FavoriteButton session={session} isMiniButton={false} />
                         <ParticipateButton session={session} isTallButton={true} />
 
