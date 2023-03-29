@@ -41,11 +41,11 @@ export function UserAuthenticationProvider({ children }: UserAuthenticationProvi
 
         if (session.user.id) {
           const userId = `${window.location.origin}/api/fetchUser/${session.user.id!}/`;
-          console.log("full", userId)
+
           await axios
             .get(userId)
             .then((res) => {
-                console.log(res.data)
+
                 setUserRole(session.user.user_metadata.role)
                 setUserInfo(res.data)
             })
