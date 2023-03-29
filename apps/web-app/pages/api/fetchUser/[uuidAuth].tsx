@@ -5,7 +5,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Create authenticated Supabase Client
 
     const supabase = createServerSupabaseClient({ req, res })
-
+    console.log("here", req.query.uuidAuth)
     // Check if we have a session
     const {
         data: { session }
@@ -19,9 +19,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     try {
-        const response = await supabase.from("users").select().eq("uui_auth", req.query.uuidAuth).single()
-        console.log(response)
-        res.status(200).send(req.query.uuidAuth)
+        const response = await supabase.from("users").select("*").eq("uui_auth", req.query.uuidAuth).single()
+
+        res.status(200).send(response.data)
     } catch (err: any) {
         console.log("error: ", err)
         res.status(500).json({ statusCode: 500, message: err })

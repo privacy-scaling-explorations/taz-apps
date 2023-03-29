@@ -22,7 +22,7 @@ const MyProfilePage = ({ events, sessions }: Props) => {
     const [openAddSessionModal, setOpenAddSessionModal] = useState(false)
 
     const isOrganizer = userRole === "resident"
-
+    console.log("sessions", userSessions)
     async function getUserTickets() {
         try {
             console.log(userInfo!.email)
@@ -51,7 +51,7 @@ const MyProfilePage = ({ events, sessions }: Props) => {
             getUserTickets()
             setEventsOpt(uniqueValues)
         }
-    }, [userSessions])
+    }, [userSessions, tickets])
 
     const handleOptionChange = (i: string) => {
         if (selectedOpt.includes(i)) {
