@@ -72,29 +72,24 @@ export default function TicketsModalView(props) {
                   >
                     Available Tickets
                   </Dialog.Title>
-                  <div className="p-4 grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block font-bold mb-2">Session:</label>
-                      {props.tickets
-                        ? props.tickets.map((ticket, index) => (
-                            <div className="text-xl" key={index}>{ticket.name}</div>
-                          ))
-                        : ""}
-                    </div>
-                    <div>
-                      <label className="block font-bold mb-2">Tickets:</label>
-                      {props.tickets
-                        ? props.tickets.map((ticket, index) => (
-                            <div key={index}>
-                              <a >
-                                <button onClick={downloadFile} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                  <div className="p-4 grid grid-cols-1 gap-4">
+                    {props.tickets
+                      ? props.tickets.map((ticket, index) => (
+                          <div className="ticket-row" key={index}>
+                            <div className="text-l mb-2">{ticket.name}</div>
+                            <div>
+                              <a>
+                                <button
+                                  onClick={downloadFile}
+                                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                >
                                   Download Ticket
                                 </button>
                               </a>
                             </div>
-                          ))
-                        : ""}
-                    </div>
+                          </div>
+                        ))
+                      : ""}
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
