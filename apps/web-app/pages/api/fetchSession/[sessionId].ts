@@ -34,7 +34,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             .eq("participants.user_id", userId)
             .eq("favorited_sessions.user_id", userId)
             .single()
-        if (response.error === null) res.status(200).send(response.data)
+
+        if (response.error === null) res.status(200).send({session: response.data, userId: userId})
         else res.status(response.status).send(response.error)
     } catch (err: any) {
         console.log("error: ", err)
