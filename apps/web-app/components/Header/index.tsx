@@ -76,7 +76,7 @@ const Header = () => {
                             About
                         </li>
                     </NextLink>
-                    <NextLink href={"/events"}>
+                    <NextLink href={"/full-program"}>
                         <li
                             className={`cursor-pointer text-[#F8FFFE] text-[18px] ${
                                 router.asPath === "/events" ? "font-[700]" : "font-[400]"
@@ -135,7 +135,7 @@ const Header = () => {
                             About
                         </li>
                     </NextLink>
-                    <NextLink href={"/events"}>
+                    <NextLink href={"/full-program"}>
                         <li
                             className={`cursor-pointer text-[#F8FFFE] text-[18px] ${
                                 router.asPath === "/events" ? "font-[700]" : "font-[400]"
