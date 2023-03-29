@@ -39,20 +39,26 @@ export function UserAuthenticationProvider({ children }: UserAuthenticationProvi
             return setUserInfo(undefined)
         }
 
-        await axios
-            .get(`${window.location.href}/api/fetchUser/${session.user.id}/`)
+        if (session.user.id) {
+          const userId = `${window.location.origin}/api/fetchUser/${session.user.id!}/`;
+          console.log("full", userId)
+          await axios
+            .get(userId)
             .then((res) => {
-
+                console.log(res.data)
                 setUserRole(session.user.user_metadata.role)
                 setUserInfo(res.data)
             })
             .catch((error) => {
                 console.log("USER AUTH CONTEXT FAILED TO FETCH USER ID", error)
             })
+        }
+
     }
 
     const fetchEvents = async () => {
         if (userInfo) {
+
             await axios
                 .get(`/api/fetchSessionsByUserId/${userInfo.id}`)
                 .then((res) => {

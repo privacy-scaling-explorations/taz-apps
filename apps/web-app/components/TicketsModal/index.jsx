@@ -11,11 +11,12 @@ const TicketsModal = ({ isOpen, closeModal, checkSession, userInfo }) => {
     }
 
     async function getUserTickets() {
-        try {
+
+      try {
             const supabaseResponse = await supabase.from("tickets").select("*").eq("email", userInfo.email)
             if (!supabaseResponse.error) {
                 setTickets(supabaseResponse.data)
-                console.log(tickets)
+                console.log("tickets", tickets)
             }
         } catch (error) {
             console.log(error)

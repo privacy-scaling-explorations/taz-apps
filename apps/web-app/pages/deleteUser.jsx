@@ -277,7 +277,7 @@ function App() {
     ];
 
     const { data, error } = await supabase.auth.admin.deleteUser(
-      '6bbcc82a-6d09-42a6-8761-1fc400052a4c',
+      '69151438-ad6e-4d15-80f2-e75969692065',
 
       true
     );
