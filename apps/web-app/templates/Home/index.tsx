@@ -14,7 +14,7 @@ type Props = {
 }
 
 const HomeTemplate = ({ events }: Props) => {
-    const { isAuth } = useUserAuthenticationContext()
+    const { userInfo } = useUserAuthenticationContext()
     const { requestSignedZuID } = useUserPassportContext()
 
     return (
@@ -26,7 +26,7 @@ const HomeTemplate = ({ events }: Props) => {
 
             <div className="flex flex-col min-h-[100vh] bg-[#EEEEF0] p-5 gap-10">
                 <MainSection />
-                {!isAuth && (
+                {!userInfo && (
                     <div className="flex flex-col items-center px-[32px] gap-[8px] bg-white rounded-[16px]">
                         <div className="flex flex-col md:flex-row justify-center items-center p-[16px] gap-[24px]">
                             <p className="font-[600] text-[18px] w-[310px] h-[50px] md:w-auto md:h-auto">

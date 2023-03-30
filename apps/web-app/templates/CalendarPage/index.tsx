@@ -18,7 +18,7 @@ type Props = {
 
 const CalendarPage = ({ sessions, events }: Props) => {
     const localtionRef = useRef(null)
-    const { isAuth, userRole, userInfo } = useUserAuthenticationContext()
+    const { userRole, userInfo } = useUserAuthenticationContext()
 
     const [openAddSessionModal, setOpenAddSessionModal] = useState(false)
     const [openAddTicketsModal, setOpenAddTicketsModal] = useState(false)
@@ -177,7 +177,7 @@ const CalendarPage = ({ sessions, events }: Props) => {
                     </div>
                 </div>
 
-                {isAuth ? (
+                {userInfo ? (
                     <>
                         <button
                             className="flex md:hidden w-full flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
@@ -220,7 +220,7 @@ const CalendarPage = ({ sessions, events }: Props) => {
                         <div className="flex flex-col md:flex-row items-start md:items-center justify-center gap-[32px]">
                             <h1 className="text-[24px] md:text-[40px] text-[#37352F] font-[600]">Sessions</h1>
 
-                            {isAuth ? (
+                            {userInfo ? (
                                 <>
                                     <button
                                         className="hidden md:flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
@@ -239,7 +239,7 @@ const CalendarPage = ({ sessions, events }: Props) => {
                                 ""
                             )}
                         </div>
-                        {isAuth && (
+                        {userInfo && (
                             <div className="flex flex-col md:flex-row justify-center items-start md:items-start gap-5 w-full md:w-auto">
                                 <div className="flex flex-col relative w-full md:w-[150px]" ref={localtionRef}>
                                     <button
@@ -316,15 +316,15 @@ const CalendarPage = ({ sessions, events }: Props) => {
                         )}
                     </div>
 
-                    {isAuth && <CalendarPageSessions sessions={filteredSessionsByLocation} />}
+                    {userInfo && <CalendarPageSessions sessions={filteredSessionsByLocation} />}
 
-                    {/* {!isAuth && (
+                    {/* {!userInfo && (
                         <div className="flex flex-col items-center justify-center w-full h-full mb-10">
                             You need to be connected to see the sessions.
                         </div>
                     )} */}
 
-                    {!isAuth && (
+                    {!userInfo && (
                         <div className="bg-gray-200 px-5 py-6 rounded-md">
                             <p className="text-center">You need to connect your Passport to see the sessions.</p>
                         </div>

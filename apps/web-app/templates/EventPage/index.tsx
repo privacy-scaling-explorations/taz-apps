@@ -19,7 +19,7 @@ type Props = {
 }
 
 const EventPage = ({ event, sessions, allSessions }: Props) => {
-    const { isAuth, userRole } = useUserAuthenticationContext()
+    const { userInfo, userRole } = useUserAuthenticationContext()
     const [openAddSessionModal, setOpenAddSessionModal] = useState(false)
     const [speakers, setSpeakers] = useState<string[]>([])
 
@@ -244,7 +244,7 @@ const EventPage = ({ event, sessions, allSessions }: Props) => {
                         height="682px"
                     />
                 </div>
-                {isAuth && (
+                {userInfo && (
                     <button
                         className="flex md:hidden flex-row font-[600] w-full justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
                         onClick={() => setOpenAddSessionModal(true)}
@@ -255,7 +255,7 @@ const EventPage = ({ event, sessions, allSessions }: Props) => {
                 <div className="flex flex-col items-center pt-[16px] px-[18px] md:px-[32px] pb-[40px] bg-white gap-[8px] rounded-[16px]">
                     <div className="w-full flex flex-col md:flex-row justify-between items-start md:items-center p-0 md:p-[16px] gap-[24px]">
                         <h1 className="text-[24px] md:text-[40px] text-[#37352F] font-[600]">Sessions</h1>
-                        {isAuth && (
+                        {userInfo && (
                             <button
                                 className="hidden md:flex flex-row font-[600] w-[300px] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
                                 onClick={() => setOpenAddSessionModal(true)}
