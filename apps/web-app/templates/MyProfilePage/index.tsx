@@ -35,7 +35,6 @@ const MyProfilePage = ({ events, sessions }: Props) => {
         }
     }
 
-
     const openPDFPopup = async (apiURL: any) => {
         const response = await fetch(`/api/download-ticket?apiURL=${encodeURIComponent(apiURL)}`)
         const pdfBlob = await response.blob()
@@ -94,28 +93,24 @@ const MyProfilePage = ({ events, sessions }: Props) => {
                     sessions={sessions}
                 />
                 <div className="flex md:hidden flex-col items-start py-[8px] px-[2px] gap-[8px]">
-                    {isOrganizer && (
-                        <button
-                            onClick={() => setOpenAddSessionModal(true)}
-                            className="flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px] w-full h-[48px]"
-                        >
-                            CREATE SESSION
-                        </button>
-                    )}
+                    <button
+                        onClick={() => setOpenAddSessionModal(true)}
+                        className="flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px] w-full h-[48px]"
+                    >
+                        CREATE SESSION
+                    </button>
                 </div>
                 <div className="flex flex-col md:flex-row justify-between h-full">
                     <div className="p-5 flex flex-col items-start bg-white rounded-[8px] w-full md:w-4/6 gap-[8px]">
                         <div className="flex flex-col justify-between w-full gap-[16px]">
                             <div className="flex items-center gap-10">
                                 <h1 className="font-semibold text-[24px] md:text-[40px]">My Sessions</h1>
-                                {isOrganizer && (
-                                    <button
-                                        onClick={() => setOpenAddSessionModal(true)}
-                                        className="hidden md:flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px] h-[40px]"
-                                    >
-                                        CREATE SESSION
-                                    </button>
-                                )}
+                                <button
+                                    onClick={() => setOpenAddSessionModal(true)}
+                                    className="hidden md:flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px] h-[40px]"
+                                >
+                                    CREATE SESSION
+                                </button>
                             </div>
                             <div className="flex flex-col items-start p-[2px] gap-[16px]">
                                 <Sessions sessions={filteredSessions} showStartDate={true} />
