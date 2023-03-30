@@ -23,6 +23,7 @@ type NewSessionState = {
     info: string
     level: string
     location: string
+    custom_location: string
     name: string
     startDate: Date
     startTime: string
@@ -345,25 +346,47 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                     <h1 className="text-[14px] text-[#AAAAAA]">Max 2000 characters</h1>
                 </div>
             </div>
-            <div className="flex flex-col gap-1 w-full">
-                <label htmlFor="location" className="font-[600]">
-                    Location*
-                </label>
-                <select
-                    id="location"
-                    name="location"
-                    className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px] w-full"
-                    onChange={(e) => setNewSession({ ...newSession, location: e.target.value })}
-                >
-                    <option value="Select Location">Select Location</option>
-                    {locationsOpt &&
-                        locationsOpt.map((item, index) => (
-                            <option key={index} value={item.location}>
-                                {item.location}
-                            </option>
-                        ))}
-                </select>
-            </div>
+            {newSession.event_id != 101 ? (
+                <div className="flex flex-col gap-1 w-full">
+                    <label htmlFor="location" className="font-[600]">
+                        Location*
+                    </label>
+                    <select
+                        id="location"
+                        name="location"
+                        className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px] w-full"
+                        onChange={(e) => setNewSession({ ...newSession, location: e.target.value })}
+                    >
+                        <option value="Select Location">Select Location</option>
+                        {locationsOpt &&
+                            locationsOpt.map((item, index) => (
+                                <option key={index} value={item.location}>
+                                    {item.location}
+                                </option>
+                            ))}
+                    </select>
+                </div>
+            ) : (
+                ""
+            )}
+
+            {newSession.location == "Other" ? (
+                <div className="flex flex-col gap-1 w-full mt-2">
+                    <label htmlFor="custom_location" className="font-[600]">
+                        Specify location
+                    </label>
+                    <input
+                        type="text"
+                        placeholder="Specify Location"
+                        className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px] w-full"
+                        value={newSession.custom_location}
+                        onChange={(e) => setNewSession({ ...newSession, custom_location: e.target.value })}
+                    />
+                </div>
+            ) : (
+                ""
+            )}
+
             <div className="flex flex-col gap-1 w-full mt-2">
                 <label htmlFor="location" className="font-[600]">
                     Duration*
