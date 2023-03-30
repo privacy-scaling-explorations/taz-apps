@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import NextImage from "next/image"
 import NextLink from "next/link"
 import { useRouter } from "next/router"
@@ -10,7 +10,7 @@ import PassportLoadingModal from "../PassportLoadingModal"
 const Header = () => {
     const { isAuth } = useUserAuthenticationContext()
 
-    const { requestSignedZuID, loadingPassport } = useUserPassportContext()
+    const { requestSignedZuID, loadingPassport, errorPassport } = useUserPassportContext()
 
     const [navbar, setNavbar] = useState(false)
 
@@ -18,7 +18,9 @@ const Header = () => {
 
     return (
         <div className="relative px-[24px] md:px-[72px] flex flex-row h-[112px] md:justify-between w-full z-10 bg-zulalu-darkBase items-center">
-            {/* {loadingPassport && <PassportLoadingModal />} */}
+            {!isAuth && loadingPassport.step !== 0 && (
+                <PassportLoadingModal loadingPassport={loadingPassport} errorPassport={errorPassport} />
+            )}
             <div className="w-full flex relative justify-between md:justify-start overflow-hidden gap-5 items-center">
                 <NextLink href={"/"}>
                     <div className="hidden md:flex cursor-pointer gap-2 items-center justify-center ">
@@ -76,7 +78,7 @@ const Header = () => {
                             About
                         </li>
                     </NextLink>
-                    <NextLink href={"/events"}>
+                    <NextLink href={"/full-program"}>
                         <li
                             className={`cursor-pointer text-[#F8FFFE] text-[18px] ${
                                 router.asPath === "/events" ? "font-[700]" : "font-[400]"
@@ -135,7 +137,7 @@ const Header = () => {
                             About
                         </li>
                     </NextLink>
-                    <NextLink href={"/events"}>
+                    <NextLink href={"/full-program"}>
                         <li
                             className={`cursor-pointer text-[#F8FFFE] text-[18px] ${
                                 router.asPath === "/events" ? "font-[700]" : "font-[400]"

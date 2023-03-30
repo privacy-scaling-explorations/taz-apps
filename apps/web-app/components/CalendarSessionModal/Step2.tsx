@@ -193,11 +193,20 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
     useEffect(() => {
         const selectedLocation = newSession.location.toLocaleLowerCase()
 
+        if (selectedLocation === "other") {
+            return setSlotsUnavailable((prevState) =>
+                prevState.map((slot) => ({
+                    ...slot,
+                    disabled: false
+                }))
+            )
+        }
+
         const filteredSession = sessions
             .filter((item) => item.location.toLocaleLowerCase() === selectedLocation)
             .filter((item) => {
-                const selectedDate = moment(new Date(newSession.startDate)).format("MMM d, yyyy")
-                const newSessionStartDate = moment(new Date(item.startDate)).add(1, "day").format("MMM d, yyyy")
+                const selectedDate = moment.utc(new Date(newSession.startDate)).format("MMM d, yyyy")
+                const newSessionStartDate = moment.utc(new Date(item.startDate)).format("MMM d, yyyy")
 
                 return selectedDate === newSessionStartDate
             })
@@ -207,12 +216,12 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
             filteredSession.forEach((item) => {
                 const [hours, minutes] = item.startTime.split(":").map(Number)
 
-                const startTimeFormatted = moment({ hours, minutes })
+                const startTimeFormatted = moment.utc({ hours, minutes })
 
-                const endTime = moment({ hours, minutes }).add(parseInt(item.duration), "minute")
+                const endTime = moment.utc({ hours, minutes }).add(parseInt(item.duration), "minute")
 
                 let current = startTimeFormatted.clone()
-                while (current.isSameOrBefore(endTime)) {
+                while (current.isBefore(endTime)) {
                     intervals.push(current.format("HH:mm"))
                     current.add(15, "minutes")
                 }
@@ -273,8 +282,8 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
             })
         }
         const [hours, minutes] = newSession.startTime.split(":").map(Number)
-        const startTimeFormatted = moment({ hours, minutes })
-        const endTime = moment(startTimeFormatted).add(parseInt(newSession.duration), "minute")
+        const startTimeFormatted = moment.utc({ hours, minutes })
+        const endTime = moment.utc(startTimeFormatted).add(parseInt(newSession.duration), "minute")
 
         let current = startTimeFormatted.clone()
         let interval: string[] = []
