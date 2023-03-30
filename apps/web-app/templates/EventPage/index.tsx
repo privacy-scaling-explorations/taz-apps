@@ -157,6 +157,16 @@ const EventPage = ({ event, sessions, allSessions }: Props) => {
         filterSpeakers()
     }, [])
 
+    const handleClickToFilterByTodayDate = () => {
+        const filtered = sessions.filter((session) => {
+            const sessionDate = moment.utc(session.startDate).format("MMMM Do")
+            const todayDate = moment.utc(new Date()).format("MMMM Do")
+
+            return sessionDate === todayDate
+        })
+        setFilteredSessions(filtered)
+    }
+
     return (
         <BaseTemplate>
             <div className="flex flex-col p-5 bg-[#EEEEF0] gap-5 w-full h-full">
@@ -282,6 +292,16 @@ const EventPage = ({ event, sessions, allSessions }: Props) => {
                                     </div>
                                 )}
                             </div>
+                            <button
+                                onClick={() => {
+                                    setSelectedLocations([])
+                                    setFilteredSessions(sessions)
+                                    setDatePickerDescription("FULL PROGRAM")
+                                }}
+                                className="bg-white border w-full md:w-auto border-primary text-zulalu-primary font-[600] py-[8px] px-[16px] gap-[8px] text-[16px] rounded-[8px] flex flex-row justify-between md:justify-center items-center"
+                            >
+                                <p>CLEAR FILTER</p>
+                            </button>
 
                             {/* Begin DatePicker Filter */}
                             <div className="flex flex-col w-auto min-w-[200px]" ref={datePickerWrapperRef}>
@@ -306,6 +326,14 @@ const EventPage = ({ event, sessions, allSessions }: Props) => {
                                 )}
                             </div>
                             {/* End DatePicker Filter */}
+                            <button
+                                onClick={() => {
+                                    handleClickToFilterByTodayDate()
+                                }}
+                                className="bg-[#D3DDDC] w-full md:w-auto text-[#1C2928] font-[600] py-[8px] px-[16px] gap-[8px] text-[16px] rounded-[8px] flex flex-row justify-between md:justify-center items-center"
+                            >
+                                <p>TODAY</p>
+                            </button>
                         </div>
                     </div>
                     <Sessions event={event} sessions={filteredSessionsByLocation} />

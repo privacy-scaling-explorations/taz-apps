@@ -128,6 +128,16 @@ const CalendarPage = ({ sessions, events }: Props) => {
             ? filteredSessions.filter((item) => selectedLocations.includes(item.location))
             : filteredSessions
 
+    const handleClickToFilterByTodayDate = () => {
+        const filtered = sessions.filter((session) => {
+            const sessionDate = moment.utc(session.startDate).format("MMMM Do")
+            const todayDate = moment.utc(new Date()).format("MMMM Do")
+
+            return sessionDate === todayDate
+        })
+        setFilteredSessions(filtered)
+    }
+
     return (
         <BaseTemplate>
             <div className="flex flex-col border border-black p-5 bg-[#EEEEF0] gap-5 w-full h-full">
@@ -255,6 +265,7 @@ const CalendarPage = ({ sessions, events }: Props) => {
                                     </div>
                                 )}
                             </div>
+
                             <button
                                 onClick={() => {
                                     setSelectedLocations([])
@@ -289,6 +300,14 @@ const CalendarPage = ({ sessions, events }: Props) => {
                                 )}
                             </div>
                             {/* End DatePicker Filter */}
+                            <button
+                                onClick={() => {
+                                    handleClickToFilterByTodayDate()
+                                }}
+                                className="bg-[#D3DDDC] w-full md:w-auto text-[#1C2928] font-[600] py-[8px] px-[16px] gap-[8px] text-[16px] rounded-[8px] flex flex-row justify-between md:justify-center items-center"
+                            >
+                                <p>TODAY</p>
+                            </button>
                         </div>
                     </div>
 
