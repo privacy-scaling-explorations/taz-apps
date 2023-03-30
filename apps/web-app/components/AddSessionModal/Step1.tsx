@@ -22,6 +22,7 @@ type NewSessionState = {
     duration: string
     level: string
     location: string
+    custom_location: string
     name: string
     startDate: Date
     startTime: string
@@ -324,6 +325,22 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                             </option>
                         ))}
                 </select>
+                {newSession.location == "Other" ? (
+                <div className="flex flex-col gap-1 w-full mt-2">
+                    <label htmlFor="custom_location" className="font-[600]">
+                        Specify location
+                    </label>
+                    <input
+                        type="text"
+                        placeholder="Specify Location"
+                        className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px] w-full"
+                        value={newSession.custom_location}
+                        onChange={(e) => setNewSession({ ...newSession, custom_location: e.target.value })}
+                    />
+                </div>
+            ) : (
+                ""
+            )}
             </div>
             <div className="flex flex-col gap-1 w-full mt-2">
                 <label htmlFor="location" className="font-[600]">
