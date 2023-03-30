@@ -54,6 +54,8 @@ const Sessions = ({ event, sessions }: Props) => {
                                     .utc({ hours, minutes })
                                     .add(parseInt(session.duration), "minute")
                                     .format("HH:mm")
+
+                                console.log(session.event_id)
                                 return (
                                     <div
                                         key={idx}
@@ -76,11 +78,19 @@ const Sessions = ({ event, sessions }: Props) => {
                                                     </NextLink>
 
                                                     <div className="hidden md:flex">
-                                                        <FavoriteButton session={session} isMiniButton={true} />
+                                                        {session.event_id === 90 ? (
+                                                            ""
+                                                        ) : (
+                                                            <FavoriteButton session={session} isMiniButton={true} />
+                                                        )}
                                                     </div>
                                                 </div>
                                                 <div className="hidden md:flex">
-                                                    <ParticipateButton session={session} isTallButton={false} />
+                                                    {session.event_id === 90 ? (
+                                                        ""
+                                                    ) : (
+                                                        <ParticipateButton session={session} isTallButton={false} />
+                                                    )}
                                                 </div>
                                             </div>
                                             <div className="w-full flex flex-col md:flex-row gap-[32px] justify-between md:items-center items-start">
@@ -205,7 +215,11 @@ const Sessions = ({ event, sessions }: Props) => {
                                                     ))}
                                                 </div>
                                                 <div className="flex md:hidden w-full">
-                                                    <ParticipateButton session={session} isTallButton={false} />
+                                                    {session.event_id === 90 ? (
+                                                        ""
+                                                    ) : (
+                                                        <ParticipateButton session={session} isTallButton={false} />
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>
