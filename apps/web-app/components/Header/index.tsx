@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import NextImage from "next/image"
 import NextLink from "next/link"
 import { useRouter } from "next/router"
+import { FiArrowUpRight } from "react-icons/fi"
 
 import { useUserAuthenticationContext } from "../../context/UserAuthenticationContext"
 import { useUserPassportContext } from "../../context/UserPassportContext"
@@ -84,7 +85,7 @@ const Header = () => {
                                 router.asPath === "/events" ? "font-[700]" : "font-[400]"
                             }`}
                         >
-                            Program
+                            Schedule
                         </li>
                     </NextLink>
                     <NextLink href={"/faq"}>
@@ -96,6 +97,15 @@ const Header = () => {
                             FAQ
                         </li>
                     </NextLink>
+                    <a href={"https://zupass.org/"} target="_blank">
+                        <li
+                            className={`flex items-center gap-2 cursor-pointer text-[#F8FFFE] text-[18px] ${
+                                router.asPath === "/faq" ? "font-[700]" : "font-[400]"
+                            }`}
+                        >
+                            Zulalu Passport
+                        </li>
+                    </a>
                     {!isAuth && (
                         <a href="https://airtable.com/shrRZrZbozPE2g6HH" target="_blank" rel="noopener noreferrer">
                             <li className="cursor-pointer font-[400] text-[18px] text-[#F8FFFE]">Apply Now</li>
@@ -143,7 +153,7 @@ const Header = () => {
                                 router.asPath === "/events" ? "font-[700]" : "font-[400]"
                             }`}
                         >
-                            Program
+                            Schedule
                         </li>
                     </NextLink>
                     <NextLink href={"/faq"}>
@@ -155,6 +165,16 @@ const Header = () => {
                             FAQ
                         </li>
                     </NextLink>
+                    <a href={"https://zupass.org/"} target="_blank">
+                        <li
+                            className={`flex items-center gap-2 cursor-pointer text-[#F8FFFE] text-[18px] ${
+                                router.asPath === "/faq" ? "font-[700]" : "font-[400]"
+                            }`}
+                        >
+                            Zulalu Passport
+                            <FiArrowUpRight />
+                        </li>
+                    </a>
                     {!isAuth ? (
                         <a href="https://airtable.com/shrRZrZbozPE2g6HH" target="_blank" rel="noopener noreferrer">
                             <li className="cursor-pointer font-[400] text-[18px] text-[#F8FFFE]">Apply Now</li>
@@ -170,6 +190,14 @@ const Header = () => {
                             </li>
                         </NextLink>
                     )}
+                    <div className="w-full h-[1px] bg-zulalu-primary" />
+                    <li
+                        className={`capitalize text-[#F8FFFE] text-[18px] ${
+                            router.asPath === "/faq" ? "font-[700]" : "font-[400]"
+                        }`}
+                    >
+                        Contact: support@zuzalu.org
+                    </li>
                 </ul>
             </div>
         </div>
