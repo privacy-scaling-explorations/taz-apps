@@ -22,7 +22,6 @@ const MyProfilePage = ({ events, sessions }: Props) => {
     const [openAddSessionModal, setOpenAddSessionModal] = useState(false)
 
     const isOrganizer = userRole === "resident"
-    console.log("sessions", userSessions)
     async function getUserTickets() {
         try {
             console.log(userInfo!.email)
@@ -37,21 +36,21 @@ const MyProfilePage = ({ events, sessions }: Props) => {
     }
 
 
-      const openPDFPopup = async (apiURL : any) => {
-        const response = await fetch(`/api/download-ticket?apiURL=${encodeURIComponent(apiURL)}`);
-        const pdfBlob = await response.blob();
-        const pdfURL = URL.createObjectURL(pdfBlob);
-        window.open(pdfURL, "_blank", "resizable=yes,scrollbars=yes,width=800,height=600");
-      };
+    const openPDFPopup = async (apiURL: any) => {
+        const response = await fetch(`/api/download-ticket?apiURL=${encodeURIComponent(apiURL)}`)
+        const pdfBlob = await response.blob()
+        const pdfURL = URL.createObjectURL(pdfBlob)
+        window.open(pdfURL, "_blank", "resizable=yes,scrollbars=yes,width=800,height=600")
+    }
 
     useEffect(() => {
         if (userSessions.length > 0) {
             const eventsName = userSessions.map((item) => item.events).map((event) => event.name.replace("\n", ""))
             const uniqueValues = eventsName.filter((value, index, self) => self.indexOf(value) === index)
-            getUserTickets()
             setEventsOpt(uniqueValues)
+            getUserTickets()
         }
-    }, [userSessions, tickets])
+    }, [userSessions])
 
     const handleOptionChange = (i: string) => {
         if (selectedOpt.includes(i)) {
