@@ -62,7 +62,7 @@ export interface SessionsDTO {
     type: any
     events: EventsDTO
     quota_id: number
-    creator_uuid: string
+    creator_id: number
 }
 
 export interface RsvpDTO {
