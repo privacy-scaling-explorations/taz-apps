@@ -6,9 +6,10 @@ import { SessionsDTO } from "../../../../types"
 type Props = {
     session: SessionsDTO
     sessions: SessionsDTO[]
+    userId: number
 }
 
-const Session = ({ session, sessions }: Props) => <SessionPage session={session} sessions={sessions} />
+const Session = ({ session, sessions, userId }: Props) => <SessionPage session={session} sessions={sessions} userId={userId} />
 
 export default Session
 
@@ -22,7 +23,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
             }
         })
 
-        const session = await responseSession.data
+        const {session, userId} = await responseSession.data
         console.log("found", session)
         const responseSessions = await axios.get(`${url}/api/fetchSessions`, {
             headers: {
@@ -33,7 +34,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
         const sessions = await responseSessions.data
 
         return {
-            props: { session, sessions }
+            props: { session, sessions, userId }
         }
     } catch (error) {
         res.statusCode = 404

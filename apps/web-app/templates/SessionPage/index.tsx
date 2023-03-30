@@ -16,9 +16,11 @@ import { useUserAuthenticationContext } from "../../context/UserAuthenticationCo
 type Props = {
     session: SessionsDTO
     sessions: SessionsDTO[]
+    userId: number
 }
 
-const SessionPage = ({ session, sessions }: Props) => {
+const SessionPage = ({ session, sessions, userId }: Props) => {
+    console.log("SESSION PAGE: ", session)
     const { userInfo } = useUserAuthenticationContext()
     const router = useRouter()
     const { startDate, location, startTime } = session
@@ -101,7 +103,7 @@ const SessionPage = ({ session, sessions }: Props) => {
 
                         <button
                             className={`${
-                                userInfo?.uui_auth === session.creator_uuid ? "flex" : "hidden"
+                                userId === session.creator_id ? "flex" : "hidden"
                             } w-full md:w-auto justify-center gap-2 items-center bg-zulalu-primary border border-primary text-white font-[600] py-[8px] px-[16px] rounded-[8px]`}
                             onClick={() => setOpenEditSessionModal(true)}
                         >
@@ -116,7 +118,7 @@ const SessionPage = ({ session, sessions }: Props) => {
                         />
                         <button
                             className={`${
-                                userInfo?.uui_auth === session.creator_uuid ? "flex" : "hidden"
+                                userId === session.creator_id ? "flex" : "hidden"
                             } w-full md:w-auto justify-center gap-2 items-center bg-zulalu-primary border border-primary text-white font-[600] py-[8px] px-[16px] rounded-[8px]`}
                             onClick={() => setOpenDeleteSessionModal(true)}
                         >

@@ -5,7 +5,6 @@ import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs"
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     // Create authenticated Supabase Client
     const supabase = createServerSupabaseClient({ req, res })
-    console.log("create body:", req.body)
 
     //Check if we have a session
     const {
@@ -18,6 +17,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             description: "The user does not have an active session or is not authenticated"
         })
     }
+
+    const user = await supabase.from("users").select().eq("uui_auth", session.user.id).single()
 
     if (session) {
         try {
@@ -69,10 +70,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 event_slug,
                 event_item_id,
                 quota_id,
-                creator_uuid: session.user.id
+                creator_id: user.data!.id
             })
 
-            res.status(201).json("Event created")
+            res.status(201).json("Sesson created")
         } catch (error) {
             console.log("error: ", error)
             res.status(500).json({ statusCode: 500, message: error })
