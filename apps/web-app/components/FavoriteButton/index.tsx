@@ -11,7 +11,7 @@ type Props = {
 }
 
 const FavoriteButton = ({ session, isMiniButton }: Props) => {
-    const { userInfo, isAuth } = useUserAuthenticationContext()
+    const { userInfo } = useUserAuthenticationContext()
     const [latestFavoritedSessionId, setLatestFavoritedSessionId] = useState<number | null>(
         session.favoritedSessions.length > 0 ? session.favoritedSessions[0].id : null
     )

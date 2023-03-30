@@ -9,7 +9,7 @@ import { useUserPassportContext } from "../../context/UserPassportContext"
 import PassportLoadingModal from "../PassportLoadingModal"
 
 const Header = () => {
-    const { isAuth } = useUserAuthenticationContext()
+    const { userInfo } = useUserAuthenticationContext()
 
     const { requestSignedZuID, loadingPassport, errorPassport } = useUserPassportContext()
 
@@ -19,7 +19,7 @@ const Header = () => {
 
     return (
         <div className="relative px-[24px] md:px-[72px] flex flex-row h-[112px] md:justify-between w-full z-10 bg-zulalu-darkBase items-center">
-            {!isAuth && loadingPassport.step !== 0 && (
+            {!userInfo && loadingPassport.step !== 0 && (
                 <PassportLoadingModal loadingPassport={loadingPassport} errorPassport={errorPassport} />
             )}
             <div className="w-full flex relative justify-between md:justify-start overflow-hidden gap-5 items-center">
@@ -41,13 +41,13 @@ const Header = () => {
                     </div>
                 </NextLink>
 
-                {isAuth && (
+                {userInfo && (
                     <div className="flex gap-2 text-[#B1F9CA] justify-center items-center text-white text-[18px] text-center self-center">
                         <div className="w-[8px] h-[8px] bg-[#B1F9CA] rounded-full" />
                         <h1 className="text-[#B1F9CA] text-[18px] font-[400]">Passport Connected</h1>
                     </div>
                 )}
-                {!isAuth && (
+                {!userInfo && (
                     <div className="flex flex-row -center">
                         <button
                             className={`flex md:hidden bg-zulalu-primary text-white py-[8px] px-[16px] rounded-[8px]`}
@@ -106,12 +106,12 @@ const Header = () => {
                             Zuzalu Passport
                         </li>
                     </a>
-                    {!isAuth && (
+                    {!userInfo && (
                         <a href="https://airtable.com/shrRZrZbozPE2g6HH" target="_blank" rel="noopener noreferrer">
                             <li className="cursor-pointer font-[400] text-[18px] text-[#F8FFFE]">Apply Now</li>
                         </a>
                     )}
-                    {isAuth ? (
+                    {userInfo ? (
                         <li
                             className={`cursor-pointer text-[#F8FFFE] text-[18px] ${
                                 router.asPath === "/myprofile" ? "font-[700]" : "font-[400]"
@@ -175,7 +175,7 @@ const Header = () => {
                             <FiArrowUpRight />
                         </li>
                     </a>
-                    {!isAuth ? (
+                    {!userInfo ? (
                         <a href="https://airtable.com/shrRZrZbozPE2g6HH" target="_blank" rel="noopener noreferrer">
                             <li className="cursor-pointer font-[400] text-[18px] text-[#F8FFFE]">Apply Now</li>
                         </a>
