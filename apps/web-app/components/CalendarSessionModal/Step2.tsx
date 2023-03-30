@@ -247,7 +247,7 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                 }))
             )
         }
-    }, [newSession.location, newSession.startDate])
+    }, [newSession])
 
     const handleNextStep = () => {
         if (
@@ -282,8 +282,8 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
             })
         }
         const [hours, minutes] = newSession.startTime.split(":").map(Number)
-        const startTimeFormatted = moment({ hours, minutes })
-        const endTime = moment(startTimeFormatted).add(parseInt(newSession.duration), "minute")
+        const startTimeFormatted = moment.utc({ hours, minutes })
+        const endTime = moment.utc(startTimeFormatted).add(parseInt(newSession.duration), "minute")
 
         let current = startTimeFormatted.clone()
         let interval: string[] = []
