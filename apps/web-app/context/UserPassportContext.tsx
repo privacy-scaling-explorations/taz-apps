@@ -6,7 +6,10 @@ import axios from "axios"
 type UserPassportContextData = {
     requestSignedZuID: () => void
     errorPassport: boolean
-    loadingPassport: boolean
+    loadingPassport: {
+        step: number
+        text: string
+    }
 }
 
 type UserPassportProviderProps = {
@@ -19,7 +22,10 @@ export function UserPassportContextProvider({ children }: UserPassportProviderPr
     const [uuid, setUuid] = useState<string | undefined>()
     const [pcdStr, setPcdStr] = useState("")
     const router = useRouter()
-    const [loadingPassport, setLoadingPassport] = useState(false)
+    const [loadingPassport, setLoadingPassport] = useState({
+        step: 0,
+        text: ""
+    })
     const [errorPassport, setErrorPassport] = useState(false)
 
     const PASSPORT_URL = "https://zupass.org/"
@@ -31,7 +37,7 @@ export function UserPassportContextProvider({ children }: UserPassportProviderPr
     }
 
     function requestSignedZuID() {
-        setLoadingPassport(true)
+        setLoadingPassport({ step: 1, text: "Waiting to prove passport..." })
         const proofUrl = requestSignedZuzaluUUIDUrl(PASSPORT_URL, `${window.location.origin}/popup`)
         requestProofFromPassport(proofUrl)
     }
@@ -40,7 +46,7 @@ export function UserPassportContextProvider({ children }: UserPassportProviderPr
     useEffect(() => {
         async function receiveMessage(ev: MessageEvent<any>) {
             if (!ev.data.encodedPcd) return
-            console.log("Received message", ev.data)
+            setLoadingPassport({ step: 2, text: "Waiting response..." })
             setPcdStr(ev.data.encodedPcd)
         }
         window.addEventListener("message", receiveMessage, false)
@@ -53,7 +59,6 @@ export function UserPassportContextProvider({ children }: UserPassportProviderPr
     useEffect(() => {
         if (signatureProofValid && signatureProof) {
             const userUuid = signatureProof.claim.signedMessage
-            console.log("USER UUID", userUuid)
             setUuid(userUuid)
         }
     }, [signatureProofValid, signatureProof])
@@ -63,22 +68,37 @@ export function UserPassportContextProvider({ children }: UserPassportProviderPr
 
     const loginProof = async (participant1: any) => {
         try {
-            console.log("log my proof", participant1)
-            const response = await axios({
+            await axios({
                 method: "post",
-                url: "https://zuzalu.city/api/passport-user-login/",
+                url: "https://b91a-201-42-127-94.sa.ngrok.io/api/passport-user-login/",
                 data: participant1,
                 headers: {
                     "Content-Type": "application/json"
                 }
             })
-            console.log("req response", response)
+                .then((response) => {
+                    if (response.status === 200) {
+                        setLoadingPassport({
+                            step: 4,
+                            text: "SUCCESS"
+                        })
 
-            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-            router.push("/").then(() => {
-                router.reload()
-            })
-            setLoadingPassport(false)
+                        setTimeout(() => {
+                            setLoadingPassport({
+                                step: 0,
+                                text: ""
+                            })
+                        }, 3000)
+                        setErrorPassport(false)
+                        router.push("/").then(() => {
+                            router.reload()
+                        })
+                    }
+                })
+                .catch((error) => {
+                    console.log("AXIOS CALL USER PASSPORT CONTEXT POST", error)
+                    setErrorPassport(true)
+                })
         } catch (error1) {
             console.error("error1", error1)
             setErrorPassport(true)
@@ -87,8 +107,7 @@ export function UserPassportContextProvider({ children }: UserPassportProviderPr
 
     useEffect(() => {
         if (participant) {
-            // TODO: Login Flow
-            console.log("PARTICIPANT", participant)
+            setLoadingPassport({ step: 3, text: "Loginng you in..." })
             loginProof(participant)
         }
     }, [participant])
