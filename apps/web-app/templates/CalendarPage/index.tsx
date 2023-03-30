@@ -177,7 +177,7 @@ const CalendarPage = ({ sessions, events }: Props) => {
                     </div>
                 </div>
 
-                {isAuth && isOrganizer ? (
+                {isAuth ? (
                     <>
                         <button
                             className="flex md:hidden w-full flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
@@ -220,7 +220,7 @@ const CalendarPage = ({ sessions, events }: Props) => {
                         <div className="flex flex-col md:flex-row items-start md:items-center justify-center gap-[32px]">
                             <h1 className="text-[24px] md:text-[40px] text-[#37352F] font-[600]">Sessions</h1>
 
-                            {isAuth && isOrganizer ? (
+                            {isAuth ? (
                                 <>
                                     <button
                                         className="hidden md:flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px]"
