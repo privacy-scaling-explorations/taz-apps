@@ -28,6 +28,8 @@ export default async function handler(req, res) {
 
     const { subEventId, slug, itemId, name, id } = req.body
 
+    const user = await supabase.from("users").select().eq("uui_auth", session.user.id).single()
+
     // Will need user email as input, hard-coded for now
     const body = {
         email: `${session.user.email}`,
@@ -58,7 +60,7 @@ export default async function handler(req, res) {
         )
 
         console.log(response)
-        const inputToSupabase = await supabase.from("tickets").insert({email: session.user.email, pdf_link: response.data.downloads[0].url, name: name, session_id: id})
+        const inputToSupabase = await supabase.from("tickets").insert({email: session.user.email, pdf_link: response.data.downloads[0].url, name: name, session_id: id, user_id: user.data.id})
 
         console.log(inputToSupabase)
         if (response.status == 201) {
