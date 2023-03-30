@@ -103,7 +103,7 @@ const Header = () => {
                                 router.asPath === "/faq" ? "font-[700]" : "font-[400]"
                             }`}
                         >
-                            Zulalu Passport
+                            Zuzalu Passport
                         </li>
                     </a>
                     {!isAuth && (
@@ -171,7 +171,7 @@ const Header = () => {
                                 router.asPath === "/faq" ? "font-[700]" : "font-[400]"
                             }`}
                         >
-                            Zulalu Passport
+                            Zuzalu Passport
                             <FiArrowUpRight />
                         </li>
                     </a>
