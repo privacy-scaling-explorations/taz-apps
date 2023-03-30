@@ -20,6 +20,7 @@ type NewSessionState = {
     info: string
     level: string
     location: string
+    custom_location: string
     name: string
     duration: string
     startDate: Date
@@ -52,6 +53,7 @@ const AddSessionModal = ({ isOpen, closeModal, event, sessions }: Props) => {
         startDate: new Date(),
         startTime: "00",
         location: "",
+        custom_location: "",
         tags: [],
         info: "",
         event_id: event.id,
@@ -135,6 +137,7 @@ const AddSessionModal = ({ isOpen, closeModal, event, sessions }: Props) => {
             team_members: [],
             startDate: new Date(),
             location: "",
+            custom_location: "",
             startTime: "00",
             tags: [],
             info: "",
