@@ -23,6 +23,7 @@ export function UserAuthenticationProvider({ children }: UserAuthenticationProvi
     const [userInfo, setUserInfo] = useState<UserDTO>()
     const [userSessions, setUserSessions] = useState<SessionsDTO[]>([])
     const [userRole, setUserRole] = useState("")
+    const [errorAuth, setErrorAuth] = useState(false)
 
     const [userParticipatingSessions, setUserParticipatingSessions] = useState<SessionsDTO[]>([])
 
@@ -40,25 +41,25 @@ export function UserAuthenticationProvider({ children }: UserAuthenticationProvi
         }
 
         if (session.user.id) {
-          const userId = `${window.location.origin}/api/fetchUser/${session.user.id!}/`;
+            const userId = `${window.location.origin}/api/fetchUser/${session.user.id!}/`
 
-          await axios
-            .get(userId)
-            .then((res) => {
-
-                setUserRole(session.user.user_metadata.role)
-                setUserInfo(res.data)
-            })
-            .catch((error) => {
-                console.log("USER AUTH CONTEXT FAILED TO FETCH USER ID", error)
-            })
+            await axios
+                .get(userId)
+                .then((res) => {
+                    setUserRole(session.user.user_metadata.role)
+                    setUserInfo(res.data)
+                })
+                .catch((error) => {
+                    console.log("USER AUTH CONTEXT FAILED TO FETCH USER ID", error)
+                })
+        } else {
+            setErrorAuth(true)
+            console.log("USER AUTH CONTEXT FAILED TO FETCH USER ID")
         }
-
     }
 
     const fetchEvents = async () => {
         if (userInfo) {
-
             await axios
                 .get(`/api/fetchSessionsByUserId/${userInfo.id}`)
                 .then((res) => {
@@ -78,7 +79,9 @@ export function UserAuthenticationProvider({ children }: UserAuthenticationProvi
     }, [])
 
     useEffect(() => {
-        fetchEvents()
+        if (errorAuth === false && userInfo !== undefined) {
+            fetchEvents()
+        }
     }, [userInfo])
 
     return (

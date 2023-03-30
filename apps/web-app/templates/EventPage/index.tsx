@@ -198,7 +198,7 @@ const EventPage = ({ event, sessions, allSessions }: Props) => {
                             <h1 className="text-black text-[52px] font-[600] leading-tight">{event.name}</h1>
                         </div>
                         <div className="flex flex-col w-full gap-4">
-                            <div className="flex gap-1 items-center justify-start">
+                            <div className="flex gap-1 items-center justify-start font-[600]">
                                 <NextImage src={"/vector-calendar.svg"} alt="calendar" width={15} height={15} />
                                 <h1 className="text-zulalu-secondary">{formatDates(event.startDate, event.endDate)}</h1>
                             </div>
@@ -207,9 +207,12 @@ const EventPage = ({ event, sessions, allSessions }: Props) => {
                         <div className="flex flex-col mt-10 gap-5">
                             <h1 className="text-black text-[24px]">Speakers</h1>
 
-                            <div className="flex flex-wrap gap-[24px]">
+                            <div className="flex flex-wrap gap-[8px]">
                                 {speakers.map((speaker, idx) => (
-                                    <div className="flex gap-2 bg-gray-200 rounded-[4px] px-3 py-1" key={idx}>
+                                    <div
+                                        className="flex gap-2 bg-gray-200 text-[10px] justify-center items-center rounded-[4px] px-3 py-1"
+                                        key={idx}
+                                    >
                                         <img src="/user-icon-4.svg" className="w-[24px] h-[24px]" />
                                         <h1 className="capitalize">{speaker}</h1>
                                     </div>

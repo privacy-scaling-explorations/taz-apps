@@ -33,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             .eq("participants.user_id", userId)
             .eq("favoritedSessions.user_id", userId)
             .order("startDate", { ascending: true })
-
+            .order("startTime", { ascending: true })
         if (response.error === null) res.status(200).send(response.data)
         else res.status(response.status).send(response.error)
     } catch (err: any) {
