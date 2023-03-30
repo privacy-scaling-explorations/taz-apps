@@ -44,7 +44,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 subEventId,
                 event_slug,
                 event_item_id,
-                quota_id
+                quota_id,
+                duration,
+                custom_location
             } = req.body
 
             await supabase.from("sessions").insert({
@@ -70,7 +72,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 event_slug,
                 event_item_id,
                 quota_id,
-                creator_id: user.data!.id
+                creator_id: user.data!.id,
+                duration,
+                custom_location
             })
 
             res.status(201).json("Sesson created")

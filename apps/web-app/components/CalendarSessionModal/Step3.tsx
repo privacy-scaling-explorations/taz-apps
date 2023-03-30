@@ -24,6 +24,7 @@ type NewSessionState = {
         role: string
     }[]
     track: string
+    custom_location: string
 }
 
 type Props = {

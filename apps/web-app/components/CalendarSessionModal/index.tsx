@@ -23,6 +23,7 @@ type NewSessionState = {
     info: string
     level: string
     location: string
+    custom_location: string
     name: string
     startDate: Date
     startTime: string
@@ -56,6 +57,7 @@ const CalendarSessionModal = ({ isOpen, closeModal, events, sessions }: Props) =
         startDate: new Date(),
         startTime: "00",
         location: "",
+        custom_location: "",
         tags: [],
         info: "",
         event_id: 97,
@@ -141,6 +143,7 @@ const CalendarSessionModal = ({ isOpen, closeModal, events, sessions }: Props) =
             startDate: new Date(),
             startTime: "00",
             location: "Amphitheater",
+            custom_location: "",
             tags: [],
             info: "",
             duration: "0",
