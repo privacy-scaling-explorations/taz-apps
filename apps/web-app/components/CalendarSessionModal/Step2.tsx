@@ -355,7 +355,7 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                     <h1 className="text-[14px] text-[#AAAAAA]">Max 2000 characters</h1>
                 </div>
             </div>
-            {newSession.event_id != 101 ? (
+            {newSession.event_id !== 101 ? (
                 <div className="flex flex-col gap-1 w-full">
                     <label htmlFor="location" className="font-[600]">
                         Location*
@@ -379,7 +379,7 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                 ""
             )}
 
-            {newSession.location == "Other" ? (
+            {newSession.location === "Other" ? (
                 <div className="flex flex-col gap-1 w-full mt-2">
                     <label htmlFor="custom_location" className="font-[600]">
                         Specify location

@@ -61,10 +61,9 @@ const CalendarPageSessions = ({ sessions, showStartDate = false }: Props) => {
     // const closeOpenTicketModal = (close = false) => {
     //     if (close) setOpenBuyTicketModal(false)
     // }
-    const todayDate = moment.utc(new Date()).format("DD")
 
     const groupedByStartDate: GroupedSession[] = sessions.reduce((acc: GroupedSession[], session: SessionsDTO) => {
-        const startDateStr: string = moment(session.startDate).utc().format("YYYY-MM-DD")
+        const startDateStr: string = moment.utc(session.startDate).format("YYYY-MM-DD")
         const group: GroupedSession | undefined = acc.find((item: GroupedSession) => item.startDate === startDateStr)
 
         if (group) {

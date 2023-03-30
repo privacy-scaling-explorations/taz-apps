@@ -9,7 +9,9 @@ type Props = {
     userId: number
 }
 
-const Session = ({ session, sessions, userId }: Props) => <SessionPage session={session} sessions={sessions} userId={userId} />
+const Session = ({ session, sessions, userId }: Props) => (
+    <SessionPage session={session} sessions={sessions} userId={userId} />
+)
 
 export default Session
 
@@ -23,8 +25,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
             }
         })
 
-        const {session, userId} = await responseSession.data
-        console.log("found", session)
+        const { session, userId } = await responseSession.data
         const responseSessions = await axios.get(`${url}/api/fetchSessions`, {
             headers: {
                 Cookie: req.headers.cookie || "" // Pass cookies from the incoming request

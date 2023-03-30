@@ -34,9 +34,7 @@ type Props = {
 const Step1 = ({ events, setSteps, newSession, setNewSession }: Props) => {
     const handleSelect = (index: number) => {
         const selectedEvent = events[index]
-        console.log(selectedEvent)
-        if (selectedEvent.id == 101) {
-            console.log("open session selected")
+        if (selectedEvent.id === 101) {
             setNewSession({
                 ...newSession,
                 location: "Other",
@@ -52,8 +50,6 @@ const Step1 = ({ events, setSteps, newSession, setNewSession }: Props) => {
                 event_item_id: selectedEvent.item_id
             })
         }
-
-        console.log("new session: ", newSession)
     }
 
     return (

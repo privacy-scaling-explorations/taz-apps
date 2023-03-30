@@ -18,7 +18,7 @@ interface GroupedSession {
 
 const Sessions = ({ event, sessions }: Props) => {
     const groupedByStartDate: GroupedSession[] = sessions.reduce((acc: GroupedSession[], session: SessionsDTO) => {
-        const startDateStr: string = moment(session.startDate).utc().format("YYYY-MM-DD")
+        const startDateStr: string = moment.utc(session.startDate).format("YYYY-MM-DD")
         const group: GroupedSession | undefined = acc.find((item: GroupedSession) => item.startDate === startDateStr)
 
         if (group) {
@@ -55,7 +55,6 @@ const Sessions = ({ event, sessions }: Props) => {
                                     .add(parseInt(session.duration), "minute")
                                     .format("HH:mm")
 
-                                console.log(session.event_id)
                                 return (
                                     <div
                                         key={idx}
@@ -149,10 +148,10 @@ const Sessions = ({ event, sessions }: Props) => {
                                                         />
                                                         <p className="text-[#708E8C] text-[18px]">
                                                             {item.startDate &&
-                                                            moment(`${item.startDate}T00:00:00Z`).isValid()
-                                                                ? moment(
-                                                                      `${item.startDate}T${session.startTime}`
-                                                                  ).format("dddd, MMMM Do")
+                                                            moment.utc(`${item.startDate}T00:00:00Z`).isValid()
+                                                                ? moment
+                                                                      .utc(`${item.startDate}T${session.startTime}`)
+                                                                      .format("dddd, MMMM Do")
                                                                 : "\u00A0"}
                                                         </p>
                                                     </div>
