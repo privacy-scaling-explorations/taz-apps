@@ -43,18 +43,6 @@ const ParticipateButton = ({ session, isTallButton }: Props) => {
             })
         }
     }
-
-    const handleBuyTicket = async () => {
-        await axios.post("/api/pretix-create-order", {
-            subEventId: session.subevent_id,
-            slug: session.event_slug,
-            itemId: session.event_item_id,
-            name: session.name,
-            session_id: session.id
-        }).then(() => handleClickAttend(session.id)).then(() => router.reload())
-
-    }
-
     const handleClickAttend = async (sessionId: number) => {
         if (userInfo) {
             await axios
@@ -73,6 +61,19 @@ const ParticipateButton = ({ session, isTallButton }: Props) => {
                     makeToast(false, "Error")
                 })
         }
+    }
+
+    const handleBuyTicket = async () => {
+        await axios
+            .post("/api/pretix-create-order", {
+                subEventId: session.subevent_id,
+                slug: session.event_slug,
+                itemId: session.event_item_id,
+                name: session.name,
+                session_id: session.id
+            })
+            .then(() => handleClickAttend(session.id))
+            .then(() => router.reload())
     }
 
     const closeTicketModal = (close = false) => {
