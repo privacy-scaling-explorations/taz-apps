@@ -31,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     error: updatePubUserError,
                     status,
                     statusText
-                } = await supabase.from("users").update({ uui_auth: data.user.id }).eq("email", email)
+                } = await supabase.from("users").update({ uui_auth: data.user.id, role }).eq("email", email)
 
                 if (updatePubUserError) {
                     res.status(400).json("Error with updating public user")
@@ -84,7 +84,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     if (publicUserData !== null) {
                         const updatePublicUser = await supabase
                             .from("users")
-                            .update({ uui_auth: signupData.user.id })
+                            .update({ uui_auth: signupData.user.id, role })
                             .eq("email", email)
                         console.log("Updated existing user", updatePublicUser)
                     }
@@ -93,7 +93,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         const { data: addUserData, error: addUserError } = await supabase.from("users").insert({
                             userName: name,
                             email,
-                            uui_auth: signupData.user.id
+                            uui_auth: signupData.user.id,
+                            role
                         })
 
                         if (addUserError) {
