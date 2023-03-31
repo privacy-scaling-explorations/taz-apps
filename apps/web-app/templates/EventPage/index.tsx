@@ -64,8 +64,8 @@ const EventPage = ({ event, sessions, allSessions }: Props) => {
     // (done in useEffect because start and end date must be done updating first)
     useEffect(() => {
         const today = moment().utc().startOf("day")
-        const start = datePickerStartDate ? moment(datePickerStartDate).utc() : null
-        const end = datePickerEndDate ? moment(datePickerEndDate).utc() : null
+        const start = datePickerStartDate ? moment.utc(datePickerStartDate) : null
+        const end = datePickerEndDate ? moment.utc(datePickerEndDate) : null
 
         if (start?.isSame(today) && end?.isSame(today)) {
             setDatePickerDescription("TODAY")
@@ -160,7 +160,7 @@ const EventPage = ({ event, sessions, allSessions }: Props) => {
     const handleClickToFilterByTodayDate = () => {
         const filtered = sessions.filter((session) => {
             const sessionDate = moment.utc(session.startDate).format("MMMM Do")
-            const todayDate = moment.utc(new Date()).format("MMMM Do")
+            const todayDate = moment().format("MMMM Do")
 
             return sessionDate === todayDate
         })

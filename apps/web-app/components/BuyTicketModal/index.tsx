@@ -1,9 +1,7 @@
 import "react-autocomplete-input/dist/bundle.css"
 import "react-datepicker/dist/react-datepicker.css"
-import NextImage from "next/image"
 import { Dialog, Transition } from "@headlessui/react"
-import { useRouter } from "next/router"
-import { Fragment, useRef, useState } from "react"
+import { Fragment, useState } from "react"
 import Loading from "../Loading"
 
 type Props = {
