@@ -1,6 +1,6 @@
 <p align="center">
     <h1 align="center">
-        TAZ applications
+        TAZ applications - TAZ-Zuzalu
     </h1>
 </p>
 
@@ -38,52 +38,42 @@
     </h4>
 </div>
 
-| The Temporary Anonymous Zone is a no-labels zone where Devcon VI attendees can learn through experience about privacy and anonymity. Visitors can get info on basic concepts, ask the team questions, share thoughts, make digital and physical art together, and interact anonymously with other Devcon attendees using apps built specifically for the Devcon VI TAZ. |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| TAZ-Zuzalu is a decentralized application (DApp) that allows attendees of the Zuzalu pop-up city community in Montenegro to participate in events anonymously while preserving their identities. The application leverages Zero Knowledge Proof (ZKP) technology, specifically the Semaphore protocol, integrating a Passport that enables users to prove their eligibility to attend events without revealing their personal information.
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 
-TAZ contracts use the latest version of the [`Semaphore.sol`](https://goerli.etherscan.io/address/0xE585f0Db9aB24dC912404DFfb9b28fb8BF211fA6) contract, deployed on the Goerli testnet. The web app uses Next.js and allows users with a valid Semaphore ID to join the TAZ group and generate Semaphore proofs to post anonymous questions and answers, or to make art. Proofs related to the Q&A part are validated on-chain, while proofs related to artworks are validated off-chain and final canvases are posted as NFTs. Users can also vote anonymously for their favorite artworks.
-
-⚠️ The TAZ apps are experimental and the code is not well tested. For more information visit [taz.appliedzkp.org](https://taz.appliedzkp.org) or see our [Notion site](https://pse-team.notion.site/About-the-TAZ-app-1ae2793046414468b56472f43725961e).
+<br>
 
 ## 🛠 Install
 
 Clone this repository:
 
 ```bash
-git clone https://github.com/semaphore-protocol/taz-apps.git
+git clone https://github.com/Taz-Zuzalu/web-app.git
 ```
 
 And install the dependencies:
 
 ```bash
-cd taz-apps && yarn
+cd web-app && yarn
+cd apps/web-app && yarn
 ```
 
 ## 📜 Usage
 
-Web app and contracts need their env variables. For each of them, copy the `.env.example` file as `.env`:
+Web app needs its env variables. Copy the `.env.example` file as `.env.local` at the `apps/web-app` folder.
 
 ```bash
-cd apps/web-app # and apps/contracts
-cp .env.example .env
+cp .env.example .env.local
 ```
 
 And add your environment variables.
 
 ### Start the web-app
 
-Run the following command to run a local web app:
+Run the following command to run a local web app from your apps folder:
 
 ```bash
 yarn start:web-app
-```
-
-### Test the contracts
-
-Contracts can be tested with the following command:
-
-```bash
-yarn test:contracts
 ```
 
 ### Code quality and formatting
