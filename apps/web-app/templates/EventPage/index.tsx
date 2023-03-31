@@ -197,10 +197,12 @@ const EventPage = ({ event, sessions, allSessions }: Props) => {
                         <button className="w-full md:w-auto justify-center text-center bg-white border border-primary py-[8px] px-[5px] md:px-[15px] text-zulalu-primary font-[600] rounded-[8px] text-[12px] md:text-[16px]">
                             CONTACT ORGANIZERS
                         </button>
+                        <a href={event.publicUrl} target="_blank">
                         <button className="w-full md:w-auto justify-center text-center flex gap-1 items-center bg-zulalu-primary text-white py-[8px] px-[5px] md:px-[15px] font-[600] rounded-[8px] text-[12px] md:text-[16px]">
                             <NextImage src={"/ticket.svg"} width={13} height={12} />
-                            TICKETS COMING SOON
+                            BUY TICKET
                         </button>
+                        </a>
                     </div>
                 </div>
                 <div className="flex flex-col lg:flex-row w-full justify-start bg-white rounded-[16px] h-full">

@@ -107,6 +107,9 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
         setNewSession({ ...newSession, team_members: [...newSession.team_members, teamMember] })
         setTeamMember({ name: "", role: "Speaker" })
         setDisplay(false)
+
+        const selectedRole = teamMember.role
+        setTeamMember({ name: "", role: selectedRole })
     }
 
     const handleRemoveTeamMember = (index: number) => {
