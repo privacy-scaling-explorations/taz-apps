@@ -204,6 +204,7 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
 
         setSteps(2)
     }
+
     return (
         <div className="flex flex-col w-full">
             <ToastContainer
@@ -271,9 +272,8 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                 <label className="font-[600]">Start Date*</label>
                 <DatePicker
                     className="border-[#C3D0CF] border-2 p-1 rounded-[8px] h-[42px] w-full"
-                    selected={new Date(startDate)}
+                    selected={moment(newSession.startDate, "YYYY-MM-DDTHH:mm:ss").toDate()}
                     onChange={(e) => setNewSession({ ...newSession, startDate: e as Date })}
-                    minDate={moment().toDate()}
                 />
             </div>
 
@@ -287,7 +287,7 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                         className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px] w-full"
                         onChange={(e) => setNewSession({ ...newSession, startTime: `${e.target.value}` })}
                     >
-                        <option value="00" >Select Slot</option>
+                        <option value="00">Select Slot</option>
                         {slotsUnavailable.map((slot, index) => (
                             <option key={index} value={slot.time} disabled={slot.disabled}>{`${slot.time}`}</option>
                         ))}
@@ -380,7 +380,11 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                 </div>
                 <ul className="flex flex-row items-center">
                     {newSession.tags.map((item, index) => (
-                        <div key={index} className="bg-[#E4EAEA] py-[4px] px-[8px] text-sm rounded-[4px] cursor-pointe mr-[8px] cursor-pointer" onClick={(e) => handleRemoveTag(e, index)}>
+                        <div
+                            key={index}
+                            className="bg-[#E4EAEA] py-[4px] px-[8px] text-sm rounded-[4px] cursor-pointe mr-[8px] cursor-pointer"
+                            onClick={(e) => handleRemoveTag(e, index)}
+                        >
                             {item}
                         </div>
                     ))}
