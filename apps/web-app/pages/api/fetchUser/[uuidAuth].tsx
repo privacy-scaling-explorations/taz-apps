@@ -5,7 +5,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Create authenticated Supabase Client
 
     const supabase = createServerSupabaseClient({ req, res })
-    console.log("here", req.query.uuidAuth)
     // Check if we have a session
     const {
         data: { session }
