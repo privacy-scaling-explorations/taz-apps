@@ -107,7 +107,7 @@ export function UserPassportContextProvider({ children }: UserPassportProviderPr
 
     useEffect(() => {
         if (participant) {
-            setLoadingPassport({ step: 3, text: "Loginng you in..." })
+            setLoadingPassport({ step: 3, text: "Logging you in..." })
             loginProof(participant)
         }
     }, [participant])
