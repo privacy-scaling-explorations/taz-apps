@@ -10,6 +10,7 @@ import DeleteSessionModal from "../../components/DeleteSessionModal"
 import EditSessionModal from "../../components/EditSessionModal"
 import ParticipateButton from "../../components/ParticipateButton"
 import FavoriteButton from "../../components/FavoriteButton"
+import { useUserAuthenticationContext } from "../../context/UserAuthenticationContext"
 
 type Props = {
     session: SessionsDTO
@@ -19,6 +20,7 @@ type Props = {
 
 const SessionPage = ({ session, sessions, userId }: Props) => {
     const router = useRouter()
+    const { userInfo, userRole } = useUserAuthenticationContext()
     const { startDate, location, startTime } = session
     const [openDeleteSessionModal, setOpenDeleteSessionModal] = useState(false)
     const [openEditSessionModal, setOpenEditSessionModal] = useState(false)
@@ -47,6 +49,8 @@ const SessionPage = ({ session, sessions, userId }: Props) => {
         if (close) setOpenDeleteSessionModal(false)
     }
 
+    const checkOrganizerOrCreator = session.creator_id === userId || userRole === "organizer"
+
     return (
         <BaseTemplate>
             <div className="flex flex-col items-center bg-[#EEEEF0] h-full md:h-[100vh] px-4 md:px-[24px] py-4 md:py-[24px] gap-4 md:gap-[16px]">
@@ -67,15 +71,15 @@ const SessionPage = ({ session, sessions, userId }: Props) => {
                         <FavoriteButton session={session} isMiniButton={false} />
                         <ParticipateButton session={session} isTallButton={true} />
 
-                        <button
-                            className={`${
-                                userId === session.creator_id ? "flex" : "hidden"
-                            } w-full md:w-auto justify-center gap-2 items-center bg-zulalu-primary border border-primary text-white font-[600] py-[8px] px-[16px] rounded-[8px]`}
-                            onClick={() => setOpenEditSessionModal(true)}
-                        >
-                            <NextImage src={"/pencil.svg"} width={12} height={16} />
-                            EDIT SESSION
-                        </button>
+                        {checkOrganizerOrCreator && (
+                            <button
+                                className={`flex w-full md:w-auto justify-center gap-2 items-center bg-zulalu-primary border border-primary text-white font-[600] py-[8px] px-[16px] rounded-[8px]`}
+                                onClick={() => setOpenEditSessionModal(true)}
+                            >
+                                <NextImage src={"/pencil.svg"} width={12} height={16} />
+                                EDIT SESSION
+                            </button>
+                        )}
                         <EditSessionModal
                             isOpen={openEditSessionModal}
                             closeModal={setOpenEditSessionModal}

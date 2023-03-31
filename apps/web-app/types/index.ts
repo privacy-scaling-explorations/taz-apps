@@ -5,6 +5,7 @@ export interface UserDTO {
     id: number
     semaphoreId: string
     userName: string
+    role: string
     uui_auth: string
 }
 

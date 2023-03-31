@@ -181,7 +181,13 @@ const EventPage = ({ event, sessions, allSessions }: Props) => {
                     <div className="flex flex-col w-auto md:flex-row gap-4 md:gap-[8px] justify-end items-start md:items-center">
                         <a
                             className="w-full md:w-auto"
-                            href={event.id === 90 ? "https://lu.ma/bpvpaljo" : event.apply_form}
+                            href={
+                                event.id === 90
+                                    ? "https://lu.ma/bpvpaljo"
+                                    : event.id === 92
+                                    ? "https://airtable.com/shrABLqfWSmhm39z3"
+                                    : event.apply_form
+                            }
                             target="_blank"
                         >
                             <div className="w-full md:w-auto justify-center text-center md:w-auto bg-white border border-primary py-[8px] px-[5px] md:px-[15px] text-zulalu-primary font-[600] rounded-[8px] text-[12px] md:text-[16px]">
