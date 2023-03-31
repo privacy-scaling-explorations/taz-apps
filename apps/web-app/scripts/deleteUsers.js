@@ -1,18 +1,18 @@
-import { createClient } from "@supabase/supabase-js"
-const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co"
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY
+const { createClient } = require("@supabase/supabase-js");
+const supabaseUrl = "https://polcxtixgqxfuvrqgthn.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBvbGN4dGl4Z3F4ZnV2cnFndGhuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY3ODM0MzYwMywiZXhwIjoxOTkzOTE5NjAzfQ.6_AnKSHkt5kARd6tK5JVnLCNm8ATQFHiuXjnGtOBCcc";
 const supabase = createClient(supabaseUrl, supabaseKey, {
-    auth: {
-        autoRefreshToken: false,
-        persistSession: false,
-        detectSessionInUrl: false
-    }
-})
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false,
+    detectSessionInUrl: false,
+  },
+});
 
-(async function deleteUsers() {
+(async () => {
   const { data, error } = await supabase.auth.admin.deleteUser(
-    '72ba6b67-3715-4cab-96cf-dd031798e09a',
-    {shouldSoftDelete: true}
-  )
-  print(data, error)
-})()
+    "f739cb24-205f-41fc-b5fc-a02a06cc1814",
+    true
+  );
+  console.log(data, error);
+})();
