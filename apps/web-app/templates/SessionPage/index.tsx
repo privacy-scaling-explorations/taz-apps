@@ -49,7 +49,7 @@ const SessionPage = ({ session, sessions, userId }: Props) => {
         if (close) setOpenDeleteSessionModal(false)
     }
 
-    const checkOrganizerOrCreator = session.creator_id === userId || userRole === "organizer"
+    const checkOrganizerOrCreator = userInfo && (session.creator_id === userId || userInfo.role === "organizer")
 
     return (
         <BaseTemplate>
