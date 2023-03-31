@@ -86,14 +86,14 @@ const SessionPage = ({ session, sessions, userId }: Props) => {
                             session={session}
                             sessions={sessions}
                         />
-                        <button
-                            className={`${
-                                userId === session.creator_id ? "flex" : "hidden"
-                            } w-full md:w-auto justify-center gap-2 items-center bg-zulalu-primary border border-primary text-white font-[600] py-[8px] px-[16px] rounded-[8px]`}
-                            onClick={() => setOpenDeleteSessionModal(true)}
-                        >
-                            DELETE SESSION
-                        </button>
+                        {checkOrganizerOrCreator && (
+                            <button
+                                className={`flex w-full md:w-auto justify-center gap-2 items-center bg-zulalu-primary border border-primary text-white font-[600] py-[8px] px-[16px] rounded-[8px]`}
+                                onClick={() => setOpenDeleteSessionModal(true)}
+                            >
+                                DELETE SESSION
+                            </button>
+                        )}
                         <DeleteSessionModal
                             isOpen={openDeleteSessionModal}
                             closeModal={closeDeleteSessionModal}
