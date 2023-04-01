@@ -18,6 +18,7 @@ type NewSessionState = {
     custom_location: string
     name: string
     startDate: Date
+    duration: string
     startTime: string
     subevent_id: number
     tags: string[]
@@ -36,7 +37,7 @@ type Props = {
     amountTickets: string
 }
 
-const Step3 = ({ setSteps, newSession, handleSubmit, isLoading, amountTickets }: Props) => (
+const Step3 = ({ setSteps, newSession, handleSubmit, isLoading, amountTickets}: Props) => (
     <div className="flex flex-col w-full gap-8 bg-white rounded-lg">
         <div className="flex flex-col gap-4">
             <h1 className="text-[24px] font-[600]">{newSession.name}</h1>

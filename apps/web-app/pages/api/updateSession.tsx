@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next"
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const supabase = createServerSupabaseClient({ req, res })
+    const supabase = createServerSupabaseClient({ req, res })
 
     // Check if we have a session
     const {
@@ -15,13 +15,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             description: "The user does not have an active session or is not authenticated"
         })
 
-  console.log("Body: ", req.body)
+    console.log("Body: ", req.body)
     try {
         const {
             id,
             description,
             name,
             startDate,
+            duration,
             location,
             custom_location,
             startTime,
@@ -30,6 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             hasTicket,
             event_type,
             format,
+            level,
             equipment,
             team_members,
             track,
@@ -44,6 +46,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 description,
                 startDate,
                 location,
+                duration,
                 custom_location,
                 startTime,
                 tags,
@@ -51,6 +54,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 hasTicket,
                 event_type,
                 format,
+                level,
                 team_members,
                 track,
                 equipment,
