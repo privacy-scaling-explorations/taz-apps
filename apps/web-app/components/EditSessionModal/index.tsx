@@ -21,6 +21,7 @@ type NewSessionState = {
     info: string
     level: string
     location: string
+    custom_location: string
     name: string
     startDate: Date
     startTime: string
@@ -54,6 +55,7 @@ const EditSessionModal = ({ isOpen, closeModal, session, sessions }: Props) => {
         startDate: session.startDate,
         startTime: session.startTime,
         location: session.location,
+        custom_location: session.custom_location,
         tags: session.tags,
         info: session.info,
         event_id: session.event_id,
@@ -137,6 +139,7 @@ const EditSessionModal = ({ isOpen, closeModal, session, sessions }: Props) => {
             startDate: session.startDate,
             startTime: session.startTime,
             location: session.location,
+            custom_location: session.custom_location,
             tags: session.tags,
             info: session.info,
             event_id: session.event_id,
