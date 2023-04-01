@@ -549,6 +549,23 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                 </ul>
             </div>
             <div className="flex flex-col gap-1 my-2">
+                <label htmlFor="tags">Track:</label>
+                <select
+                    id="track"
+                    name="track"
+                    className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px]"
+                    onChange={(e) => setNewSession({ ...newSession, track: e.target.value })}
+                    value={newSession.track}
+                >
+                    {tracksOpt &&
+                        tracksOpt.map((item, index) => (
+                            <option key={index} value={item.type}>
+                                {item.type}
+                            </option>
+                        ))}
+                </select>
+            </div>
+            <div className="flex flex-col gap-1 my-2">
                 <label htmlFor="tags">Format:</label>
                 <select
                     id="format"
