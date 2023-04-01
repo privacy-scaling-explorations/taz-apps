@@ -15,6 +15,7 @@ type NewSessionState = {
     info: string
     level: string
     location: string
+    custom_location: string
     name: string
     startDate: Date
     startTime: string
@@ -53,7 +54,7 @@ const Step3 = ({ setSteps, newSession, handleSubmit, isLoading, amountTickets }:
 
             <div className="flex items-center gap-2">
                 <NextImage src="/vector-location.svg" width={20} height={20} />
-                <h1 className="text-[18px]">{newSession.location}</h1>
+                <h1 className="text-[18px]">{newSession.location === "Other" ? newSession.custom_location : newSession.location}</h1>
             </div>
             <div className="flex flex-col gap-[12px]">
                 <div className="flex flex-row gap-[8px]">

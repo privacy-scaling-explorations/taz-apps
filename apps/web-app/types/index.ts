@@ -48,6 +48,7 @@ export interface SessionsDTO {
     info: string
     level: string
     location: string
+    custom_location: string
     name: string
     participants: ParticipantsDTO[]
     startDate: Date

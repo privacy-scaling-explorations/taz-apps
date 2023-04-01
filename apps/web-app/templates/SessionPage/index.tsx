@@ -19,9 +19,10 @@ type Props = {
 }
 
 const SessionPage = ({ session, sessions, userId }: Props) => {
+    console.log("SESSION: ", session)
     const router = useRouter()
     const { userInfo, userRole } = useUserAuthenticationContext()
-    const { startDate, location, startTime } = session
+    const { startDate, location, startTime, custom_location } = session
     const [openDeleteSessionModal, setOpenDeleteSessionModal] = useState(false)
     const [openEditSessionModal, setOpenEditSessionModal] = useState(false)
 
@@ -122,7 +123,7 @@ const SessionPage = ({ session, sessions, userId }: Props) => {
                             </div>
                             <div className="flex gap-1 items-center justify-start mt-4">
                                 <NextImage src={"/vector-location.svg"} alt="calendar" width={15} height={15} />
-                                <h1 className="text-zulalu-secondary">{location}</h1>
+                                <h1 className="text-zulalu-secondary">{location === "Other" ? custom_location : location}</h1>
                             </div>
                         </div>
                         <div className="flex flex-col lg:flex-row gap-[24px] w-full mt-4">

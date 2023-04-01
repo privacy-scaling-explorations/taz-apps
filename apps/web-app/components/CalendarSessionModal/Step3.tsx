@@ -15,6 +15,7 @@ type NewSessionState = {
     info: string
     level: string
     location: string
+    custom_location: string
     name: string
     startDate: Date
     startTime: string
@@ -24,7 +25,6 @@ type NewSessionState = {
         role: string
     }[]
     track: string
-    custom_location: string
 }
 
 type Props = {
