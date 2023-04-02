@@ -21,8 +21,10 @@ type NewSessionState = {
     info: string
     level: string
     location: string
+    custom_location: string
     name: string
     startDate: Date
+    duration: string
     startTime: string
     subevent_id: number
     tags: string[]
@@ -41,9 +43,11 @@ type Props = {
     closeModal: (b: boolean) => void
     session: SessionsDTO
     sessions: SessionsDTO[]
+    reRender: boolean
+    setReRender: Function
 }
 
-const EditSessionModal = ({ isOpen, closeModal, session, sessions }: Props) => {
+const EditSessionModal = ({ isOpen, closeModal, session, sessions, reRender, setReRender }: Props) => {
     const router = useRouter()
     const questionTextRef = useRef(null)
     const [isLoading, setIsLoading] = useState(false)
@@ -52,8 +56,10 @@ const EditSessionModal = ({ isOpen, closeModal, session, sessions }: Props) => {
         name: session.name,
         team_members: session.team_members,
         startDate: session.startDate,
+        duration: session.duration,
         startTime: session.startTime,
         location: session.location,
+        custom_location: session.custom_location,
         tags: session.tags,
         info: session.info,
         event_id: session.event_id,
@@ -124,9 +130,6 @@ const EditSessionModal = ({ isOpen, closeModal, session, sessions }: Props) => {
             })
         }
 
-        // refresh to see new event created
-        router.push(router.asPath)
-
         // CLEAN EVERYTHING AFTER CREATING EVENT
 
         setIsLoading(false)
@@ -135,8 +138,10 @@ const EditSessionModal = ({ isOpen, closeModal, session, sessions }: Props) => {
             name: session.name,
             team_members: session.team_members,
             startDate: session.startDate,
+            duration: session.duration,
             startTime: session.startTime,
             location: session.location,
+            custom_location: session.custom_location,
             tags: session.tags,
             info: session.info,
             event_id: session.event_id,
@@ -152,7 +157,9 @@ const EditSessionModal = ({ isOpen, closeModal, session, sessions }: Props) => {
             event_item_id: session.event_item_id,
             quota_id: session.quota_id
         })
+
         closeModal(false)
+        router.reload()
     }
 
     return (

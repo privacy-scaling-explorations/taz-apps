@@ -130,7 +130,8 @@ const CalendarSessionModal = ({ isOpen, closeModal, events, sessions }: Props) =
         }
 
         // refresh to see new event created
-        router.push(router.asPath)
+        // router.push(router.asPath)
+        router.reload()
 
         // CLEAN EVERYTHING AFTER CREATING EVENT
 

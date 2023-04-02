@@ -225,7 +225,7 @@ const CalendarPageSessions = ({ sessions, showStartDate = false }: Props) => {
                                                             width={15}
                                                             height={15}
                                                         />
-                                                        <p className="text-[18px]">{session.location}</p>
+                                                        <p className="text-[18px]">{session.location === "Other" ? session.custom_location : session.location}</p>
                                                     </div>
                                                 </div>
 

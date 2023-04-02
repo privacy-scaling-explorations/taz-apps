@@ -171,7 +171,7 @@ const Sessions = ({ event, sessions }: Props) => {
                                                             width={15}
                                                             height={15}
                                                         />
-                                                        <p className="text-[18px]">{session.location}</p>
+                                                        <p className="text-[18px]">{session.location === "Other" ? session.custom_location : session.location}</p>
                                                     </div>
                                                 </div>
                                                 <div className="flex md:hidden flex-col items-start gap-[8px]">

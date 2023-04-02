@@ -14,8 +14,10 @@ type NewSessionState = {
     info: string
     level: string
     location: string
+    custom_location: string
     name: string
     startDate: Date
+    duration: string
     startTime: string
     subevent_id: number
     tags: string[]
