@@ -1,14 +1,15 @@
-/* eslint-disable prefer-const */
-
 import { useEffect, useRef, useState } from "react"
+import dynamic from "next/dynamic"
 import DatePicker from "react-datepicker"
 import axios from "axios"
 import moment from "moment"
 import { ToastContainer, toast } from "react-toastify"
 import NextImage from "next/image"
 import { IoMdArrowBack } from "react-icons/io"
+import { EditorState } from "draft-js"
+import { stateToHTML } from "draft-js-export-html"
 
-import { UserDTO, TracksDTO, FormatDTO, LevelDTO, LocationDTO, EventTypeDTO, SessionsDTO } from "../../types"
+import { TracksDTO, FormatDTO, LevelDTO, LocationDTO, EventTypeDTO, SessionsDTO } from "../../types"
 
 type NewSessionState = {
     description: string
@@ -42,8 +43,11 @@ type Props = {
     sessions: SessionsDTO[]
 }
 
+const Editor = dynamic(() => import("react-draft-wysiwyg").then((mod) => mod.Editor), { ssr: false })
+
 const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
-    const { name, team_members, startDate, tags, description } = newSession
+    const { name, team_members, startDate, tags } = newSession
+    const wraperRef = useRef(null)
     const [teamMember, setTeamMember] = useState({ name: "", role: "Speaker" })
     const [tag, setTag] = useState("")
     const [rerender, setRerender] = useState(true)
@@ -101,7 +105,14 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
         })
     )
 
-    const wraperRef = useRef(null)
+    const [richTextEditor, setRichTextEditor] = useState<EditorState>(EditorState.createEmpty())
+
+    const onEditorStateChange = (editorState: EditorState) => {
+        setRichTextEditor(editorState)
+        const html = stateToHTML(editorState.getCurrentContent())
+
+        setNewSession({ ...newSession, description: html })
+    }
 
     const handleAddTeamMember = () => {
         setNewSession({ ...newSession, team_members: [...newSession.team_members, teamMember] })
@@ -342,20 +353,20 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                     onChange={(e) => setNewSession({ ...newSession, name: e.target.value })}
                 />
             </div>
-            <div className="flex flex-col gap-1 my-1 w-full">
+            <div className="flex flex-col gap-1 my-2 w-full">
                 <label htmlFor="info" className="font-[600]">
                     Description*
                 </label>
-                <textarea
-                    className="border-[#C3D0CF] border-2 p-1 rounded-[8px] h-[150px]"
-                    id="info"
-                    placeholder="What will be covered during the session ?"
-                    value={description}
-                    maxLength={2000}
-                    onChange={(e) => setNewSession({ ...newSession, description: e.target.value })}
-                />
-                <div className="flex w-full justify-end">
-                    <h1 className="text-[14px] text-[#AAAAAA]">Max 2000 characters</h1>
+                <div className="w-full h-[400px] p-4 border border-gray-300 rounded overflow-scroll">
+                    {richTextEditor && (
+                        <Editor
+                            editorState={richTextEditor}
+                            onEditorStateChange={onEditorStateChange}
+                            wrapperClassName="wrapper-class"
+                            editorClassName="editor-class"
+                            toolbarClassName="toolbar-class"
+                        />
+                    )}
                 </div>
             </div>
             {newSession.event_id !== 101 ? (
