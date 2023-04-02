@@ -92,7 +92,7 @@ const MyProfilePage = ({ events, sessions }: Props) => {
         <BaseTemplate>
             {/* <div className="flex flex-col bg-[#EEEEF0] px-6 sm:px-12 md:px-[24px] py-6 sm:py-12 md:py-[24px] gap-4 sm:gap-8 md:gap-[16px]"> */}
             <div className="flex flex-col bg-[#EEEEF0] px-4 md:px-[24px] py-4 md:py-[24px] gap-4 md:gap-[16px]">
-                <div className="hidden md:flex flex-col items-center px-[32px] gap-[8px] bg-white w-full rounded-[8px] flex-wrap">
+                {/* <div className="hidden md:flex flex-col items-center px-[32px] gap-[8px] bg-white w-full rounded-[8px] flex-wrap">
                     <div className="flex flex-row justify-between items-center p-[16px] gap-[24px] w-full">
                         <div className="flex flex-row items-start md:items-center w-full md:w-auto mb-4 md:mb-0 space-y-4 md:space-y-0 md:space-x-4">
                             <div className="flex w-auto gap-2 px-2 py-1 text-[16px] items-center">
@@ -131,7 +131,7 @@ const MyProfilePage = ({ events, sessions }: Props) => {
                             </button>
                         )}
                     </div>
-                </div>
+                </div> */}
 
                 {profile ? (
                     <div className="flex md:hidden flex-col items-start gap-[8px] bg-white w-full rounded-[16px]">
@@ -233,7 +233,63 @@ const MyProfilePage = ({ events, sessions }: Props) => {
                             </div>
                         </div>
                     </div>
-                    <div className="flex flex-col pl-0 md:pl-5 w-full md:w-2/6 gap-10 mt-10 md:mt-0">
+                    <div className="flex flex-col pl-0 md:pl-5 w-full md:w-2/6 gap-[16px] mt-10 md:mt-0">
+                        {profile ? (
+                            <div className="hidden md:flex flex-col items-start gap-[8px] bg-white w-full rounded-[16px]">
+                                <div className="flex flex-col items-start pt-[16px] px-[16px] pb-[24px] gap-[24px] w-full">
+                                    <div className="flex flex-col items-start justify-center w-full gap-[24px]">
+                                        <div className="flex flex-row justify-between items-center gap-[24px] w-full">
+                                            <div className="flex flex-row items-start gap-[8px]">
+                                                <NextImage
+                                                    src={"/user-icon-5.svg"}
+                                                    alt="calendar"
+                                                    width={24}
+                                                    height={24}
+                                                />
+                                                <p className="font-[700] text-[18px] text-[#1C2928]">
+                                                    {userInfo && userInfo.userName}
+                                                </p>
+                                            </div>
+                                            <button onClick={() => setOpenEditProfileModal(true)}>
+                                                <NextImage
+                                                    src={"/vector-pencil.svg"}
+                                                    alt="pencil"
+                                                    height={24}
+                                                    width={24}
+                                                />
+                                            </button>
+                                        </div>
+                                        <div className="flex flex-row items-center gap-[8px] w-full">
+                                            <div className="flex flex-row items-start py-[8px] px-[4px] gap-[8px]">
+                                                <NextImage src={"/pin-map.svg"} alt="mappin" width={16} height={16} />
+                                            </div>
+                                            <p className="font-[600] text-[16px] text-[#1C2928]">{profile?.location}</p>
+                                        </div>
+                                        <div className="flex flex-row items-center gap-[8px]">
+                                            <div className="flex flex-row items-start py-[8px] px-[4px] gap-[8px]">
+                                                <NextImage src={"/briefcase.svg"} alt="mappin" width={16} height={16} />
+                                            </div>
+                                            <p className="font-[600] text-[16px] text-[#1C2928]">{profile?.company}</p>
+                                        </div>
+                                        <div className="flex flex-row items-start gap-[8px]">
+                                            <div className="flex flex-row items-start py-[8px] px-[4px] gap-[8px] w-[24px] h-[24px]">
+                                                <NextImage src={"/info.svg"} alt="info" width={16} height={16} />
+                                            </div>
+                                            <p className="font-[400] text-[16px] text-[#1C2928] w-[310px]">
+                                                {profile?.bio}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ) : (
+                            <button
+                                onClick={() => setOpenCreateProfileModal(true)}
+                                className="hidden md:flex flex-row font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-[#35655F] rounded-[8px] text-white text-[16px] w-full h-[48px]"
+                            >
+                                SET UP PROFILE
+                            </button>
+                        )}
                         <div className="flex flex-col p-5 gap-5 bg-white rounded-[8px]">
                             <h1 className="text-[24px] font-semibold">My Sessions</h1>
                             <div className="flex gap-2 flex-col items-start justify-center">
