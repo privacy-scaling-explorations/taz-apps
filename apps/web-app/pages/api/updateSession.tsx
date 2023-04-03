@@ -15,7 +15,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             description: "The user does not have an active session or is not authenticated"
         })
 
-    console.log("Body: ", req.body)
     try {
         const {
             id,
@@ -59,7 +58,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 track,
                 equipment,
                 subevent_id: subEventId,
-                quota_id: quota_id
+                quota_id
             })
             .eq("id", id)
         console.log("Response: ", response)

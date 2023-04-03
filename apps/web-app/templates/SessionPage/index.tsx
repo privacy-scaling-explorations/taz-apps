@@ -4,6 +4,8 @@ import axios from "axios"
 import { useRouter } from "next/router"
 import Link from "next/link"
 import moment from "moment"
+import { Parser } from "html-to-react"
+
 import { SessionsDTO } from "../../types"
 import BaseTemplate from "../Base"
 import DeleteSessionModal from "../../components/DeleteSessionModal"
@@ -20,7 +22,7 @@ type Props = {
 
 const SessionPage = ({ session, sessions, userId }: Props) => {
     const router = useRouter()
-    const { userInfo, userRole } = useUserAuthenticationContext()
+    const { userInfo } = useUserAuthenticationContext()
     const { startDate, location, startTime, custom_location } = session
     const [openDeleteSessionModal, setOpenDeleteSessionModal] = useState(false)
     const [openEditSessionModal, setOpenEditSessionModal] = useState(false)
@@ -52,9 +54,12 @@ const SessionPage = ({ session, sessions, userId }: Props) => {
 
     const checkOrganizerOrCreator = userInfo && (session.creator_id === userId || userInfo.role === "organizer")
 
+    const parser = new Parser()
+    const reactContent = parser.parse(session.description)
+
     return (
         <BaseTemplate>
-            <div className="flex flex-col items-center bg-[#EEEEF0] h-full md:h-[100vh] px-4 md:px-[24px] py-4 md:py-[24px] gap-4 md:gap-[16px]">
+            <div className="flex flex-col items-center bg-[#EEEEF0] h-full lg:h-[100vh] px-4 md:px-[24px] py-4 md:py-[24px] gap-4 md:gap-[16px]">
                 <div className="flex flex-col md:flex-row justify-between p-5 bg-white w-full rounded-[16px]">
                     <div className="flex md:w-3/6 w-full items-center gap-2 mb-4 md:mb-0 text-[12px] md:text-[14px]">
                         <Link href={"/"}>
@@ -131,12 +136,12 @@ const SessionPage = ({ session, sessions, userId }: Props) => {
                             </div>
                         </div>
                         <div className="flex flex-col lg:flex-row gap-[24px] w-full mt-4">
-                            <div className="w-full md:w-5/6 py-5">{session.description}</div>
+                            <div className="w-full md:w-5/6 py-5">{reactContent}</div>
                             <div className="flex flex-wrap gap-5 w-full lg:w-3/6 p-0 lg:p-5">
                                 {session.team_members.map((item: any, index: any) => (
                                     <div
                                         key={index}
-                                        className="flex w-auto rounded-[4px] gap-2 px-2 py-1 bg-[#E4EAEA] text-[16px]"
+                                        className="flex w-auto rounded-[4px] items-center gap-2 px-2 py-1 bg-[#E4EAEA] text-[16px]"
                                     >
                                         {item.role === "Speaker" && (
                                             <NextImage
