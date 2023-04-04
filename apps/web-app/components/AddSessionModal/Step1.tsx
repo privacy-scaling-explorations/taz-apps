@@ -47,7 +47,7 @@ type Props = {
     sessions: SessionsDTO[]
 }
 
-const DynamicEditor = dynamic<EditorProps>(() => import("../MyEditor"), {
+const DynamicEditor = dynamic<React.FC<EditorProps>>(() => import("../MyEditor").then((mod) => mod.default), {
     ssr: false,
     loading: () => <div>Loading Editor...</div>
 })
