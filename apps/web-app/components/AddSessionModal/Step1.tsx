@@ -1,5 +1,5 @@
 /* eslint-disable prefer-const */
-import { useEffect, useRef, useState } from "react"
+import { ComponentType, useEffect, useRef, useState } from "react"
 import DatePicker from "react-datepicker"
 import axios from "axios"
 import moment from "moment"
@@ -10,8 +10,6 @@ import { EditorState } from "draft-js"
 import MaskedInput from "react-text-mask"
 import { EditorProps } from "react-draft-wysiwyg"
 import dynamic from "next/dynamic"
-
-import MyEditor from "../MyEditor"
 
 import { TracksDTO, FormatDTO, LevelDTO, LocationDTO, EventTypeDTO, SessionsDTO } from "../../types"
 
@@ -47,7 +45,8 @@ type Props = {
     sessions: SessionsDTO[]
 }
 
-const DynamicEditor = dynamic<React.FC<EditorProps>>(() => import("../MyEditor").then((mod) => mod.default), {
+// @ts-ignore
+const DynamicEditor = dynamic<EditorProps>(() => import("react-draft-wysiwyg").then((mod) => mod.Editor), {
     ssr: false,
     loading: () => <div>Loading Editor...</div>
 })
