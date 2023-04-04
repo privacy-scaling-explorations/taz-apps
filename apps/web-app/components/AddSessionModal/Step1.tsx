@@ -9,6 +9,7 @@ import NextImage from "next/image"
 import dynamic from "next/dynamic"
 import { stateToHTML } from "draft-js-export-html"
 import { EditorState } from "draft-js"
+import MaskedInput from "react-text-mask"
 
 import { TracksDTO, FormatDTO, LevelDTO, LocationDTO, EventTypeDTO, SessionsDTO } from "../../types"
 
@@ -47,7 +48,7 @@ type Props = {
 const Editor = dynamic(() => import("react-draft-wysiwyg").then((mod) => mod.Editor), { ssr: false })
 
 const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
-    const { name, team_members, startDate, tags, description } = newSession
+    const { name, team_members, startDate, tags, startTime, duration, custom_location, location } = newSession
     const [teamMember, setTeamMember] = useState({ name: "", role: "Speaker" })
     const [tag, setTag] = useState("")
     const [rerender, setRerender] = useState(true)
@@ -57,17 +58,6 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
     const [levelsOpt, setLevelsOpt] = useState<LevelDTO[]>()
     const [locationsOpt, setLocationsOpt] = useState<LocationDTO[]>()
     const [eventTypesOpt, setEventTypesOpt] = useState<EventTypeDTO[]>()
-
-    const [slotsUnavailable, setSlotsUnavailable] = useState(
-        Array.from(Array(45), (_, index) => {
-            const hour = Math.floor(index / 4) + 9
-            const minute = (index % 4) * 15
-            return {
-                time: `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`,
-                disabled: false
-            }
-        })
-    )
 
     const wraperRef = useRef(null)
 
@@ -167,64 +157,28 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
         }
     }, [])
 
-    useEffect(() => {
-        const selectedLocation = newSession.location.toLocaleLowerCase()
+    const isOverlapping = ({ filteredSeshs }: { filteredSeshs: SessionsDTO[] }) => {
+        const newSessionStart = moment.utc(
+            `${newSession.startDate.toISOString().split("T")[0]}T${newSession.startTime}`,
+            "YYYY-MM-DDTHH:mm"
+        )
+        const newSessionEnd = moment
+            .utc(`${newSession.startDate.toISOString().split("T")[0]}T${newSession.startTime}`, "YYYY-MM-DDTHH:mm")
+            .add(newSession.duration, "minutes")
 
-        if (selectedLocation === "other") {
-            return setSlotsUnavailable((prevState) =>
-                prevState.map((slot) => ({
-                    ...slot,
-                    disabled: false
-                }))
-            )
+        for (const idx of filteredSeshs) {
+            const sessionStart = moment.utc(`${idx.startDate}T${idx.startTime}`, "YYYY-MM-DDTHH:mm")
+            const sessionEnd = moment
+                .utc(`${idx.startDate}T${idx.startTime}`, "YYYY-MM-DDTHH:mm")
+                .add(idx.duration, "minutes")
+
+            if (newSessionStart.isBefore(sessionEnd) && newSessionEnd.isAfter(sessionStart)) {
+                return true
+            }
         }
 
-        const filteredSession = sessions
-            .filter((item) => item.location.toLocaleLowerCase() === selectedLocation)
-            .filter((item) => {
-                const selectedDate = moment.utc(new Date(newSession.startDate)).format("MMM d, yyyy")
-                const newSessionStartDate = moment.utc(new Date(item.startDate)).format("MMM d, yyyy")
-
-                return selectedDate === newSessionStartDate
-            })
-
-        if (filteredSession.length > 0) {
-            const intervals: string[] = []
-            filteredSession.forEach((item) => {
-                const [hours, minutes] = item.startTime.split(":").map(Number)
-
-                const startTimeFormatted = moment.utc({ hours, minutes })
-
-                const endTime = moment.utc({ hours, minutes }).add(parseInt(item.duration), "minute")
-
-                let current = startTimeFormatted.clone()
-                while (current.isBefore(endTime)) {
-                    intervals.push(current.format("HH:mm"))
-                    current.add(15, "minutes")
-                }
-            })
-
-            const newSlots = slotsUnavailable.map((i) => {
-                if (intervals.includes(i.time)) {
-                    return {
-                        ...i,
-                        disabled: true
-                    }
-                }
-
-                return i
-            })
-
-            setSlotsUnavailable(newSlots)
-        } else {
-            setSlotsUnavailable((prevState) =>
-                prevState.map((slot) => ({
-                    ...slot,
-                    disabled: false
-                }))
-            )
-        }
-    }, [newSession])
+        return false
+    }
 
     const handleNextStep = () => {
         if (
@@ -258,23 +212,20 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                 theme: "light"
             })
         }
-        const [hours, minutes] = newSession.startTime.split(":").map(Number)
-        const startTimeFormatted = moment.utc({ hours, minutes })
-        const endTime = moment.utc(startTimeFormatted).add(parseInt(newSession.duration), "minute")
 
-        let current = startTimeFormatted.clone()
-        let interval: string[] = []
-        while (current.isBefore(endTime)) {
-            slotsUnavailable.map((i) => {
-                if (i.time === current.format("HH:mm") && i.disabled === true) {
-                    return interval.push(i.time)
-                }
+        const selectedLocation = newSession.location.toLocaleLowerCase()
+
+        const filteredSeshs = sessions
+            .filter((item) => item.location.toLocaleLowerCase() === selectedLocation)
+            .filter((item) => {
+                const selectedDate = moment.utc(newSession.startDate).format("MMM d, yyyy")
+                const newSessionStartDate = moment.utc(item.startDate).format("MMM d, yyyy")
+
+                return selectedDate === newSessionStartDate
             })
-            current.add(15, "minutes")
-        }
 
-        if (interval.length > 0) {
-            return toast.error("Session is already booked. Decrease time duration", {
+        if (isOverlapping({ filteredSeshs })) {
+            return toast.error("Session already booked on that Date and Time.", {
                 position: "top-center",
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -285,7 +236,6 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                 theme: "light"
             })
         }
-
         setSteps(2)
     }
     return (
@@ -331,12 +281,13 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                     )}
                 </div>
             </div>
-            <div className="flex flex-col gap-1 w-full">
+            <div className="flex flex-col gap-1 w-full mt-5">
                 <label htmlFor="location" className="font-[600]">
                     Location*
                 </label>
                 <select
                     id="location"
+                    value={location}
                     name="location"
                     className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px] w-full"
                     onChange={(e) => setNewSession({ ...newSession, location: e.target.value })}
@@ -349,7 +300,7 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                             </option>
                         ))}
                 </select>
-                {newSession.location === "Other" ? (
+                {location === "Other" ? (
                     <div className="flex flex-col gap-1 w-full mt-2">
                         <label htmlFor="custom_location" className="font-[600]">
                             Specify location
@@ -358,7 +309,7 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                             type="text"
                             placeholder="Specify Location"
                             className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px] w-full"
-                            value={newSession.custom_location}
+                            value={custom_location}
                             onChange={(e) => setNewSession({ ...newSession, custom_location: e.target.value })}
                         />
                     </div>
@@ -366,28 +317,7 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                     ""
                 )}
             </div>
-            <div className="flex flex-col gap-1 w-full mt-2">
-                <label htmlFor="location" className="font-[600]">
-                    Duration*
-                </label>
-                <select
-                    id="location"
-                    name="location"
-                    value={newSession.duration}
-                    className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px] w-full"
-                    onChange={(e) => setNewSession({ ...newSession, duration: e.target.value })}
-                >
-                    <option value="0">Select Duration</option>
-                    <option value="15">15m</option>
-                    <option value="30">30m</option>
-                    <option value="45">45m</option>
-                    <option value="60">1h</option>
-                    <option value="75">1h15</option>
-                    <option value="90">1h30m</option>
-                    <option value="105">1h45m</option>
-                    <option value="120">2h00m</option>
-                </select>
-            </div>
+
             <div className="flex flex-col justify-start my-2">
                 <label className="font-[600]">Start Date*</label>
                 <DatePicker
@@ -398,25 +328,34 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                 />
             </div>
 
-            {newSession.location !== "Select Location" && newSession.location !== "" && (
-                <div className="flex flex-col justify-start my-2">
-                    <label className="font-[600]">Time Slot*</label>
-                    <select
-                        id="location"
-                        name="location"
-                        value={newSession.startTime}
+            <div className="flex flex-row w-full gap-5 my-2">
+                <div className="flex flex-col w-3/6">
+                    <label htmlFor="startTime" className="font-[600]">
+                        Start Time* (24h format)
+                    </label>
+                    <MaskedInput
+                        id="startTime"
                         className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px] w-full"
+                        mask={[/\d/, /\d/, ":", /\d/, /\d/]}
+                        value={startTime}
                         onChange={(e) => setNewSession({ ...newSession, startTime: e.target.value })}
-                    >
-                        <option value="00">Select Slot</option>
-                        {slotsUnavailable.map((slot, index) => (
-                            <option key={index} value={slot.time} disabled={slot.disabled}>{`${slot.time}:00-${
-                                slot.time > "12" ? "PM" : "AM"
-                            }`}</option>
-                        ))}
-                    </select>
+                        placeholder="18:00"
+                    />
                 </div>
-            )}
+                <div className="flex flex-col w-3/6">
+                    <label htmlFor="duration" className="font-[600]">
+                        Duration* (Minutes)
+                    </label>
+                    <input
+                        type="text"
+                        id="duration"
+                        placeholder="60m"
+                        className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px] w-full"
+                        value={duration}
+                        onChange={(e) => setNewSession({ ...newSession, duration: e.target.value })}
+                    />
+                </div>
+            </div>
 
             <div className="flex flex-col gap-4 w-full my-8">
                 <div className="flex flex-col md:flex-row w-full gap-4">

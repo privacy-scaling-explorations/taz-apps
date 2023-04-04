@@ -51,7 +51,7 @@ const AddSessionModal = ({ isOpen, closeModal, event, sessions }: Props) => {
         name: "",
         team_members: [],
         startDate: new Date(),
-        startTime: "00",
+        startTime: "",
         location: "",
         custom_location: "",
         tags: [],

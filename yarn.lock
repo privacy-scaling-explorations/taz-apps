@@ -2368,6 +2368,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-text-mask@npm:^5.4.11":
+  version: 5.4.11
+  resolution: "@types/react-text-mask@npm:5.4.11"
+  dependencies:
+    "@types/react": "*"
+  checksum: 4defba1467e61b73bfdae74d0b1bea0f27846aabf5283f137fa372ef05bf23accfdf04fffaba33272e9eff5abf00a74863e9c24ca6974c731d73f3fae6efc577
+  languageName: node
+  linkType: hard
+
 "@types/react@npm:*, @types/react@npm:latest":
   version: 18.0.31
   resolution: "@types/react@npm:18.0.31"
@@ -6458,7 +6467,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.6.0, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
+"prop-types@npm:^15.5.6, prop-types@npm:^15.6.0, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -6648,6 +6657,17 @@ __metadata:
     react: ^16.8.0 || ^17 || ^18
     react-dom: ^16.8.0 || ^17 || ^18
   checksum: 837111c98738011c69b3069a464ea5bdcbf487105b6148e8faf90cb7337e134edb1b98b8824322941c378756cca30a15c18c25f558e53b85ed5762fa0dc8e6b2
+  languageName: node
+  linkType: hard
+
+"react-text-mask@npm:^5.5.0":
+  version: 5.5.0
+  resolution: "react-text-mask@npm:5.5.0"
+  dependencies:
+    prop-types: ^15.5.6
+  peerDependencies:
+    react: ^0.14.0 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
+  checksum: ccfd425a66cf074fd3e4823bf4d1a4f07caf81309f7c1461e524c32ae53b17a666855a8dcc1c73206e9d8e4a6a9460f66f767aac6ba18034b663521848294c5c
   languageName: node
   linkType: hard
 
@@ -8002,6 +8022,7 @@ __metadata:
     "@types/react": latest
     "@types/react-datepicker": ^4.10.0
     "@types/react-draft-wysiwyg": ^1.13.4
+    "@types/react-text-mask": ^5.4.11
     "@types/uuid": ^9.0.1
     assert: ^2.0.0
     autoprefixer: ^10.4.14
@@ -8025,6 +8046,7 @@ __metadata:
     react-dom: ^18.2.0
     react-draft-wysiwyg: ^1.15.0
     react-icons: ^4.4.0
+    react-text-mask: ^5.5.0
     react-toastify: ^9.1.1
     tailwindcss: ^3.1.8
     ts-loader: ^9.4.2

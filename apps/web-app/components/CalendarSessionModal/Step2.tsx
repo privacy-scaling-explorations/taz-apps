@@ -8,6 +8,7 @@ import NextImage from "next/image"
 import { IoMdArrowBack } from "react-icons/io"
 import { EditorState } from "draft-js"
 import { stateToHTML } from "draft-js-export-html"
+import MaskedInput from "react-text-mask"
 
 import { TracksDTO, FormatDTO, LevelDTO, LocationDTO, EventTypeDTO, SessionsDTO } from "../../types"
 
@@ -46,7 +47,7 @@ type Props = {
 const Editor = dynamic(() => import("react-draft-wysiwyg").then((mod) => mod.Editor), { ssr: false })
 
 const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
-    const { name, team_members, startDate, tags } = newSession
+    const { name, team_members, startDate, tags, startTime, duration } = newSession
     const wraperRef = useRef(null)
     const [teamMember, setTeamMember] = useState({ name: "", role: "Speaker" })
     const [tag, setTag] = useState("")
@@ -58,52 +59,6 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
     const [levelsOpt, setLevelsOpt] = useState<LevelDTO[]>()
     const [locationsOpt, setLocationsOpt] = useState<LocationDTO[]>()
     const [eventTypesOpt, setEventTypesOpt] = useState<EventTypeDTO[]>()
-
-    const [durationsOpt, setDurationsOpt] = useState([
-        {
-            time: "15",
-            disabled: false
-        },
-        {
-            time: "30",
-            disabled: false
-        },
-        {
-            time: "45",
-            disabled: false
-        },
-        {
-            time: "60",
-            disabled: false
-        },
-        {
-            time: "75",
-            disabled: false
-        },
-        {
-            time: "90",
-            disabled: false
-        },
-        {
-            time: "105",
-            disabled: false
-        },
-        {
-            time: "120",
-            disabled: false
-        }
-    ])
-
-    const [slotsUnavailable, setSlotsUnavailable] = useState(
-        Array.from(Array(45), (_, index) => {
-            const hour = Math.floor(index / 4) + 9
-            const minute = (index % 4) * 15
-            return {
-                time: `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`,
-                disabled: false
-            }
-        })
-    )
 
     const [richTextEditor, setRichTextEditor] = useState<EditorState>(EditorState.createEmpty())
 
@@ -204,64 +159,28 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
         }
     }, [])
 
-    useEffect(() => {
-        const selectedLocation = newSession.location.toLocaleLowerCase()
+    const isOverlapping = ({ filteredSeshs }: { filteredSeshs: SessionsDTO[] }) => {
+        const newSessionStart = moment.utc(
+            `${newSession.startDate.toISOString().split("T")[0]}T${newSession.startTime}`,
+            "YYYY-MM-DDTHH:mm"
+        )
+        const newSessionEnd = moment
+            .utc(`${newSession.startDate.toISOString().split("T")[0]}T${newSession.startTime}`, "YYYY-MM-DDTHH:mm")
+            .add(newSession.duration, "minutes")
 
-        if (selectedLocation === "other") {
-            return setSlotsUnavailable((prevState) =>
-                prevState.map((slot) => ({
-                    ...slot,
-                    disabled: false
-                }))
-            )
+        for (const idx of filteredSeshs) {
+            const sessionStart = moment.utc(`${idx.startDate}T${idx.startTime}`, "YYYY-MM-DDTHH:mm")
+            const sessionEnd = moment
+                .utc(`${idx.startDate}T${idx.startTime}`, "YYYY-MM-DDTHH:mm")
+                .add(idx.duration, "minutes")
+
+            if (newSessionStart.isBefore(sessionEnd) && newSessionEnd.isAfter(sessionStart)) {
+                return true
+            }
         }
 
-        const filteredSession = sessions
-            .filter((item) => item.location.toLocaleLowerCase() === selectedLocation)
-            .filter((item) => {
-                const selectedDate = moment.utc(new Date(newSession.startDate)).format("MMM d, yyyy")
-                const newSessionStartDate = moment.utc(new Date(item.startDate)).format("MMM d, yyyy")
-
-                return selectedDate === newSessionStartDate
-            })
-
-        if (filteredSession.length > 0) {
-            const intervals: string[] = []
-            filteredSession.forEach((item) => {
-                const [hours, minutes] = item.startTime.split(":").map(Number)
-
-                const startTimeFormatted = moment.utc({ hours, minutes })
-
-                const endTime = moment.utc({ hours, minutes }).add(parseInt(item.duration), "minute")
-
-                let current = startTimeFormatted.clone()
-                while (current.isBefore(endTime)) {
-                    intervals.push(current.format("HH:mm"))
-                    current.add(15, "minutes")
-                }
-            })
-
-            const newSlots = slotsUnavailable.map((i) => {
-                if (intervals.includes(i.time)) {
-                    return {
-                        ...i,
-                        disabled: true
-                    }
-                }
-
-                return i
-            })
-
-            setSlotsUnavailable(newSlots)
-        } else {
-            setSlotsUnavailable((prevState) =>
-                prevState.map((slot) => ({
-                    ...slot,
-                    disabled: false
-                }))
-            )
-        }
-    }, [newSession])
+        return false
+    }
 
     const handleNextStep = () => {
         if (
@@ -269,7 +188,7 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
             newSession.description.length === 0 ||
             newSession.location === "" ||
             newSession.team_members.length === 0 ||
-            newSession.startTime === "00"
+            newSession.startTime === ""
         ) {
             return toast.error("Please fill all inputs required.", {
                 position: "top-center",
@@ -295,23 +214,20 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                 theme: "light"
             })
         }
-        const [hours, minutes] = newSession.startTime.split(":").map(Number)
-        const startTimeFormatted = moment.utc({ hours, minutes })
-        const endTime = moment.utc(startTimeFormatted).add(parseInt(newSession.duration), "minute")
 
-        let current = startTimeFormatted.clone()
-        let interval: string[] = []
-        while (current.isBefore(endTime)) {
-            slotsUnavailable.map((i) => {
-                if (i.time === current.format("HH:mm") && i.disabled === true) {
-                    return interval.push(i.time)
-                }
+        const selectedLocation = newSession.location.toLocaleLowerCase()
+
+        const filteredSeshs = sessions
+            .filter((item) => item.location.toLocaleLowerCase() === selectedLocation)
+            .filter((item) => {
+                const selectedDate = moment.utc(newSession.startDate).format("MMM d, yyyy")
+                const newSessionStartDate = moment.utc(item.startDate).format("MMM d, yyyy")
+
+                return selectedDate === newSessionStartDate
             })
-            current.add(15, "minutes")
-        }
 
-        if (interval.length > 0) {
-            return toast.error("Session is already booked. Decrease time duration", {
+        if (isOverlapping({ filteredSeshs })) {
+            return toast.error("Session already booked on that Date and Time.", {
                 position: "top-center",
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -322,7 +238,6 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                 theme: "light"
             })
         }
-
         setSteps(3)
     }
 
@@ -409,31 +324,6 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
             ) : (
                 ""
             )}
-
-            <div className="flex flex-col gap-1 w-full mt-2">
-                <label htmlFor="location" className="font-[600]">
-                    Duration*
-                </label>
-                <select
-                    id="location"
-                    name="location"
-                    value={newSession.duration}
-                    className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px] w-full"
-                    onChange={(e) => setNewSession({ ...newSession, duration: e.target.value })}
-                >
-                    <option value="0">Select Duration</option>
-                    {durationsOpt.map((duration, index) => {
-                        const formatted = moment.duration(duration.time, "minutes")
-                        const hours = formatted.hours()
-                        const mins = formatted.minutes()
-                        return (
-                            <option key={index} value={duration.time} disabled={duration.disabled}>{`${`${
-                                hours === 0 ? "" : `${hours}h`
-                            }${mins}m`}`}</option>
-                        )
-                    })}
-                </select>
-            </div>
             <div className="flex flex-col justify-start my-2">
                 <label className="font-[600]">Start Date*</label>
                 <DatePicker
@@ -444,25 +334,34 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                 />
             </div>
 
-            {newSession.location !== "Select Location" && newSession.location !== "" && (
-                <div className="flex flex-col justify-start my-2">
-                    <label className="font-[600]">Time Slot*</label>
-                    <select
-                        id="location"
-                        name="location"
-                        value={newSession.startTime}
+            <div className="flex flex-row w-full gap-5 my-2">
+                <div className="flex flex-col w-3/6">
+                    <label htmlFor="startTime" className="font-[600]">
+                        Start Time* (24h format)
+                    </label>
+                    <MaskedInput
+                        id="startTime"
                         className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px] w-full"
+                        mask={[/\d/, /\d/, ":", /\d/, /\d/]}
+                        value={startTime}
                         onChange={(e) => setNewSession({ ...newSession, startTime: e.target.value })}
-                    >
-                        <option value="00">Select Slot</option>
-                        {slotsUnavailable.map((slot, index) => (
-                            <option key={index} value={slot.time} disabled={slot.disabled}>{`${slot.time}:00-${
-                                slot.time > "12" ? "PM" : "AM"
-                            }`}</option>
-                        ))}
-                    </select>
+                        placeholder="18:00"
+                    />
                 </div>
-            )}
+                <div className="flex flex-col w-3/6">
+                    <label htmlFor="duration" className="font-[600]">
+                        Duration* (Minutes)
+                    </label>
+                    <input
+                        type="text"
+                        id="duration"
+                        placeholder="60m"
+                        className="border-[#C3D0CF] bg-white border-2 p-1 rounded-[8px] h-[42px] w-full"
+                        value={duration}
+                        onChange={(e) => setNewSession({ ...newSession, duration: e.target.value })}
+                    />
+                </div>
+            </div>
 
             <div className="flex flex-col gap-4 w-full my-8">
                 <div className="flex flex-col md:flex-row w-full gap-4">
@@ -627,10 +526,10 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                         ))}
                 </select>
             </div>
-            <div className="w-full flex flex-col md:flex-row gap-5 justify-center items-center mt-5">
+            <div className="w-full border border-black flex flex-col md:flex-row gap-5 justify-center items-center mt-5">
                 <button
                     type="button"
-                    className="w-full flex flex-row border-zulalu-primary border font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-white rounded-[8px] text-black text-[16px] mb-5"
+                    className="w-full flex flex-row border-zulalu-primary border font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-white rounded-[8px] text-black text-[16px]"
                     onClick={() => setSteps(1)}
                 >
                     <IoMdArrowBack size={20} />
