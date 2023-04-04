@@ -45,6 +45,7 @@ type Props = {
     sessions: SessionsDTO[]
 }
 
+// @ts-ignore
 const loadEditor: Loader<EditorProps> = async () => {
     const mod = await import("react-draft-wysiwyg")
     return mod.Editor as ComponentType<EditorProps>
@@ -280,6 +281,7 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                 </label>
                 <div className="w-full h-[400px] p-4 border border-gray-300 rounded overflow-scroll">
                     {richTextEditor && (
+                        // @ts-ignore
                         <Editor
                             editorState={richTextEditor}
                             onEditorStateChange={onEditorStateChange}
