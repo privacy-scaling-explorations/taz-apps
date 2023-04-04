@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js"
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs"
 import { SessionsDTO } from "../../types"
 
+// Comment
 const supabase = createBrowserSupabaseClient()
 
 type Props = {
