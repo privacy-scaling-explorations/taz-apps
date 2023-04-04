@@ -55,7 +55,7 @@ const CalendarSessionModal = ({ isOpen, closeModal, events, sessions }: Props) =
         name: "",
         team_members: [],
         startDate: new Date(),
-        startTime: "00",
+        startTime: "",
         location: "",
         custom_location: "",
         tags: [],
