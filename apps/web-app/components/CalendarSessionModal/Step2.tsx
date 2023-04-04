@@ -160,21 +160,19 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
     }, [])
 
     const isOverlapping = ({ filteredSeshs }: { filteredSeshs: SessionsDTO[] }) => {
-        const newSessionStart = moment.utc(
-            `${newSession.startDate.toISOString().split("T")[0]}T${newSession.startTime}`,
-            "YYYY-MM-DDTHH:mm"
-        )
-        const newSessionEnd = moment
-            .utc(`${newSession.startDate.toISOString().split("T")[0]}T${newSession.startTime}`, "YYYY-MM-DDTHH:mm")
-            .add(newSession.duration, "minutes")
+        const formatDate = moment.utc(newSession.startDate).format("YYYY-MM-DD")
+        const newSessionStart = moment.utc(`${formatDate}T${newSession.startTime}`)
+        const newSessionEnd = newSessionStart.clone().add(newSession.duration, "minutes")
 
         for (const idx of filteredSeshs) {
-            const sessionStart = moment.utc(`${idx.startDate}T${idx.startTime}`, "YYYY-MM-DDTHH:mm")
-            const sessionEnd = moment
-                .utc(`${idx.startDate}T${idx.startTime}`, "YYYY-MM-DDTHH:mm")
-                .add(idx.duration, "minutes")
+            const sessionStart = moment.utc(`${idx.startDate}T${idx.startTime}`)
+            const sessionEnd = sessionStart.clone().add(idx.duration, "minutes")
 
-            if (newSessionStart.isBefore(sessionEnd) && newSessionEnd.isAfter(sessionStart)) {
+            if (
+                (newSessionStart.isSameOrAfter(sessionStart) && newSessionStart.isBefore(sessionEnd)) ||
+                (newSessionEnd.isAfter(sessionStart) && newSessionEnd.isSameOrBefore(sessionEnd)) ||
+                (newSessionStart.isSameOrBefore(sessionStart) && newSessionEnd.isSameOrAfter(sessionEnd))
+            ) {
                 return true
             }
         }
@@ -183,48 +181,52 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
     }
 
     const handleNextStep = () => {
-        if (
-            newSession.name.length === 0 ||
-            newSession.description.length === 0 ||
-            newSession.location === "" ||
-            newSession.team_members.length === 0 ||
-            newSession.startTime === ""
-        ) {
-            return toast.error("Please fill all inputs required.", {
-                position: "top-center",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light"
-            })
-        }
+        // if (
+        //     newSession.name.length === 0 ||
+        //     newSession.description.length === 0 ||
+        //     newSession.location === "" ||
+        //     newSession.team_members.length === 0 ||
+        //     newSession.startTime === ""
+        // ) {
+        //     return toast.error("Please fill all inputs required.", {
+        //         position: "top-center",
+        //         autoClose: 3000,
+        //         hideProgressBar: false,
+        //         closeOnClick: true,
+        //         pauseOnHover: true,
+        //         draggable: true,
+        //         progress: undefined,
+        //         theme: "light"
+        //     })
+        // }
 
-        if (newSession.duration === "0") {
-            return toast.error("Please fill duration time field.", {
-                position: "top-center",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light"
-            })
-        }
+        // if (newSession.duration === "0") {
+        //     return toast.error("Please fill duration time field.", {
+        //         position: "top-center",
+        //         autoClose: 3000,
+        //         hideProgressBar: false,
+        //         closeOnClick: true,
+        //         pauseOnHover: true,
+        //         draggable: true,
+        //         progress: undefined,
+        //         theme: "light"
+        //     })
+        // }
 
         const selectedLocation = newSession.location.toLocaleLowerCase()
 
         const filteredSeshs = sessions
             .filter((item) => item.location.toLocaleLowerCase() === selectedLocation)
             .filter((item) => {
-                const selectedDate = moment.utc(newSession.startDate).format("MMM d, yyyy")
-                const newSessionStartDate = moment.utc(item.startDate).format("MMM d, yyyy")
+                const formatDate = moment.utc(newSession.startDate).format("YYYY-MM-DD")
 
-                return selectedDate === newSessionStartDate
+                const selectedDate = moment.utc(formatDate)
+                const newSessionStartDate = moment.utc(item.startDate)
+
+                return selectedDate.isSame(newSessionStartDate)
             })
+
+        console.log(filteredSeshs)
 
         if (isOverlapping({ filteredSeshs })) {
             return toast.error("Session already booked on that Date and Time.", {
@@ -238,7 +240,7 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                 theme: "light"
             })
         }
-        setSteps(3)
+        // setSteps(3)
     }
 
     return (
@@ -526,7 +528,7 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                         ))}
                 </select>
             </div>
-            <div className="w-full border border-black flex flex-col md:flex-row gap-5 justify-center items-center mt-5">
+            <div className="w-full flex flex-col md:flex-row gap-5 justify-center items-center mt-5">
                 <button
                     type="button"
                     className="w-full flex flex-row border-zulalu-primary border font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-white rounded-[8px] text-black text-[16px]"
