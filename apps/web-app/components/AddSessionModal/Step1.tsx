@@ -1,16 +1,17 @@
 /* eslint-disable prefer-const */
-import * as React from "react"
-import { ComponentType, useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import DatePicker from "react-datepicker"
 import axios from "axios"
 import moment from "moment"
 import { ToastContainer, toast } from "react-toastify"
 import NextImage from "next/image"
-import dynamic, { Loader } from "next/dynamic"
 import { stateToHTML } from "draft-js-export-html"
 import { EditorState } from "draft-js"
-import { EditorProps } from "react-draft-wysiwyg"
 import MaskedInput from "react-text-mask"
+import { EditorProps } from "react-draft-wysiwyg"
+import dynamic from "next/dynamic"
+
+import MyEditor from "../MyEditor"
 
 import { TracksDTO, FormatDTO, LevelDTO, LocationDTO, EventTypeDTO, SessionsDTO } from "../../types"
 
@@ -46,7 +47,7 @@ type Props = {
     sessions: SessionsDTO[]
 }
 
-const Editor = dynamic(() => import("react-draft-wysiwyg").then((mod) => mod.Editor), {
+const DynamicEditor = dynamic<EditorProps>(() => import("../MyEditor"), {
     ssr: false,
     loading: () => <div>Loading Editor...</div>
 })
@@ -275,7 +276,7 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                 </label>
                 <div className="w-full h-[400px] p-4 border border-gray-300 rounded overflow-scroll">
                     {richTextEditor && (
-                        <Editor
+                        <DynamicEditor
                             editorState={richTextEditor}
                             onEditorStateChange={onEditorStateChange}
                             wrapperClassName="wrapper-class"
