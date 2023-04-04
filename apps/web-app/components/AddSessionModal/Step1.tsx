@@ -1,5 +1,5 @@
 /* eslint-disable prefer-const */
-
+import * as React from "react"
 import { ComponentType, useEffect, useRef, useState } from "react"
 import DatePicker from "react-datepicker"
 import axios from "axios"
@@ -49,10 +49,10 @@ type Props = {
 const loadEditor = async () => {
     const mod = await import("react-draft-wysiwyg")
     const Editor = mod.Editor as ComponentType<EditorProps>
-    return { ...Editor, __esModule: true, default: Editor }
+    return Editor
 }
 
-const Editor = dynamic(loadEditor, { ssr: false })
+const Editor = dynamic<EditorProps>(loadEditor, { ssr: false })
 
 const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
     const { name, team_members, startDate, tags, startTime, duration, custom_location, location } = newSession
