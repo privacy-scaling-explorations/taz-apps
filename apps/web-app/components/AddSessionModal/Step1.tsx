@@ -46,7 +46,7 @@ type Props = {
     sessions: SessionsDTO[]
 }
 
-const Editor = dynamic<any>(() => import("react-draft-wysiwyg").then((mod) => mod.Editor), {
+const Editor = dynamic(() => import("react-draft-wysiwyg").then((mod) => mod.Editor), {
     ssr: false,
     loading: () => <div>Loading Editor...</div>
 })
