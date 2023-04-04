@@ -6,7 +6,7 @@ import axios from "axios"
 import moment from "moment"
 import { ToastContainer, toast } from "react-toastify"
 import NextImage from "next/image"
-import dynamic from "next/dynamic"
+import dynamic, { Loader } from "next/dynamic"
 import { stateToHTML } from "draft-js-export-html"
 import { EditorState } from "draft-js"
 import { EditorProps } from "react-draft-wysiwyg"
@@ -46,7 +46,12 @@ type Props = {
     sessions: SessionsDTO[]
 }
 
-const Editor = dynamic<EditorProps>(() => import("react-draft-wysiwyg").then((mod) => mod.Editor), { ssr: false })
+const loadEditor: Loader<EditorProps> = async () => {
+    const mod = await import("react-draft-wysiwyg")
+    return mod.Editor as ComponentType<EditorProps>
+}
+
+const Editor = dynamic<EditorProps>(loadEditor, { ssr: false })
 
 const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
     const { name, team_members, startDate, tags, startTime, duration, custom_location, location } = newSession

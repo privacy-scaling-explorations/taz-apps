@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react"
-import dynamic from "next/dynamic"
+import { ComponentType, useEffect, useRef, useState } from "react"
+import dynamic, { Loader } from "next/dynamic"
 import DatePicker from "react-datepicker"
 import axios from "axios"
 import moment from "moment"
@@ -45,7 +45,12 @@ type Props = {
     sessions: SessionsDTO[]
 }
 
-const Editor = dynamic<EditorProps>(() => import("react-draft-wysiwyg").then((mod) => mod.Editor), { ssr: false })
+const loadEditor: Loader<EditorProps> = async () => {
+    const mod = await import("react-draft-wysiwyg")
+    return mod.Editor as ComponentType<EditorProps>
+}
+
+const Editor = dynamic<EditorProps>(loadEditor, { ssr: false })
 
 const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
     const { name, team_members, startDate, tags, startTime, duration } = newSession
