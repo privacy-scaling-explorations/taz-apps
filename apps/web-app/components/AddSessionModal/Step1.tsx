@@ -1,6 +1,6 @@
 /* eslint-disable prefer-const */
 
-import { useEffect, useRef, useState } from "react"
+import { ComponentType, useEffect, useRef, useState } from "react"
 import DatePicker from "react-datepicker"
 import axios from "axios"
 import moment from "moment"
@@ -9,6 +9,7 @@ import NextImage from "next/image"
 import dynamic from "next/dynamic"
 import { stateToHTML } from "draft-js-export-html"
 import { EditorState } from "draft-js"
+import { EditorProps } from "react-draft-wysiwyg"
 import MaskedInput from "react-text-mask"
 
 import { TracksDTO, FormatDTO, LevelDTO, LocationDTO, EventTypeDTO, SessionsDTO } from "../../types"
@@ -45,7 +46,7 @@ type Props = {
     sessions: SessionsDTO[]
 }
 
-const Editor = dynamic(() => import("react-draft-wysiwyg").then((mod) => mod.Editor), { ssr: false })
+const Editor = dynamic<EditorProps>(() => import("react-draft-wysiwyg").then((mod) => mod.Editor), { ssr: false })
 
 const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
     const { name, team_members, startDate, tags, startTime, duration, custom_location, location } = newSession
@@ -158,21 +159,19 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
     }, [])
 
     const isOverlapping = ({ filteredSeshs }: { filteredSeshs: SessionsDTO[] }) => {
-        const newSessionStart = moment.utc(
-            `${newSession.startDate.toISOString().split("T")[0]}T${newSession.startTime}`,
-            "YYYY-MM-DDTHH:mm"
-        )
-        const newSessionEnd = moment
-            .utc(`${newSession.startDate.toISOString().split("T")[0]}T${newSession.startTime}`, "YYYY-MM-DDTHH:mm")
-            .add(newSession.duration, "minutes")
+        const formatDate = moment.utc(newSession.startDate).format("YYYY-MM-DD")
+        const newSessionStart = moment.utc(`${formatDate}T${newSession.startTime}`)
+        const newSessionEnd = newSessionStart.clone().add(newSession.duration, "minutes")
 
         for (const idx of filteredSeshs) {
-            const sessionStart = moment.utc(`${idx.startDate}T${idx.startTime}`, "YYYY-MM-DDTHH:mm")
-            const sessionEnd = moment
-                .utc(`${idx.startDate}T${idx.startTime}`, "YYYY-MM-DDTHH:mm")
-                .add(idx.duration, "minutes")
+            const sessionStart = moment.utc(`${idx.startDate}T${idx.startTime}`)
+            const sessionEnd = sessionStart.clone().add(idx.duration, "minutes")
 
-            if (newSessionStart.isBefore(sessionEnd) && newSessionEnd.isAfter(sessionStart)) {
+            if (
+                (newSessionStart.isSameOrAfter(sessionStart) && newSessionStart.isBefore(sessionEnd)) ||
+                (newSessionEnd.isAfter(sessionStart) && newSessionEnd.isSameOrBefore(sessionEnd)) ||
+                (newSessionStart.isSameOrBefore(sessionStart) && newSessionEnd.isSameOrAfter(sessionEnd))
+            ) {
                 return true
             }
         }
@@ -218,10 +217,12 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
         const filteredSeshs = sessions
             .filter((item) => item.location.toLocaleLowerCase() === selectedLocation)
             .filter((item) => {
-                const selectedDate = moment.utc(newSession.startDate).format("MMM d, yyyy")
-                const newSessionStartDate = moment.utc(item.startDate).format("MMM d, yyyy")
+                const formatDate = moment.utc(newSession.startDate).format("YYYY-MM-DD")
 
-                return selectedDate === newSessionStartDate
+                const selectedDate = moment.utc(formatDate)
+                const newSessionStartDate = moment.utc(item.startDate)
+
+                return selectedDate.isSame(newSessionStartDate)
             })
 
         if (isOverlapping({ filteredSeshs })) {

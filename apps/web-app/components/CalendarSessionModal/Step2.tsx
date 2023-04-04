@@ -9,6 +9,7 @@ import { IoMdArrowBack } from "react-icons/io"
 import { EditorState } from "draft-js"
 import { stateToHTML } from "draft-js-export-html"
 import MaskedInput from "react-text-mask"
+import { EditorProps } from "react-draft-wysiwyg"
 
 import { TracksDTO, FormatDTO, LevelDTO, LocationDTO, EventTypeDTO, SessionsDTO } from "../../types"
 
@@ -44,7 +45,7 @@ type Props = {
     sessions: SessionsDTO[]
 }
 
-const Editor = dynamic(() => import("react-draft-wysiwyg").then((mod) => mod.Editor), { ssr: false })
+const Editor = dynamic<EditorProps>(() => import("react-draft-wysiwyg").then((mod) => mod.Editor), { ssr: false })
 
 const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
     const { name, team_members, startDate, tags, startTime, duration } = newSession
@@ -181,37 +182,37 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
     }
 
     const handleNextStep = () => {
-        // if (
-        //     newSession.name.length === 0 ||
-        //     newSession.description.length === 0 ||
-        //     newSession.location === "" ||
-        //     newSession.team_members.length === 0 ||
-        //     newSession.startTime === ""
-        // ) {
-        //     return toast.error("Please fill all inputs required.", {
-        //         position: "top-center",
-        //         autoClose: 3000,
-        //         hideProgressBar: false,
-        //         closeOnClick: true,
-        //         pauseOnHover: true,
-        //         draggable: true,
-        //         progress: undefined,
-        //         theme: "light"
-        //     })
-        // }
+        if (
+            newSession.name.length === 0 ||
+            newSession.description.length === 0 ||
+            newSession.location === "" ||
+            newSession.team_members.length === 0 ||
+            newSession.startTime === ""
+        ) {
+            return toast.error("Please fill all inputs required.", {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light"
+            })
+        }
 
-        // if (newSession.duration === "0") {
-        //     return toast.error("Please fill duration time field.", {
-        //         position: "top-center",
-        //         autoClose: 3000,
-        //         hideProgressBar: false,
-        //         closeOnClick: true,
-        //         pauseOnHover: true,
-        //         draggable: true,
-        //         progress: undefined,
-        //         theme: "light"
-        //     })
-        // }
+        if (newSession.duration === "0") {
+            return toast.error("Please fill duration time field.", {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light"
+            })
+        }
 
         const selectedLocation = newSession.location.toLocaleLowerCase()
 
@@ -226,8 +227,6 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                 return selectedDate.isSame(newSessionStartDate)
             })
 
-        console.log(filteredSeshs)
-
         if (isOverlapping({ filteredSeshs })) {
             return toast.error("Session already booked on that Date and Time.", {
                 position: "top-center",
@@ -240,7 +239,7 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                 theme: "light"
             })
         }
-        // setSteps(3)
+        setSteps(3)
     }
 
     return (
