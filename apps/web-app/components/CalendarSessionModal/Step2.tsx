@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react"
-import dynamic from "next/dynamic"
+import { ComponentType, useEffect, useRef, useState } from "react"
+import dynamic, { Loader } from "next/dynamic"
 import DatePicker from "react-datepicker"
 import axios from "axios"
 import moment from "moment"
@@ -9,6 +9,7 @@ import { IoMdArrowBack } from "react-icons/io"
 import { EditorState } from "draft-js"
 import { stateToHTML } from "draft-js-export-html"
 import MaskedInput from "react-text-mask"
+import { EditorProps } from "react-draft-wysiwyg"
 
 import { TracksDTO, FormatDTO, LevelDTO, LocationDTO, EventTypeDTO, SessionsDTO } from "../../types"
 
@@ -44,7 +45,13 @@ type Props = {
     sessions: SessionsDTO[]
 }
 
-const Editor = dynamic(() => import("react-draft-wysiwyg").then((mod) => mod.Editor), { ssr: false })
+// @ts-ignore
+const loadEditor: Loader<EditorProps> = async () => {
+    const mod = await import("react-draft-wysiwyg")
+    return mod.Editor as ComponentType<EditorProps>
+}
+
+const Editor = dynamic<EditorProps>(loadEditor, { ssr: false })
 
 const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
     const { name, team_members, startDate, tags, startTime, duration } = newSession
@@ -160,21 +167,19 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
     }, [])
 
     const isOverlapping = ({ filteredSeshs }: { filteredSeshs: SessionsDTO[] }) => {
-        const newSessionStart = moment.utc(
-            `${newSession.startDate.toISOString().split("T")[0]}T${newSession.startTime}`,
-            "YYYY-MM-DDTHH:mm"
-        )
-        const newSessionEnd = moment
-            .utc(`${newSession.startDate.toISOString().split("T")[0]}T${newSession.startTime}`, "YYYY-MM-DDTHH:mm")
-            .add(newSession.duration, "minutes")
+        const formatDate = moment.utc(newSession.startDate).format("YYYY-MM-DD")
+        const newSessionStart = moment.utc(`${formatDate}T${newSession.startTime}`)
+        const newSessionEnd = newSessionStart.clone().add(newSession.duration, "minutes")
 
         for (const idx of filteredSeshs) {
-            const sessionStart = moment.utc(`${idx.startDate}T${idx.startTime}`, "YYYY-MM-DDTHH:mm")
-            const sessionEnd = moment
-                .utc(`${idx.startDate}T${idx.startTime}`, "YYYY-MM-DDTHH:mm")
-                .add(idx.duration, "minutes")
+            const sessionStart = moment.utc(`${idx.startDate}T${idx.startTime}`)
+            const sessionEnd = sessionStart.clone().add(idx.duration, "minutes")
 
-            if (newSessionStart.isBefore(sessionEnd) && newSessionEnd.isAfter(sessionStart)) {
+            if (
+                (newSessionStart.isSameOrAfter(sessionStart) && newSessionStart.isBefore(sessionEnd)) ||
+                (newSessionEnd.isAfter(sessionStart) && newSessionEnd.isSameOrBefore(sessionEnd)) ||
+                (newSessionStart.isSameOrBefore(sessionStart) && newSessionEnd.isSameOrAfter(sessionEnd))
+            ) {
                 return true
             }
         }
@@ -220,10 +225,12 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
         const filteredSeshs = sessions
             .filter((item) => item.location.toLocaleLowerCase() === selectedLocation)
             .filter((item) => {
-                const selectedDate = moment.utc(newSession.startDate).format("MMM d, yyyy")
-                const newSessionStartDate = moment.utc(item.startDate).format("MMM d, yyyy")
+                const formatDate = moment.utc(newSession.startDate).format("YYYY-MM-DD")
 
-                return selectedDate === newSessionStartDate
+                const selectedDate = moment.utc(formatDate)
+                const newSessionStartDate = moment.utc(item.startDate)
+
+                return selectedDate.isSame(newSessionStartDate)
             })
 
         if (isOverlapping({ filteredSeshs })) {
@@ -274,6 +281,7 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                 </label>
                 <div className="w-full h-[400px] p-4 border border-gray-300 rounded overflow-scroll">
                     {richTextEditor && (
+                        // @ts-ignore
                         <Editor
                             editorState={richTextEditor}
                             onEditorStateChange={onEditorStateChange}
@@ -526,7 +534,7 @@ const Step2 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                         ))}
                 </select>
             </div>
-            <div className="w-full border border-black flex flex-col md:flex-row gap-5 justify-center items-center mt-5">
+            <div className="w-full flex flex-col md:flex-row gap-5 justify-center items-center mt-5">
                 <button
                     type="button"
                     className="w-full flex flex-row border-zulalu-primary border font-[600] justify-center items-center py-[8px] px-[16px] gap-[8px] bg-white rounded-[8px] text-black text-[16px]"
