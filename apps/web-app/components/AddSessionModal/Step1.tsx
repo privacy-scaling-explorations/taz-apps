@@ -46,13 +46,10 @@ type Props = {
     sessions: SessionsDTO[]
 }
 
-const loadEditor = async () => {
-    const mod = await import("react-draft-wysiwyg")
-    const Editor = mod.Editor as ComponentType<EditorProps>
-    return Editor
-}
-
-const Editor = dynamic<EditorProps>(loadEditor, { ssr: false })
+const Editor = dynamic<any>(() => import("react-draft-wysiwyg").then((mod) => mod.Editor), {
+    ssr: false,
+    loading: () => <div>Loading Editor...</div>
+})
 
 const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
     const { name, team_members, startDate, tags, startTime, duration, custom_location, location } = newSession
