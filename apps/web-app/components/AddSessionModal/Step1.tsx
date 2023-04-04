@@ -275,6 +275,7 @@ const Step1 = ({ newSession, setNewSession, setSteps, sessions }: Props) => {
                 </label>
                 <div className="w-full h-[400px] p-4 border border-gray-300 rounded overflow-scroll">
                     {richTextEditor && (
+                        // @ts-ignore
                         <DynamicEditor
                             editorState={richTextEditor}
                             onEditorStateChange={onEditorStateChange}
